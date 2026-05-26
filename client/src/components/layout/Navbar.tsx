@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
-import { Anchor, Menu, X } from "lucide-react";
+import { Anchor, Car, Menu, X, Calendar } from "lucide-react";
 import { useState } from "react";
 
 export default function Navbar() {
@@ -8,9 +8,16 @@ export default function Navbar() {
   const [location] = useLocation();
   const [open, setOpen] = useState(false);
 
+  const role = user?.role;
+  const isCaptain = role === "captain" || role === "both";
+  const isDriver = role === "driver" || role === "both";
+
   const links = [
-    { href: "/viagens", label: "Viagens" },
-    ...(user?.role === "captain" ? [{ href: "/minha-lancha", label: "Minha Lancha" }] : []),
+    { href: "/caronas", label: "🚗 Carro" },
+    { href: "/lanchas", label: "⛵ Lancha" },
+    { href: "/recorrentes", label: "Recorrentes" },
+    ...(isCaptain ? [{ href: "/minha-lancha", label: "Minha Lancha" }] : []),
+    ...(isDriver ? [{ href: "/meu-carro", label: "Meu Carro" }] : []),
     ...(user ? [{ href: "/minhas-reservas", label: "Reservas" }] : []),
   ];
 
@@ -19,7 +26,10 @@ export default function Navbar() {
       <div className="nav-inner">
         <Link href="/">
           <div className="nav-logo">
-            <div className="nav-logo-icon"><Anchor size={16} color="#fff" /></div>
+            <div className="nav-logo-icon">
+              <Car size={13} color="#fff" />
+              <Anchor size={13} color="#fff" />
+            </div>
             <span className="nav-logo-text">LanchaCarona</span>
           </div>
         </Link>
@@ -73,12 +83,12 @@ export default function Navbar() {
           )}
           <div className="nav-mobile-divider" />
           {user ? (
-            <button className="nav-mobile-link" style={{ background: "none", border: "none", width: "100%", textAlign: "left", color: "#475569", cursor: "pointer" }}
+            <button className="nav-mobile-link" style={{ background: "none", border: "none", width: "100%", textAlign: "left", color: "var(--text2)", cursor: "pointer" }}
               onClick={() => { logout(); setOpen(false); }}>Sair</button>
           ) : (
             <div className="nav-mobile-actions">
-              <Link href="/entrar"><span className="nav-mobile-btn" style={{ background: "#071525", border: "1px solid #0D2035", color: "#94A3B8" }} onClick={() => setOpen(false)}>Entrar</span></Link>
-              <Link href="/cadastro"><span className="nav-mobile-btn" style={{ background: "#0284C7", color: "#fff", fontWeight: 700 }} onClick={() => setOpen(false)}>Cadastrar</span></Link>
+              <Link href="/entrar"><span className="nav-mobile-btn" onClick={() => setOpen(false)}>Entrar</span></Link>
+              <Link href="/cadastro"><span className="nav-mobile-btn" style={{ background: "var(--boat)", color: "#fff", fontWeight: 700 }} onClick={() => setOpen(false)}>Cadastrar</span></Link>
             </div>
           )}
         </div>

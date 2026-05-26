@@ -117,6 +117,44 @@ async function runMigrations() {
         created_at TIMESTAMP DEFAULT NOW() NOT NULL
       );
       CREATE INDEX IF NOT EXISTS reviews_captain_id_idx ON reviews (captain_id);
+
+      CREATE TABLE IF NOT EXISTS driver_profiles (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id),
+        license_number TEXT NOT NULL,
+        license_image_url TEXT NOT NULL,
+        car_make TEXT NOT NULL,
+        car_model TEXT NOT NULL,
+        car_year INTEGER,
+        car_color TEXT,
+        car_capacity INTEGER NOT NULL,
+        car_image_url TEXT,
+        bio TEXT,
+        verified BOOLEAN NOT NULL DEFAULT false,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL
+      );
+      CREATE INDEX IF NOT EXISTS driver_profiles_user_id_idx ON driver_profiles (user_id);
+
+      ALTER TABLE rides ADD COLUMN IF NOT EXISTS ride_type TEXT NOT NULL DEFAULT 'boat';
+      CREATE INDEX IF NOT EXISTS rides_type_idx ON rides (ride_type);
+
+      CREATE TABLE IF NOT EXISTS recurring_schedules (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id),
+        ride_type TEXT NOT NULL,
+        origin_city TEXT NOT NULL,
+        destination_city TEXT NOT NULL,
+        days_of_week TEXT NOT NULL,
+        departure_time TEXT NOT NULL,
+        return_time TEXT,
+        price_per_seat NUMERIC(10,2),
+        total_seats INTEGER,
+        description TEXT,
+        active BOOLEAN NOT NULL DEFAULT true,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL
+      );
+      CREATE INDEX IF NOT EXISTS recurring_user_id_idx ON recurring_schedules (user_id);
+      CREATE INDEX IF NOT EXISTS recurring_type_idx ON recurring_schedules (ride_type);
     `);
     console.log("Migrações concluídas.");
   } finally {

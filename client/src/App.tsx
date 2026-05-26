@@ -3,6 +3,7 @@ import { Router, Route, Switch } from "wouter";
 import { queryClient } from "@/lib/queryClient";
 import { AuthProvider } from "@/hooks/use-auth";
 import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 import Home from "@/pages/Home";
 import Auth from "@/pages/Auth";
 import Rides from "@/pages/Rides";
@@ -20,6 +21,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <Navbar />
+        <div className="app-body">
         <Switch>
           <Route path="/" component={Home} />
           <Route path="/entrar" component={() => <Auth mode="login" />} />
@@ -42,6 +44,8 @@ export default function App() {
             </div>
           </Route>
         </Switch>
+        </div>
+        <Footer />
       </AuthProvider>
     </QueryClientProvider>
   );

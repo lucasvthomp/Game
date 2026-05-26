@@ -1,24 +1,30 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
-import { Anchor, Car, Menu, X, Calendar } from "lucide-react";
-import { useState } from "react";
+import { Anchor, Car, Menu, X, Moon, Sun } from "lucide-react";
+import { useState, useEffect } from "react";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const [location] = useLocation();
   const [open, setOpen] = useState(false);
+  const [dark, setDark] = useState(() => localStorage.getItem("theme") === "dark");
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+    localStorage.setItem("theme", dark ? "dark" : "light");
+  }, [dark]);
 
   const role = user?.role;
   const isCaptain = role === "captain" || role === "both";
-  const isDriver = role === "driver" || role === "both";
+  const isDriver  = role === "driver"  || role === "both";
 
   const links = [
-    { href: "/caronas", label: "Carro" },
-    { href: "/lanchas", label: "Lancha" },
+    { href: "/caronas",   label: "Carro" },
+    { href: "/lanchas",   label: "Lancha" },
     { href: "/recorrentes", label: "Recorrentes" },
     ...(isCaptain ? [{ href: "/minha-lancha", label: "Minha Lancha" }] : []),
-    ...(isDriver ? [{ href: "/meu-carro", label: "Meu Carro" }] : []),
-    ...(user ? [{ href: "/minhas-reservas", label: "Reservas" }] : []),
+    ...(isDriver  ? [{ href: "/meu-carro",    label: "Meu Carro"    }] : []),
+    ...(user      ? [{ href: "/minhas-reservas", label: "Reservas"  }] : []),
   ];
 
   return (
@@ -27,14 +33,13 @@ export default function Navbar() {
         <Link href="/">
           <div className="nav-logo">
             <div className="nav-logo-icon">
-              <Car size={13} color="#fff" />
-              <Anchor size={13} color="#fff" />
+              <Car size={12} color="#fff" />
+              <Anchor size={12} color="#fff" />
             </div>
             <span className="nav-logo-text">LanchaCarona</span>
           </div>
         </Link>
 
-        {/* Desktop links */}
         <div className="nav-links hidden md-flex">
           {links.map(l => (
             <Link key={l.href} href={l.href}>
@@ -43,8 +48,15 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Desktop auth */}
         <div className="nav-auth hidden md-flex">
+          <button
+            className="nav-theme-btn"
+            onClick={() => setDark(d => !d)}
+            title={dark ? "Modo claro" : "Modo escuro"}
+          >
+            {dark ? <Sun size={16} /> : <Moon size={16} />}
+          </button>
+
           {user ? (
             <>
               <Link href="/perfil">
@@ -63,10 +75,15 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile hamburger */}
-        <button className="nav-hamburger md-hidden" onClick={() => setOpen(!open)}>
-          {open ? <X size={22} /> : <Menu size={22} />}
-        </button>
+        <div className="hidden md-flex" style={{ display: "none" }} />
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }} className="md-hidden">
+          <button className="nav-theme-btn" onClick={() => setDark(d => !d)}>
+            {dark ? <Sun size={16} /> : <Moon size={16} />}
+          </button>
+          <button className="nav-hamburger" onClick={() => setOpen(!open)}>
+            {open ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
       </div>
 
       {open && (

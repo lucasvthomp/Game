@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useParams, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
-import { Anchor, Clock, MapPin, Users, Star, ChevronLeft, CheckCircle } from "lucide-react";
+import { Anchor, Clock, MapPin, Users, Star, ChevronLeft, CheckCircle, Shield, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
@@ -37,142 +37,197 @@ export default function RideDetail() {
     onError: (err: any) => setError(err.message),
   });
 
-  if (isLoading) return <div style={{ textAlign: "center", padding: 80, color: "#64748B" }}>Carregando...</div>;
-  if (!data?.ride) return <div style={{ textAlign: "center", padding: 80, color: "#64748B" }}>Viagem não encontrada.</div>;
+  if (isLoading) return (
+    <div style={{ minHeight: "80vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#020D18" }}>
+      <div style={{ color: "#334155" }}>Carregando viagem...</div>
+    </div>
+  );
+
+  if (!data?.ride) return (
+    <div style={{ minHeight: "80vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#020D18" }}>
+      <div style={{ textAlign: "center" }}>
+        <AlertCircle size={40} color="#334155" style={{ marginBottom: 12 }} />
+        <p style={{ color: "#475569" }}>Viagem não encontrada.</p>
+      </div>
+    </div>
+  );
 
   const { ride, captain, captainProfile, avgRating } = data;
   const reviews = reviewsData?.reviews || [];
   const totalPrice = (parseFloat(ride.pricePerSeat) * seats).toFixed(2).replace(".", ",");
+  const isCaptainOwner = user?.id === ride.captainId;
 
   return (
-    <div style={{ maxWidth: 800, margin: "0 auto", padding: "40px 20px" }}>
-      <button onClick={() => navigate("/viagens")} style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", color: "#64748B", cursor: "pointer", marginBottom: 24, fontSize: 14 }}>
-        <ChevronLeft size={16} /> Voltar às viagens
-      </button>
+    <div style={{ minHeight: "100vh", background: "#020D18" }}>
+      {/* Back */}
+      <div style={{ borderBottom: "1px solid #0F2336", padding: "16px 24px" }}>
+        <button onClick={() => navigate("/viagens")} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "none", border: "none", color: "#475569", cursor: "pointer", fontSize: 14, fontWeight: 500 }}>
+          <ChevronLeft size={16} /> Todas as viagens
+        </button>
+      </div>
 
-      {/* Main card */}
-      <div style={{ background: "#071E36", border: "1px solid #1E3A5F", borderRadius: 16, padding: 32, marginBottom: 24 }}>
-        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 16, marginBottom: 28 }}>
-          <div>
-            <div style={{ fontSize: "1.8rem", fontWeight: 800, color: "#F0F9FF", marginBottom: 8 }}>
-              {ride.originCity} → {ride.destinationCity}
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 6, color: "#64748B", fontSize: 15 }}>
-              <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <Clock size={15} color="#38BDF8" />
-                Ida: {format(new Date(ride.departureTime), "dd 'de' MMMM 'de' yyyy 'às' HH:mm", { locale: ptBR })}
-              </span>
-              {ride.returnTime && (
-                <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                  <Clock size={15} color="#475569" />
-                  Volta: {format(new Date(ride.returnTime), "HH:mm 'do mesmo dia'")}
-                </span>
-              )}
-              <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <Users size={15} color="#38BDF8" />
-                {ride.availableSeats} vagas disponíveis de {ride.totalSeats}
-              </span>
-            </div>
-          </div>
-          <div style={{ textAlign: "right" }}>
-            <div style={{ fontSize: "2rem", fontWeight: 800, color: "#38BDF8" }}>
-              R$ {parseFloat(ride.pricePerSeat).toFixed(2).replace(".", ",")}
-            </div>
-            <div style={{ color: "#475569", fontSize: 14 }}>por pessoa</div>
-          </div>
-        </div>
+      <div style={{ maxWidth: 720, margin: "0 auto", padding: "36px 24px" }}>
 
-        {ride.description && (
-          <div style={{ background: "#0A2847", borderRadius: 10, padding: "14px 18px", marginBottom: 24, color: "#94A3B8", lineHeight: 1.6 }}>
-            {ride.description}
-          </div>
-        )}
-
-        {/* Captain info */}
-        <div style={{ borderTop: "1px solid #1E3A5F", paddingTop: 24, marginBottom: 24 }}>
-          <div style={{ fontWeight: 600, color: "#94A3B8", fontSize: 13, marginBottom: 14, textTransform: "uppercase", letterSpacing: "0.05em" }}>Capitão</div>
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <div style={{ width: 50, height: 50, borderRadius: "50%", background: "#1E3A5F", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Anchor size={20} color="#38BDF8" />
-            </div>
-            <div>
-              <div style={{ fontWeight: 700, color: "#F0F9FF", fontSize: "1.05rem" }}>{captain.fullName}</div>
-              <div style={{ color: "#475569", fontSize: 13 }}>@{captain.username}</div>
-            </div>
-            {avgRating > 0 && (
-              <span style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 4, color: "#FBBF24", fontWeight: 700 }}>
-                <Star size={16} fill="#FBBF24" /> {avgRating.toFixed(1)}
+        {/* Route Hero */}
+        <div style={{ background: "linear-gradient(135deg, #071829 0%, #04111F 100%)", border: "1px solid #0F2336", borderRadius: 20, padding: "32px 28px", marginBottom: 16 }}>
+          <div style={{ display: "flex", gap: 8, marginBottom: 24, flexWrap: "wrap" }}>
+            <span style={{ background: "rgba(34,197,94,0.08)", color: "#4ADE80", border: "1px solid rgba(74,222,128,0.2)", padding: "4px 12px", borderRadius: 100, fontSize: 12, fontWeight: 700 }}>
+              {ride.availableSeats} vagas disponíveis
+            </span>
+            {captainProfile?.verified && (
+              <span style={{ background: "rgba(56,189,248,0.08)", color: "#38BDF8", border: "1px solid rgba(56,189,248,0.2)", padding: "4px 12px", borderRadius: 100, fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", gap: 4 }}>
+                <Shield size={11} /> Capitão verificado
               </span>
             )}
           </div>
-          {captainProfile && (
-            <div style={{ marginTop: 14, color: "#64748B", fontSize: 14, display: "flex", gap: 20, flexWrap: "wrap" }}>
-              <span><strong style={{ color: "#94A3B8" }}>Lancha:</strong> {captainProfile.boatName}{captainProfile.boatModel ? ` (${captainProfile.boatModel})` : ""}</span>
-              <span><strong style={{ color: "#94A3B8" }}>Capacidade:</strong> {captainProfile.boatCapacity} pessoas</span>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", gap: 12, marginBottom: 28 }}>
+            <div>
+              <div style={{ color: "#475569", fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", marginBottom: 4 }}>ORIGEM</div>
+              <div style={{ fontWeight: 900, fontSize: "clamp(1.4rem, 4vw, 2rem)", color: "#F0F9FF", letterSpacing: "-0.5px" }}>{ride.originCity}</div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+              <Anchor size={18} color="#0EA5E9" />
+              <div style={{ height: 1, width: 40, background: "linear-gradient(90deg, #0F2336, #1E3A5F, #0F2336)" }} />
+            </div>
+            <div style={{ textAlign: "right" }}>
+              <div style={{ color: "#475569", fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", marginBottom: 4 }}>DESTINO</div>
+              <div style={{ fontWeight: 900, fontSize: "clamp(1.4rem, 4vw, 2rem)", color: "#F0F9FF", letterSpacing: "-0.5px" }}>{ride.destinationCity}</div>
+            </div>
+          </div>
+
+          <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#64748B", fontSize: 14 }}>
+              <Clock size={15} color="#0EA5E9" />
+              <span>Ida: <strong style={{ color: "#94A3B8" }}>{format(new Date(ride.departureTime), "dd 'de' MMMM 'às' HH:mm", { locale: ptBR })}</strong></span>
+            </div>
+            {ride.returnTime && (
+              <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#64748B", fontSize: 14 }}>
+                <Clock size={15} color="#334155" />
+                <span>Volta: <strong style={{ color: "#94A3B8" }}>{format(new Date(ride.returnTime), "HH:mm")}</strong></span>
+              </div>
+            )}
+            <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#64748B", fontSize: 14 }}>
+              <Users size={15} color="#0EA5E9" />
+              <span>{ride.totalSeats} assentos totais</span>
+            </div>
+          </div>
+
+          {ride.description && (
+            <div style={{ marginTop: 20, paddingTop: 20, borderTop: "1px solid #0F2336", color: "#64748B", fontSize: 14, lineHeight: 1.7 }}>
+              {ride.description}
             </div>
           )}
         </div>
 
-        {/* Reservation */}
+        {/* Captain card */}
+        <div style={{ background: "#071829", border: "1px solid #0F2336", borderRadius: 16, padding: 24, marginBottom: 16 }}>
+          <p style={{ color: "#334155", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", marginBottom: 16 }}>CAPITÃO</p>
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            <div style={{ width: 52, height: 52, borderRadius: "50%", background: "linear-gradient(135deg, #0369A1, #0284C7)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <Anchor size={22} color="#fff" />
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: 800, color: "#F0F9FF", fontSize: "1.05rem" }}>{captain.fullName}</div>
+              <div style={{ color: "#475569", fontSize: 13 }}>@{captain.username}</div>
+            </div>
+            {avgRating > 0 && (
+              <div style={{ textAlign: "right" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 4, color: "#FBBF24", fontWeight: 800, fontSize: "1.1rem", justifyContent: "flex-end" }}>
+                  <Star size={16} fill="#FBBF24" /> {avgRating.toFixed(1)}
+                </div>
+                <div style={{ color: "#334155", fontSize: 11 }}>{reviews.length} avaliações</div>
+              </div>
+            )}
+          </div>
+          {captainProfile && (
+            <div style={{ marginTop: 14, paddingTop: 14, borderTop: "1px solid #0F2336", display: "flex", gap: 20, flexWrap: "wrap" }}>
+              <span style={{ color: "#475569", fontSize: 13 }}>
+                <span style={{ color: "#334155" }}>Lancha:</span> <strong style={{ color: "#94A3B8" }}>{captainProfile.boatName}{captainProfile.boatModel ? ` · ${captainProfile.boatModel}` : ""}</strong>
+              </span>
+              <span style={{ color: "#475569", fontSize: 13 }}>
+                <span style={{ color: "#334155" }}>Capacidade:</span> <strong style={{ color: "#94A3B8" }}>{captainProfile.boatCapacity} pessoas</strong>
+              </span>
+            </div>
+          )}
+          {captainProfile?.bio && (
+            <p style={{ marginTop: 12, color: "#475569", fontSize: 13, lineHeight: 1.6 }}>{captainProfile.bio}</p>
+          )}
+        </div>
+
+        {/* Reservation box */}
         {success ? (
-          <div style={{ background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.3)", borderRadius: 12, padding: "20px 24px", display: "flex", alignItems: "center", gap: 12 }}>
-            <CheckCircle size={24} color="#22C55E" />
+          <div style={{ background: "rgba(34,197,94,0.06)", border: "1px solid rgba(74,222,128,0.2)", borderRadius: 16, padding: 28, display: "flex", alignItems: "center", gap: 16, marginBottom: 16 }}>
+            <CheckCircle size={32} color="#4ADE80" />
             <div>
-              <div style={{ fontWeight: 700, color: "#22C55E" }}>Reserva confirmada!</div>
-              <div style={{ color: "#64748B", fontSize: 14 }}>Sua vaga foi reservada. Veja em "Minhas Reservas".</div>
+              <div style={{ fontWeight: 800, color: "#4ADE80", fontSize: "1.05rem" }}>Reserva confirmada!</div>
+              <div style={{ color: "#475569", fontSize: 14, marginTop: 2 }}>Veja os detalhes em "Minhas Reservas".</div>
             </div>
           </div>
-        ) : user && user.id !== ride.captainId && ride.status === "active" ? (
-          <div style={{ background: "#0A2847", borderRadius: 12, padding: 20 }}>
-            <div style={{ fontWeight: 600, color: "#F0F9FF", marginBottom: 14 }}>Reservar assento</div>
-            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
-              <label style={{ color: "#94A3B8", fontSize: 14 }}>Assentos:</label>
+        ) : !user ? (
+          <div style={{ background: "#071829", border: "1px solid #0F2336", borderRadius: 16, padding: 28, textAlign: "center", marginBottom: 16 }}>
+            <p style={{ color: "#475569", marginBottom: 16 }}>Faça login para reservar um assento</p>
+            <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
+              <a href="/entrar" style={{ background: "#0284C7", color: "#fff", padding: "10px 24px", borderRadius: 10, textDecoration: "none", fontWeight: 700, fontSize: 14 }}>Entrar</a>
+              <a href="/cadastro" style={{ background: "#071829", border: "1px solid #1E3A5F", color: "#94A3B8", padding: "10px 24px", borderRadius: 10, textDecoration: "none", fontWeight: 600, fontSize: 14 }}>Cadastrar</a>
+            </div>
+          </div>
+        ) : isCaptainOwner ? (
+          <div style={{ background: "#071829", border: "1px solid #0F2336", borderRadius: 16, padding: 20, color: "#475569", fontSize: 14, textAlign: "center", marginBottom: 16 }}>
+            Esta é sua viagem.
+          </div>
+        ) : ride.status === "active" && ride.availableSeats > 0 ? (
+          <div style={{ background: "#071829", border: "1px solid #0F2336", borderRadius: 16, padding: 24, marginBottom: 16 }}>
+            <p style={{ color: "#334155", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", marginBottom: 16 }}>RESERVAR ASSENTO</p>
+            <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
+              <label style={{ color: "#64748B", fontSize: 14, whiteSpace: "nowrap" }}>Quantos assentos?</label>
               <select value={seats} onChange={e => setSeats(parseInt(e.target.value))}
-                style={{ background: "#071E36", border: "1px solid #1E3A5F", borderRadius: 8, padding: "8px 12px", color: "#E2E8F0", fontSize: 14 }}>
-                {Array.from({ length: Math.min(ride.availableSeats, 6) }, (_, i) => i + 1).map(n => (
+                style={{ background: "#040F1C", border: "1px solid #1E3A5F", borderRadius: 8, padding: "9px 14px", color: "#E2E8F0", fontSize: 14, flex: 1 }}>
+                {Array.from({ length: Math.min(ride.availableSeats, 8) }, (_, i) => i + 1).map(n => (
                   <option key={n} value={n}>{n} {n === 1 ? "assento" : "assentos"}</option>
                 ))}
               </select>
-              <span style={{ color: "#38BDF8", fontWeight: 700, fontSize: "1.1rem", marginLeft: "auto" }}>Total: R$ {totalPrice}</span>
             </div>
-            {error && <div style={{ color: "#F87171", fontSize: 14, marginBottom: 10 }}>{error}</div>}
-            <button
-              onClick={() => { setError(""); reserveMutation.mutate(); }}
-              disabled={reserveMutation.isPending || ride.availableSeats === 0}
-              style={{ width: "100%", background: "#0284C7", color: "#fff", border: "none", borderRadius: 10, padding: "13px", fontWeight: 700, fontSize: 15, cursor: "pointer" }}
-            >
-              {reserveMutation.isPending ? "Reservando..." : "Confirmar reserva"}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, background: "#040F1C", borderRadius: 10, padding: "12px 16px" }}>
+              <span style={{ color: "#475569", fontSize: 14 }}>{seats} × R$ {parseFloat(ride.pricePerSeat).toFixed(2).replace(".", ",")}</span>
+              <span style={{ fontWeight: 900, color: "#38BDF8", fontSize: "1.2rem" }}>R$ {totalPrice}</span>
+            </div>
+            {error && (
+              <div style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", borderRadius: 8, padding: "10px 14px", color: "#F87171", fontSize: 13, marginBottom: 14 }}>
+                {error}
+              </div>
+            )}
+            <button onClick={() => { setError(""); reserveMutation.mutate(); }} disabled={reserveMutation.isPending}
+              style={{ width: "100%", background: "linear-gradient(135deg, #0284C7, #0369A1)", color: "#fff", border: "none", borderRadius: 12, padding: 15, fontWeight: 800, fontSize: 15, cursor: reserveMutation.isPending ? "not-allowed" : "pointer", opacity: reserveMutation.isPending ? 0.7 : 1 }}>
+              {reserveMutation.isPending ? "Confirmando..." : `Confirmar reserva · R$ ${totalPrice}`}
             </button>
           </div>
-        ) : !user ? (
-          <div style={{ textAlign: "center", padding: 20 }}>
-            <p style={{ color: "#64748B", marginBottom: 12 }}>Faça login para reservar</p>
-            <a href="/entrar" style={{ background: "#0284C7", color: "#fff", padding: "10px 24px", borderRadius: 8, textDecoration: "none", fontWeight: 600 }}>Entrar</a>
-          </div>
         ) : null}
-      </div>
 
-      {/* Reviews */}
-      {reviews.length > 0 && (
-        <div style={{ background: "#071E36", border: "1px solid #1E3A5F", borderRadius: 16, padding: 24 }}>
-          <h3 style={{ fontWeight: 700, color: "#F0F9FF", marginBottom: 20 }}>Avaliações do capitão</h3>
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            {reviews.map((rev: any) => (
-              <div key={rev.id} style={{ borderBottom: "1px solid #1E3A5F", paddingBottom: 16 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} size={14} color="#FBBF24" fill={i < rev.rating ? "#FBBF24" : "none"} />
-                  ))}
-                  <span style={{ color: "#475569", fontSize: 12, marginLeft: 4 }}>
-                    {format(new Date(rev.createdAt), "dd/MM/yyyy")}
-                  </span>
+        {/* Reviews */}
+        {reviews.length > 0 && (
+          <div style={{ background: "#071829", border: "1px solid #0F2336", borderRadius: 16, padding: 24 }}>
+            <p style={{ color: "#334155", fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", marginBottom: 20 }}>AVALIAÇÕES DO CAPITÃO</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+              {reviews.slice(0, 5).map((rev: any, i: number) => (
+                <div key={rev.id} style={{ paddingBottom: i < reviews.length - 1 ? 18 : 0, borderBottom: i < reviews.length - 1 ? "1px solid #0F2336" : "none" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                    <div style={{ display: "flex", gap: 2 }}>
+                      {Array.from({ length: 5 }).map((_, j) => (
+                        <Star key={j} size={13} color="#FBBF24" fill={j < rev.rating ? "#FBBF24" : "none"} />
+                      ))}
+                    </div>
+                    <span style={{ color: "#334155", fontSize: 12 }}>
+                      {format(new Date(rev.createdAt), "dd/MM/yyyy")}
+                    </span>
+                  </div>
+                  {rev.comment && <p style={{ color: "#64748B", fontSize: 14, lineHeight: 1.6 }}>{rev.comment}</p>}
                 </div>
-                {rev.comment && <p style={{ color: "#94A3B8", fontSize: 14, lineHeight: 1.5 }}>{rev.comment}</p>}
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

@@ -1,109 +1,88 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
-import { Anchor, Menu, X, ChevronDown } from "lucide-react";
+import { Anchor, Menu, X } from "lucide-react";
 import { useState } from "react";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const [location] = useLocation();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  const isActive = (href: string) => location === href;
+  const links = [
+    { href: "/viagens", label: "Viagens" },
+    ...(user?.role === "captain" ? [{ href: "/minha-lancha", label: "Minha Lancha" }] : []),
+    ...(user ? [{ href: "/minhas-reservas", label: "Reservas" }] : []),
+  ];
 
   return (
-    <nav style={{ background: "rgba(2,13,24,0.92)", borderBottom: "1px solid #0F2336", position: "sticky", top: 0, zIndex: 100, backdropFilter: "blur(16px)" }}>
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 58 }}>
-        {/* Logo */}
+    <nav className="nav-root">
+      <div className="nav-inner">
         <Link href="/">
-          <span style={{ display: "flex", alignItems: "center", gap: 9, cursor: "pointer" }}>
-            <div style={{ width: 32, height: 32, borderRadius: 10, background: "linear-gradient(135deg, #0369A1, #0284C7)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Anchor size={17} color="#fff" />
-            </div>
-            <span style={{ fontWeight: 800, fontSize: 17, color: "#F0F9FF", letterSpacing: "-0.5px" }}>LanchaCarona</span>
-          </span>
+          <div className="nav-logo">
+            <div className="nav-logo-icon"><Anchor size={16} color="#fff" /></div>
+            <span className="nav-logo-text">LanchaCarona</span>
+          </div>
         </Link>
 
-        {/* Desktop nav */}
-        <div style={{ display: "flex", alignItems: "center", gap: 4 }} className="hidden md:flex">
-          <NavLink href="/viagens" active={isActive("/viagens")} label="Viagens" />
-          {user && user.role === "captain" && <NavLink href="/minha-lancha" active={isActive("/minha-lancha")} label="Minha Lancha" />}
-          {user && <NavLink href="/minhas-reservas" active={isActive("/minhas-reservas")} label="Reservas" />}
+        {/* Desktop links */}
+        <div className="nav-links hidden md-flex">
+          {links.map(l => (
+            <Link key={l.href} href={l.href}>
+              <span className={`nav-link ${location === l.href ? "active" : ""}`}>{l.label}</span>
+            </Link>
+          ))}
         </div>
 
         {/* Desktop auth */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }} className="hidden md:flex">
+        <div className="nav-auth hidden md-flex">
           {user ? (
             <>
               <Link href="/perfil">
-                <span style={{ display: "flex", alignItems: "center", gap: 8, background: "#071829", border: "1px solid #1E3A5F", borderRadius: 10, padding: "7px 14px", cursor: "pointer" }}>
-                  <div style={{ width: 24, height: 24, borderRadius: "50%", background: "#0284C7", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "#fff" }}>
-                    {user.fullName[0]}
-                  </div>
-                  <span style={{ color: "#94A3B8", fontSize: 14, fontWeight: 500 }}>{user.fullName.split(" ")[0]}</span>
-                </span>
+                <div className="nav-avatar">
+                  <div className="nav-avatar-dot">{user.fullName[0]}</div>
+                  <span>{user.fullName.split(" ")[0]}</span>
+                </div>
               </Link>
-              <button onClick={() => logout()} style={{ background: "none", border: "none", color: "#334155", fontSize: 13, cursor: "pointer", padding: "7px 10px" }}>
-                Sair
-              </button>
+              <button className="nav-logout" onClick={() => logout()}>Sair</button>
             </>
           ) : (
             <>
-              <Link href="/entrar">
-                <span style={{ color: "#64748B", fontSize: 14, fontWeight: 500, cursor: "pointer", padding: "7px 12px" }}>Entrar</span>
-              </Link>
-              <Link href="/cadastro">
-                <span style={{ background: "#0284C7", color: "#fff", padding: "8px 18px", borderRadius: 10, fontSize: 14, fontWeight: 700, cursor: "pointer", display: "inline-block" }}>
-                  Cadastrar
-                </span>
-              </Link>
+              <Link href="/entrar"><span className="nav-login">Entrar</span></Link>
+              <Link href="/cadastro"><span className="nav-signup">Cadastrar</span></Link>
             </>
           )}
         </div>
 
-        {/* Mobile menu button */}
-        <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: "none", border: "none", cursor: "pointer", color: "#475569", padding: 6 }} className="md:hidden">
-          {menuOpen ? <X size={22} /> : <Menu size={22} />}
+        {/* Mobile hamburger */}
+        <button className="nav-hamburger md-hidden" onClick={() => setOpen(!open)}>
+          {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div style={{ background: "#040F1C", borderTop: "1px solid #0F2336", padding: "16px 24px", display: "flex", flexDirection: "column", gap: 4 }}>
-          {[
-            { href: "/viagens", label: "Viagens" },
-            ...(user?.role === "captain" ? [{ href: "/minha-lancha", label: "Minha Lancha" }] : []),
-            ...(user ? [{ href: "/minhas-reservas", label: "Minhas Reservas" }, { href: "/perfil", label: "Perfil" }] : []),
-          ].map(item => (
-            <Link key={item.href} href={item.href}>
-              <span onClick={() => setMenuOpen(false)} style={{ display: "block", padding: "10px 14px", borderRadius: 10, color: isActive(item.href) ? "#38BDF8" : "#64748B", fontWeight: isActive(item.href) ? 700 : 500, fontSize: 15, cursor: "pointer", background: isActive(item.href) ? "rgba(56,189,248,0.06)" : "none" }}>
-                {item.label}
-              </span>
+      {open && (
+        <div className="nav-mobile">
+          {links.map(l => (
+            <Link key={l.href} href={l.href}>
+              <span className={`nav-mobile-link ${location === l.href ? "active" : ""}`} onClick={() => setOpen(false)}>{l.label}</span>
             </Link>
           ))}
-          <div style={{ borderTop: "1px solid #0F2336", marginTop: 8, paddingTop: 8 }}>
-            {user ? (
-              <button onClick={() => { logout(); setMenuOpen(false); }} style={{ background: "none", border: "none", color: "#475569", fontSize: 15, cursor: "pointer", padding: "10px 14px", width: "100%", textAlign: "left" }}>
-                Sair
-              </button>
-            ) : (
-              <div style={{ display: "flex", gap: 10 }}>
-                <Link href="/entrar"><span onClick={() => setMenuOpen(false)} style={{ flex: 1, textAlign: "center", background: "#071829", border: "1px solid #1E3A5F", color: "#94A3B8", padding: "10px 20px", borderRadius: 10, cursor: "pointer", fontSize: 14, fontWeight: 600, display: "block" }}>Entrar</span></Link>
-                <Link href="/cadastro"><span onClick={() => setMenuOpen(false)} style={{ flex: 1, textAlign: "center", background: "#0284C7", color: "#fff", padding: "10px 20px", borderRadius: 10, cursor: "pointer", fontSize: 14, fontWeight: 700, display: "block" }}>Cadastrar</span></Link>
-              </div>
-            )}
-          </div>
+          {user && (
+            <Link href="/perfil">
+              <span className="nav-mobile-link" onClick={() => setOpen(false)}>Perfil</span>
+            </Link>
+          )}
+          <div className="nav-mobile-divider" />
+          {user ? (
+            <button className="nav-mobile-link" style={{ background: "none", border: "none", width: "100%", textAlign: "left", color: "#475569", cursor: "pointer" }}
+              onClick={() => { logout(); setOpen(false); }}>Sair</button>
+          ) : (
+            <div className="nav-mobile-actions">
+              <Link href="/entrar"><span className="nav-mobile-btn" style={{ background: "#071525", border: "1px solid #0D2035", color: "#94A3B8" }} onClick={() => setOpen(false)}>Entrar</span></Link>
+              <Link href="/cadastro"><span className="nav-mobile-btn" style={{ background: "#0284C7", color: "#fff", fontWeight: 700 }} onClick={() => setOpen(false)}>Cadastrar</span></Link>
+            </div>
+          )}
         </div>
       )}
     </nav>
-  );
-}
-
-function NavLink({ href, active, label }: { href: string; active: boolean; label: string }) {
-  return (
-    <Link href={href}>
-      <span style={{ display: "inline-block", padding: "6px 14px", borderRadius: 8, color: active ? "#38BDF8" : "#475569", fontWeight: active ? 700 : 500, fontSize: 14, cursor: "pointer", background: active ? "rgba(56,189,248,0.08)" : "none", transition: "all 0.15s" }}>
-        {label}
-      </span>
-    </Link>
   );
 }

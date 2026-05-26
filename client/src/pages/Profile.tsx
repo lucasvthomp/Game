@@ -1,6 +1,6 @@
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation, Link } from "wouter";
-import { User, Anchor, Calendar, LogOut } from "lucide-react";
+import { Anchor, Calendar, LogOut, ChevronRight, User } from "lucide-react";
 
 export default function Profile() {
   const { user, logout } = useAuth();
@@ -8,68 +8,87 @@ export default function Profile() {
 
   if (!user) { navigate("/entrar"); return null; }
 
-  const handleLogout = async () => {
-    await logout();
-    navigate("/");
-  };
-
   return (
-    <div style={{ maxWidth: 600, margin: "0 auto", padding: "40px 20px" }}>
-      <h1 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#F0F9FF", marginBottom: 32 }}>Meu Perfil</h1>
+    <div className="profile-page">
+      <h1 className="page-title" style={{ marginBottom: 28 }}>Perfil</h1>
 
-      <div style={{ background: "#071E36", border: "1px solid #1E3A5F", borderRadius: 16, padding: 32, marginBottom: 20 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: 28 }}>
-          <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#1E3A5F", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <User size={28} color="#38BDF8" />
+      {/* User card */}
+      <div className="profile-card" style={{ marginBottom: 16 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
+          <div className="profile-avatar">
+            <span style={{ fontSize: 22, fontWeight: 800, color: "#fff" }}>{user.fullName[0]}</span>
           </div>
           <div>
-            <div style={{ fontWeight: 700, fontSize: "1.3rem", color: "#F0F9FF" }}>{user.fullName}</div>
-            <div style={{ color: "#64748B" }}>@{user.username}</div>
-            <span style={{ background: user.role === "captain" ? "rgba(56,189,248,0.1)" : "rgba(148,163,184,0.1)", color: user.role === "captain" ? "#38BDF8" : "#94A3B8", padding: "2px 10px", borderRadius: 20, fontSize: 12, fontWeight: 600, marginTop: 4, display: "inline-block" }}>
+            <div style={{ fontWeight: 800, fontSize: "1.2rem", color: "#F8FAFC" }}>{user.fullName}</div>
+            <div style={{ color: "#475569", fontSize: 13 }}>@{user.username}</div>
+            <span style={{ display: "inline-block", marginTop: 5, padding: "2px 10px", borderRadius: 100, fontSize: 11, fontWeight: 700, background: user.role === "captain" ? "rgba(14,165,233,0.08)" : "rgba(148,163,184,0.08)", color: user.role === "captain" ? "#38BDF8" : "#64748B", border: `1px solid ${user.role === "captain" ? "rgba(14,165,233,0.15)" : "rgba(148,163,184,0.1)"}` }}>
               {user.role === "captain" ? "Capitão" : "Passageiro"}
             </span>
           </div>
         </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 12, color: "#94A3B8", fontSize: 15, borderTop: "1px solid #1E3A5F", paddingTop: 20 }}>
-          <div style={{ display: "flex", gap: 10 }}>
-            <span style={{ color: "#475569", minWidth: 80 }}>Email</span>
-            <span style={{ color: "#E2E8F0" }}>{user.email}</span>
+        <div style={{ borderTop: "1px solid #0D2035", paddingTop: 16, display: "flex", flexDirection: "column", gap: 10 }}>
+          <div style={{ display: "flex", gap: 12, fontSize: 14 }}>
+            <span style={{ color: "#334155", minWidth: 72 }}>Email</span>
+            <span style={{ color: "#94A3B8" }}>{user.email}</span>
           </div>
           {user.phone && (
-            <div style={{ display: "flex", gap: 10 }}>
-              <span style={{ color: "#475569", minWidth: 80 }}>Telefone</span>
-              <span style={{ color: "#E2E8F0" }}>{user.phone}</span>
+            <div style={{ display: "flex", gap: 12, fontSize: 14 }}>
+              <span style={{ color: "#334155", minWidth: 72 }}>Telefone</span>
+              <span style={{ color: "#94A3B8" }}>{user.phone}</span>
             </div>
           )}
         </div>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      {/* Actions */}
+      <div className="profile-list">
         {user.role !== "captain" && (
           <Link href="/perfil-capitao">
-            <div style={{ background: "#071E36", border: "1px solid #1E3A5F", borderRadius: 12, padding: "16px 20px", cursor: "pointer", display: "flex", alignItems: "center", gap: 14 }}>
-              <Anchor size={20} color="#38BDF8" />
-              <div>
-                <div style={{ fontWeight: 600, color: "#F0F9FF" }}>Quero ser capitão</div>
-                <div style={{ color: "#64748B", fontSize: 13 }}>Complete seu perfil e ofereça caronas</div>
+            <button className="profile-action">
+              <div style={{ width: 38, height: 38, borderRadius: 10, background: "rgba(14,165,233,0.08)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Anchor size={18} color="#0EA5E9" />
               </div>
-            </div>
+              <div style={{ flex: 1 }}>
+                <div className="profile-action-title">Quero ser capitão</div>
+                <div className="profile-action-sub">Complete seu perfil e publique viagens</div>
+              </div>
+              <ChevronRight size={16} color="#334155" />
+            </button>
+          </Link>
+        )}
+        {user.role === "captain" && (
+          <Link href="/minha-lancha">
+            <button className="profile-action">
+              <div style={{ width: 38, height: 38, borderRadius: 10, background: "rgba(14,165,233,0.08)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Anchor size={18} color="#0EA5E9" />
+              </div>
+              <div style={{ flex: 1 }}>
+                <div className="profile-action-title">Minha Lancha</div>
+                <div className="profile-action-sub">Gerenciar viagens e passageiros</div>
+              </div>
+              <ChevronRight size={16} color="#334155" />
+            </button>
           </Link>
         )}
         <Link href="/minhas-reservas">
-          <div style={{ background: "#071E36", border: "1px solid #1E3A5F", borderRadius: 12, padding: "16px 20px", cursor: "pointer", display: "flex", alignItems: "center", gap: 14 }}>
-            <Calendar size={20} color="#38BDF8" />
-            <div>
-              <div style={{ fontWeight: 600, color: "#F0F9FF" }}>Minhas reservas</div>
-              <div style={{ color: "#64748B", fontSize: 13 }}>Ver suas caronas agendadas</div>
+          <button className="profile-action">
+            <div style={{ width: 38, height: 38, borderRadius: 10, background: "rgba(14,165,233,0.08)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Calendar size={18} color="#0EA5E9" />
             </div>
-          </div>
+            <div style={{ flex: 1 }}>
+              <div className="profile-action-title">Minhas Reservas</div>
+              <div className="profile-action-sub">Ver caronas agendadas</div>
+            </div>
+            <ChevronRight size={16} color="#334155" />
+          </button>
         </Link>
-        <button onClick={handleLogout}
-          style={{ background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.2)", borderRadius: 12, padding: "16px 20px", cursor: "pointer", display: "flex", alignItems: "center", gap: 14, width: "100%", textAlign: "left" }}>
-          <LogOut size={20} color="#F87171" />
-          <span style={{ fontWeight: 600, color: "#F87171" }}>Sair da conta</span>
+        <button className="profile-action profile-action-danger" onClick={async () => { await logout(); navigate("/"); }}>
+          <div style={{ width: 38, height: 38, borderRadius: 10, background: "rgba(239,68,68,0.08)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <LogOut size={18} color="#F87171" />
+          </div>
+          <div style={{ flex: 1 }}>
+            <div className="profile-action-title" style={{ color: "#F87171" }}>Sair da conta</div>
+          </div>
         </button>
       </div>
     </div>

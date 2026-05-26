@@ -1,10 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { Link } from "wouter";
-import { Anchor, Clock, Star, MapPin, Search, SlidersHorizontal, Wind } from "lucide-react";
+import { Anchor, Clock, Star, MapPin, Search } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
+
+const PLACEHOLDER_RIDES = [
+  { id: 1, originCity: "Bertioga", destinationCity: "Ilhabela", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 18).toISOString(), returnTime: new Date(Date.now() + 1000 * 60 * 60 * 26).toISOString(), pricePerSeat: "85.00", availableSeats: 4, totalSeats: 6, captainName: "Rafael M.", boatName: "Veneza III", avgRating: 4.9 },
+  { id: 2, originCity: "Santos", destinationCity: "Ilha Grande", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 30).toISOString(), returnTime: null, pricePerSeat: "120.00", availableSeats: 2, totalSeats: 8, captainName: "Carlos P.", boatName: "Acqua Viva", avgRating: 4.7 },
+  { id: 3, originCity: "Angra dos Reis", destinationCity: "Paraty", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 44).toISOString(), returnTime: new Date(Date.now() + 1000 * 60 * 60 * 52).toISOString(), pricePerSeat: "65.00", availableSeats: 6, totalSeats: 10, captainName: "Bruno S.", boatName: "Mar Aberto", avgRating: 5.0 },
+  { id: 4, originCity: "Guarujá", destinationCity: "Ubatuba", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 60).toISOString(), returnTime: null, pricePerSeat: "95.00", availableSeats: 3, totalSeats: 6, captainName: "Diego F.", boatName: "Brisa do Mar", avgRating: 4.8 },
+  { id: 5, originCity: "Ilhabela", destinationCity: "São Sebastião", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 72).toISOString(), returnTime: null, pricePerSeat: "40.00", availableSeats: 5, totalSeats: 8, captainName: "Marcos T.", boatName: "Veleiro Sul", avgRating: 4.6 },
+  { id: 6, originCity: "Paraty", destinationCity: "Angra dos Reis", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 80).toISOString(), returnTime: null, pricePerSeat: "55.00", availableSeats: 1, totalSeats: 6, captainName: "André L.", boatName: "Ondas do Sul", avgRating: 4.9 },
+];
 
 export default function Rides() {
   const [search, setSearch] = useState("");
@@ -13,116 +22,72 @@ export default function Rides() {
     queryFn: () => apiRequest("GET", "/api/rides"),
   });
 
-  const rides = (data?.rides || []).filter((r: any) => {
+  const liveRides = data?.rides || [];
+  const source = liveRides.length > 0 ? liveRides : PLACEHOLDER_RIDES;
+  const rides = source.filter((r: any) => {
     if (!search.trim()) return true;
     const q = search.toLowerCase();
     return r.originCity.toLowerCase().includes(q) || r.destinationCity.toLowerCase().includes(q);
   });
 
   return (
-    <div style={{ minHeight: "100vh", background: "#020D18" }}>
-      {/* Header */}
-      <div style={{ background: "linear-gradient(180deg, #040F1C 0%, #020D18 100%)", borderBottom: "1px solid #0F2336", padding: "40px 24px 32px" }}>
-        <div style={{ maxWidth: 1000, margin: "0 auto" }}>
-          <p style={{ color: "#38BDF8", fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", marginBottom: 8 }}>CARONAS DISPONÍVEIS</p>
-          <h1 style={{ fontSize: "clamp(1.8rem, 5vw, 2.6rem)", fontWeight: 900, color: "#F0F9FF", letterSpacing: "-0.8px", marginBottom: 24 }}>
-            Encontre sua viagem
-          </h1>
-          {/* Search */}
-          <div style={{ position: "relative", maxWidth: 480 }}>
-            <Search size={16} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "#334155", pointerEvents: "none" }} />
-            <input
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              placeholder="Buscar por cidade de origem ou destino..."
-              style={{ width: "100%", background: "#071829", border: "1px solid #1E3A5F", borderRadius: 12, padding: "12px 14px 12px 42px", color: "#E2E8F0", fontSize: 14, outline: "none" }}
-            />
+    <div className="rides-page">
+      <div className="rides-header">
+        <div className="rides-header-inner">
+          <p className="section-label">CARONAS DISPONÍVEIS</p>
+          <h1 className="page-title" style={{ marginBottom: 0 }}>Encontre sua viagem</h1>
+          <div className="rides-search">
+            <Search size={15} className="rides-search-icon" />
+            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar por cidade..." />
           </div>
         </div>
       </div>
 
-      {/* Content */}
-      <div style={{ maxWidth: 1000, margin: "0 auto", padding: "36px 24px" }}>
+      <div className="rides-body">
         {isLoading ? (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
+          <div className="ride-grid">
             {[1,2,3,4].map(i => (
-              <div key={i} style={{ background: "#071829", border: "1px solid #0F2336", borderRadius: 16, height: 220, opacity: 0.4 }} />
+              <div key={i} style={{ background: "#071525", border: "1px solid #0D2035", borderRadius: 18, height: 240, opacity: 0.3 }} />
             ))}
           </div>
         ) : rides.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "80px 20px" }}>
-            <Wind size={48} color="#1E3A5F" style={{ marginBottom: 16 }} />
-            <p style={{ color: "#334155", fontSize: "1.1rem", fontWeight: 600 }}>Nenhuma viagem encontrada</p>
-            <p style={{ color: "#1E3A5F", fontSize: 14, marginTop: 6 }}>Tente outra cidade ou volte mais tarde</p>
+          <div className="rides-empty">
+            <Anchor size={44} className="empty-state-icon" />
+            <p style={{ fontWeight: 600, fontSize: "1.05rem", marginBottom: 6 }}>Nenhuma viagem encontrada</p>
+            <p style={{ fontSize: 13 }}>Tente outra cidade ou volte mais tarde</p>
           </div>
         ) : (
           <>
-            <p style={{ color: "#334155", fontSize: 13, marginBottom: 20 }}>{rides.length} {rides.length === 1 ? "viagem encontrada" : "viagens encontradas"}</p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(290px, 1fr))", gap: 16 }}>
-              {rides.map((ride: any) => (
+            <p className="rides-count">{rides.length} {rides.length === 1 ? "viagem encontrada" : "viagens encontradas"}</p>
+            <div className="ride-grid">
+              {rides.map((ride: any, i: number) => (
                 <Link key={ride.id} href={`/viagens/${ride.id}`}>
-                  <div style={{ background: "#071829", border: "1px solid #0F2336", borderRadius: 16, padding: 24, cursor: "pointer", height: "100%", display: "flex", flexDirection: "column", gap: 18 }}>
-                    {/* Badges */}
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                      <span style={{
-                        background: ride.availableSeats > 0 ? "rgba(34,197,94,0.08)" : "rgba(239,68,68,0.08)",
-                        color: ride.availableSeats > 0 ? "#4ADE80" : "#F87171",
-                        border: `1px solid ${ride.availableSeats > 0 ? "rgba(74,222,128,0.2)" : "rgba(248,113,113,0.2)"}`,
-                        padding: "3px 10px", borderRadius: 100, fontSize: 11, fontWeight: 700,
-                      }}>
-                        {ride.availableSeats > 0 ? `${ride.availableSeats} vagas` : "Esgotado"}
-                      </span>
-                      {ride.avgRating > 0 && (
-                        <span style={{ display: "flex", alignItems: "center", gap: 4, color: "#FBBF24", fontSize: 12, fontWeight: 700 }}>
-                          <Star size={12} fill="#FBBF24" /> {ride.avgRating.toFixed(1)}
+                  <div className="ride-card fade-up" style={{ animationDelay: `${i * 60}ms` }}>
+                    <div className="ride-card-inner">
+                      <div className="ride-top">
+                        <span className={`badge ${ride.availableSeats > 0 ? "badge-green" : "badge-red"}`}>
+                          {ride.availableSeats > 0 ? `${ride.availableSeats} vagas` : "Esgotado"}
                         </span>
-                      )}
-                    </div>
-
-                    {/* Route */}
-                    <div>
-                      <div style={{ fontWeight: 800, fontSize: "1.2rem", color: "#F0F9FF", letterSpacing: "-0.3px", marginBottom: 4 }}>
-                        {ride.originCity}
+                        {ride.avgRating > 0 && (
+                          <span className="rating"><Star size={11} fill="#FBBF24" color="#FBBF24" /> {ride.avgRating.toFixed(1)}</span>
+                        )}
                       </div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                        <div style={{ flex: 1, height: 1, background: "#0F2336" }} />
-                        <MapPin size={12} color="#0EA5E9" />
-                        <div style={{ flex: 1, height: 1, background: "#0F2336" }} />
+                      <div className="ride-route">
+                        <div className="ride-city">{ride.originCity}</div>
+                        <div className="ride-arrow"><div className="arrow-line" /><MapPin size={11} color="#0EA5E9" /><div className="arrow-line" /></div>
+                        <div className="ride-city">{ride.destinationCity}</div>
                       </div>
-                      <div style={{ fontWeight: 800, fontSize: "1.2rem", color: "#F0F9FF", letterSpacing: "-0.3px" }}>
-                        {ride.destinationCity}
+                      <div className="ride-meta">
+                        <span><Clock size={12} /> {format(new Date(ride.departureTime), "dd MMM · HH:mm", { locale: ptBR })}</span>
+                        <span><Anchor size={12} /> {ride.boatName} · Cap. {ride.captainName}</span>
                       </div>
-                    </div>
-
-                    {/* Meta */}
-                    <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-                      <span style={{ display: "flex", alignItems: "center", gap: 8, color: "#64748B", fontSize: 13 }}>
-                        <Clock size={13} color="#0EA5E9" />
-                        {format(new Date(ride.departureTime), "dd 'de' MMM · HH:mm", { locale: ptBR })}
-                      </span>
-                      {ride.returnTime && (
-                        <span style={{ display: "flex", alignItems: "center", gap: 8, color: "#475569", fontSize: 13 }}>
-                          <Clock size={13} color="#334155" />
-                          Volta {format(new Date(ride.returnTime), "HH:mm")}
-                        </span>
-                      )}
-                      <span style={{ display: "flex", alignItems: "center", gap: 8, color: "#64748B", fontSize: 13 }}>
-                        <Anchor size={13} color="#0EA5E9" />
-                        {ride.boatName || "Lancha"} · Cap. {ride.captainName}
-                      </span>
-                    </div>
-
-                    {/* Price + CTA */}
-                    <div style={{ marginTop: "auto", display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 16, borderTop: "1px solid #0F2336" }}>
-                      <div>
-                        <div style={{ fontWeight: 900, fontSize: "1.4rem", color: "#38BDF8", letterSpacing: "-0.5px" }}>
-                          R$ {parseFloat(ride.pricePerSeat).toFixed(2).replace(".", ",")}
+                      <div className="ride-footer">
+                        <div className="ride-price">
+                          <span className="price-amount">R$ {parseFloat(ride.pricePerSeat).toFixed(2).replace(".", ",")}</span>
+                          <span className="price-label">/ pessoa</span>
                         </div>
-                        <div style={{ color: "#334155", fontSize: 11, fontWeight: 500 }}>por pessoa</div>
+                        <span className="btn-reserve">Reservar →</span>
                       </div>
-                      <span style={{ background: "#0284C7", color: "#fff", padding: "8px 18px", borderRadius: 10, fontSize: 13, fontWeight: 700 }}>
-                        Reservar
-                      </span>
                     </div>
                   </div>
                 </Link>

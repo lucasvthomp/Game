@@ -88,8 +88,8 @@ export default function Recurring() {
 
           <div className="type-tabs">
             <button className={`type-tab ${tab === "all" ? "active" : ""}`} onClick={() => setTab("all")}>Todos</button>
-            <button className={`type-tab type-tab-car ${tab === "car" ? "active-car" : ""}`} onClick={() => setTab("car")}>🚗 Carro</button>
-            <button className={`type-tab type-tab-boat ${tab === "boat" ? "active-boat" : ""}`} onClick={() => setTab("boat")}>⛵ Lancha</button>
+            <button className={`type-tab type-tab-car ${tab === "car" ? "active-car" : ""}`} onClick={() => setTab("car")}>Carro</button>
+            <button className={`type-tab type-tab-boat ${tab === "boat" ? "active-boat" : ""}`} onClick={() => setTab("boat")}>Lancha</button>
           </div>
         </div>
       </div>
@@ -125,8 +125,8 @@ export default function Recurring() {
             <div className="form-group">
               <label>Tipo de transporte</label>
               <div className="type-tabs" style={{ gap: 8 }}>
-                <button type="button" className={`type-tab type-tab-car ${form.rideType === "car" ? "active-car" : ""}`} onClick={() => setForm(f => ({ ...f, rideType: "car" }))}>🚗 Carro</button>
-                <button type="button" className={`type-tab type-tab-boat ${form.rideType === "boat" ? "active-boat" : ""}`} onClick={() => setForm(f => ({ ...f, rideType: "boat" }))}>⛵ Lancha</button>
+                <button type="button" className={`type-tab type-tab-car ${form.rideType === "car" ? "active-car" : ""}`} onClick={() => setForm(f => ({ ...f, rideType: "car" }))}>Carro</button>
+                <button type="button" className={`type-tab type-tab-boat ${form.rideType === "boat" ? "active-boat" : ""}`} onClick={() => setForm(f => ({ ...f, rideType: "boat" }))}>Lancha</button>
               </div>
             </div>
 
@@ -224,7 +224,7 @@ function ScheduleCard({ schedule: s, onDelete, isOwn }: { schedule: any; onDelet
     <div className="recurring-card-full fade-up" style={{ borderLeft: `3px solid ${isBoat ? "var(--boat)" : "var(--car)"}` }}>
       <div className="recurring-card-header">
         <span className={`type-badge ${isBoat ? "type-badge-boat" : "type-badge-car"}`}>
-          {isBoat ? "⛵ Lancha" : "🚗 Carro"}
+          {isBoat ? "Lancha" : "Carro"}
         </span>
         <span className="recurring-route">
           <strong>{s.originCity}</strong> → <strong>{s.destinationCity}</strong>
@@ -244,7 +244,7 @@ function ScheduleCard({ schedule: s, onDelete, isOwn }: { schedule: any; onDelet
       </div>
 
       <div className="recurring-card-meta">
-        <span>🕐 {s.departureTime}{s.returnTime ? ` · volta ${s.returnTime}` : ""}</span>
+        <span>{s.departureTime}{s.returnTime ? ` · volta ${s.returnTime}` : ""}</span>
         {s.totalSeats && <span><Users size={11} /> {s.totalSeats} {s.totalSeats === 1 ? "vaga" : "vagas"}</span>}
         {s.pricePerSeat && <span>R$ {parseFloat(s.pricePerSeat).toFixed(2).replace(".", ",")} / pessoa</span>}
         {s.description && <span style={{ color: "var(--text3)", fontStyle: "italic" }}>{s.description}</span>}

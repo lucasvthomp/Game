@@ -50,7 +50,7 @@ export default function Rides({ defaultType }: { defaultType?: "car" | "boat"; [
       <div className="rides-header">
         <div className="rides-header-inner">
           <p className="section-label">
-            {isBoatPage ? "⛵ CARONAS DE LANCHA" : isCarPage ? "🚗 CARONAS DE CARRO" : "CARONAS DISPONÍVEIS"}
+            {isBoatPage ? "CARONAS DE LANCHA" : isCarPage ? "CARONAS DE CARRO" : "CARONAS DISPONÍVEIS"}
           </p>
           <h1 className="page-title" style={{ marginBottom: 16 }}>
             {isBoatPage ? "Travessias de lancha" : isCarPage ? "Caronas de carro" : "Encontre sua carona"}
@@ -62,10 +62,10 @@ export default function Rides({ defaultType }: { defaultType?: "car" | "boat"; [
               Todos
             </button>
             <button className={`type-tab type-tab-car ${activeTab === "car" ? "active-car" : ""}`} onClick={() => setActiveTab("car")}>
-              🚗 Carro
+              Carro
             </button>
             <button className={`type-tab type-tab-boat ${activeTab === "boat" ? "active-boat" : ""}`} onClick={() => setActiveTab("boat")}>
-              ⛵ Lancha
+              Lancha
             </button>
           </div>
 
@@ -101,7 +101,7 @@ export default function Rides({ defaultType }: { defaultType?: "car" | "boat"; [
                       <div className="ride-card-inner">
                         <div className="ride-top">
                           <span className={`type-badge ${isBoat ? "type-badge-boat" : "type-badge-car"}`}>
-                            {isBoat ? "⛵ Lancha" : "🚗 Carro"}
+                            {isBoat ? "Lancha" : "Carro"}
                           </span>
                           <span className={`badge ${ride.availableSeats > 0 ? "badge-green" : "badge-red"}`}>
                             {ride.availableSeats > 0 ? `${ride.availableSeats} vagas` : "Esgotado"}

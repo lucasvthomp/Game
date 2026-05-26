@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { MapPin, Clock, Star, ChevronRight, Anchor, Car, Users, Calendar, ArrowRight } from "lucide-react";
+import { Clock, Star, ChevronRight, Anchor, Car, Calendar } from "lucide-react";
 
 const PLACEHOLDER_BOAT_RIDES = [
   { id: 1, rideType: "boat", originCity: "Bertioga", destinationCity: "Ilhabela", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 18).toISOString(), pricePerSeat: "85.00", availableSeats: 4, captainName: "Rafael M.", boatName: "Veneza III", avgRating: 4.9 },
@@ -36,56 +36,72 @@ export default function Home() {
   return (
     <div className="page-wrapper">
 
-      {/* ── SPLIT HERO ── */}
-      <section className="hero-split">
-        <div className="hero-panel hero-panel-car slide-left">
-          <div className="hero-panel-content">
-            <div className="hero-panel-icon">🚗</div>
-            <h2 className="hero-panel-title">Caronas<br />de Carro</h2>
-            <p className="hero-panel-sub">Divida o trecho, economize combustível e faça companhia na estrada.</p>
+      {/* ── HERO ── */}
+      <section className="hero">
+        <div className="hero-bg">
+          <div className="hero-orb orb-1" />
+          <div className="hero-orb orb-2" />
+        </div>
+
+        <div className="hero-content fade-up">
+          <div className="hero-eyebrow">
+            <Anchor size={12} />
+            <span>Caronas de carro e lancha · Brasil</span>
+          </div>
+
+          <h1 className="hero-title">
+            Compartilhe o trajeto.<br />
+            <span className="gradient-text">Na estrada ou no mar.</span>
+          </h1>
+
+          <p className="hero-sub">
+            Motoristas e capitães verificados publicam rotas. Você reserva um assento e vai. Como uma carona — de carro ou de lancha.
+          </p>
+
+          <div className="hero-actions">
             <Link href="/caronas">
-              <span className="hero-panel-btn btn-car">Ver caronas de carro <ArrowRight size={15} /></span>
+              <span className="btn-primary btn-primary-car">
+                Caronas de carro <ChevronRight size={15} />
+              </span>
             </Link>
-          </div>
-          <div className="hero-panel-deco hero-panel-deco-car">🛣️</div>
-        </div>
-
-        <div className="hero-center-brand">
-          <div className="hero-brand-pill">
-            <Anchor size={14} />
-            <Car size={14} />
-            <span>LanchaCarona</span>
-          </div>
-          <p className="hero-center-tagline">Caronas<br />que fazem sentido</p>
-        </div>
-
-        <div className="hero-panel hero-panel-boat slide-right">
-          <div className="hero-panel-content">
-            <div className="hero-panel-icon">⛵</div>
-            <h2 className="hero-panel-title">Caronas<br />de Lancha</h2>
-            <p className="hero-panel-sub">Capitães verificados publicam rotas costeiras. Você reserva um assento e embarca.</p>
             <Link href="/lanchas">
-              <span className="hero-panel-btn btn-boat">Ver caronas de lancha <ArrowRight size={15} /></span>
+              <span className="btn-primary btn-primary-boat">
+                Caronas de lancha <ChevronRight size={15} />
+              </span>
             </Link>
           </div>
-          <div className="hero-panel-deco hero-panel-deco-boat">🌊</div>
+
+          <div className="hero-stats">
+            {[
+              ["Motoristas e capitães verificados", "✓"],
+              ["Rotas agendadas", "✓"],
+              ["Sem taxas ocultas", "✓"],
+            ].map(([label, icon]) => (
+              <div key={label} className="hero-stat">
+                <span className="stat-icon">{icon}</span>
+                <span>{label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ── CATEGORY CARDS ── */}
-      <section className="section category-section">
+      <section className="section">
         <div className="section-inner">
           <div className="category-grid fade-up">
             <Link href="/caronas">
               <div className="category-card category-card-car">
-                <div className="category-card-icon">🚗</div>
+                <div className="category-card-icon-wrap">
+                  <Car size={24} color="var(--car-dark)" />
+                </div>
                 <div className="category-card-body">
                   <h3 className="category-card-title">Caronas de Carro</h3>
                   <p className="category-card-desc">Rotas diárias entre cidades. Ideal para quem commuta todo dia. Divida o custo.</p>
                   <ul className="category-card-list">
-                    <li>✓ Motoristas verificados</li>
-                    <li>✓ Rotas recorrentes disponíveis</li>
-                    <li>✓ Do seu bairro ao trabalho</li>
+                    <li>Motoristas verificados</li>
+                    <li>Rotas recorrentes disponíveis</li>
+                    <li>Do seu bairro ao trabalho</li>
                   </ul>
                 </div>
                 <div className="category-card-cta">
@@ -96,14 +112,16 @@ export default function Home() {
 
             <Link href="/lanchas">
               <div className="category-card category-card-boat">
-                <div className="category-card-icon">⛵</div>
+                <div className="category-card-icon-wrap">
+                  <Anchor size={24} color="var(--boat-dark)" />
+                </div>
                 <div className="category-card-body">
                   <h3 className="category-card-title">Caronas de Lancha</h3>
                   <p className="category-card-desc">Travessias costeiras com capitães experientes. Único no Brasil.</p>
                   <ul className="category-card-list">
-                    <li>✓ Capitães com licença marítima</li>
-                    <li>✓ Ilhas, praias e enseadas</li>
-                    <li>✓ Paraty, Ilha Grande, Ubatuba…</li>
+                    <li>Capitães com licença marítima</li>
+                    <li>Ilhas, praias e enseadas</li>
+                    <li>Paraty, Ilha Grande, Ubatuba…</li>
                   </ul>
                 </div>
                 <div className="category-card-cta">
@@ -120,11 +138,11 @@ export default function Home() {
         <div className="section-inner">
           <div className="recurring-inner fade-up">
             <div className="recurring-text">
-              <p className="section-label" style={{ color: "var(--amber)", borderColor: "rgba(217,119,6,0.25)" }}>NOVIDADE</p>
+              <p className="section-label" style={{ color: "var(--amber)" }}>NOVIDADE</p>
               <h2 className="recurring-title">Vai todo dia pro mesmo lugar?</h2>
               <p className="recurring-sub">
                 Cadastre sua rota recorrente e encontre companheiros de viagem fixos.
-                Funciona para carro e lancha — pra quem mora em Pindamonhangaba e trabalha em SJC, ou quem traversa de lancha toda semana.
+                Funciona para carro e lancha — para quem mora em Pindamonhangaba e trabalha em SJC, ou quem atravessa de lancha toda semana.
               </p>
               <Link href="/recorrentes">
                 <span className="btn-amber">
@@ -136,7 +154,7 @@ export default function Home() {
             <div className="recurring-visual">
               <div className="recurring-card">
                 <div className="recurring-card-top">
-                  <span className="badge-car-sm">🚗 Pindamonhangaba → SJC</span>
+                  <span className="badge-car-sm">Carro — Pindamonhangaba → SJC</span>
                 </div>
                 <div className="recurring-days">
                   {DAY_LABELS.map((d, i) => (
@@ -148,14 +166,14 @@ export default function Home() {
                   <div className="day-chip">Dom</div>
                 </div>
                 <div className="recurring-card-meta">
-                  <span>🕐 07:30 saída · 18:00 volta</span>
+                  <span>07:30 saída · 18:00 volta</span>
                   <span>3 companheiros encontrados</span>
                 </div>
               </div>
 
               <div className="recurring-card" style={{ marginTop: 12 }}>
                 <div className="recurring-card-top">
-                  <span className="badge-boat-sm">⛵ Santos → Ilhabela</span>
+                  <span className="badge-boat-sm">Lancha — Santos → Ilhabela</span>
                 </div>
                 <div className="recurring-days">
                   <div className="day-chip">Seg</div>
@@ -170,7 +188,7 @@ export default function Home() {
                   <div className="day-chip">Dom</div>
                 </div>
                 <div className="recurring-card-meta">
-                  <span>🕐 06:00 saída</span>
+                  <span>06:00 saída</span>
                   <span>2 passageiros fixos</span>
                 </div>
               </div>
@@ -179,14 +197,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── LIVE RIDES ── */}
-      <section className="section rides-section">
+      {/* ── RIDES FEED ── */}
+      <section className="section">
         <div className="section-inner">
 
-          {/* Car rides */}
           <div className="section-header fade-up" style={{ marginBottom: 20 }}>
             <div>
-              <p className="section-label" style={{ color: "var(--car)", borderColor: "var(--car-light)" }}>🚗 CARONAS DE CARRO</p>
+              <p className="section-label" style={{ color: "var(--car)" }}>CARONAS DE CARRO</p>
               <h2 className="section-title">Próximas saídas</h2>
             </div>
             <Link href="/caronas">
@@ -199,10 +216,9 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Boat rides */}
           <div className="section-header fade-up" style={{ marginBottom: 20 }}>
             <div>
-              <p className="section-label" style={{ color: "var(--boat)", borderColor: "var(--boat-light)" }}>⛵ CARONAS DE LANCHA</p>
+              <p className="section-label" style={{ color: "var(--boat)" }}>CARONAS DE LANCHA</p>
               <h2 className="section-title">Próximas travessias</h2>
             </div>
             <Link href="/lanchas">
@@ -219,7 +235,7 @@ export default function Home() {
       </section>
 
       {/* ── HOW IT WORKS ── */}
-      <section className="section how-section">
+      <section className="section" style={{ background: "var(--card)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
         <div className="section-inner">
           <div className="section-header fade-up" style={{ justifyContent: "center", textAlign: "center", flexDirection: "column", alignItems: "center", marginBottom: 40 }}>
             <p className="section-label">COMO FUNCIONA</p>
@@ -230,7 +246,7 @@ export default function Home() {
               { n: "01", title: "Motorista ou capitão publica a rota", desc: "Define origem, destino, horário, preço e vagas disponíveis." },
               { n: "02", title: "Você encontra a carona certa", desc: "Filtre por tipo (carro ou lancha), cidade e data." },
               { n: "03", title: "Reserva em segundos", desc: "Escolha quantas vagas precisa e confirme sua participação." },
-              { n: "04", title: "Hora de ir", desc: "No dia combinado, encontre o motorista/capitão e aproveite a viagem." },
+              { n: "04", title: "Hora de ir", desc: "No dia combinado, encontre o motorista ou capitão e aproveite." },
             ].map((step, i) => (
               <div key={i} className="step fade-up" style={{ animationDelay: `${i * 100}ms` }}>
                 <div className="step-num">{step.n}</div>
@@ -242,24 +258,28 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── CTA DUAL ── */}
+      {/* ── CTA ── */}
       <section className="cta-dual-section fade-up">
         <div className="section-inner">
           <div className="cta-dual-grid">
             <div className="cta-card cta-card-car">
-              <div className="cta-card-icon">🚗</div>
+              <div className="cta-card-icon-wrap">
+                <Car size={22} color="var(--car-dark)" />
+              </div>
               <h3>Você tem carro?</h3>
               <p>Publique sua rota diária e divida os custos com outros passageiros.</p>
               <Link href="/cadastro">
-                <span className="cta-card-btn">Cadastrar como motorista</span>
+                <span className="cta-card-btn cta-card-btn-car">Cadastrar como motorista</span>
               </Link>
             </div>
             <div className="cta-card cta-card-boat">
-              <div className="cta-card-icon">⛵</div>
+              <div className="cta-card-icon-wrap">
+                <Anchor size={22} color="var(--boat-dark)" />
+              </div>
               <h3>Você tem lancha?</h3>
               <p>Publique suas rotas costeiras, encontre passageiros e divida os custos.</p>
               <Link href="/cadastro">
-                <span className="cta-card-btn">Cadastrar como capitão</span>
+                <span className="cta-card-btn cta-card-btn-boat">Cadastrar como capitão</span>
               </Link>
             </div>
           </div>
@@ -278,7 +298,7 @@ function RideCard({ ride, i }: { ride: any; i: number }) {
         <div className="ride-card-inner">
           <div className="ride-top">
             <span className={`type-badge ${isBoat ? "type-badge-boat" : "type-badge-car"}`}>
-              {isBoat ? "⛵ Lancha" : "🚗 Carro"}
+              {isBoat ? "Lancha" : "Carro"}
             </span>
             {ride.availableSeats > 0
               ? <span className="badge badge-green">{ride.availableSeats} vagas</span>
@@ -314,7 +334,7 @@ function RideCard({ ride, i }: { ride: any; i: number }) {
               <span className="price-amount">R$ {parseFloat(ride.pricePerSeat).toFixed(2).replace(".", ",")}</span>
               <span className="price-label">/ pessoa</span>
             </div>
-            <span className={`btn-reserve ${isBoat ? "btn-reserve-boat" : "btn-reserve-car"}`}>Reservar →</span>
+            <span className={`btn-reserve ${isBoat ? "btn-reserve-boat" : "btn-reserve-car"}`}>Reservar</span>
           </div>
         </div>
       </Link>

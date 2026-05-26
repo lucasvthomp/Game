@@ -13,8 +13,8 @@ export default function Navbar() {
   const isDriver = role === "driver" || role === "both";
 
   const links = [
-    { href: "/caronas", label: "🚗 Carro" },
-    { href: "/lanchas", label: "⛵ Lancha" },
+    { href: "/caronas", label: "Carro" },
+    { href: "/lanchas", label: "Lancha" },
     { href: "/recorrentes", label: "Recorrentes" },
     ...(isCaptain ? [{ href: "/minha-lancha", label: "Minha Lancha" }] : []),
     ...(isDriver ? [{ href: "/meu-carro", label: "Meu Carro" }] : []),

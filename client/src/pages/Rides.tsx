@@ -19,25 +19,25 @@ const PLACEHOLDER_RIDES = [
   { id: 104, rideType: "car", originCity: "São Paulo", destinationCity: "Santos", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 14).toISOString(), pricePerSeat: "30.00", availableSeats: 2, captainName: "Roberto M.", carName: "Hyundai HB20", avgRating: 4.5 },
 ];
 
-type TabType = "all" | "car" | "boat";
+type TabType = "car" | "boat";
 
 export default function Rides({ defaultType }: { defaultType?: "car" | "boat"; [key: string]: any }) {
   const search = useSearch();
   const params = new URLSearchParams(search);
   const typeFromUrl = params.get("type") as TabType | null;
-  const [activeTab, setActiveTab] = useState<TabType>(typeFromUrl || defaultType || "all");
+  const [activeTab, setActiveTab] = useState<TabType>(typeFromUrl || defaultType || "car");
   const [searchText, setSearchText] = useState("");
 
   const { data, isLoading } = useQuery({
     queryKey: ["/api/rides", activeTab],
-    queryFn: () => apiRequest("GET", `/api/rides${activeTab !== "all" ? `?type=${activeTab}` : ""}`),
+    queryFn: () => apiRequest("GET", `/api/rides?type=${activeTab}`),
   });
 
   const liveRides = data?.rides || [];
   const source = liveRides.length > 0 ? liveRides : PLACEHOLDER_RIDES;
 
   const rides = source.filter((r: any) => {
-    const matchType = activeTab === "all" || r.rideType === activeTab;
+    const matchType = r.rideType === activeTab;
     const matchSearch = !searchText.trim() || r.originCity.toLowerCase().includes(searchText.toLowerCase()) || r.destinationCity.toLowerCase().includes(searchText.toLowerCase());
     return matchType && matchSearch;
   });
@@ -49,23 +49,20 @@ export default function Rides({ defaultType }: { defaultType?: "car" | "boat"; [
     <div className="rides-page">
       <div className="rides-header">
         <div className="rides-header-inner">
-          <p className="section-label">
-            {isBoatPage ? "CARONAS DE LANCHA" : isCarPage ? "CARONAS DE CARRO" : "CARONAS DISPONÍVEIS"}
+          <p className="section-label" style={{ color: isBoatPage ? "var(--boat)" : "var(--car)" }}>
+            {isBoatPage ? "CARONAS DE LANCHA" : "CARONAS DE CARRO"}
           </p>
           <h1 className="page-title" style={{ marginBottom: 16 }}>
-            {isBoatPage ? "Travessias de lancha" : isCarPage ? "Caronas de carro" : "Encontre sua carona"}
+            {isBoatPage ? "Travessias de lancha" : "Caronas de carro"}
           </h1>
 
-          {/* Type tabs */}
+          {/* Type tabs — no "Todos" */}
           <div className="type-tabs" style={{ marginBottom: 16 }}>
-            <button className={`type-tab ${activeTab === "all" ? "active" : ""}`} onClick={() => setActiveTab("all")}>
-              Todos
-            </button>
             <button className={`type-tab type-tab-car ${activeTab === "car" ? "active-car" : ""}`} onClick={() => setActiveTab("car")}>
-              Carro
+              <Car size={12} /> Carro
             </button>
             <button className={`type-tab type-tab-boat ${activeTab === "boat" ? "active-boat" : ""}`} onClick={() => setActiveTab("boat")}>
-              Lancha
+              <Anchor size={12} /> Lancha
             </button>
           </div>
 

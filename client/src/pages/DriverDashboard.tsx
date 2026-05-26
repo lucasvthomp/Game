@@ -122,7 +122,7 @@ export default function DriverDashboard() {
               </div>
             </div>
             <div className="dash-stat-card">
-              <div className="dash-stat-icon" style={{ background: "#FEF3C7", color: "var(--amber)" }}><Star size={18} /></div>
+              <div className="dash-stat-icon" style={{ background: "var(--boat-light)", color: "var(--boat)" }}><Star size={18} /></div>
               <div>
                 <div className="dash-stat-value">R$ {totalEarnings.toFixed(0)}</div>
                 <div className="dash-stat-label">Estimativa arrecadada</div>

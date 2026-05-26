@@ -1150,3 +1150,134 @@ input, select, textarea, button { font-family: inherit; }
 .section-pro, .stats-bar, .recurring-pro-section, .cta-pro-section, .footer {
   transition: background 0.3s;
 }
+
+/* ══════════════════════════════════════════
+   AMBER REMOVAL — boat blue accent throughout
+══════════════════════════════════════════ */
+.btn-boat-solid {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--boat); color: #fff; border: none;
+  padding: 11px 22px; border-radius: 10px;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+.btn-boat-solid:hover { background: var(--boat-dark); transform: translateY(-1px); }
+
+/* Type pills with icons */
+.type-pill { display: inline-flex; align-items: center; gap: 5px; }
+.ride-card-pro-rating { color: var(--boat); }
+
+/* Hero SVG background */
+.hero-bg-svg {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  width: 100%; height: 60%;
+  pointer-events: none;
+}
+.hero-pro-eyebrow { display: inline-flex; align-items: center; gap: 7px; flex-wrap: wrap; justify-content: center; }
+
+/* Search type btn icons */
+.search-type-btn { display: inline-flex; align-items: center; gap: 5px; }
+.search-type-btn.active-car  { color: var(--car);  border-bottom-color: var(--car); }
+.search-type-btn.active-boat { color: var(--boat); border-bottom-color: var(--boat); }
+
+/* Hero quick link variants */
+.hero-quick-link { display: inline-flex; align-items: center; gap: 5px; }
+.hero-quick-link-car:hover  { border-color: var(--car);  color: var(--car-dark); }
+.hero-quick-link-boat:hover { border-color: var(--boat); color: var(--boat-dark); }
+
+/* Recurring preview label row */
+.recurring-preview-label-row { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; }
+.recurring-preview-label { font-size: 13px; font-weight: 700; color: var(--text1); margin: 0; }
+
+/* Day chip active → boat blue */
+.day-chip-active { background: var(--boat); color: #fff; border-color: var(--boat); }
+.day-pill-pro.active { background: var(--boat); color: #fff; border-color: var(--boat); }
+
+/* ══════════════════════════════════════════
+   DARK MODE — complete coverage
+══════════════════════════════════════════ */
+[data-theme="dark"] .hero-pro          { background: var(--bg); }
+[data-theme="dark"] .hero-search       { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .hero-search-field input { color: var(--text1); }
+[data-theme="dark"] .hero-quick-link   { background: var(--card); border-color: var(--border); color: var(--text2); }
+[data-theme="dark"] .stats-bar-item    { border-color: var(--border); }
+[data-theme="dark"] .step-pro          { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .ride-card-pro-inner { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .trust-card        { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .cta-pro-card      { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .recurring-preview-card { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .footer            { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .footer-bottom     { background: var(--bg2); border-color: var(--border); }
+[data-theme="dark"] .nav-root          { background: rgba(17,17,16,0.92); border-color: var(--border); }
+[data-theme="dark"] .nav-mobile        { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .auth-card         { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .form-input, [data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group select, [data-theme="dark"] .form-group textarea,
+[data-theme="dark"] .field-with-icon   { background: var(--bg2); border-color: var(--border); color: var(--text1); }
+[data-theme="dark"] .ride-card-inner   { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .rides-header      { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .rides-search input { background: var(--bg2); color: var(--text1); border-color: var(--border); }
+[data-theme="dark"] .rides-search input::placeholder { color: var(--text3); }
+[data-theme="dark"] .type-tab          { background: var(--card); border-color: var(--border); color: var(--text2); }
+[data-theme="dark"] .dash-header       { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .dash-stat-card    { background: var(--bg2); border-color: var(--border); }
+[data-theme="dark"] .dash-form-card    { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .dash-ride-card    { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .dash-empty-profile { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .profile-form      { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .detail-card       { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .card              { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .recurring-card-full { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .create-ride-form  { background: var(--card) !important; }
+[data-theme="dark"] .res-card          { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .profile-card      { background: var(--card); border-color: var(--border); }
+[data-theme="dark"] .profile-action    { background: var(--card); border-color: var(--border); }
+
+/* ──────────────────────────────────────
+   LIGHT MODE TEXT CONTRAST FIXES
+   (ensure nothing renders too pale)
+────────────────────────────────────── */
+.section-label { color: var(--text2); }
+.stats-bar-label { color: var(--text2); }
+.hero-pro-sub { color: var(--text2); }
+.step-pro-desc { color: var(--text2); }
+.trust-desc    { color: var(--text2); }
+.cta-pro-card p { color: var(--text2); }
+.recurring-pro-sub { color: var(--text2); }
+.recurring-check-item { color: var(--text2); }
+.recurring-preview-meta { color: var(--text2); }
+.footer-tagline { color: var(--text2); }
+.footer-link    { color: var(--text2); }
+.footer-group-title { color: var(--text2); }
+.footer-contact-item { color: var(--text2); }
+.footer-bottom-inner { color: var(--text2); }
+.footer-bottom-link  { color: var(--text2); }
+.ride-card-pro-per  { color: var(--text2); }
+.ride-card-pro-meta span { color: var(--text2); }
+.hero-center-tagline { color: var(--text2); }
+.dash-stat-label { color: var(--text2); }
+.dash-sub { color: var(--text2); }
+.page-sub { color: var(--text2); }
+.form-group label { color: var(--text2); }
+.auth-sub  { color: var(--text2); }
+.nav-link  { color: var(--text2); }
+.nav-logout { color: var(--text2); }
+/* Ensure dark mode text1 is bright */
+[data-theme="dark"] .section-title-pro,
+[data-theme="dark"] .hero-pro-title,
+[data-theme="dark"] .recurring-pro-title,
+[data-theme="dark"] .dash-name,
+[data-theme="dark"] .ride-card-pro-city,
+[data-theme="dark"] .ride-card-pro-price,
+[data-theme="dark"] .stats-bar-value,
+[data-theme="dark"] .trust-title,
+[data-theme="dark"] .step-pro-title,
+[data-theme="dark"] .cta-pro-card h3,
+[data-theme="dark"] .page-title { color: var(--text1); }
+[data-theme="dark"] .hero-pro-sub,
+[data-theme="dark"] .step-pro-desc,
+[data-theme="dark"] .trust-desc,
+[data-theme="dark"] .recurring-pro-sub,
+[data-theme="dark"] .ride-card-pro-meta span,
+[data-theme="dark"] .dash-sub,
+[data-theme="dark"] .nav-link { color: var(--text2); }

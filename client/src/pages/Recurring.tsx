@@ -18,7 +18,7 @@ const PLACEHOLDER_SCHEDULES = [
 export default function Recurring() {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const [tab, setTab] = useState<"all" | "car" | "boat">("all");
+  const [tab, setTab] = useState<"car" | "boat">("car");
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
     rideType: "car",
@@ -35,7 +35,7 @@ export default function Recurring() {
 
   const { data: allData } = useQuery({
     queryKey: ["/api/recurring", tab],
-    queryFn: () => apiRequest("GET", `/api/recurring${tab !== "all" ? `?type=${tab}` : ""}`),
+    queryFn: () => apiRequest("GET", `/api/recurring?type=${tab}`),
   });
 
   const { data: mineData } = useQuery({
@@ -73,23 +73,22 @@ export default function Recurring() {
   };
 
   const liveSchedules = allData?.schedules || [];
-  const schedules = liveSchedules.length > 0 ? liveSchedules : PLACEHOLDER_SCHEDULES.filter(s => tab === "all" || s.rideType === tab);
+  const schedules = liveSchedules.length > 0 ? liveSchedules : PLACEHOLDER_SCHEDULES.filter(s => s.rideType === tab);
   const mySchedules = mineData?.schedules || [];
 
   return (
     <div className="page-wrapper">
       <div className="rides-header">
         <div className="rides-header-inner">
-          <p className="section-label" style={{ color: "var(--amber)", borderColor: "rgba(217,119,6,0.25)" }}>ROTAS RECORRENTES</p>
+          <p className="section-label" style={{ color: "var(--boat)", borderColor: "rgba(217,119,6,0.25)" }}>ROTAS RECORRENTES</p>
           <h1 className="page-title" style={{ marginBottom: 8 }}>Commuters do Brasil</h1>
           <p style={{ color: "var(--text2)", fontSize: 15, marginBottom: 20 }}>
             Encontre companheiros de viagem fixos para sua rota semanal — de carro ou de lancha.
           </p>
 
           <div className="type-tabs">
-            <button className={`type-tab ${tab === "all" ? "active" : ""}`} onClick={() => setTab("all")}>Todos</button>
-            <button className={`type-tab type-tab-car ${tab === "car" ? "active-car" : ""}`} onClick={() => setTab("car")}>Carro</button>
-            <button className={`type-tab type-tab-boat ${tab === "boat" ? "active-boat" : ""}`} onClick={() => setTab("boat")}>Lancha</button>
+            <button className={`type-tab type-tab-car ${tab === "car" ? "active-car" : ""}`} onClick={() => setTab("car")}><Car size={12} /> Carro</button>
+            <button className={`type-tab type-tab-boat ${tab === "boat" ? "active-boat" : ""}`} onClick={() => setTab("boat")}><Anchor size={12} /> Lancha</button>
           </div>
         </div>
       </div>
@@ -111,7 +110,7 @@ export default function Recurring() {
         {/* Add button */}
         {user && (
           <div style={{ marginBottom: 24 }}>
-            <button className="btn-amber" onClick={() => setShowForm(!showForm)}>
+            <button className="btn-boat-solid" onClick={() => setShowForm(!showForm)}>
               <Plus size={14} /> {showForm ? "Fechar formulário" : "Cadastrar minha rota recorrente"}
             </button>
           </div>
@@ -119,8 +118,8 @@ export default function Recurring() {
 
         {/* Create form */}
         {showForm && (
-          <div className="create-ride-form" style={{ borderColor: "rgba(217,119,6,0.3)", background: "linear-gradient(135deg, #FEF3C7 0%, #fff 60%)", marginBottom: 32 }}>
-            <h4 style={{ marginBottom: 16, color: "var(--amber)", fontWeight: 700 }}>Nova rota recorrente</h4>
+          <div className="create-ride-form" style={{ borderColor: "var(--boat)", borderTopWidth: 3, marginBottom: 32 }}>
+            <h4 style={{ marginBottom: 16, color: "var(--boat)", fontWeight: 700 }}>Nova rota recorrente</h4>
 
             <div className="form-group">
               <label>Tipo de transporte</label>
@@ -187,7 +186,7 @@ export default function Recurring() {
             </div>
 
             {error && <div className="form-error">{error}</div>}
-            <button className="btn-amber" onClick={() => createMutation.mutate()} disabled={createMutation.isPending}>
+            <button className="btn-boat-solid" onClick={() => createMutation.mutate()} disabled={createMutation.isPending}>
               {createMutation.isPending ? "Cadastrando..." : "Cadastrar rota recorrente"}
             </button>
           </div>
@@ -203,10 +202,10 @@ export default function Recurring() {
 
         {!user && (
           <div style={{ textAlign: "center", marginTop: 32, padding: "24px", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16 }}>
-            <Calendar size={32} color="var(--amber)" style={{ marginBottom: 12 }} />
+            <Calendar size={32} color="var(--boat)" style={{ marginBottom: 12 }} />
             <p style={{ fontWeight: 600, marginBottom: 8 }}>Quer cadastrar sua rota recorrente?</p>
             <p style={{ fontSize: 13, color: "var(--text2)", marginBottom: 16 }}>Faça login para encontrar companheiros de viagem fixos.</p>
-            <a href="/entrar" className="btn-amber">Entrar</a>
+            <a href="/entrar" className="btn-boat-solid">Entrar</a>
           </div>
         )}
 

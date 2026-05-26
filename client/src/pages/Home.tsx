@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Clock, Star, ChevronRight, Anchor, Car, Calendar, Shield, MapPin, Users, ArrowRight, Check } from "lucide-react";
+import { Clock, Star, ChevronRight, Anchor, Car, Calendar, Shield, MapPin, Users, ArrowRight, Check, Navigation, Zap, Globe } from "lucide-react";
 import { useState } from "react";
 
 const PLACEHOLDER_BOAT_RIDES = [
@@ -15,13 +15,6 @@ const PLACEHOLDER_CAR_RIDES = [
   { id: 101, rideType: "car", originCity: "Pindamonhangaba", destinationCity: "São José dos Campos", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 8).toISOString(), pricePerSeat: "18.00", availableSeats: 3, captainName: "Fernanda R.", carName: "Honda Civic", avgRating: 4.8 },
   { id: 102, rideType: "car", originCity: "Taubaté", destinationCity: "Guarulhos", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 12).toISOString(), pricePerSeat: "25.00", availableSeats: 2, captainName: "Guilherme A.", carName: "Toyota Corolla", avgRating: 4.9 },
   { id: 103, rideType: "car", originCity: "Campinas", destinationCity: "São Paulo", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 10).toISOString(), pricePerSeat: "22.00", availableSeats: 1, captainName: "Juliana C.", carName: "VW Golf", avgRating: 4.7 },
-];
-
-const STATS = [
-  { value: "12.400+", label: "Viagens realizadas" },
-  { value: "3.200+", label: "Motoristas e capitães" },
-  { value: "4.8", label: "Avaliação média" },
-  { value: "R$ 0", label: "Taxa de cadastro" },
 ];
 
 const DAY_LABELS = ["Seg", "Ter", "Qua", "Qui", "Sex"];
@@ -42,10 +35,10 @@ export default function Home() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    const base = searchType === "car" ? "/caronas" : "/lanchas";
     const params = new URLSearchParams();
     if (searchFrom) params.set("from", searchFrom);
     if (searchTo)   params.set("to", searchTo);
-    const base = searchType === "car" ? "/caronas" : "/lanchas";
     window.location.href = `${base}?${params.toString()}`;
   };
 
@@ -54,75 +47,36 @@ export default function Home() {
 
       {/* ─── HERO ─── */}
       <section className="hero-pro">
-        <div className="hero-pro-bg">
-          {/* Soft radial blobs */}
-          <div className="hero-blob blob-1" />
-          <div className="hero-blob blob-2" />
-          {/* Grid pattern */}
-          <div className="hero-grid-lines" />
-          {/* SVG map/road illustration */}
-          <svg className="hero-bg-svg" viewBox="0 0 900 400" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            {/* Road curves */}
-            <path d="M-40 340 Q200 200 400 280 Q600 360 900 180" stroke="var(--car)" strokeWidth="2.5" strokeDasharray="8 6" opacity="0.18" />
-            <path d="M-40 360 Q200 220 400 300 Q600 380 900 200" stroke="var(--car)" strokeWidth="1" opacity="0.10" />
-            {/* Coastal wave lines */}
-            <path d="M0 380 Q120 340 240 370 Q360 400 480 360 Q600 320 720 350 Q840 380 920 340" stroke="var(--boat)" strokeWidth="2" opacity="0.18" />
-            <path d="M0 395 Q140 360 280 385 Q420 410 560 375 Q700 340 900 365" stroke="var(--boat)" strokeWidth="1" opacity="0.10" />
-            {/* Location dots */}
-            <circle cx="180" cy="295" r="4" fill="var(--car)" opacity="0.25" />
-            <circle cx="180" cy="295" r="8" stroke="var(--car)" strokeWidth="1.5" opacity="0.12" />
-            <circle cx="520" cy="265" r="4" fill="var(--car)" opacity="0.25" />
-            <circle cx="520" cy="265" r="8" stroke="var(--car)" strokeWidth="1.5" opacity="0.12" />
-            <circle cx="320" cy="355" r="4" fill="var(--boat)" opacity="0.25" />
-            <circle cx="320" cy="355" r="8" stroke="var(--boat)" strokeWidth="1.5" opacity="0.12" />
-            <circle cx="700" cy="325" r="4" fill="var(--boat)" opacity="0.25" />
-            <circle cx="700" cy="325" r="8" stroke="var(--boat)" strokeWidth="1.5" opacity="0.12" />
-            {/* Connection line between dots */}
-            <line x1="180" y1="295" x2="520" y2="265" stroke="var(--car)" strokeWidth="1" strokeDasharray="4 4" opacity="0.15" />
-            <line x1="320" y1="355" x2="700" y2="325" stroke="var(--boat)" strokeWidth="1" strokeDasharray="4 4" opacity="0.15" />
-          </svg>
-        </div>
-
         <div className="hero-pro-inner fade-up">
-          <div className="hero-pro-eyebrow">
-            <Car size={11} color="var(--car)" />
-            <span style={{ color: "var(--car)", fontWeight: 700 }}>Carro</span>
-            <span style={{ color: "var(--border2)" }}>·</span>
-            <Anchor size={11} color="var(--boat)" />
-            <span style={{ color: "var(--boat)", fontWeight: 700 }}>Lancha</span>
-            <span style={{ color: "var(--border2)" }}>·</span>
-            <span>Caronas verificadas · Brasil</span>
-          </div>
 
           <h1 className="hero-pro-title">
-            A melhor forma de<br />
-            <span className="hero-pro-gradient">compartilhar o caminho</span>
+            Compartilhe o<br />
+            <span className="hero-pro-gradient">caminho</span>
           </h1>
 
           <p className="hero-pro-sub">
-            Caronas de carro para o trabalho. Travessias de lancha pelo litoral.<br />
-            Motoristas e capitães verificados, preços transparentes.
+            Caronas de carro e de lancha por todo o Brasil.<br />
+            Motoristas e capitães verificados.
           </p>
 
-          {/* Search widget */}
           <form className="hero-search" onSubmit={handleSearch}>
             <div className="hero-search-type">
-              <button type="button" className={`search-type-btn search-type-car ${searchType === "car" ? "active-car" : ""}`} onClick={() => setSearchType("car")}>
+              <button type="button" className={`search-type-btn ${searchType === "car" ? "active-car" : ""}`} onClick={() => setSearchType("car")}>
                 <Car size={12} /> Carro
               </button>
-              <button type="button" className={`search-type-btn search-type-boat ${searchType === "boat" ? "active-boat" : ""}`} onClick={() => setSearchType("boat")}>
+              <button type="button" className={`search-type-btn ${searchType === "boat" ? "active-boat" : ""}`} onClick={() => setSearchType("boat")}>
                 <Anchor size={12} /> Lancha
               </button>
             </div>
             <div className="hero-search-fields">
               <div className="hero-search-field">
                 <MapPin size={14} className="search-field-icon" />
-                <input value={searchFrom} onChange={e => setSearchFrom(e.target.value)} placeholder="De onde você sai?" />
+                <input value={searchFrom} onChange={e => setSearchFrom(e.target.value)} placeholder="De onde?" />
               </div>
               <div className="hero-search-divider" />
               <div className="hero-search-field">
                 <MapPin size={14} className="search-field-icon" />
-                <input value={searchTo} onChange={e => setSearchTo(e.target.value)} placeholder="Para onde vai?" />
+                <input value={searchTo} onChange={e => setSearchTo(e.target.value)} placeholder="Para onde?" />
               </div>
               <button type="submit" className="hero-search-btn">
                 Buscar <ArrowRight size={14} />
@@ -131,44 +85,165 @@ export default function Home() {
           </form>
 
           <div className="hero-pro-links">
-            <Link href="/caronas">
-              <span className="hero-quick-link hero-quick-link-car"><Car size={12} /> Caronas de carro <ChevronRight size={12} /></span>
-            </Link>
-            <Link href="/lanchas">
-              <span className="hero-quick-link hero-quick-link-boat"><Anchor size={12} /> Caronas de lancha <ChevronRight size={12} /></span>
-            </Link>
-            <Link href="/recorrentes">
-              <span className="hero-quick-link"><Calendar size={12} /> Rotas recorrentes <ChevronRight size={12} /></span>
-            </Link>
+            <Link href="/caronas"><span className="hero-quick-link hero-quick-link-car"><Car size={12} /> Carro</span></Link>
+            <Link href="/lanchas"><span className="hero-quick-link hero-quick-link-boat"><Anchor size={12} /> Lancha</span></Link>
+            <Link href="/recorrentes"><span className="hero-quick-link"><Calendar size={12} /> Recorrentes</span></Link>
           </div>
         </div>
       </section>
 
-      {/* ─── STATS BAR ─── */}
-      <div className="stats-bar">
-        <div className="stats-bar-inner">
-          {STATS.map(s => (
-            <div key={s.label} className="stats-bar-item">
-              <span className="stats-bar-value">{s.value}</span>
-              <span className="stats-bar-label">{s.label}</span>
-            </div>
-          ))}
-        </div>
+      {/* ─── SPLIT LANE ─── */}
+      <div className="split-lane">
+        <Link href="/caronas">
+          <div className="split-panel split-panel-car">
+            <div className="split-panel-accent" />
+            <div className="split-panel-icon"><Car size={26} /></div>
+            <p className="split-panel-label">Caronas de Carro</p>
+            <h2 className="split-panel-title">Divida o trajeto</h2>
+            <p className="split-panel-desc">Motoristas verificados em rotas diárias. Economize no combustível e pedágio.</p>
+            <span className="split-panel-btn">Encontrar carona <ArrowRight size={13} /></span>
+          </div>
+        </Link>
+        <Link href="/lanchas">
+          <div className="split-panel split-panel-boat">
+            <div className="split-panel-accent" />
+            <div className="split-panel-icon"><Anchor size={26} /></div>
+            <p className="split-panel-label">Caronas de Lancha</p>
+            <h2 className="split-panel-title">Navegue pelo litoral</h2>
+            <p className="split-panel-desc">Capitães credenciados em travessias costeiras. Ilhabela, Angra, Paraty.</p>
+            <span className="split-panel-btn">Ver travessias <ArrowRight size={13} /></span>
+          </div>
+        </Link>
       </div>
 
+      {/* ─── MAP SECTION ─── */}
+      <section className="map-section">
+        <div className="map-section-inner">
+          <div className="fade-up">
+            <p className="map-text-label">Cobertura de rotas</p>
+            <h2 className="map-text-title">Litoral e interior do Brasil</h2>
+            <p className="map-text-desc">Do Vale do Paraíba ao litoral paulista, de Santos a Paraty — encontre caronas nas rotas que você já faz todo dia.</p>
+            <div className="map-features">
+              {[
+                { dot: "car",  title: "Rotas terrestres",  desc: "São Paulo, Vale do Paraíba, Campinas e região" },
+                { dot: "boat", title: "Rotas marítimas",   desc: "Santos, Ilhabela, Angra dos Reis, Paraty, Ilha Grande" },
+                { dot: "car",  title: "Rotas recorrentes", desc: "Comute diariamente com os mesmos companheiros" },
+              ].map((f, i) => (
+                <div key={i} className="map-feature-item fade-up" style={{ animationDelay: `${i * 80}ms` }}>
+                  <div className={`map-feature-dot map-feature-dot-${f.dot}`} />
+                  <div className="map-feature-text">
+                    <strong>{f.title}</strong>
+                    <span>{f.desc}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="map-canvas scale-in" style={{ animationDelay: "120ms" }}>
+            <svg className="map-canvas-svg" viewBox="0 0 420 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <defs>
+                <pattern id="dotgrid" width="24" height="24" patternUnits="userSpaceOnUse">
+                  <circle cx="0.5" cy="0.5" r="0.6" fill="var(--border2)" opacity="0.5" />
+                </pattern>
+              </defs>
+              <rect width="420" height="300" fill="url(#dotgrid)" />
+
+              {/* Car routes */}
+              <path className="map-route-line" d="M60 80 C110 100 140 115 160 130" stroke="var(--car)" strokeWidth="1.5" strokeDasharray="200" opacity="0.8" />
+              <path className="map-route-line" d="M160 130 C185 155 215 178 240 200" stroke="var(--car)" strokeWidth="1.5" strokeDasharray="200" opacity="0.6" style={{ animationDelay: "200ms" }} />
+              <path className="map-route-line" d="M320 60 C280 80 255 95 230 110" stroke="var(--car)" strokeWidth="1.2" strokeDasharray="200" opacity="0.5" style={{ animationDelay: "300ms" }} />
+
+              {/* Boat routes */}
+              <path className="map-route-line" d="M240 200 C280 215 330 210 360 180" stroke="var(--boat)" strokeWidth="1.5" strokeDasharray="200" opacity="0.8" style={{ animationDelay: "500ms" }} />
+              <path className="map-route-line" d="M240 200 C265 220 290 238 310 240" stroke="var(--boat)" strokeWidth="1.2" strokeDasharray="200" opacity="0.6" style={{ animationDelay: "700ms" }} />
+              <path className="map-route-line" d="M310 240 C340 258 370 255 390 250" stroke="var(--boat)" strokeWidth="1.2" strokeDasharray="200" opacity="0.5" style={{ animationDelay: "900ms" }} />
+
+              {/* Car cities */}
+              {[
+                { cx: 60,  cy: 80,  label: "Campinas",  a: 0 },
+                { cx: 160, cy: 130, label: "S.Paulo",   a: 200, big: true },
+                { cx: 320, cy: 60,  label: "Taubaté",   a: 100 },
+                { cx: 230, cy: 110, label: "SJCampos",  a: 150 },
+              ].map((c, i) => (
+                <g key={i}>
+                  {c.big && <circle cx={c.cx} cy={c.cy} r="16" fill="var(--car)" opacity="0.06" className="map-dot-ping" style={{ animationDelay: `${c.a}ms` }} />}
+                  <circle cx={c.cx} cy={c.cy} r={c.big ? 5 : 3.5} fill="var(--car)" opacity="0.9" />
+                  <circle cx={c.cx} cy={c.cy} r={c.big ? 9 : 6.5} stroke="var(--car)" strokeWidth="1" fill="none" opacity="0.2" />
+                  <text x={c.cx + (c.big ? 11 : 9)} y={c.cy + 4} fill="var(--text3)" fontSize="9" fontWeight="600">{c.label}</text>
+                </g>
+              ))}
+
+              {/* Boat cities */}
+              {[
+                { cx: 240, cy: 200, label: "Santos",   a: 0, big: true },
+                { cx: 360, cy: 180, label: "Ilhabela", a: 200 },
+                { cx: 310, cy: 240, label: "Angra",    a: 300 },
+                { cx: 390, cy: 250, label: "Paraty",   a: 400 },
+              ].map((c, i) => (
+                <g key={i}>
+                  {c.big && <circle cx={c.cx} cy={c.cy} r="16" fill="var(--boat)" opacity="0.06" className="map-dot-ping" style={{ animationDelay: `${500 + c.a}ms` }} />}
+                  <circle cx={c.cx} cy={c.cy} r={c.big ? 5 : 3.5} fill="var(--boat)" opacity="0.9" />
+                  <circle cx={c.cx} cy={c.cy} r={c.big ? 9 : 6.5} stroke="var(--boat)" strokeWidth="1" fill="none" opacity="0.2" />
+                  <text x={c.cx + (c.big ? 11 : 9)} y={c.cy + 4} fill="var(--text3)" fontSize="9" fontWeight="600">{c.label}</text>
+                </g>
+              ))}
+
+              {/* Legend */}
+              <circle cx="20" cy="286" r="4" fill="var(--car)" />
+              <text x="28" y="290" fill="var(--text3)" fontSize="9" fontWeight="600">Carro</text>
+              <circle cx="72" cy="286" r="4" fill="var(--boat)" />
+              <text x="80" y="290" fill="var(--text3)" fontSize="9" fontWeight="600">Lancha</text>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── LIVE FEED ─── */}
+      <section className="section-pro" style={{ background: "var(--bg)" }}>
+        <div className="section-inner">
+          <div className="feed-header fade-up">
+            <div>
+              <p className="section-label" style={{ color: "var(--car)" }}>
+                <Car size={11} style={{ display: "inline", verticalAlign: "middle", marginRight: 5 }} />
+                SAÍDAS DE CARRO
+              </p>
+              <h2 className="section-title-pro">Próximas caronas</h2>
+            </div>
+            <Link href="/caronas"><span className="link-more-pro">Ver todas <ChevronRight size={14} /></span></Link>
+          </div>
+          <div className="ride-grid-pro">
+            {carRides.map((ride: any, i: number) => <RideCard key={ride.id} ride={ride} i={i} />)}
+          </div>
+
+          <div className="feed-header fade-up" style={{ marginTop: 56 }}>
+            <div>
+              <p className="section-label" style={{ color: "var(--boat)" }}>
+                <Anchor size={11} style={{ display: "inline", verticalAlign: "middle", marginRight: 5 }} />
+                SAÍDAS DE LANCHA
+              </p>
+              <h2 className="section-title-pro">Próximas travessias</h2>
+            </div>
+            <Link href="/lanchas"><span className="link-more-pro">Ver todas <ChevronRight size={14} /></span></Link>
+          </div>
+          <div className="ride-grid-pro">
+            {boatRides.map((ride: any, i: number) => <RideCard key={ride.id} ride={ride} i={i} />)}
+          </div>
+        </div>
+      </section>
+
       {/* ─── HOW IT WORKS ─── */}
-      <section className="section-pro">
+      <section className="section-pro" style={{ background: "var(--bg2)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
         <div className="section-inner">
           <div className="section-label-row fade-up">
-            <p className="section-label">COMO FUNCIONA</p>
-            <h2 className="section-title-pro">Pronto em minutos</h2>
+            <p className="section-label" style={{ color: "var(--text3)" }}>COMO FUNCIONA</p>
+            <h2 className="section-title-pro">Simples assim</h2>
           </div>
-          <div className="steps-pro fade-up">
+          <div className="steps-pro">
             {[
-              { icon: <Car size={20} />,      step: "01", title: "Escolha o tipo", desc: "Carro para rotas terrestres, lancha para o litoral." },
-              { icon: <MapPin size={20} />,   step: "02", title: "Busque sua rota", desc: "Encontre viagens disponíveis com preço por assento." },
-              { icon: <Calendar size={20} />, step: "03", title: "Reserve o lugar", desc: "Confirme quantas vagas precisa em poucos cliques." },
-              { icon: <Shield size={20} />,   step: "04", title: "Viaje com segurança", desc: "Todos os motoristas e capitães são verificados." },
+              { icon: <Car size={20} />,        step: "01", title: "Escolha o tipo",     desc: "Carro para rotas terrestres, lancha para travessias no litoral." },
+              { icon: <Navigation size={20} />, step: "02", title: "Busque sua rota",    desc: "Filtre por cidade, data e tipo. Veja preço e vagas em tempo real." },
+              { icon: <Zap size={20} />,        step: "03", title: "Reserve um assento", desc: "Confirme quantas vagas precisa com poucos cliques." },
+              { icon: <Shield size={20} />,     step: "04", title: "Viaje com segurança", desc: "Motoristas e capitães verificados. Avaliações reais após cada viagem." },
             ].map((s, i) => (
               <div key={i} className="step-pro fade-up" style={{ animationDelay: `${i * 80}ms` }}>
                 <div className="step-pro-num">{s.step}</div>
@@ -181,65 +256,29 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── RIDE FEED ─── */}
-      <section className="section-pro" style={{ background: "var(--bg2)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
-        <div className="section-inner">
-          <div className="feed-header fade-up">
-            <div>
-              <p className="section-label" style={{ color: "var(--car)" }}>
-                <Car size={11} style={{ display: "inline", verticalAlign: "middle", marginRight: 5 }} />
-                CARONAS DE CARRO
-              </p>
-              <h2 className="section-title-pro">Próximas saídas</h2>
-            </div>
-            <Link href="/caronas"><span className="link-more-pro">Ver todas <ChevronRight size={14} /></span></Link>
-          </div>
-          <div className="ride-grid-pro">
-            {carRides.map((ride: any, i: number) => <RideCard key={ride.id} ride={ride} i={i} />)}
-          </div>
-
-          <div className="feed-header fade-up" style={{ marginTop: 48 }}>
-            <div>
-              <p className="section-label" style={{ color: "var(--boat)" }}>
-                <Anchor size={11} style={{ display: "inline", verticalAlign: "middle", marginRight: 5 }} />
-                CARONAS DE LANCHA
-              </p>
-              <h2 className="section-title-pro">Próximas travessias</h2>
-            </div>
-            <Link href="/lanchas"><span className="link-more-pro">Ver todas <ChevronRight size={14} /></span></Link>
-          </div>
-          <div className="ride-grid-pro">
-            {boatRides.map((ride: any, i: number) => <RideCard key={ride.id} ride={ride} i={i} />)}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── RECURRING CALLOUT ─── */}
+      {/* ─── RECURRING ─── */}
       <section className="recurring-pro-section">
-        <div className="section-inner">
+        <div className="section-inner" style={{ padding: "0 24px" }}>
           <div className="recurring-pro-inner fade-up">
-            <div className="recurring-pro-text">
+            <div>
               <p className="section-label" style={{ color: "var(--boat)" }}>ROTAS RECORRENTES</p>
               <h2 className="recurring-pro-title">Vai todo dia pro mesmo lugar?</h2>
               <p className="recurring-pro-sub">
-                Cadastre sua rota de segunda a sexta e encontre companheiros fixos. Menos gasto, menos trânsito, mais conversa.
+                Cadastre sua rota semanal e encontre companheiros fixos. Menos gasto, menos trânsito.
               </p>
               <div className="recurring-pro-checks">
-                {["Rotas de carro e lancha", "Horários flexíveis", "Companheiros verificados"].map(c => (
-                  <div key={c} className="recurring-check-item">
-                    <Check size={14} /> {c}
-                  </div>
+                {["De carro ou de lancha", "Horários flexíveis", "Companheiros verificados"].map(c => (
+                  <div key={c} className="recurring-check-item"><Check size={14} /> {c}</div>
                 ))}
               </div>
               <Link href="/recorrentes">
                 <span className="btn-boat-solid">Ver rotas recorrentes <ArrowRight size={14} /></span>
               </Link>
             </div>
-
             <div className="recurring-pro-visual">
               {[
-                { label: "Carro — Pindamonhangaba → SJC", days: [1,2,3,4,5], time: "07:30 · 18:00", peers: "3 companheiros", type: "car" as const },
-                { label: "Lancha — Santos → Ilhabela",    days: [2,4,5],     time: "06:00",         peers: "2 companheiros", type: "boat" as const },
+                { label: "Pindamonhangaba → SJC", days: [1,2,3,4,5], time: "07:30 · 18:00", peers: "3 companheiros", type: "car" as const },
+                { label: "Santos → Ilhabela",     days: [2,4,5],     time: "06:00",         peers: "2 companheiros", type: "boat" as const },
               ].map((card, ci) => (
                 <div key={ci} className="recurring-preview-card">
                   <div className="recurring-preview-label-row">
@@ -248,8 +287,7 @@ export default function Home() {
                   </div>
                   <div className="day-row">
                     {DAY_LABELS.map((d, i) => (
-                      <span key={d} className={`day-pill-pro ${card.days.includes(i + 1) ? "active" : ""}`}
-                        style={{ animationDelay: `${ci * 300 + i * 100}ms` }}>
+                      <span key={d} className={`day-pill-pro ${card.days.includes(i + 1) ? "active" : ""}`} style={{ animationDelay: `${ci * 250 + i * 90}ms` }}>
                         {d}
                       </span>
                     ))}
@@ -265,22 +303,22 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── TRUST SECTION ─── */}
-      <section className="section-pro">
+      {/* ─── TRUST ─── */}
+      <section className="section-pro" style={{ background: "var(--bg)" }}>
         <div className="section-inner">
-          <div className="section-label-row fade-up" style={{ marginBottom: 40 }}>
-            <p className="section-label">POR QUE USAR</p>
-            <h2 className="section-title-pro">Seguro, simples e barato</h2>
+          <div className="section-label-row fade-up" style={{ marginBottom: 32 }}>
+            <p className="section-label" style={{ color: "var(--text3)" }}>POR QUE USAR</p>
+            <h2 className="section-title-pro">Por que a LanchaCarona?</h2>
           </div>
-          <div className="trust-grid fade-up">
+          <div className="trust-grid">
             {[
-              { icon: <Shield size={22} />,   title: "Verificação rigorosa",    desc: "CNH e licença marítima confirmadas antes de qualquer publicação.", color: "var(--car)" },
-              { icon: <Star size={22} />,     title: "Avaliações reais",        desc: "Passageiros avaliam após cada viagem. Histórico público e transparente.", color: "var(--boat)" },
-              { icon: <Users size={22} />,    title: "Comunidade brasileira",   desc: "Motoristas e capitães de todo o litoral e interior do Brasil.", color: "var(--boat-dark)" },
-              { icon: <Clock size={22} />,    title: "Agendado com antecedência", desc: "Viagens planejadas. Sem espera, sem surpresa.", color: "var(--car-dark)" },
+              { icon: <Shield size={22} />,   title: "Verificação rigorosa",      desc: "CNH e licença marítima confirmadas antes de qualquer publicação.", color: "var(--car)" },
+              { icon: <Star size={22} />,     title: "Avaliações reais",           desc: "Passageiros avaliam após cada viagem. Histórico público.", color: "var(--boat)" },
+              { icon: <Globe size={22} />,    title: "Comunidade brasileira",      desc: "Motoristas e capitães de todo o litoral e interior do país.", color: "var(--boat)" },
+              { icon: <Clock size={22} />,    title: "Sem espera",                 desc: "Viagens agendadas com antecedência. Sem surpresa no preço.", color: "var(--car)" },
             ].map((t, i) => (
               <div key={i} className="trust-card fade-up" style={{ animationDelay: `${i * 80}ms` }}>
-                <div className="trust-icon" style={{ background: `${t.color}18`, color: t.color }}>{t.icon}</div>
+                <div className="trust-icon" style={{ background: `${t.color}15`, color: t.color }}>{t.icon}</div>
                 <h3 className="trust-title">{t.title}</h3>
                 <p className="trust-desc">{t.desc}</p>
               </div>
@@ -289,25 +327,21 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── CTA DUAL ─── */}
+      {/* ─── CTA ─── */}
       <section className="cta-pro-section">
         <div className="section-inner">
           <div className="cta-pro-grid fade-up">
             <div className="cta-pro-card cta-pro-car">
               <div className="cta-pro-icon-wrap"><Car size={24} /></div>
               <h3>Você tem carro?</h3>
-              <p>Publique sua rota diária. Divida os custos de combustível e pedágio com passageiros verificados.</p>
-              <Link href="/cadastro">
-                <span className="cta-pro-btn cta-pro-btn-car">Cadastrar como motorista</span>
-              </Link>
+              <p>Publique sua rota. Divida o custo de combustível e pedágio com passageiros verificados.</p>
+              <Link href="/cadastro"><span className="cta-pro-btn cta-pro-btn-car">Cadastrar como motorista</span></Link>
             </div>
             <div className="cta-pro-card cta-pro-boat">
               <div className="cta-pro-icon-wrap"><Anchor size={24} /></div>
               <h3>Você tem lancha?</h3>
               <p>Publique suas travessias costeiras e encontre passageiros para dividir a experiência.</p>
-              <Link href="/cadastro">
-                <span className="cta-pro-btn cta-pro-btn-boat">Cadastrar como capitão</span>
-              </Link>
+              <Link href="/cadastro"><span className="cta-pro-btn cta-pro-btn-boat">Cadastrar como capitão</span></Link>
             </div>
           </div>
         </div>
@@ -332,7 +366,6 @@ function RideCard({ ride, i }: { ride: any; i: number }) {
               {ride.availableSeats > 0 ? `${ride.availableSeats} vagas` : "Esgotado"}
             </span>
           </div>
-
           <div className="ride-card-pro-route">
             <div className="ride-card-pro-city">{ride.originCity}</div>
             <div className="ride-card-pro-arrow">
@@ -342,22 +375,18 @@ function RideCard({ ride, i }: { ride: any; i: number }) {
             </div>
             <div className="ride-card-pro-city">{ride.destinationCity}</div>
           </div>
-
           <div className="ride-card-pro-meta">
             <span><Clock size={11} /> {format(new Date(ride.departureTime), "dd MMM · HH:mm", { locale: ptBR })}</span>
-            <span>
-              {isBoat ? <>{ride.boatName} · Cap. {ride.captainName}</> : <>{ride.carName} · {ride.captainName}</>}
-            </span>
+            <span>{isBoat ? <><Anchor size={10} />{ride.boatName} · Cap. {ride.captainName}</> : <><Car size={10} />{ride.carName} · {ride.captainName}</>}</span>
           </div>
-
           <div className="ride-card-pro-footer">
             <div>
               <span className="ride-card-pro-price">R$ {parseFloat(ride.pricePerSeat).toFixed(2).replace(".", ",")}</span>
               <span className="ride-card-pro-per"> / pessoa</span>
             </div>
-            <div className="ride-card-pro-rating">
-              {ride.avgRating > 0 && <><Star size={11} fill="var(--boat)" color="var(--boat)" /> {ride.avgRating.toFixed(1)}</>}
-            </div>
+            {ride.avgRating > 0 && (
+              <div className="ride-card-pro-rating"><Star size={11} fill="currentColor" /> {ride.avgRating.toFixed(1)}</div>
+            )}
           </div>
         </div>
       </Link>

@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import { Anchor, Clock, MapPin, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -49,7 +49,7 @@ export default function MyReservations() {
             <div style={{ marginBottom: 32 }}>
               <p className="section-group-label">CONFIRMADAS</p>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {active.map((res: any) => <ResCard key={res.id} res={res} onCancel={() => { if (confirm("Cancelar esta reserva?")) cancelMutation.mutate(res.id); }} />)}
+                {active.map((res: any) => <ResCard key={res.id} res={res} onCancel={() => { if (confirm("Cancelar esta reserva?")) cancelMutation.mutate(res.id); }} messagesHref={`/mensagens/${res.id}`} />)}
               </div>
             </div>
           )}
@@ -67,7 +67,7 @@ export default function MyReservations() {
   );
 }
 
-function ResCard({ res, onCancel }: { res: any; onCancel?: () => void }) {
+function ResCard({ res, onCancel, messagesHref }: { res: any; onCancel?: () => void; messagesHref?: string }) {
   const ride = res.ride;
   return (
     <div className={`res-card ${res.status !== "confirmed" ? "cancelled" : ""}`}>
@@ -89,6 +89,13 @@ function ResCard({ res, onCancel }: { res: any; onCancel?: () => void }) {
           {res.status === "confirmed" ? "Confirmada" : "Cancelada"}
         </span>
         <div className="res-price">R$ {parseFloat(res.totalPrice).toFixed(2).replace(".", ",")}</div>
+        {messagesHref && (
+          <Link href={messagesHref}>
+            <button style={{ padding: "7px 14px", borderRadius: 8, background: "rgba(0,196,255,0.08)", border: "1px solid rgba(0,196,255,0.15)", color: "var(--boat)", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
+              Mensagens
+            </button>
+          </Link>
+        )}
         {onCancel && (
           <button className="btn-danger" onClick={onCancel} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, padding: "5px 10px" }}>
             <Trash2 size={12} /> Cancelar

@@ -1,6 +1,6 @@
 import { db } from "./db.js";
 import {
-  users, captainProfiles, driverProfiles, rides, recurringSchedules, reservations, reviews
+  users, captainProfiles, driverProfiles, rides, recurringSchedules, reservations, reviews, messages
 } from "@shared/schema";
 import type {
   User, InsertUser,
@@ -10,8 +10,9 @@ import type {
   RecurringSchedule, InsertRecurringSchedule,
   Reservation, InsertReservation,
   Review, InsertReview,
+  Message, InsertMessage,
 } from "@shared/schema";
-import { eq, desc, and, gte, sql, or, ilike } from "drizzle-orm";
+import { eq, desc, and, gte, sql, or, ilike, asc } from "drizzle-orm";
 import { hashPassword } from "./auth.js";
 
 export const storage = {
@@ -133,6 +134,15 @@ export const storage = {
     if (!res) return;
     await db.update(reservations).set({ status: "cancelled" }).where(eq(reservations.id, id));
     await db.update(rides).set({ availableSeats: sql`available_seats + ${res.seats}` }).where(eq(rides.id, res.rideId));
+  },
+
+  // ── Messages ──
+  async getMessagesByReservation(reservationId: number): Promise<Message[]> {
+    return db.select().from(messages).where(eq(messages.reservationId, reservationId)).orderBy(asc(messages.createdAt));
+  },
+  async createMessage(data: InsertMessage): Promise<Message> {
+    const [msg] = await db.insert(messages).values(data).returning();
+    return msg;
   },
 
   // ── Reviews ──

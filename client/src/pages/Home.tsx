@@ -61,10 +61,10 @@ export default function Home() {
 
           <form className="hero-search" onSubmit={handleSearch}>
             <div className="hero-search-type">
-              <button type="button" className={`search-type-btn ${searchType === "car" ? "active-car" : ""}`} onClick={() => setSearchType("car")}>
+              <button type="button" className={`search-type-btn ${searchType === "car" ? "active-car" : ""}`} onClick={() => setSearchType("car")} style={{ minHeight: 44 }}>
                 <Car size={12} /> Carro
               </button>
-              <button type="button" className={`search-type-btn ${searchType === "boat" ? "active-boat" : ""}`} onClick={() => setSearchType("boat")}>
+              <button type="button" className={`search-type-btn ${searchType === "boat" ? "active-boat" : ""}`} onClick={() => setSearchType("boat")} style={{ minHeight: 44 }}>
                 <Anchor size={12} /> Lancha
               </button>
             </div>

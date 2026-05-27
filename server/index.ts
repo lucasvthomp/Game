@@ -155,6 +155,15 @@ async function runMigrations() {
       );
       CREATE INDEX IF NOT EXISTS recurring_user_id_idx ON recurring_schedules (user_id);
       CREATE INDEX IF NOT EXISTS recurring_type_idx ON recurring_schedules (ride_type);
+
+      CREATE TABLE IF NOT EXISTS messages (
+        id SERIAL PRIMARY KEY,
+        reservation_id INTEGER NOT NULL REFERENCES reservations(id),
+        sender_id INTEGER NOT NULL REFERENCES users(id),
+        body TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL
+      );
+      CREATE INDEX IF NOT EXISTS messages_reservation_id_idx ON messages(reservation_id);
     `);
     console.log("Migrações concluídas.");
   } finally {

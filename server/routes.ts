@@ -290,6 +290,37 @@ router.delete("/reservations/:id", requireAuth, async (req: Request, res: Respon
   res.json({ success: true });
 });
 
+// ── MESSAGES ──
+router.get("/messages/:reservationId", requireAuth, async (req: Request, res: Response) => {
+  const reservationId = parseInt(req.params.reservationId as string);
+  const reservation = await storage.getReservation(reservationId);
+  if (!reservation) return res.status(404).json({ error: "Reserva não encontrada" });
+  const ride = await storage.getRide(reservation.rideId);
+  if ((req.user as any).id !== reservation.passengerId && (req.user as any).id !== ride?.captainId) {
+    return res.status(403).json({ error: "Sem permissão" });
+  }
+  const msgs = await storage.getMessagesByReservation(reservationId);
+  const enriched = await Promise.all(msgs.map(async m => {
+    const sender = await storage.getUser(m.senderId);
+    return { ...m, senderName: sender?.fullName || "Usuário" };
+  }));
+  res.json({ messages: enriched });
+});
+
+router.post("/messages/:reservationId", requireAuth, async (req: Request, res: Response) => {
+  const reservationId = parseInt(req.params.reservationId as string);
+  const { body } = req.body;
+  if (!body?.trim()) return res.status(400).json({ error: "Mensagem vazia" });
+  const reservation = await storage.getReservation(reservationId);
+  if (!reservation) return res.status(404).json({ error: "Reserva não encontrada" });
+  const ride = await storage.getRide(reservation.rideId);
+  if ((req.user as any).id !== reservation.passengerId && (req.user as any).id !== ride?.captainId) {
+    return res.status(403).json({ error: "Sem permissão" });
+  }
+  const msg = await storage.createMessage({ reservationId, senderId: (req.user as any).id, body: body.trim() });
+  res.json({ message: msg });
+});
+
 // ── REVIEWS ──
 router.post("/reviews", requireAuth, async (req: Request, res: Response) => {
   try {

@@ -7,6 +7,40 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
 
+function StarRating({ value, onChange }: { value: number; onChange?: (v: number) => void }) {
+  const [hovered, setHovered] = useState(0);
+  return (
+    <div style={{ display: "flex", gap: 4 }}>
+      {Array.from({ length: 5 }).map((_, i) => {
+        const filled = (hovered || value) > i;
+        return (
+          <Star
+            key={i}
+            size={26}
+            color="#FBBF24"
+            fill={filled ? "#FBBF24" : "none"}
+            style={{ cursor: onChange ? "pointer" : "default", transition: "transform 0.1s", transform: hovered === i + 1 ? "scale(1.18)" : "scale(1)" }}
+            onMouseEnter={() => onChange && setHovered(i + 1)}
+            onMouseLeave={() => onChange && setHovered(0)}
+            onClick={() => onChange && onChange(i + 1)}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+function StarDisplay({ rating, size = 13 }: { rating: number; size?: number }) {
+  const filled = Math.round(rating);
+  return (
+    <div style={{ display: "flex", gap: 2 }}>
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Star key={i} size={size} color="#FBBF24" fill={i < filled ? "#FBBF24" : "none"} />
+      ))}
+    </div>
+  );
+}
+
 export default function RideDetail() {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
@@ -15,6 +49,10 @@ export default function RideDetail() {
   const [seats, setSeats] = useState(1);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewComment, setReviewComment] = useState("");
+  const [reviewSuccess, setReviewSuccess] = useState(false);
+  const [reviewError, setReviewError] = useState("");
 
   const { data, isLoading } = useQuery({
     queryKey: [`/api/rides/${id}`],
@@ -32,6 +70,21 @@ export default function RideDetail() {
     onError: (err: any) => setError(err.message),
   });
 
+  const reviewMutation = useMutation({
+    mutationFn: () => apiRequest("POST", "/api/reviews", {
+      rideId: parseInt(id!),
+      captainId: data?.ride?.captainId,
+      rating: reviewRating,
+      comment: reviewComment.trim() || undefined,
+    }),
+    onSuccess: () => {
+      setReviewSuccess(true);
+      setReviewError("");
+      qc.invalidateQueries({ queryKey: [`/api/captain/${data?.ride?.captainId}/reviews`] });
+    },
+    onError: (err: any) => setReviewError(err.message || "Erro ao enviar avaliação."),
+  });
+
   if (isLoading) return (
     <div style={{ minHeight: "80vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#030B14", color: "#334155" }}>
       Carregando...
@@ -44,9 +97,14 @@ export default function RideDetail() {
     </div>
   );
 
-  const { ride, captain, captainProfile, avgRating } = data;
+  const { ride, captain, captainProfile } = data;
   const reviews = reviewsData?.reviews || [];
+  const avgRating: number = reviewsData?.avgRating ?? data.avgRating ?? 0;
   const totalPrice = (parseFloat(ride.pricePerSeat) * seats).toFixed(2).replace(".", ",");
+
+  const departurePassed = new Date(ride.departureTime) < new Date();
+  const alreadyReviewed = user ? reviews.some((r: any) => r.reviewerId === user.id) : false;
+  const canReview = user && user.id !== ride.captainId && departurePassed && !alreadyReviewed && !reviewSuccess;
 
   return (
     <div className="detail-page">
@@ -115,10 +173,11 @@ export default function RideDetail() {
             </div>
             {avgRating > 0 && (
               <div style={{ textAlign: "right" }}>
-                <div className="rating" style={{ fontSize: 14, justifyContent: "flex-end" }}>
-                  <Star size={15} fill="#FBBF24" color="#FBBF24" /> {avgRating.toFixed(1)}
+                <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "flex-end" }}>
+                  <StarDisplay rating={avgRating} size={14} />
+                  <span style={{ fontSize: 14, fontWeight: 700, color: "var(--boat)" }}>{avgRating.toFixed(1)}</span>
                 </div>
-                <div style={{ color: "#334155", fontSize: 11, marginTop: 2 }}>{reviews.length} avaliações</div>
+                <div style={{ color: "var(--text3)", fontSize: 11, marginTop: 4 }}>{reviews.length} {reviews.length === 1 ? "avaliação" : "avaliações"}</div>
               </div>
             )}
           </div>
@@ -179,22 +238,89 @@ export default function RideDetail() {
         {/* Reviews */}
         {reviews.length > 0 && (
           <div className="detail-card fade-up" style={{ animationDelay: "200ms" }}>
-            <p className="section-label" style={{ marginBottom: 16 }}>AVALIAÇÕES DO CAPITÃO</p>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 8 }}>
+              <p className="section-label" style={{ margin: 0 }}>AVALIAÇÕES</p>
+              {avgRating > 0 && (
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <StarDisplay rating={avgRating} size={14} />
+                  <span style={{ fontWeight: 700, fontSize: 14, color: "var(--boat)" }}>{avgRating.toFixed(1)}</span>
+                  <span style={{ color: "var(--text3)", fontSize: 12 }}>({reviews.length})</span>
+                </div>
+              )}
+            </div>
             <div className="reviews-list">
               {reviews.slice(0, 5).map((rev: any) => (
                 <div key={rev.id} className="review-item">
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <div className="review-stars">
-                      {Array.from({ length: 5 }).map((_, j) => (
-                        <Star key={j} size={13} color="#FBBF24" fill={j < rev.rating ? "#FBBF24" : "none"} />
-                      ))}
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <div style={{ width: 28, height: 28, borderRadius: "50%", background: "var(--surface)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "var(--text2)" }}>
+                        {(rev.reviewerName || "P")[0].toUpperCase()}
+                      </div>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text1)" }}>
+                        {rev.reviewerName || "Passageiro"}
+                      </span>
                     </div>
                     <span className="review-date">{format(new Date(rev.createdAt), "dd/MM/yyyy")}</span>
                   </div>
-                  {rev.comment && <p className="review-comment">{rev.comment}</p>}
+                  <div className="review-stars" style={{ marginBottom: rev.comment ? 6 : 0 }}>
+                    <StarDisplay rating={rev.rating} size={13} />
+                  </div>
+                  {rev.comment && <p className="review-comment" style={{ margin: 0 }}>{rev.comment}</p>}
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* Review form */}
+        {canReview && (
+          <div className="detail-card fade-up" style={{ animationDelay: "240ms" }}>
+            <p className="section-label" style={{ marginBottom: 16 }}>AVALIAR VIAGEM</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <div>
+                <p style={{ fontSize: 13, color: "var(--text2)", marginBottom: 10 }}>Sua nota:</p>
+                <StarRating value={reviewRating} onChange={setReviewRating} />
+              </div>
+              <textarea
+                value={reviewComment}
+                onChange={e => setReviewComment(e.target.value)}
+                placeholder="Conte como foi a viagem..."
+                rows={3}
+                style={{
+                  background: "var(--surface)",
+                  border: "1px solid var(--border)",
+                  borderRadius: 10,
+                  padding: "11px 14px",
+                  color: "var(--text1)",
+                  fontSize: 14,
+                  lineHeight: 1.6,
+                  resize: "vertical",
+                  outline: "none",
+                  width: "100%",
+                  boxSizing: "border-box",
+                  fontFamily: "inherit",
+                }}
+              />
+              {reviewError && (
+                <div className="booking-error">{reviewError}</div>
+              )}
+              <button
+                className="booking-btn booking-btn-boat"
+                disabled={reviewRating === 0 || reviewMutation.isPending}
+                onClick={() => { setReviewError(""); reviewMutation.mutate(); }}
+              >
+                {reviewMutation.isPending ? "Enviando..." : "Enviar avaliação"}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {(reviewSuccess || (user && user.id !== ride.captainId && departurePassed && alreadyReviewed)) && !canReview && (
+          <div style={{ display: "flex", alignItems: "center", gap: 12, background: "rgba(0,196,255,0.07)", border: "1px solid rgba(0,196,255,0.18)", borderRadius: 14, padding: "18px 22px", marginBottom: 12 }}>
+            <CheckCircle size={22} color="var(--boat)" />
+            <span style={{ fontSize: 14, color: "var(--text2)" }}>
+              {reviewSuccess ? "Obrigado pela sua avaliação!" : "Você já avaliou esta viagem."}
+            </span>
           </div>
         )}
       </div>

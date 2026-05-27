@@ -114,6 +114,19 @@ export const reviews = pgTable("reviews", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 }, (t) => [index("reviews_captain_id_idx").on(t.captainId)]);
 
+export const messages = pgTable("messages", {
+  id: serial("id").primaryKey(),
+  reservationId: integer("reservation_id").notNull().references(() => reservations.id),
+  senderId: integer("sender_id").notNull().references(() => users.id),
+  body: text("body").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (t) => [
+  index("messages_reservation_id_idx").on(t.reservationId),
+]);
+
+export type Message = typeof messages.$inferSelect;
+export type InsertMessage = typeof messages.$inferInsert;
+
 // Zod schemas
 export const insertUserSchema = createInsertSchema(users).omit({ id: true, createdAt: true });
 export const insertCaptainProfileSchema = createInsertSchema(captainProfiles).omit({ id: true, createdAt: true, verified: true });

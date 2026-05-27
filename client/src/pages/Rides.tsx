@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { Link, useSearch } from "wouter";
-import { Anchor, Clock, Star, Search, Car } from "lucide-react";
+import { Anchor, Clock, Star, Search, Car, Users, ArrowRight, MapPin } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
@@ -75,9 +75,9 @@ export default function Rides({ defaultType }: { defaultType?: "car" | "boat"; [
 
       <div className="rides-body">
         {isLoading ? (
-          <div className="ride-grid">
+          <div className="ride-grid-v2">
             {[1,2,3,4].map(i => (
-              <div key={i} style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 18, height: 240, opacity: 0.4 }} />
+              <div key={i} className="rcv2-skeleton" />
             ))}
           </div>
         ) : rides.length === 0 ? (
@@ -89,48 +89,88 @@ export default function Rides({ defaultType }: { defaultType?: "car" | "boat"; [
         ) : (
           <>
             <p className="rides-count">{rides.length} {rides.length === 1 ? "carona encontrada" : "caronas encontradas"}</p>
-            <div className="ride-grid">
+            <div className="ride-grid-v2">
               {rides.map((ride: any, i: number) => {
                 const isBoat = ride.rideType === "boat";
+                const accent = isBoat ? "var(--boat)" : "var(--car)";
+                const accentLight = isBoat ? "var(--boat-light)" : "var(--car-light)";
+                const soldOut = ride.availableSeats === 0;
                 return (
                   <Link key={ride.id} href={`/viagens/${ride.id}`}>
-                    <div className="ride-card fade-up" style={{ animationDelay: `${i * 60}ms` }}>
-                      <div className="ride-card-inner">
-                        <div className="ride-top">
-                          <span className={`type-badge ${isBoat ? "type-badge-boat" : "type-badge-car"}`}>
+                    <div className="rcv2 fade-up" style={{ animationDelay: `${i * 50}ms` }}>
+                      {/* Left accent bar */}
+                      <div className="rcv2-bar" style={{ background: accent }} />
+
+                      <div className="rcv2-body">
+                        {/* Top row: type pill + seats + rating */}
+                        <div className="rcv2-top">
+                          <span className="rcv2-type-pill" style={{ background: accentLight, color: accent }}>
+                            {isBoat ? <Anchor size={10} /> : <Car size={10} />}
                             {isBoat ? "Lancha" : "Carro"}
                           </span>
-                          <span className={`badge ${ride.availableSeats > 0 ? "badge-green" : "badge-red"}`}>
-                            {ride.availableSeats > 0 ? `${ride.availableSeats} vagas` : "Esgotado"}
-                          </span>
-                          {ride.avgRating > 0 && (
-                            <span className="rating"><Star size={11} fill="#FBBF24" color="#FBBF24" /> {ride.avgRating.toFixed(1)}</span>
-                          )}
-                        </div>
-                        <div className="ride-route">
-                          <div className="ride-city">{ride.originCity}</div>
-                          <div className="ride-arrow">
-                            <div className="arrow-line" />
-                            {isBoat ? <Anchor size={12} color="var(--boat)" /> : <Car size={12} color="var(--car)" />}
-                            <div className="arrow-line" />
+                          <div className="rcv2-top-right">
+                            {ride.avgRating > 0 && (
+                              <span className="rcv2-rating">
+                                <Star size={11} fill="#FBBF24" color="#FBBF24" />
+                                {Number(ride.avgRating).toFixed(1)}
+                              </span>
+                            )}
+                            <span className="rcv2-seats" style={{
+                              background: soldOut ? "rgba(255,64,64,0.1)" : "rgba(0,232,122,0.08)",
+                              color: soldOut ? "var(--red)" : "var(--car)",
+                            }}>
+                              <Users size={10} />
+                              {soldOut ? "Esgotado" : `${ride.availableSeats} vagas`}
+                            </span>
                           </div>
-                          <div className="ride-city">{ride.destinationCity}</div>
                         </div>
-                        <div className="ride-meta">
-                          <span><Clock size={12} /> {format(new Date(ride.departureTime), "dd MMM · HH:mm", { locale: ptBR })}</span>
+
+                        {/* Route — hero section */}
+                        <div className="rcv2-route">
+                          <div className="rcv2-city-block">
+                            <div className="rcv2-city-label">ORIGEM</div>
+                            <div className="rcv2-city">{ride.originCity}</div>
+                          </div>
+                          <div className="rcv2-route-mid">
+                            <div className="rcv2-dot" style={{ background: accent }} />
+                            <div className="rcv2-dashes" style={{ borderTopColor: accent }} />
+                            <ArrowRight size={14} style={{ color: accent, flexShrink: 0 }} />
+                          </div>
+                          <div className="rcv2-city-block rcv2-city-block-right">
+                            <div className="rcv2-city-label">DESTINO</div>
+                            <div className="rcv2-city">{ride.destinationCity}</div>
+                          </div>
+                        </div>
+
+                        {/* Meta row */}
+                        <div className="rcv2-meta">
+                          <span>
+                            <Clock size={12} style={{ color: accent }} />
+                            {format(new Date(ride.departureTime), "dd 'de' MMM · HH:mm", { locale: ptBR })}
+                          </span>
                           <span>
                             {isBoat
-                              ? <><Anchor size={12} /> {ride.boatName} · Cap. {ride.captainName}</>
-                              : <><Car size={12} /> {ride.carName} · {ride.captainName}</>
+                              ? <><Anchor size={12} style={{ color: accent }} />{ride.boatName || "Lancha"} · {ride.captainName}</>
+                              : <><Car size={12} style={{ color: accent }} />{ride.carName || "Carro"} · {ride.captainName}</>
                             }
                           </span>
                         </div>
-                        <div className="ride-footer">
-                          <div className="ride-price">
-                            <span className="price-amount">R$ {parseFloat(ride.pricePerSeat).toFixed(2).replace(".", ",")}</span>
-                            <span className="price-label">/ pessoa</span>
+
+                        {/* Footer: price + CTA */}
+                        <div className="rcv2-footer">
+                          <div>
+                            <span className="rcv2-price" style={{ color: accent }}>
+                              R$ {parseFloat(ride.pricePerSeat).toFixed(2).replace(".", ",")}
+                            </span>
+                            <span className="rcv2-per"> / pessoa</span>
                           </div>
-                          <span className={`btn-reserve ${isBoat ? "btn-reserve-boat" : "btn-reserve-car"}`}>Reservar →</span>
+                          <button
+                            className="rcv2-cta"
+                            style={{ background: accent, opacity: soldOut ? 0.4 : 1 }}
+                            disabled={soldOut}
+                          >
+                            {soldOut ? "Esgotado" : "Reservar"}
+                          </button>
                         </div>
                       </div>
                     </div>

@@ -4,6 +4,7 @@ import { queryClient } from "@/lib/queryClient";
 import { AuthProvider } from "@/hooks/use-auth";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import BottomNav from "@/components/layout/BottomNav";
 import Home from "@/pages/Home";
 import Auth from "@/pages/Auth";
 import Rides from "@/pages/Rides";
@@ -14,6 +15,7 @@ import DriverProfile from "@/pages/DriverProfile";
 import DriverDashboard from "@/pages/DriverDashboard";
 import Recurring from "@/pages/Recurring";
 import MyReservations from "@/pages/MyReservations";
+import Messages from "@/pages/Messages";
 import Profile from "@/pages/Profile";
 
 export default function App() {
@@ -36,6 +38,7 @@ export default function App() {
           <Route path="/meu-carro" component={DriverDashboard} />
           <Route path="/recorrentes" component={Recurring} />
           <Route path="/minhas-reservas" component={MyReservations} />
+          <Route path="/mensagens/:reservationId" component={Messages} />
           <Route path="/perfil" component={Profile} />
           <Route>
             <div style={{ textAlign: "center", padding: 80, color: "var(--text2)" }}>
@@ -46,6 +49,7 @@ export default function App() {
         </Switch>
         </div>
         <Footer />
+        <BottomNav />
       </AuthProvider>
     </QueryClientProvider>
   );

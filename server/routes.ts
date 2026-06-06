@@ -211,6 +211,42 @@ router.delete("/rides/:id", requireCaptainOrDriver, async (req: Request, res: Re
   res.json({ success: true });
 });
 
+router.get("/rides/:id/reservations", requireAuth, async (req: Request, res: Response) => {
+  try {
+    const rideId = parseInt(req.params.id as string);
+    if (isNaN(rideId)) return res.status(400).json({ error: "ID inválido." });
+    const ride = await storage.getRide(rideId);
+    if (!ride) return res.status(404).json({ error: "Ride not found" });
+    // Only the captain/driver can see reservations
+    if (ride.captainId !== (req.user as any).id) {
+      return res.status(403).json({ error: "Forbidden" });
+    }
+    const rawReservations = await storage.getReservationsByRide(rideId);
+    const reservations = await Promise.all(rawReservations.map(async (r) => {
+      const passenger = await storage.getUser(r.passengerId);
+      return { ...r, passengerName: passenger?.fullName || "Passageiro", userName: passenger?.fullName };
+    }));
+    res.json({ reservations });
+  } catch (e: any) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+router.patch("/me", requireAuth, async (req: Request, res: Response) => {
+  try {
+    const user = req.user as any;
+    const { fullName, phone } = req.body;
+    const updates: any = {};
+    if (fullName !== undefined) updates.fullName = fullName.trim();
+    if (phone !== undefined) updates.phone = phone.trim() || null;
+    const updated = await storage.updateUser(user.id, updates);
+    const { password: _, ...safe } = updated;
+    res.json({ user: safe });
+  } catch (e: any) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 // ── RECURRING SCHEDULES ──
 router.get("/recurring", async (req: Request, res: Response) => {
   try {

@@ -1,10 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { Link, useSearch } from "wouter";
-import { Anchor, Calendar, Clock, Star, Search, Car, Users, ArrowRight, MapPin } from "lucide-react";
+import { Anchor, Calendar, Clock, Star, Search, Car, Users, ArrowRight, Map, List } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
+
+const RouteMap = lazy(() => import("@/components/RouteMap"));
 
 const PLACEHOLDER_RIDES = [
   { id: 1, rideType: "boat", originCity: "Bertioga", destinationCity: "Ilhabela", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 18).toISOString(), pricePerSeat: "85.00", availableSeats: 4, captainName: "Rafael M.", boatName: "Veneza III", avgRating: 4.9 },
@@ -30,6 +32,7 @@ export default function Rides({ defaultType }: { defaultType?: "car" | "boat"; [
   const [sortBy, setSortBy] = useState<"price" | "rating" | "departure">("departure");
   const [dateFilter, setDateFilter] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const [viewMode, setViewMode] = useState<"list" | "map">("list");
 
   const { data, isLoading } = useQuery({
     queryKey: ["/api/rides", activeTab],
@@ -85,17 +88,100 @@ export default function Rides({ defaultType }: { defaultType?: "car" | "boat"; [
             <Search size={15} className="rides-search-icon" />
             <input value={searchText} onChange={e => setSearchText(e.target.value)} placeholder="Buscar por cidade..." />
           </div>
+
+          {/* Filter bar */}
+          <div style={{ display: "flex", gap: 10, marginTop: 14, flexWrap: "wrap", alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 10, padding: "7px 12px" }}>
+              <Calendar size={13} style={{ color: "var(--text3)" }} />
+              <input
+                type="date"
+                value={dateFilter}
+                onChange={e => setDateFilter(e.target.value)}
+                style={{ border: "none", background: "none", outline: "none", fontSize: 13, color: "var(--text1)", cursor: "pointer" }}
+              />
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 10, padding: "7px 12px" }}>
+              <span style={{ fontSize: 12, color: "var(--text3)", whiteSpace: "nowrap" }}>Até R$</span>
+              <input
+                type="number"
+                placeholder="Sem limite"
+                value={maxPrice}
+                onChange={e => setMaxPrice(e.target.value)}
+                style={{ border: "none", background: "none", outline: "none", fontSize: 13, color: "var(--text1)", width: 80 }}
+              />
+            </div>
+            <select
+              value={sortBy}
+              onChange={e => setSortBy(e.target.value as any)}
+              style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 10, padding: "7px 12px", fontSize: 13, color: "var(--text1)", outline: "none", cursor: "pointer" }}
+            >
+              <option value="departure">Mais próximas</option>
+              <option value="price">Menor preço</option>
+              <option value="rating">Melhor avaliação</option>
+            </select>
+            {(dateFilter || maxPrice || sortBy !== "departure") && (
+              <button
+                onClick={() => { setDateFilter(""); setMaxPrice(""); setSortBy("departure"); }}
+                style={{ background: "none", border: "1px solid var(--border)", borderRadius: 10, padding: "7px 12px", fontSize: 12, color: "var(--text3)", cursor: "pointer" }}
+              >
+                Limpar filtros
+              </button>
+            )}
+            <div style={{ marginLeft: "auto", display: "flex", gap: 4 }}>
+              <button
+                onClick={() => setViewMode("list")}
+                style={{ padding: "7px 12px", borderRadius: 10, border: "1px solid var(--border)", background: viewMode === "list" ? "var(--boat-light)" : "var(--surface)", color: viewMode === "list" ? "var(--boat)" : "var(--text2)", cursor: "pointer", display: "flex", alignItems: "center", gap: 5, fontSize: 12, fontWeight: 600 }}
+              >
+                <List size={13} /> Lista
+              </button>
+              <button
+                onClick={() => setViewMode("map")}
+                style={{ padding: "7px 12px", borderRadius: 10, border: "1px solid var(--border)", background: viewMode === "map" ? "var(--boat-light)" : "var(--surface)", color: viewMode === "map" ? "var(--boat)" : "var(--text2)", cursor: "pointer", display: "flex", alignItems: "center", gap: 5, fontSize: 12, fontWeight: 600 }}
+              >
+                <Map size={13} /> Mapa
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
       <div className="rides-body">
+        {viewMode === "map" && (
+          <Suspense fallback={<div style={{ height: 480, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text3)" }}>Carregando mapa...</div>}>
+            <RouteMap
+              height="480px"
+              points={rides.flatMap((r: any) => {
+                const pts = [];
+                const getCityCoords = (city: string): [number, number] | null => {
+                  const MAP: Record<string, [number, number]> = {
+                    "santos": [-23.9618, -46.3322], "ilhabela": [-23.7781, -45.3581],
+                    "angra dos reis": [-23.0067, -44.3181], "paraty": [-23.2178, -44.7131],
+                    "ilha grande": [-23.1711, -44.1927], "bertioga": [-23.8542, -46.1388],
+                    "são paulo": [-23.5505, -46.6333], "campinas": [-22.9056, -47.0608],
+                    "são josé dos campos": [-23.1794, -45.8869], "sjc": [-23.1794, -45.8869],
+                    "taubaté": [-23.0260, -45.5553], "pindamonhangaba": [-22.9239, -45.4614],
+                    "guarulhos": [-23.4543, -46.5333], "rio de janeiro": [-22.9068, -43.1729],
+                    "guarujá": [-23.9932, -46.2567], "ubatuba": [-23.4336, -45.0838],
+                    "são sebastião": [-23.7969, -45.4081],
+                  };
+                  return MAP[city.toLowerCase()] ?? null;
+                };
+                const oC = r.originLat ? [Number(r.originLat), Number(r.originLng)] as [number,number] : getCityCoords(r.originCity);
+                const dC = r.destLat ? [Number(r.destLat), Number(r.destLng)] as [number,number] : getCityCoords(r.destinationCity);
+                if (oC) pts.push({ lat: oC[0], lng: oC[1], city: r.originCity, type: r.rideType as "boat" | "car" });
+                if (dC) pts.push({ lat: dC[0], lng: dC[1], city: r.destinationCity, type: r.rideType as "boat" | "car" });
+                return pts;
+              })}
+            />
+          </Suspense>
+        )}
         {isLoading ? (
           <div className="ride-grid-v2">
             {[1,2,3,4].map(i => (
               <div key={i} className="rcv2-skeleton" />
             ))}
           </div>
-        ) : rides.length === 0 ? (
+        ) : viewMode === "map" ? null : rides.length === 0 ? (
           <div className="rides-empty">
             {isBoatPage ? <Anchor size={44} className="empty-state-icon" /> : <Car size={44} className="empty-state-icon" />}
             <p style={{ fontWeight: 600, fontSize: "1.05rem", marginBottom: 6 }}>Nenhuma carona encontrada</p>
@@ -103,7 +189,7 @@ export default function Rides({ defaultType }: { defaultType?: "car" | "boat"; [
           </div>
         ) : (
           <>
-            <p className="rides-count">{rides.length} {rides.length === 1 ? "carona encontrada" : "caronas encontradas"}</p>
+            <p className="rides-count">{filtered.length} viagem{filtered.length !== 1 ? "s" : ""} encontrada{filtered.length !== 1 ? "s" : ""}</p>
             <div className="ride-grid-v2">
               {rides.map((ride: any, i: number) => {
                 const isBoat = ride.rideType === "boat";

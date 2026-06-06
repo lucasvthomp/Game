@@ -11,6 +11,31 @@ const MapPicker = lazy(() => import("@/components/RouteMap").then(m => ({ defaul
 
 const BLANK = { originCity: "", destinationCity: "", departureTime: "", returnTime: "", pricePerSeat: "", totalSeats: "", description: "" };
 
+function RidePassengers({ rideId }: { rideId: number }) {
+  const { data, isLoading } = useQuery({
+    queryKey: [`/api/rides/${rideId}/reservations`],
+    queryFn: () => apiRequest("GET", `/api/rides/${rideId}/reservations`),
+  });
+  if (isLoading) return <div style={{ padding: "12px 0", color: "var(--text3)", fontSize: 13 }}>Carregando...</div>;
+  const reservations = data?.reservations || [];
+  if (!reservations.length) return <div style={{ padding: "12px 0", color: "var(--text3)", fontSize: 13 }}>Nenhuma reserva ainda.</div>;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingTop: 12 }}>
+      {reservations.map((r: any) => (
+        <div key={r.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "var(--surface)", borderRadius: 10, padding: "10px 14px", flexWrap: "wrap", gap: 8 }}>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 14, color: "var(--text1)" }}>{r.passengerName || r.userName || "Passageiro"}</div>
+            <div style={{ fontSize: 12, color: "var(--text3)", marginTop: 2 }}>{r.seats} assento{r.seats > 1 ? "s" : ""} · R$ {(parseFloat(r.totalPrice || "0")).toFixed(2).replace(".", ",")}</div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 9px", borderRadius: 100, background: r.status === "confirmed" ? "rgba(61,138,92,0.12)" : "var(--surface)", color: r.status === "confirmed" ? "var(--green)" : "var(--text3)" }}>{r.status === "confirmed" ? "Confirmado" : r.status}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function CaptainDashboard() {
   const { user } = useAuth();
   const [, navigate] = useLocation();
@@ -22,6 +47,7 @@ export default function CaptainDashboard() {
   const [originPin, setOriginPin] = useState<[number, number] | null>(null);
   const [destPin, setDestPin] = useState<[number, number] | null>(null);
   const [showMap, setShowMap] = useState(false);
+  const [expandedRide, setExpandedRide] = useState<number | null>(null);
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setForm(f => ({ ...f, [k]: e.target.value }));
 
   const { data: profileData } = useQuery({
@@ -204,6 +230,15 @@ export default function CaptainDashboard() {
                     <Trash2 size={14} />
                   </button>
                 )}
+              </div>
+              <div style={{ borderTop: "1px solid var(--border)", marginTop: 12, paddingTop: 12 }}>
+                <button
+                  onClick={() => setExpandedRide(expandedRide === ride.id ? null : ride.id)}
+                  style={{ background: "none", border: "none", color: "var(--boat)", fontSize: 13, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 5 }}
+                >
+                  <Users size={13} /> {expandedRide === ride.id ? "Ocultar passageiros" : "Ver passageiros"}
+                </button>
+                {expandedRide === ride.id && <RidePassengers rideId={ride.id} />}
               </div>
             </div>
           ))}

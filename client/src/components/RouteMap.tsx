@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from "react-leaflet";
 import L from "leaflet";
 
@@ -134,7 +134,7 @@ function ClickHandler({ mode, onOriginPick, onDestPick }: { mode: "origin" | "de
 export function MapPicker({ onOriginPick, onDestPick, originPin, destPin, type = "boat" }: MapPickerProps) {
   const isBoat = type === "boat";
   const color = isBoat ? "#2563EB" : "#F05A28";
-  const [mode, setMode] = useRef<"origin" | "dest">("origin") as any;
+  const [mode, setMode] = useState<"origin" | "dest">("origin");
   const modeRef = useRef<"origin" | "dest">("origin");
 
   const originIcon = makeIcon(color, isBoat ? "🚢" : "🚗");
@@ -147,12 +147,12 @@ export function MapPicker({ onOriginPick, onDestPick, originPin, destPin, type =
           <button
             key={m}
             type="button"
-            onClick={() => { modeRef.current = m; }}
+            onClick={() => { modeRef.current = m; setMode(m); }}
             style={{
               padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: "pointer", border: "1.5px solid",
-              borderColor: modeRef.current === m ? color : "var(--border)",
-              background: modeRef.current === m ? `${color}15` : "var(--surface)",
-              color: modeRef.current === m ? color : "var(--text2)",
+              borderColor: mode === m ? color : "var(--border)",
+              background: mode === m ? `${color}15` : "var(--surface)",
+              color: mode === m ? color : "var(--text2)",
               transition: "all 0.15s",
             }}
           >

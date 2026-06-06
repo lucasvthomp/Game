@@ -1,10 +1,22 @@
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation, Link } from "wouter";
 import { Anchor, Calendar, LogOut, ChevronRight, User } from "lucide-react";
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 
 export default function Profile() {
   const { user, logout } = useAuth();
   const [, navigate] = useLocation();
+  const qc = useQueryClient();
+  const [editing, setEditing] = useState(false);
+  const [fullName, setFullName] = useState(user?.fullName || "");
+  const [phone, setPhone] = useState(user?.phone || "");
+
+  const updateMutation = useMutation({
+    mutationFn: () => apiRequest("PATCH", "/api/me", { fullName, phone }),
+    onSuccess: () => { setEditing(false); qc.invalidateQueries({ queryKey: ["/api/me"] }); },
+  });
 
   if (!user) { navigate("/entrar"); return null; }
 
@@ -31,13 +43,29 @@ export default function Profile() {
             <span style={{ color: "var(--text3)", minWidth: 72 }}>Email</span>
             <span style={{ color: "var(--text2)" }}>{user.email}</span>
           </div>
-          {user.phone && (
+          {user.phone && !editing && (
             <div style={{ display: "flex", gap: 12, fontSize: 14 }}>
               <span style={{ color: "var(--text3)", minWidth: 72 }}>Telefone</span>
               <span style={{ color: "var(--text2)" }}>{user.phone}</span>
             </div>
           )}
         </div>
+        {editing ? (
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 10 }}>
+            <input value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Nome completo" className="form-input" />
+            <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="Telefone / WhatsApp" className="form-input" />
+            <div style={{ display: "flex", gap: 8 }}>
+              <button onClick={() => updateMutation.mutate()} className="btn-car-solid" style={{ padding: "8px 18px", fontSize: 13 }} disabled={updateMutation.isPending}>
+                {updateMutation.isPending ? "Salvando..." : "Salvar"}
+              </button>
+              <button onClick={() => setEditing(false)} className="btn-secondary" style={{ padding: "8px 18px", fontSize: 13 }}>Cancelar</button>
+            </div>
+          </div>
+        ) : (
+          <button onClick={() => { setFullName(user.fullName); setPhone(user.phone || ""); setEditing(true); }} style={{ background: "none", border: "1px solid var(--border)", borderRadius: 8, padding: "6px 14px", fontSize: 13, color: "var(--text2)", cursor: "pointer", marginTop: 8 }}>
+            Editar perfil
+          </button>
+        )}
       </div>
 
       {/* Actions */}

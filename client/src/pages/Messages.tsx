@@ -3,7 +3,9 @@ import { useParams, useLocation } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
-import { Send, ChevronLeft } from "lucide-react";
+import { Send, ChevronLeft, MapPin, Clock } from "lucide-react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 export default function Messages() {
   const { reservationId } = useParams<{ reservationId: string }>();
@@ -19,6 +21,14 @@ export default function Messages() {
     refetchInterval: 4000,
     enabled: !!user,
   });
+
+  const { data: reservationData } = useQuery({
+    queryKey: ["/api/my/reservations"],
+    queryFn: () => apiRequest("GET", "/api/my/reservations"),
+    enabled: !!user,
+  });
+
+  const reservation = reservationData?.reservations?.find((r: any) => r.id === parseInt(reservationId || "0"))?.ride;
 
   const messages = data?.messages || [];
 
@@ -42,6 +52,18 @@ export default function Messages() {
         </button>
         <span style={{ fontWeight: 700, color: "var(--text1)", fontSize: 16 }}>Mensagens</span>
       </div>
+      {reservation && (
+        <div style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)", padding: "10px 20px", fontSize: 13, color: "var(--text2)", display: "flex", gap: 16, flexWrap: "wrap" }}>
+          <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
+            <MapPin size={12} /> {reservation.originCity} → {reservation.destinationCity}
+          </span>
+          {reservation.departureTime && (
+            <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
+              <Clock size={12} /> {format(new Date(reservation.departureTime), "dd MMM, HH:mm", { locale: ptBR })}
+            </span>
+          )}
+        </div>
+      )}
 
       {/* Messages */}
       <div style={{ flex: 1, overflowY: "auto", padding: "20px 16px", display: "flex", flexDirection: "column", gap: 10, maxWidth: 600, width: "100%", margin: "0 auto" }}>
@@ -63,6 +85,9 @@ export default function Messages() {
                 border: isMe ? "none" : "1px solid var(--border)",
               }}>
                 {msg.body}
+              </div>
+              <div style={{ fontSize: 11, color: isMe ? "rgba(255,255,255,0.6)" : "var(--text3)", marginTop: 3, textAlign: isMe ? "right" : "left" }}>
+                {format(new Date(msg.createdAt || msg.sentAt || Date.now()), "HH:mm", { locale: ptBR })}
               </div>
             </div>
           );

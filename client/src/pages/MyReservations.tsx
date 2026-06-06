@@ -36,12 +36,12 @@ export default function MyReservations() {
       </div>
 
       {isLoading ? (
-        <div style={{ color: "#334155", textAlign: "center", padding: 60 }}>Carregando...</div>
+        <div style={{ color: "var(--text3)", textAlign: "center", padding: 60 }}>Carregando...</div>
       ) : reservations.length === 0 ? (
         <div className="card empty-state">
           <Anchor size={40} className="empty-state-icon" />
-          <p style={{ fontWeight: 600, color: "#334155" }}>Nenhuma reserva ainda.</p>
-          <a href="/viagens" style={{ color: "#38BDF8", fontSize: 14, marginTop: 8, display: "inline-block" }}>Ver viagens disponíveis →</a>
+          <p style={{ fontWeight: 600, color: "var(--text3)" }}>Nenhuma reserva ainda.</p>
+          <a href="/viagens" style={{ color: "var(--boat)", fontSize: 14, marginTop: 8, display: "inline-block" }}>Ver viagens disponíveis →</a>
         </div>
       ) : (
         <>
@@ -73,7 +73,7 @@ function ResCard({ res, onCancel, messagesHref }: { res: any; onCancel?: () => v
     <div className={`res-card ${res.status !== "confirmed" ? "cancelled" : ""}`}>
       <div style={{ flex: 1 }}>
         <div className="res-route">
-          <MapPin size={14} color="#0EA5E9" />
+          <MapPin size={14} color="var(--boat)" />
           {ride ? `${ride.originCity} → ${ride.destinationCity}` : "Viagem removida"}
         </div>
         {ride && (
@@ -91,7 +91,7 @@ function ResCard({ res, onCancel, messagesHref }: { res: any; onCancel?: () => v
         <div className="res-price">R$ {parseFloat(res.totalPrice).toFixed(2).replace(".", ",")}</div>
         {messagesHref && (
           <Link href={messagesHref}>
-            <button style={{ padding: "7px 14px", borderRadius: 8, background: "rgba(0,196,255,0.08)", border: "1px solid rgba(0,196,255,0.15)", color: "var(--boat)", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
+            <button style={{ padding: "7px 14px", borderRadius: 8, background: "color-mix(in srgb, var(--boat) 10%, transparent)", border: "1px solid color-mix(in srgb, var(--boat) 22%, transparent)", color: "var(--boat)", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
               Mensagens
             </button>
           </Link>

@@ -27,7 +27,7 @@ export default function Auth({ mode }: { mode: "login" | "register" }) {
     <div className="auth-wrap">
       <div className="auth-box">
         <div className="auth-logo">
-          <div style={{ width: 44, height: 44, borderRadius: 14, background: "#0284C7", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
+          <div style={{ width: 44, height: 44, borderRadius: 14, background: "var(--boat)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
             <Anchor size={22} color="#fff" />
           </div>
           <div className="auth-title">{mode === "login" ? "Bem-vindo de volta" : "Criar conta"}</div>

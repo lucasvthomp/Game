@@ -111,12 +111,12 @@ export default function Rides({ defaultType }: { defaultType?: "car" | "boat"; [
                           <div className="rcv2-top-right">
                             {ride.avgRating > 0 && (
                               <span className="rcv2-rating">
-                                <Star size={11} fill="#FBBF24" color="#FBBF24" />
+                                <Star size={11} fill="var(--amber)" color="var(--amber)" />
                                 {Number(ride.avgRating).toFixed(1)}
                               </span>
                             )}
                             <span className="rcv2-seats" style={{
-                              background: soldOut ? "rgba(255,64,64,0.1)" : "rgba(0,232,122,0.08)",
+                              background: soldOut ? "color-mix(in srgb, var(--red) 12%, transparent)" : "color-mix(in srgb, var(--green) 10%, transparent)",
                               color: soldOut ? "var(--red)" : "var(--car)",
                             }}>
                               <Users size={10} />

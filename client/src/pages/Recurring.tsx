@@ -80,7 +80,7 @@ export default function Recurring() {
     <div className="page-wrapper">
       <div className="rides-header">
         <div className="rides-header-inner">
-          <p className="section-label" style={{ color: "var(--boat)", borderColor: "rgba(217,119,6,0.25)" }}>ROTAS RECORRENTES</p>
+          <p className="section-label" style={{ color: "var(--boat)", borderColor: "color-mix(in srgb, var(--amber) 28%, transparent)" }}>ROTAS RECORRENTES</p>
           <h1 className="page-title" style={{ marginBottom: 8 }}>Commuters do Brasil</h1>
           <p style={{ color: "var(--text2)", fontSize: 15, marginBottom: 20 }}>
             Encontre companheiros de viagem fixos para sua rota semanal — de carro ou de lancha.

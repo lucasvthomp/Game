@@ -115,7 +115,7 @@ export default function DriverDashboard() {
               </div>
             </div>
             <div className="dash-stat-card">
-              <div className="dash-stat-icon" style={{ background: "#DCFCE7", color: "#15803D" }}><TrendingUp size={18} /></div>
+              <div className="dash-stat-icon" style={{ background: "var(--car-light)", color: "var(--green)" }}><TrendingUp size={18} /></div>
               <div>
                 <div className="dash-stat-value">{activeRides.length}</div>
                 <div className="dash-stat-label">Ativas agora</div>

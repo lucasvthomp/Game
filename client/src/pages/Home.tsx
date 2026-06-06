@@ -45,8 +45,19 @@ export default function Home() {
   return (
     <div className="page-wrapper">
 
+      {/* Brazil flag stripe */}
+      <div className="brazil-stripe" />
+
       {/* ─── HERO ─── */}
       <section className="hero-pro">
+        {/* Decorative floating icons */}
+        <div className="hero-float-anchor">
+          <Anchor size={120} />
+        </div>
+        <div className="hero-float-car">
+          <Car size={100} />
+        </div>
+
         <div className="hero-pro-inner fade-up">
 
           <div className="hero-pro-eyebrow">

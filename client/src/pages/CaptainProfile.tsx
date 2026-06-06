@@ -43,17 +43,17 @@ export default function CaptainProfile() {
   };
 
   if (success) return (
-    <div style={{ minHeight: "70vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12, background: "#030B14" }}>
-      <CheckCircle size={52} color="#4ADE80" />
-      <h2 style={{ color: "#F8FAFC", fontWeight: 800 }}>Perfil criado!</h2>
-      <p style={{ color: "#475569" }}>Redirecionando...</p>
+    <div style={{ minHeight: "70vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12, background: "var(--bg)" }}>
+      <CheckCircle size={52} color="var(--green)" />
+      <h2 style={{ color: "var(--text1)", fontWeight: 800 }}>Perfil criado!</h2>
+      <p style={{ color: "var(--text2)" }}>Redirecionando...</p>
     </div>
   );
 
   return (
     <div className="captain-page">
       <div style={{ textAlign: "center", marginBottom: 36 }}>
-        <div style={{ width: 48, height: 48, borderRadius: 14, background: "#0284C7", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
+        <div style={{ width: 48, height: 48, borderRadius: 14, background: "var(--boat)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
           <Anchor size={24} color="#fff" />
         </div>
         <h1 className="page-title">Perfil de Capitão</h1>
@@ -71,7 +71,7 @@ export default function CaptainProfile() {
             <div>
               <label className="field-label">FOTO DA HABILITAÇÃO *</label>
               <label className="file-label">
-                <Upload size={16} color={licenseImage ? "#4ADE80" : "#334155"} />
+                <Upload size={16} color={licenseImage ? "var(--green)" : "var(--text3)"} />
                 <span className={licenseImage ? "file-chosen" : "file-placeholder"}>
                   {licenseImage ? licenseImage.name : "Clique para enviar foto (JPG, PNG)"}
                 </span>
@@ -98,7 +98,7 @@ export default function CaptainProfile() {
               <div>
                 <label className="field-label">FOTO DA LANCHA</label>
                 <label className="file-label" style={{ height: "100%", minHeight: 42 }}>
-                  <Upload size={14} color={boatImage ? "#4ADE80" : "#334155"} />
+                  <Upload size={14} color={boatImage ? "var(--green)" : "var(--text3)"} />
                   <span className={boatImage ? "file-chosen" : "file-placeholder"} style={{ fontSize: 12 }}>
                     {boatImage ? boatImage.name : "Opcional"}
                   </span>

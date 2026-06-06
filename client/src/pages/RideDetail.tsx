@@ -17,8 +17,8 @@ function StarRating({ value, onChange }: { value: number; onChange?: (v: number)
           <Star
             key={i}
             size={26}
-            color="#FBBF24"
-            fill={filled ? "#FBBF24" : "none"}
+            color="var(--amber)"
+            fill={filled ? "var(--amber)" : "none"}
             style={{ cursor: onChange ? "pointer" : "default", transition: "transform 0.1s", transform: hovered === i + 1 ? "scale(1.18)" : "scale(1)" }}
             onMouseEnter={() => onChange && setHovered(i + 1)}
             onMouseLeave={() => onChange && setHovered(0)}
@@ -35,7 +35,7 @@ function StarDisplay({ rating, size = 13 }: { rating: number; size?: number }) {
   return (
     <div style={{ display: "flex", gap: 2 }}>
       {Array.from({ length: 5 }).map((_, i) => (
-        <Star key={i} size={size} color="#FBBF24" fill={i < filled ? "#FBBF24" : "none"} />
+        <Star key={i} size={size} color="var(--amber)" fill={i < filled ? "var(--amber)" : "none"} />
       ))}
     </div>
   );
@@ -86,14 +86,14 @@ export default function RideDetail() {
   });
 
   if (isLoading) return (
-    <div style={{ minHeight: "80vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#030B14", color: "#334155" }}>
+    <div style={{ minHeight: "80vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", color: "var(--text3)" }}>
       Carregando...
     </div>
   );
   if (!data?.ride) return (
-    <div style={{ minHeight: "80vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#030B14", flexDirection: "column", gap: 12 }}>
-      <AlertCircle size={40} color="#1E3A5F" />
-      <p style={{ color: "#475569" }}>Viagem não encontrada.</p>
+    <div style={{ minHeight: "80vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg)", flexDirection: "column", gap: 12 }}>
+      <AlertCircle size={40} color="var(--boat)" />
+      <p style={{ color: "var(--text2)" }}>Viagem não encontrada.</p>
     </div>
   );
 
@@ -120,7 +120,7 @@ export default function RideDetail() {
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             <span className="badge badge-green">{ride.availableSeats} vagas disponíveis</span>
             {captainProfile?.verified && (
-              <span className="badge" style={{ background: "rgba(56,189,248,0.08)", color: "#38BDF8", border: "1px solid rgba(56,189,248,0.15)", display: "flex", alignItems: "center", gap: 4 }}>
+              <span className="badge" style={{ background: "color-mix(in srgb, var(--boat) 10%, transparent)", color: "var(--boat)", border: "1px solid color-mix(in srgb, var(--boat) 22%, transparent)", display: "flex", alignItems: "center", gap: 4 }}>
                 <Shield size={10} /> Verificado
               </span>
             )}
@@ -133,7 +133,7 @@ export default function RideDetail() {
             </div>
             <div className="detail-anchor">
               <div className="detail-anchor-line" />
-              <Anchor size={16} color="#0EA5E9" />
+              <Anchor size={16} color="var(--boat)" />
               <div className="detail-anchor-line" />
             </div>
             <div className="detail-city-right">
@@ -144,17 +144,17 @@ export default function RideDetail() {
 
           <div className="detail-meta-row">
             <div className="detail-meta-item">
-              <Clock size={14} color="#0EA5E9" />
+              <Clock size={14} color="var(--boat)" />
               Ida: <strong>{format(new Date(ride.departureTime), "dd 'de' MMM 'às' HH:mm", { locale: ptBR })}</strong>
             </div>
             {ride.returnTime && (
               <div className="detail-meta-item">
-                <Clock size={14} color="#334155" />
+                <Clock size={14} color="var(--text3)" />
                 Volta: <strong>{format(new Date(ride.returnTime), "HH:mm")}</strong>
               </div>
             )}
             <div className="detail-meta-item">
-              <Users size={14} color="#0EA5E9" />
+              <Users size={14} color="var(--boat)" />
               <strong>{ride.totalSeats}</strong> assentos
             </div>
           </div>
@@ -187,13 +187,13 @@ export default function RideDetail() {
               <span><strong>Capacidade:</strong> {captainProfile.boatCapacity} pessoas</span>
             </div>
           )}
-          {captainProfile?.bio && <p style={{ marginTop: 12, color: "#475569", fontSize: 13, lineHeight: 1.7 }}>{captainProfile.bio}</p>}
+          {captainProfile?.bio && <p style={{ marginTop: 12, color: "var(--text2)", fontSize: 13, lineHeight: 1.7 }}>{captainProfile.bio}</p>}
         </div>
 
         {/* Booking */}
         {success ? (
           <div className="booking-success fade-up">
-            <CheckCircle size={30} color="#4ADE80" />
+            <CheckCircle size={30} color="var(--green)" />
             <div>
               <div className="booking-success-title">Reserva confirmada!</div>
               <div className="booking-success-sub">Acesse "Reservas" para ver os detalhes.</div>
@@ -204,13 +204,13 @@ export default function RideDetail() {
             <div className="login-prompt">
               <p>Faça login para reservar um assento</p>
               <div className="login-prompt-actions">
-                <a href="/entrar" style={{ background: "#0284C7", color: "#fff", padding: "10px 22px", borderRadius: 10, fontWeight: 700, fontSize: 14 }}>Entrar</a>
-                <a href="/cadastro" style={{ background: "#071525", border: "1px solid #0D2035", color: "#94A3B8", padding: "10px 22px", borderRadius: 10, fontWeight: 600, fontSize: 14 }}>Cadastrar</a>
+                <a href="/entrar" style={{ background: "var(--boat)", color: "#fff", padding: "10px 22px", borderRadius: 10, fontWeight: 700, fontSize: 14 }}>Entrar</a>
+                <a href="/cadastro" style={{ background: "var(--card)", border: "1px solid var(--border)", color: "var(--text2)", padding: "10px 22px", borderRadius: 10, fontWeight: 600, fontSize: 14 }}>Cadastrar</a>
               </div>
             </div>
           </div>
         ) : user.id === ride.captainId ? (
-          <div className="detail-card" style={{ textAlign: "center", padding: 20, color: "#475569", fontSize: 14 }}>Esta é sua viagem.</div>
+          <div className="detail-card" style={{ textAlign: "center", padding: 20, color: "var(--text2)", fontSize: 14 }}>Esta é sua viagem.</div>
         ) : ride.status === "active" && ride.availableSeats > 0 ? (
           <div className="detail-card fade-up" style={{ animationDelay: "160ms" }}>
             <p className="section-label" style={{ marginBottom: 16, padding: "0 4px" }}>RESERVAR ASSENTO</p>
@@ -316,7 +316,7 @@ export default function RideDetail() {
         )}
 
         {(reviewSuccess || (user && user.id !== ride.captainId && departurePassed && alreadyReviewed)) && !canReview && (
-          <div style={{ display: "flex", alignItems: "center", gap: 12, background: "rgba(0,196,255,0.07)", border: "1px solid rgba(0,196,255,0.18)", borderRadius: 14, padding: "18px 22px", marginBottom: 12 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, background: "color-mix(in srgb, var(--boat) 9%, transparent)", border: "1px solid color-mix(in srgb, var(--boat) 25%, transparent)", borderRadius: 14, padding: "18px 22px", marginBottom: 12 }}>
             <CheckCircle size={22} color="var(--boat)" />
             <span style={{ fontSize: 14, color: "var(--text2)" }}>
               {reviewSuccess ? "Obrigado pela sua avaliação!" : "Você já avaliou esta viagem."}

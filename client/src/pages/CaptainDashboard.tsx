@@ -62,17 +62,17 @@ export default function CaptainDashboard() {
       {/* Stats */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 12, marginBottom: 28 }}>
         {[
-          { label: "Viagens ativas", value: rides.filter((r: any) => r.status === "active").length, icon: <Anchor size={18} color="#0EA5E9" /> },
-          { label: "Passageiros", value: totalPassengers, icon: <Users size={18} color="#0EA5E9" /> },
-          { label: "Receita estimada", value: `R$ ${totalEarnings.toFixed(0)}`, icon: <TrendingUp size={18} color="#0EA5E9" /> },
+          { label: "Viagens ativas", value: rides.filter((r: any) => r.status === "active").length, icon: <Anchor size={18} color="var(--boat)" /> },
+          { label: "Passageiros", value: totalPassengers, icon: <Users size={18} color="var(--boat)" /> },
+          { label: "Receita estimada", value: `R$ ${totalEarnings.toFixed(0)}`, icon: <TrendingUp size={18} color="var(--boat)" /> },
         ].map((stat, i) => (
           <div key={i} className="card" style={{ padding: "18px 20px", display: "flex", alignItems: "center", gap: 14 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 10, background: "rgba(14,165,233,0.08)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: 40, height: 40, borderRadius: 10, background: "color-mix(in srgb, var(--boat) 10%, transparent)", display: "flex", alignItems: "center", justifyContent: "center" }}>
               {stat.icon}
             </div>
             <div>
-              <div style={{ fontWeight: 800, fontSize: "1.3rem", color: "#F8FAFC", letterSpacing: "-0.5px" }}>{stat.value}</div>
-              <div style={{ color: "#475569", fontSize: 12 }}>{stat.label}</div>
+              <div style={{ fontWeight: 800, fontSize: "1.3rem", color: "var(--text1)", letterSpacing: "-0.5px" }}>{stat.value}</div>
+              <div style={{ color: "var(--text2)", fontSize: 12 }}>{stat.label}</div>
             </div>
           </div>
         ))}
@@ -121,7 +121,7 @@ export default function CaptainDashboard() {
                 <button type="submit" disabled={createMutation.isPending} className="btn-add" style={{ flex: 1, justifyContent: "center" }}>
                   {createMutation.isPending ? "Criando..." : "Criar viagem"}
                 </button>
-                <button type="button" onClick={() => setShowForm(false)} style={{ background: "none", border: "1px solid #0D2035", color: "#64748B", borderRadius: 10, padding: "10px 20px", cursor: "pointer", fontSize: 14 }}>
+                <button type="button" onClick={() => setShowForm(false)} style={{ background: "none", border: "1px solid var(--border)", color: "var(--text2)", borderRadius: 10, padding: "10px 20px", cursor: "pointer", fontSize: 14 }}>
                   Cancelar
                 </button>
               </div>
@@ -134,8 +134,8 @@ export default function CaptainDashboard() {
       {rides.length === 0 ? (
         <div className="card empty-state">
           <Anchor size={40} className="empty-state-icon" />
-          <p style={{ fontWeight: 600, color: "#334155" }}>Nenhuma viagem criada ainda.</p>
-          <p style={{ fontSize: 13, color: "#1E3A5F", marginTop: 4 }}>Clique em "Nova viagem" para começar.</p>
+          <p style={{ fontWeight: 600, color: "var(--text3)" }}>Nenhuma viagem criada ainda.</p>
+          <p style={{ fontSize: 13, color: "var(--boat)", marginTop: 4 }}>Clique em "Nova viagem" para começar.</p>
         </div>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -146,7 +146,7 @@ export default function CaptainDashboard() {
                 <div className="ride-row-meta">
                   <span><Clock size={12} /> {format(new Date(ride.departureTime), "dd/MM/yyyy 'às' HH:mm")}</span>
                   <span><Users size={12} /> {ride.confirmedSeats}/{ride.totalSeats} reservados</span>
-                  <span style={{ color: "#38BDF8", fontWeight: 700 }}>R$ {parseFloat(ride.pricePerSeat).toFixed(2).replace(".", ",")}/pessoa</span>
+                  <span style={{ color: "var(--boat)", fontWeight: 700 }}>R$ {parseFloat(ride.pricePerSeat).toFixed(2).replace(".", ",")}/pessoa</span>
                 </div>
               </div>
               <div className="ride-row-actions">

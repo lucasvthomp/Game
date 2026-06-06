@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
-import { Anchor, Car, Menu, X, Moon, Sun } from "lucide-react";
+import { Anchor, Menu, X, Moon, Sun } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function Navbar() {
@@ -34,12 +34,12 @@ export default function Navbar() {
 
   return (
     <nav className="nav-root">
+      <div className="brazil-stripe" style={{ opacity: 0.5 }} />
       <div className="nav-inner">
         <Link href="/">
           <div className="nav-logo">
             <div className="nav-logo-icon">
-              <Car size={12} color="#fff" />
-              <Anchor size={12} color="#fff" />
+              <Anchor size={14} color="#fff" />
             </div>
             <span className="nav-logo-text">LanchaCarona</span>
           </div>

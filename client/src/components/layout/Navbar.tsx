@@ -10,7 +10,12 @@ export default function Navbar() {
   const [dark, setDark] = useState(() => localStorage.getItem("theme") === "dark");
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+    // Light warm-minimal is the default (no attribute). Dark adds data-theme="dark".
+    if (dark) {
+      document.documentElement.setAttribute("data-theme", "dark");
+    } else {
+      document.documentElement.removeAttribute("data-theme");
+    }
     localStorage.setItem("theme", dark ? "dark" : "light");
   }, [dark]);
 

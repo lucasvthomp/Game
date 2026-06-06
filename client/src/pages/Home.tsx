@@ -4,7 +4,22 @@ import { apiRequest } from "@/lib/queryClient";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Clock, Star, ChevronRight, Anchor, Car, Calendar, Shield, MapPin, Users, ArrowRight, Check, Navigation, Zap, Globe } from "lucide-react";
-import { useState } from "react";
+import { useState, Suspense, lazy } from "react";
+
+const RouteMap = lazy(() => import("@/components/RouteMap"));
+
+const BRAZIL_MAP_POINTS = [
+  // Boat routes — origin/destination pairs
+  { lat: -23.95, lng: -46.33, city: "Santos",    type: "boat" as const, route: "Santos → Ilhabela",      price: "85,00" },
+  { lat: -23.77, lng: -45.36, city: "Ilhabela",  type: "boat" as const, route: "Santos → Ilhabela",      price: "85,00" },
+  { lat: -23.00, lng: -44.32, city: "Paraty",    type: "boat" as const, route: "Angra → Paraty",         price: "65,00" },
+  { lat: -23.01, lng: -44.31, city: "Angra dos Reis", type: "boat" as const, route: "Angra → Paraty",    price: "65,00" },
+  // Car routes — origin/destination pairs
+  { lat: -22.90, lng: -47.07, city: "Campinas",         type: "car" as const, route: "Campinas → SP",    price: "22,00" },
+  { lat: -23.55, lng: -46.63, city: "São Paulo",        type: "car" as const, route: "Campinas → SP",    price: "22,00" },
+  { lat: -23.19, lng: -45.88, city: "São José dos Campos", type: "car" as const, route: "SJC → SP",      price: "18,00" },
+  { lat: -23.55, lng: -46.63, city: "São Paulo",        type: "car" as const, route: "SJC → SP",         price: "18,00" },
+];
 
 const PLACEHOLDER_BOAT_RIDES = [
   { id: 1, rideType: "boat", originCity: "Bertioga", destinationCity: "Ilhabela", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 18).toISOString(), pricePerSeat: "85.00", availableSeats: 4, captainName: "Rafael M.", boatName: "Veneza III", avgRating: 4.9 },
@@ -140,19 +155,27 @@ export default function Home() {
       </div>
 
       {/* ─── MAP SECTION ─── */}
-      <section className="map-section">
-        <div className="map-section-inner">
-          <div className="fade-up">
-            <p className="map-text-label">Cobertura de rotas</p>
-            <h2 className="map-text-title">Litoral e interior do Brasil</h2>
-            <p className="map-text-desc">Do Vale do Paraíba ao litoral paulista, de Santos a Paraty — encontre caronas nas rotas que você já faz todo dia.</p>
-            <div className="map-features">
+      <section className="home-map-section">
+        <div className="home-map-inner">
+          <div className="home-map-text fade-up">
+            <p className="section-label" style={{ color: "var(--boat)", marginBottom: 10 }}>
+              <MapPin size={11} style={{ display: "inline", verticalAlign: "middle", marginRight: 5 }} />
+              COBERTURA DE ROTAS
+            </p>
+            <h2>Litoral e interior do Brasil</h2>
+            <p>Clique nos pins para ver detalhes de cada rota. Azul são travessias de lancha, dourado são caronas de carro.</p>
+            <div className="home-map-pills">
+              <span className="home-map-pill home-map-pill-boat"><Anchor size={11} /> Rotas marítimas</span>
+              <span className="home-map-pill home-map-pill-car"><Car size={11} /> Rotas terrestres</span>
+            </div>
+            <div className="map-features" style={{ marginTop: 8 }}>
               {[
-                { dot: "car",  title: "Rotas terrestres",  desc: "São Paulo, Vale do Paraíba, Campinas e região" },
-                { dot: "boat", title: "Rotas marítimas",   desc: "Santos, Ilhabela, Angra dos Reis, Paraty, Ilha Grande" },
-                { dot: "car",  title: "Rotas recorrentes", desc: "Comute diariamente com os mesmos companheiros" },
+                { dot: "boat", title: "Santos → Ilhabela",     desc: "Travessia costeira — 90 min" },
+                { dot: "boat", title: "Angra → Paraty",         desc: "Litoral verde — 75 min" },
+                { dot: "car",  title: "Campinas → São Paulo",   desc: "Anhanguera / Bandeirantes" },
+                { dot: "car",  title: "SJC → São Paulo",        desc: "Dutra / Ayrton Senna" },
               ].map((f, i) => (
-                <div key={i} className="map-feature-item fade-up" style={{ animationDelay: `${i * 80}ms` }}>
+                <div key={i} className="map-feature-item fade-up" style={{ animationDelay: `${i * 60}ms` }}>
                   <div className={`map-feature-dot map-feature-dot-${f.dot}`} />
                   <div className="map-feature-text">
                     <strong>{f.title}</strong>
@@ -162,61 +185,14 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <div className="map-canvas scale-in" style={{ animationDelay: "120ms" }}>
-            <svg className="map-canvas-svg" viewBox="0 0 420 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <defs>
-                <pattern id="dotgrid" width="24" height="24" patternUnits="userSpaceOnUse">
-                  <circle cx="0.5" cy="0.5" r="0.6" fill="var(--border2)" opacity="0.5" />
-                </pattern>
-              </defs>
-              <rect width="420" height="300" fill="url(#dotgrid)" />
-
-              {/* Car routes */}
-              <path className="map-route-line" d="M60 80 C110 100 140 115 160 130" stroke="var(--car)" strokeWidth="1.5" strokeDasharray="200" opacity="0.8" />
-              <path className="map-route-line" d="M160 130 C185 155 215 178 240 200" stroke="var(--car)" strokeWidth="1.5" strokeDasharray="200" opacity="0.6" style={{ animationDelay: "200ms" }} />
-              <path className="map-route-line" d="M320 60 C280 80 255 95 230 110" stroke="var(--car)" strokeWidth="1.2" strokeDasharray="200" opacity="0.5" style={{ animationDelay: "300ms" }} />
-
-              {/* Boat routes */}
-              <path className="map-route-line" d="M240 200 C280 215 330 210 360 180" stroke="var(--boat)" strokeWidth="1.5" strokeDasharray="200" opacity="0.8" style={{ animationDelay: "500ms" }} />
-              <path className="map-route-line" d="M240 200 C265 220 290 238 310 240" stroke="var(--boat)" strokeWidth="1.2" strokeDasharray="200" opacity="0.6" style={{ animationDelay: "700ms" }} />
-              <path className="map-route-line" d="M310 240 C340 258 370 255 390 250" stroke="var(--boat)" strokeWidth="1.2" strokeDasharray="200" opacity="0.5" style={{ animationDelay: "900ms" }} />
-
-              {/* Car cities */}
-              {[
-                { cx: 60,  cy: 80,  label: "Campinas",  a: 0 },
-                { cx: 160, cy: 130, label: "S.Paulo",   a: 200, big: true },
-                { cx: 320, cy: 60,  label: "Taubaté",   a: 100 },
-                { cx: 230, cy: 110, label: "SJCampos",  a: 150 },
-              ].map((c, i) => (
-                <g key={i}>
-                  {c.big && <circle cx={c.cx} cy={c.cy} r="16" fill="var(--car)" opacity="0.06" className="map-dot-ping" style={{ animationDelay: `${c.a}ms` }} />}
-                  <circle cx={c.cx} cy={c.cy} r={c.big ? 5 : 3.5} fill="var(--car)" opacity="0.9" />
-                  <circle cx={c.cx} cy={c.cy} r={c.big ? 9 : 6.5} stroke="var(--car)" strokeWidth="1" fill="none" opacity="0.2" />
-                  <text x={c.cx + (c.big ? 11 : 9)} y={c.cy + 4} fill="var(--text3)" fontSize="9" fontWeight="600">{c.label}</text>
-                </g>
-              ))}
-
-              {/* Boat cities */}
-              {[
-                { cx: 240, cy: 200, label: "Santos",   a: 0, big: true },
-                { cx: 360, cy: 180, label: "Ilhabela", a: 200 },
-                { cx: 310, cy: 240, label: "Angra",    a: 300 },
-                { cx: 390, cy: 250, label: "Paraty",   a: 400 },
-              ].map((c, i) => (
-                <g key={i}>
-                  {c.big && <circle cx={c.cx} cy={c.cy} r="16" fill="var(--boat)" opacity="0.06" className="map-dot-ping" style={{ animationDelay: `${500 + c.a}ms` }} />}
-                  <circle cx={c.cx} cy={c.cy} r={c.big ? 5 : 3.5} fill="var(--boat)" opacity="0.9" />
-                  <circle cx={c.cx} cy={c.cy} r={c.big ? 9 : 6.5} stroke="var(--boat)" strokeWidth="1" fill="none" opacity="0.2" />
-                  <text x={c.cx + (c.big ? 11 : 9)} y={c.cy + 4} fill="var(--text3)" fontSize="9" fontWeight="600">{c.label}</text>
-                </g>
-              ))}
-
-              {/* Legend */}
-              <circle cx="20" cy="286" r="4" fill="var(--car)" />
-              <text x="28" y="290" fill="var(--text3)" fontSize="9" fontWeight="600">Carro</text>
-              <circle cx="72" cy="286" r="4" fill="var(--boat)" />
-              <text x="80" y="290" fill="var(--text3)" fontSize="9" fontWeight="600">Lancha</text>
-            </svg>
+          <div className="home-map-container scale-in" style={{ animationDelay: "100ms" }}>
+            <Suspense fallback={
+              <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--surface)", borderRadius: 20, color: "var(--text3)", fontSize: 14 }}>
+                Carregando mapa...
+              </div>
+            }>
+              <RouteMap points={BRAZIL_MAP_POINTS} center={[-23.4, -45.8]} zoom={7} height="100%" />
+            </Suspense>
           </div>
         </div>
       </section>

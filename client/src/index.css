@@ -25,72 +25,72 @@ input, select, textarea, button { font-family: inherit; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
 
-/* ─── WARM MINIMAL · LIGHT TOKENS (default) ─── */
+/* ─── BRAZIL COASTAL · LIGHT TOKENS ─── */
 :root {
-  --bg:         #FAF7F2;   /* warm off-white */
-  --bg2:        #F2EDE4;   /* slightly deeper sand */
+  --bg:         #F8F9FC;
+  --bg2:        #EFF1F7;
   --card:       #FFFFFF;
-  --surface:    #F5F0E8;   /* warm surface for inputs/pills */
-  --border:     #E8E0D4;
-  --border2:    #D8CDBC;
-  --text1:      #1C1A17;   /* charcoal */
-  --text2:      #6B6358;   /* warm gray */
-  --text3:      #9A8F80;   /* muted */
-  --boat:       #3C7A89;   /* muted teal / ocean — calm secondary */
-  --boat-light: #E3EEF0;
-  --boat-dark:  #2E5F6B;
-  --car:        #E2725B;   /* terracotta — PRIMARY brand accent */
-  --car-light:  #FBEAE4;
-  --car-dark:   #C85A43;
-  --amber:      #D99A2B;   /* warm sun-gold, used sparingly */
-  --dark:       #1C1A17;
-  --dark2:      #2A2620;
-  --red:        #D6553F;
-  --green:      #4E9D6B;   /* success / available only */
-  --brazil1:    #4E9D6B;
-  --brazil2:    #D99A2B;
-  --brazil3:    #3C7A89;
-  --sunset:     #E2725B;
-  --ocean:      #3C7A89;
-  --shadow-sm:  0 2px 10px rgba(40,30,20,0.05);
-  --shadow-md:  0 10px 30px rgba(40,30,20,0.08);
-  --shadow-lg:  0 20px 48px rgba(40,30,20,0.12);
-  --glow-car:   rgba(226,114,91,0.18);
-  --glow-boat:  rgba(60,122,137,0.18);
+  --surface:    #F0F2F8;
+  --border:     #E2E6F0;
+  --border2:    #C8CFDF;
+  --text1:      #111827;
+  --text2:      #4B5563;
+  --text3:      #9CA3AF;
+  --boat:       #2563EB;
+  --boat-light: #DBEAFE;
+  --boat-dark:  #1D4ED8;
+  --car:        #F05A28;
+  --car-light:  #FEE8DF;
+  --car-dark:   #C84820;
+  --amber:      #F59E0B;
+  --dark:       #111827;
+  --dark2:      #1F2937;
+  --red:        #EF4444;
+  --green:      #10B981;
+  --brazil1:    #10B981;
+  --brazil2:    #F59E0B;
+  --brazil3:    #2563EB;
+  --sunset:     #F05A28;
+  --ocean:      #2563EB;
+  --shadow-sm:  0 1px 8px rgba(17,24,39,0.06);
+  --shadow-md:  0 8px 28px rgba(17,24,39,0.10);
+  --shadow-lg:  0 20px 48px rgba(17,24,39,0.14);
+  --glow-car:   rgba(240,90,40,0.20);
+  --glow-boat:  rgba(37,99,235,0.18);
 }
 
-/* ─── WARM MINIMAL · DARK TOKENS (opt-in via toggle) ─── */
+/* ─── BRAZIL COASTAL · DARK TOKENS (ocean night) ─── */
 [data-theme="dark"] {
-  --bg:         #1A1714;   /* warm near-black */
-  --bg2:        #211C18;
-  --card:       #241F1A;
-  --surface:    #2A241E;
-  --border:     #3A322A;
-  --border2:    #4D4236;
-  --text1:      #F4EEE6;
-  --text2:      #B5A998;
-  --text3:      #80776A;
-  --boat:       #5FA3B2;   /* brighter teal for dark bg */
-  --boat-light: #1E2E33;
-  --boat-dark:  #4A8593;
-  --car:        #EC8770;   /* brighter terracotta for dark bg */
-  --car-light:  #36241E;
-  --car-dark:   #D46A52;
-  --amber:      #E8B14C;
-  --dark:       #100D0B;
-  --dark2:      #1A1714;
-  --red:        #E26B55;
-  --green:      #5FB37E;
-  --brazil1:    #5FB37E;
-  --brazil2:    #E8B14C;
-  --brazil3:    #5FA3B2;
-  --sunset:     #EC8770;
-  --ocean:      #5FA3B2;
-  --shadow-sm:  0 2px 10px rgba(0,0,0,0.30);
-  --shadow-md:  0 10px 30px rgba(0,0,0,0.42);
-  --shadow-lg:  0 20px 48px rgba(0,0,0,0.55);
-  --glow-car:   rgba(236,135,112,0.20);
-  --glow-boat:  rgba(95,163,178,0.20);
+  --bg:         #0F1117;
+  --bg2:        #171B26;
+  --card:       #1C2130;
+  --surface:    #232A3E;
+  --border:     #2E3650;
+  --border2:    #3D4D6E;
+  --text1:      #F1F5F9;
+  --text2:      #94A3B8;
+  --text3:      #64748B;
+  --boat:       #60A5FA;
+  --boat-light: #1E3A5F;
+  --boat-dark:  #3B82F6;
+  --car:        #FB7A50;
+  --car-light:  #3D1F10;
+  --car-dark:   #F06030;
+  --amber:      #FBB840;
+  --dark:       #060810;
+  --dark2:      #0F1117;
+  --red:        #F87171;
+  --green:      #34D399;
+  --brazil1:    #34D399;
+  --brazil2:    #FBB840;
+  --brazil3:    #60A5FA;
+  --sunset:     #FB7A50;
+  --ocean:      #60A5FA;
+  --shadow-sm:  0 2px 10px rgba(0,0,0,0.35);
+  --shadow-md:  0 10px 30px rgba(0,0,0,0.50);
+  --shadow-lg:  0 20px 48px rgba(0,0,0,0.65);
+  --glow-car:   rgba(251,122,80,0.22);
+  --glow-boat:  rgba(96,165,250,0.22);
 }
 
 /* ─── ANIMATIONS ─── */
@@ -124,8 +124,8 @@ input, select, textarea, button { font-family: inherit; }
   100% { background-position: 200% center; }
 }
 @keyframes pulse {
-  0%,100% { box-shadow: 0 0 0 0 rgba(60,122,137,0.30); }
-  50%      { box-shadow: 0 0 0 10px rgba(60,122,137,0); }
+  0%,100% { box-shadow: 0 0 0 0 rgba(14,134,200,0.30); }
+  50%      { box-shadow: 0 0 0 10px rgba(14,134,200,0); }
 }
 @keyframes scaleIn {
   from { opacity: 0; transform: scale(0.92); }
@@ -193,9 +193,24 @@ input, select, textarea, button { font-family: inherit; }
 .scale-in    { animation: scaleIn 0.45s cubic-bezier(.16,1,.3,1) both; }
 .slide-up    { animation: slideUp 0.5s cubic-bezier(.16,1,.3,1) both; }
 
+/* Intersection Observer fade-ins */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(.16,1,.3,1), transform 0.6s cubic-bezier(.16,1,.3,1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
 /* ─── NAVBAR ─── */
 .nav-root {
-  background: rgba(247,243,238,0.88);
+  background: rgba(255,255,255,0.88);
   border-bottom: 1px solid var(--border);
   position: sticky; top: 0; z-index: 100;
   backdrop-filter: blur(24px) saturate(1.3);
@@ -275,11 +290,10 @@ input, select, textarea, button { font-family: inherit; }
 /* ─── HERO ─── */
 .hero-pro {
   background:
-    radial-gradient(ellipse 80% 60% at 15% -10%, rgba(60,122,137,0.10) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 90% 20%, rgba(226,114,91,0.14) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 80% at 50% 110%, rgba(60,122,137,0.08) 0%, transparent 50%),
-    linear-gradient(175deg, #FFFCF7 0%, var(--bg) 50%, var(--bg2) 100%);
-  padding: 100px 24px 0;
+    radial-gradient(ellipse 80% 60% at 15% -10%, rgba(212,96,58,0.09) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 88% 5%, rgba(46,125,156,0.07) 0%, transparent 55%),
+    linear-gradient(180deg, #FDFCF9 0%, var(--bg) 60%, var(--bg2) 100%);
+  padding: 96px 24px 0;
   position: relative;
   overflow: hidden;
   border-bottom: 1px solid var(--border);
@@ -287,28 +301,27 @@ input, select, textarea, button { font-family: inherit; }
 }
 [data-theme="dark"] .hero-pro {
   background:
-    radial-gradient(ellipse 80% 60% at 15% -10%, rgba(95,163,178,0.18) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 90% 20%, rgba(236,135,112,0.12) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 80% at 50% 110%, rgba(95,163,178,0.20) 0%, transparent 50%),
-    linear-gradient(175deg, #221C18 0%, var(--bg) 55%, var(--bg2) 100%);
+    radial-gradient(ellipse 80% 60% at 15% -10%, rgba(224,122,90,0.11) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 88% 5%, rgba(79,168,196,0.09) 0%, transparent 55%),
+    linear-gradient(180deg, #1A1410 0%, var(--bg) 60%, var(--bg2) 100%);
 }
 /* warm sun-glow that gently drifts */
 .hero-pro::before {
   content: '';
   position: absolute;
-  bottom: -120px; left: 50%; transform: translateX(-50%);
-  width: 1000px; height: 460px;
-  background: radial-gradient(ellipse at center, var(--glow-car) 0%, var(--glow-boat) 45%, transparent 72%);
+  bottom: -100px; left: 50%; transform: translateX(-50%);
+  width: 900px; height: 400px;
+  background: radial-gradient(ellipse at center, rgba(212,96,58,0.06) 0%, rgba(46,125,156,0.04) 50%, transparent 70%);
   pointer-events: none;
-  animation: glowDrift 9s ease-in-out infinite;
+  animation: glowDrift 10s ease-in-out infinite;
 }
 /* soft warm dot texture */
 .hero-pro::after {
   content: '';
   position: absolute; inset: 0;
   background-image:
-    radial-gradient(circle, rgba(60,122,137,0.07) 1px, transparent 1px),
-    radial-gradient(circle, rgba(226,114,91,0.06) 1px, transparent 1px);
+    radial-gradient(circle, rgba(14,134,200,0.07) 1px, transparent 1px),
+    radial-gradient(circle, rgba(245,158,11,0.06) 1px, transparent 1px);
   background-size: 64px 64px, 104px 104px;
   background-position: 0 0, 32px 32px;
   opacity: 0.7;
@@ -331,7 +344,7 @@ input, select, textarea, button { font-family: inherit; }
 .hero-pro-eyebrow {
   display: inline-flex; align-items: center; gap: 8px;
   background: var(--car-light);
-  border: 1px solid rgba(226,114,91,0.28);
+  border: 1px solid rgba(245,158,11,0.28);
   border-radius: 100px; padding: 6px 16px;
   font-size: 12px; font-weight: 700; color: var(--car-dark);
   margin-bottom: 28px;
@@ -444,14 +457,15 @@ input, select, textarea, button { font-family: inherit; }
   padding: 60px 48px;
   position: relative; overflow: hidden;
   cursor: pointer;
-  transition: background 0.35s ease;
+  box-shadow: none;
+  transition: background 0.35s ease, box-shadow 0.35s ease;
 }
 .split-panel:first-child { border-right: 1px solid var(--border); }
 @media (max-width: 680px) { .split-panel:first-child { border-right: none; border-bottom: 1px solid var(--border); } }
-.split-panel-car  { background: linear-gradient(135deg, var(--bg2) 0%, rgba(226,114,91,0.07) 100%); }
-.split-panel-boat { background: linear-gradient(135deg, var(--bg2) 0%, rgba(60,122,137,0.07) 100%); }
-.split-panel-car:hover  { background: linear-gradient(135deg, var(--bg2) 0%, rgba(226,114,91,0.13) 100%); }
-.split-panel-boat:hover { background: linear-gradient(135deg, var(--bg2) 0%, rgba(60,122,137,0.12) 100%); }
+.split-panel-car  { background: linear-gradient(135deg, var(--bg2) 0%, rgba(245,158,11,0.07) 100%); }
+.split-panel-boat { background: linear-gradient(135deg, var(--bg2) 0%, rgba(14,134,200,0.07) 100%); }
+.split-panel-car:hover  { background: linear-gradient(135deg, var(--bg2) 0%, rgba(245,158,11,0.13) 100%); }
+.split-panel-boat:hover { background: linear-gradient(135deg, var(--bg2) 0%, rgba(14,134,200,0.12) 100%); }
 /* glow orb behind icon */
 .split-panel::before {
   content: '';
@@ -487,12 +501,14 @@ input, select, textarea, button { font-family: inherit; }
   border: 1px solid; cursor: pointer;
   transition: background 0.25s ease, color 0.25s ease, transform 0.25s cubic-bezier(.16,1,.3,1), box-shadow 0.25s ease;
 }
-.split-panel-car  .split-panel-btn { border-color: rgba(226,114,91,0.55);  color: var(--car-dark);  background: var(--car-light); }
-.split-panel-boat .split-panel-btn { border-color: rgba(60,122,137,0.40); color: var(--boat-dark); background: var(--boat-light); }
+.split-panel-car  .split-panel-btn { border-color: rgba(245,158,11,0.55);  color: var(--car-dark);  background: var(--car-light); }
+.split-panel-boat .split-panel-btn { border-color: rgba(14,134,200,0.40); color: var(--boat-dark); background: var(--boat-light); }
 [data-theme="dark"] .split-panel-car  .split-panel-btn { color: var(--car); }
 [data-theme="dark"] .split-panel-boat .split-panel-btn { color: var(--boat); }
 .split-panel-car:hover  .split-panel-btn { background: var(--car);  color: #fff; transform: translateX(4px); box-shadow: 0 6px 18px var(--glow-car); border-color: var(--car); }
 .split-panel-boat:hover .split-panel-btn { background: var(--boat); color: #fff; transform: translateX(4px); box-shadow: 0 6px 18px var(--glow-boat); border-color: var(--boat); }
+.split-panel-car:hover  { box-shadow: inset 0 0 0 1px var(--border2); }
+.split-panel-boat:hover { box-shadow: inset 0 0 0 1px var(--border2); }
 
 /* ─── MAP SECTION ─── */
 .map-section {
@@ -839,13 +855,15 @@ input, select, textarea, button { font-family: inherit; }
 /* ─── RIDE CARDS (pro) ─── */
 .ride-grid-pro { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
 .ride-card-pro { border-radius: 18px; overflow: hidden; transition: transform 0.28s cubic-bezier(.16,1,.3,1), box-shadow 0.28s ease; cursor: pointer; position: relative; }
-.ride-card-pro:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+.ride-card-pro:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.ride-card-pro:hover .ride-card-pro-inner { border-color: var(--border2); box-shadow: var(--shadow-md); }
 .ride-card-pro-inner {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 18px; padding: 22px;
   height: 100%; display: flex; flex-direction: column; gap: 14px;
-  transition: border-color 0.28s ease;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.22s, box-shadow 0.22s, transform 0.22s;
   position: relative; overflow: hidden;
 }
 .ride-card-pro-inner::before {
@@ -856,7 +874,6 @@ input, select, textarea, button { font-family: inherit; }
 }
 .ride-card-pro.boat-card .ride-card-pro-inner::before { background: linear-gradient(90deg, var(--boat), var(--boat-dark)); }
 .ride-card-pro.car-card  .ride-card-pro-inner::before { background: linear-gradient(90deg, var(--car), var(--amber)); }
-.ride-card-pro:hover .ride-card-pro-inner { border-color: var(--border2); }
 .ride-card-pro:hover .ride-card-pro-inner::before { opacity: 1; }
 .ride-card-pro-top { display: flex; align-items: center; justify-content: space-between; }
 .ride-card-pro-route { display: flex; flex-direction: column; gap: 5px; }
@@ -1061,7 +1078,7 @@ input, select, textarea, button { font-family: inherit; }
 .step-title { font-size: 15px; font-weight: 700; color: var(--text1); margin-bottom: 8px; }
 .step-desc { font-size: 13px; color: var(--text2); line-height: 1.65; }
 .steps-pro { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-.step-pro { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 24px 20px; position: relative; overflow: hidden; transition: transform 0.28s cubic-bezier(.16,1,.3,1), box-shadow 0.28s ease, border-color 0.28s ease; }
+.step-pro { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 24px 20px; position: relative; overflow: hidden; box-shadow: var(--shadow-sm); transition: transform 0.28s cubic-bezier(.16,1,.3,1), box-shadow 0.28s ease, border-color 0.28s ease; }
 .step-pro:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--border2); }
 .step-pro-num { font-size: 3rem; font-weight: 900; color: rgba(40,30,20,0.06); position: absolute; top: 8px; right: 14px; line-height: 1; }
 [data-theme="dark"] .step-pro-num { color: rgba(255,255,255,0.05); }
@@ -1075,6 +1092,7 @@ input, select, textarea, button { font-family: inherit; }
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 16px; padding: 26px 22px;
+  box-shadow: var(--shadow-sm);
   transition: transform 0.28s cubic-bezier(.16,1,.3,1), border-color 0.28s ease, box-shadow 0.28s ease;
   position: relative; overflow: hidden;
 }
@@ -1164,10 +1182,10 @@ input, select, textarea, button { font-family: inherit; }
 @media (max-width: 600px) { .category-grid { grid-template-columns: 1fr; } }
 .category-card { border-radius: 20px; padding: 32px 28px; cursor: pointer; transition: transform 0.28s cubic-bezier(.16,1,.3,1), box-shadow 0.28s ease; position: relative; overflow: hidden; display: flex; flex-direction: column; }
 .category-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
-.category-card-car  { background: var(--car-light); border: 1px solid rgba(226,114,91,0.28); }
-.category-card-boat { background: var(--boat-light); border: 1px solid rgba(60,122,137,0.22); }
+.category-card-car  { background: var(--car-light); border: 1px solid rgba(245,158,11,0.28); }
+.category-card-boat { background: var(--boat-light); border: 1px solid rgba(14,134,200,0.22); }
 .category-card-icon-wrap { width: 48px; height: 48px; border-radius: 13px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; flex-shrink: 0; }
-.category-card-car  .category-card-icon-wrap { background: rgba(226,114,91,0.18); color: var(--car-dark); }
+.category-card-car  .category-card-icon-wrap { background: rgba(245,158,11,0.18); color: var(--car-dark); }
 .category-card-boat .category-card-icon-wrap { background: rgba(60,122,137,0.15); color: var(--boat-dark); }
 .category-card-title { font-size: 1.3rem; font-weight: 900; margin-bottom: 6px; letter-spacing: -0.3px; color: var(--text1); }
 .category-card-desc { font-size: 14px; line-height: 1.6; margin-bottom: 14px; color: var(--text2); }
@@ -1428,4 +1446,270 @@ input, select, textarea, button { font-family: inherit; }
     opacity: 1 !important;
     transform: none !important;
   }
+}
+
+/* ─── LEAFLET MAP ─── */
+@import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
+.leaflet-container {
+  border-radius: 18px;
+  z-index: 0;
+  font-family: inherit;
+}
+.leaflet-tile-pane { filter: saturate(1.1) brightness(1.02); }
+[data-theme="dark"] .leaflet-tile-pane { filter: invert(1) hue-rotate(200deg) brightness(0.85) saturate(1.2); }
+.leaflet-control-zoom { border: none !important; box-shadow: var(--shadow-md) !important; }
+.leaflet-control-zoom a {
+  background: var(--card) !important;
+  color: var(--text1) !important;
+  border: 1px solid var(--border) !important;
+  font-size: 16px !important;
+  line-height: 28px !important;
+}
+.leaflet-control-zoom a:hover { background: var(--surface) !important; color: var(--boat) !important; }
+.leaflet-popup-content-wrapper {
+  background: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 14px !important;
+  box-shadow: var(--shadow-lg) !important;
+  padding: 0 !important;
+}
+.leaflet-popup-content { margin: 14px 18px !important; color: var(--text1) !important; font-size: 13px !important; }
+.leaflet-popup-tip { background: var(--card) !important; }
+.leaflet-popup-close-button { color: var(--text3) !important; font-size: 18px !important; top: 8px !important; right: 10px !important; }
+
+/* Map section on home page */
+.home-map-section {
+  padding: 72px 0;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.home-map-inner {
+  max-width: 1020px; margin: 0 auto; padding: 0 24px;
+  display: grid; grid-template-columns: 1fr 1.4fr; gap: 48px; align-items: start;
+}
+@media (max-width: 800px) { .home-map-inner { grid-template-columns: 1fr; gap: 28px; } }
+.home-map-text .section-label { margin-bottom: 10px; }
+.home-map-text h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 900; color: var(--text1); letter-spacing: -0.5px; margin-bottom: 12px; }
+.home-map-text p { font-size: 15px; color: var(--text2); line-height: 1.75; margin-bottom: 24px; }
+.home-map-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.home-map-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 100px;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.03em;
+  border: 1px solid; cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.home-map-pill-boat { background: var(--boat-light); color: var(--boat); border-color: transparent; }
+.home-map-pill-car  { background: var(--car-light);  color: var(--car-dark); border-color: transparent; }
+.home-map-pill:hover { filter: brightness(0.95); }
+.home-map-container {
+  height: 420px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+  position: relative;
+}
+.home-map-container .leaflet-container { height: 100%; width: 100%; }
+
+/* Floating pin card that pops on map marker click */
+.map-pin-card {
+  min-width: 180px;
+}
+.map-pin-card-title { font-weight: 800; font-size: 14px; color: var(--text1); margin-bottom: 4px; }
+.map-pin-card-sub { font-size: 12px; color: var(--text2); }
+.map-pin-type { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 100px; margin-bottom: 6px; }
+.map-pin-type-boat { background: var(--boat-light); color: var(--boat); }
+.map-pin-type-car  { background: var(--car-light);  color: var(--car-dark); }
+
+/* ─── IMPROVED RIDE CARDS ─── */
+.ride-card-pro-inner {
+  transition: border-color 0.22s, box-shadow 0.22s !important;
+}
+.ride-card-pro:hover .ride-card-pro-inner {
+  box-shadow: 0 8px 32px rgba(14,134,200,0.10) !important;
+}
+[data-theme="dark"] .ride-card-pro:hover .ride-card-pro-inner {
+  box-shadow: 0 8px 32px rgba(56,189,248,0.12) !important;
+}
+
+/* Glassy hero search in dark mode */
+[data-theme="dark"] .hero-search {
+  background: rgba(25,43,61,0.9);
+  border-color: var(--border2);
+  backdrop-filter: blur(12px);
+}
+[data-theme="dark"] .hero-search-field input { color: var(--text1); }
+[data-theme="dark"] .hero-search-divider { background: var(--border2); }
+
+/* Hero search btn in dark uses boat color */
+[data-theme="dark"] .hero-search-btn { background: var(--boat); }
+[data-theme="dark"] .hero-search-btn:hover { background: var(--boat-dark); }
+
+/* Smoother section transitions */
+.section-pro { transition: background 0.3s ease; }
+
+/* Nav active link indicator */
+.nav-link.active {
+  color: var(--boat) !important;
+  background: var(--boat-light) !important;
+  font-weight: 700 !important;
+}
+[data-theme="dark"] .nav-link.active {
+  background: rgba(56,189,248,0.08) !important;
+}
+
+/* Better split panel btns in light mode */
+.split-panel-car:hover  .split-panel-btn { color: #fff !important; }
+.split-panel-boat:hover .split-panel-btn { color: #fff !important; }
+
+/* Floating label on inputs - focus glow */
+.form-input:focus { border-color: var(--boat); box-shadow: 0 0 0 3px rgba(14,134,200,0.12); }
+[data-theme="dark"] .form-input:focus { box-shadow: 0 0 0 3px rgba(56,189,248,0.12); }
+.field-input:focus { border-color: var(--boat); box-shadow: 0 0 0 3px rgba(14,134,200,0.12); }
+
+/* Smooth card entrance on scroll - use with JS IntersectionObserver or just keep fade-up */
+.card-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s cubic-bezier(.16,1,.3,1), transform 0.6s cubic-bezier(.16,1,.3,1);
+}
+.card-reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Trust card icon pulse on hover */
+.trust-card:hover .trust-icon {
+  transform: scale(1.12);
+  transition: transform 0.25s cubic-bezier(.16,1,.3,1);
+}
+.trust-icon { transition: transform 0.25s cubic-bezier(.16,1,.3,1); }
+
+/* Step card icon bounce on hover */
+.step-pro:hover .step-pro-icon { animation: dayPop 0.4s cubic-bezier(.16,1,.3,1); }
+
+/* Hero subtitle breathing animation */
+.hero-pro-sub { animation: fadeUp 0.7s cubic-bezier(.16,1,.3,1) 0.3s both; }
+
+/* Improved day pill active color for boat */
+.day-pill-pro.active { background: var(--boat); color: #fff; border-color: var(--boat); }
+.day-chip-active { background: var(--boat); color: #fff; border-color: var(--boat); }
+
+/* Brazil flag stripe with better opacity */
+.brazil-stripe {
+  height: 3px;
+  background: linear-gradient(90deg, #009C3B 0%, #009C3B 33.3%, #FEDF00 33.3%, #FEDF00 66.6%, #002776 66.6%, #002776 100%);
+  opacity: 0.65;
+}
+
+/* Boat card accent top bar uses real blue now */
+.ride-card-pro.boat-card .ride-card-pro-inner::before { background: linear-gradient(90deg, var(--boat), #38BDF8); }
+.ride-card-pro.car-card  .ride-card-pro-inner::before { background: linear-gradient(90deg, var(--car), #FDE68A); }
+
+/* Price highlight */
+.ride-card-pro-price { color: var(--boat) !important; }
+.ride-card-pro.car-card .ride-card-pro-price { color: var(--car-dark) !important; }
+
+/* Rating stays amber */
+.ride-card-pro-rating { color: var(--amber) !important; }
+
+/* Smooth scroll observer helper */
+@keyframes cardEnter {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-card { animation: cardEnter 0.5s cubic-bezier(.16,1,.3,1) both; }
+
+/* ─── LEAFLET MAP ─── */
+.leaflet-map-wrap {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  height: 380px;
+  position: relative;
+  z-index: 0;
+}
+.leaflet-map-wrap .leaflet-container {
+  height: 100%;
+  width: 100%;
+  border-radius: 16px;
+}
+/* Override leaflet tile brightness in dark mode */
+[data-theme="dark"] .leaflet-map-wrap .leaflet-tile {
+  filter: brightness(0.7) saturate(0.8) invert(1) hue-rotate(180deg);
+}
+[data-theme="dark"] .leaflet-map-wrap .leaflet-marker-icon {
+  filter: none;
+}
+.map-pin-popup {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ─── ENHANCED CARD HOVER ─── */
+.ride-card-pro-inner {
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s cubic-bezier(.16,1,.3,1) !important;
+}
+.ride-card-pro:hover .ride-card-pro-inner {
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* ─── GLASS CARD ─── */
+.glass-card {
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.5);
+}
+[data-theme="dark"] .glass-card {
+  background: rgba(28,33,48,0.75);
+  border-color: rgba(255,255,255,0.08);
+}
+
+/* ─── MAP SECTION OVERRIDE ─── */
+.map-section-inner {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 32px !important;
+  max-width: 900px !important;
+}
+@media (min-width: 900px) {
+  .map-section-inner {
+    display: grid !important;
+    grid-template-columns: 1fr 1.4fr !important;
+    gap: 48px !important;
+    flex-direction: unset !important;
+  }
+}
+
+/* ─── ANIMATED ENTRANCE ─── */
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-up {
+  animation: slideUpFade 0.6s cubic-bezier(.16,1,.3,1) both;
+}
+.animate-slide-up-delay-1 { animation-delay: 80ms; }
+.animate-slide-up-delay-2 { animation-delay: 160ms; }
+.animate-slide-up-delay-3 { animation-delay: 240ms; }
+
+/* ─── PULSE DOT ─── */
+@keyframes pulseRing {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+.pulse-dot-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.pulse-dot-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  animation: pulseRing 2s ease-out infinite;
 }

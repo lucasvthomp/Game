@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -23,73 +25,68 @@ input, select, textarea, button { font-family: inherit; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
 
-/* ─── WARM MINIMAL · LIGHT TOKENS (default) ─── */
+/* ─── BRAZIL COASTAL · LIGHT TOKENS (default) ─── */
 :root {
-  --bg:         #FAF7F2;   /* warm off-white */
-  --bg2:        #F2EDE4;   /* slightly deeper sand */
+  --bg:         #F7F3EE;   /* warm sand */
+  --bg2:        #EDE8E0;   /* deeper sand */
   --card:       #FFFFFF;
-  --surface:    #F5F0E8;   /* warm surface for inputs/pills */
-  --border:     #E8E0D4;
-  --border2:    #D8CDBC;
-  --text1:      #1C1A17;   /* charcoal */
-  --text2:      #6B6358;   /* warm gray */
-  --text3:      #9A8F80;   /* muted */
-  --boat:       #3C7A89;   /* muted teal / ocean — calm secondary */
-  --boat-light: #E3EEF0;
-  --boat-dark:  #2E5F6B;
-  --car:        #E2725B;   /* terracotta — PRIMARY brand accent */
-  --car-light:  #FBEAE4;
-  --car-dark:   #C85A43;
-  --amber:      #D99A2B;   /* warm sun-gold, used sparingly */
-  --dark:       #1C1A17;
-  --dark2:      #2A2620;
-  --red:        #D6553F;
-  --green:      #4E9D6B;   /* success / available only */
-  --brazil1:    #4E9D6B;
-  --brazil2:    #D99A2B;
-  --brazil3:    #3C7A89;
-  --sunset:     #E2725B;
-  --ocean:      #3C7A89;
-  /* soft warm shadows */
-  --shadow-sm:  0 2px 10px rgba(40,30,20,0.05);
-  --shadow-md:  0 10px 30px rgba(40,30,20,0.08);
-  --shadow-lg:  0 20px 48px rgba(40,30,20,0.12);
-  --glow-car:   rgba(226,114,91,0.18);
-  --glow-boat:  rgba(60,122,137,0.18);
+  --surface:    #F0EBE3;
+  --border:     #E2D9CE;
+  --border2:    #CFC4B5;
+  --text1:      #1A1208;   /* deep warm black */
+  --text2:      #5C4E3A;   /* warm brown-gray */
+  --text3:      #9B8E7E;   /* muted sand */
+  --boat:       #0077B6;   /* deep ocean blue */
+  --boat-light: #D6EBF5;
+  --boat-dark:  #005F8E;
+  --car:        #F4A034;   /* golden amber/sun */
+  --car-light:  #FEF3E2;
+  --car-dark:   #D98520;
+  --amber:      #F4A034;
+  --dark:       #1A1208;
+  --dark2:      #261C10;
+  --red:        #E05252;
+  --green:      #2EBD6D;
+  --brazil1:    #009C3B;   /* Brazil flag green */
+  --brazil2:    #FEDF00;   /* Brazil flag yellow */
+  --brazil3:    #002776;   /* Brazil flag blue */
+  --shadow-sm:  0 2px 10px rgba(26,18,8,0.06);
+  --shadow-md:  0 10px 32px rgba(26,18,8,0.10);
+  --shadow-lg:  0 24px 56px rgba(26,18,8,0.14);
+  --glow-car:   rgba(244,160,52,0.22);
+  --glow-boat:  rgba(0,119,182,0.18);
 }
 
-/* ─── WARM MINIMAL · DARK TOKENS (opt-in via toggle) ─── */
+/* ─── BRAZIL COASTAL · DARK TOKENS (ocean night) ─── */
 [data-theme="dark"] {
-  --bg:         #1A1714;   /* warm near-black */
-  --bg2:        #211C18;
-  --card:       #241F1A;
-  --surface:    #2A241E;
-  --border:     #3A322A;
-  --border2:    #4D4236;
-  --text1:      #F4EEE6;
-  --text2:      #B5A998;
-  --text3:      #80776A;
-  --boat:       #5FA3B2;   /* brighter teal for dark bg */
-  --boat-light: #1E2E33;
-  --boat-dark:  #4A8593;
-  --car:        #EC8770;   /* brighter terracotta for dark bg */
-  --car-light:  #36241E;
-  --car-dark:   #D46A52;
-  --amber:      #E8B14C;
-  --dark:       #100D0B;
-  --dark2:      #1A1714;
-  --red:        #E26B55;
-  --green:      #5FB37E;
-  --brazil1:    #5FB37E;
-  --brazil2:    #E8B14C;
-  --brazil3:    #5FA3B2;
-  --sunset:     #EC8770;
-  --ocean:      #5FA3B2;
-  --shadow-sm:  0 2px 10px rgba(0,0,0,0.30);
-  --shadow-md:  0 10px 30px rgba(0,0,0,0.42);
-  --shadow-lg:  0 20px 48px rgba(0,0,0,0.55);
-  --glow-car:   rgba(236,135,112,0.20);
-  --glow-boat:  rgba(95,163,178,0.20);
+  --bg:         #0D1B2A;   /* deep ocean night */
+  --bg2:        #0A1520;   /* darker ocean */
+  --card:       #112236;   /* card on ocean */
+  --surface:    #152840;
+  --border:     #1E3350;
+  --border2:    #2A4466;
+  --text1:      #F0EEE8;   /* warm off-white */
+  --text2:      #9BB0C4;   /* ocean mist */
+  --text3:      #5A7A96;   /* deep mist */
+  --boat:       #00B4D8;   /* bright cyan-ocean */
+  --boat-light: #0A2540;
+  --boat-dark:  #0096B4;
+  --car:        #FFB833;   /* bright golden sun */
+  --car-light:  #221600;
+  --car-dark:   #E09A1A;
+  --amber:      #FFB833;
+  --dark:       #060E18;
+  --dark2:      #0D1B2A;
+  --red:        #F07070;
+  --green:      #3DD68C;
+  --brazil1:    #3DD68C;
+  --brazil2:    #FFB833;
+  --brazil3:    #00B4D8;
+  --shadow-sm:  0 2px 10px rgba(0,0,0,0.40);
+  --shadow-md:  0 10px 32px rgba(0,0,0,0.55);
+  --shadow-lg:  0 24px 56px rgba(0,0,0,0.70);
+  --glow-car:   rgba(255,184,51,0.25);
+  --glow-boat:  rgba(0,180,216,0.22);
 }
 
 /* ─── ANIMATIONS ─── */
@@ -775,24 +772,26 @@ input, select, textarea, button { font-family: inherit; }
 
 /* ─── TYPE BADGES / PILLS ─── */
 .type-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 100px; font-size: 11px; font-weight: 700; }
-.type-badge-boat { background: var(--boat-light); color: var(--boat); }
-.type-badge-car  { background: var(--car-light);  color: var(--car); }
+.type-badge-boat { background: var(--boat-light); color: var(--boat-dark); }
+.type-badge-car  { background: var(--car-light);  color: var(--car-dark); }
 .type-pill { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 100px; font-size: 11px; font-weight: 700; }
-.type-pill-car  { background: var(--car-light);  color: var(--car); }
-.type-pill-boat { background: var(--boat-light); color: var(--boat); }
+.type-pill-car  { background: var(--car-light);  color: var(--car-dark); }
+.type-pill-boat { background: var(--boat-light); color: var(--boat-dark); }
+[data-theme="dark"] .type-badge-boat, [data-theme="dark"] .type-pill-boat { color: var(--boat); }
+[data-theme="dark"] .type-badge-car,  [data-theme="dark"] .type-pill-car  { color: var(--car); }
 .avail-badge { padding: 3px 9px; border-radius: 100px; font-size: 11px; font-weight: 600; }
 .avail-pill  { padding: 3px 9px; border-radius: 100px; font-size: 11px; font-weight: 600; }
-.avail-yes { background: rgba(78,157,107,0.12); color: var(--car); }
+.avail-yes { background: rgba(78,157,107,0.14); color: #3D7E55; }
 .avail-no  { background: rgba(214,85,63,0.12);  color: var(--red); }
-[data-theme="light"] .avail-yes { background: #DFF7EC; color: #006F38; }
-[data-theme="light"] .avail-no  { background: #FEE2E2; color: #B91C1C; }
-.rating { display: flex; align-items: center; gap: 3px; font-size: 12px; font-weight: 700; color: var(--boat); }
+[data-theme="dark"] .avail-yes { color: var(--green); }
+.rating { display: flex; align-items: center; gap: 3px; font-size: 12px; font-weight: 700; color: var(--boat-dark); }
+[data-theme="dark"] .rating { color: var(--boat); }
 
 /* ─── RIDE CARDS ─── */
 .ride-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px; }
-.ride-card { border-radius: 16px; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
-.ride-card:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
-.ride-card-inner { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 22px; height: 100%; display: flex; flex-direction: column; gap: 14px; cursor: pointer; transition: border-color 0.2s; }
+.ride-card { border-radius: 18px; overflow: hidden; transition: transform 0.25s cubic-bezier(.16,1,.3,1), box-shadow 0.25s ease; }
+.ride-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.ride-card-inner { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 22px; height: 100%; display: flex; flex-direction: column; gap: 14px; cursor: pointer; transition: border-color 0.25s ease; }
 .ride-card:hover .ride-card-inner { border-color: var(--border2); }
 .ride-top { display: flex; align-items: center; justify-content: space-between; }
 .ride-route { display: flex; flex-direction: column; gap: 3px; }
@@ -807,20 +806,22 @@ input, select, textarea, button { font-family: inherit; }
 .price-amount-boat { color: var(--boat); }
 .price-amount-car  { color: var(--car); }
 .price-label { font-size: 11px; color: var(--text3); }
-.btn-reserve { padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; transition: background 0.15s; }
-.btn-reserve-boat { background: var(--boat-light); color: var(--boat); }
-.btn-reserve-car  { background: var(--car-light);  color: var(--car); }
+.btn-reserve { padding: 7px 14px; border-radius: 9px; font-size: 12px; font-weight: 700; transition: background 0.18s ease; }
+.btn-reserve-boat { background: var(--boat-light); color: var(--boat-dark); }
+.btn-reserve-car  { background: var(--car-light);  color: var(--car-dark); }
+[data-theme="dark"] .btn-reserve-boat { color: var(--boat); }
+[data-theme="dark"] .btn-reserve-car  { color: var(--car); }
 
 /* ─── RIDE CARDS (pro) ─── */
 .ride-grid-pro { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-.ride-card-pro { border-radius: 16px; overflow: hidden; transition: transform 0.22s, box-shadow 0.22s; cursor: pointer; position: relative; }
-.ride-card-pro:hover { transform: translateY(-5px); box-shadow: 0 20px 48px rgba(0,0,0,0.5); }
+.ride-card-pro { border-radius: 18px; overflow: hidden; transition: transform 0.28s cubic-bezier(.16,1,.3,1), box-shadow 0.28s ease; cursor: pointer; position: relative; }
+.ride-card-pro:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
 .ride-card-pro-inner {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 16px; padding: 22px;
+  border-radius: 18px; padding: 22px;
   height: 100%; display: flex; flex-direction: column; gap: 14px;
-  transition: border-color 0.22s;
+  transition: border-color 0.28s ease;
   position: relative; overflow: hidden;
 }
 .ride-card-pro-inner::before {
@@ -829,8 +830,8 @@ input, select, textarea, button { font-family: inherit; }
   opacity: 0;
   transition: opacity 0.22s;
 }
-.ride-card-pro.boat-card .ride-card-pro-inner::before { background: linear-gradient(90deg, var(--boat), #0066CC); }
-.ride-card-pro.car-card  .ride-card-pro-inner::before { background: linear-gradient(90deg, var(--car),  #00AA50); }
+.ride-card-pro.boat-card .ride-card-pro-inner::before { background: linear-gradient(90deg, var(--boat), var(--boat-dark)); }
+.ride-card-pro.car-card  .ride-card-pro-inner::before { background: linear-gradient(90deg, var(--car),  var(--amber)); }
 .ride-card-pro:hover .ride-card-pro-inner { border-color: var(--border2); }
 .ride-card-pro:hover .ride-card-pro-inner::before { opacity: 1; }
 .ride-card-pro-top { display: flex; align-items: center; justify-content: space-between; }

@@ -164,15 +164,20 @@ router.get("/rides/:id", async (req: Request, res: Response) => {
 router.post("/rides", requireCaptainOrDriver, async (req: Request, res: Response) => {
   try {
     const user = req.user as any;
-    const { rideType, originCity, destinationCity, departureTime, returnTime, pricePerSeat, totalSeats, description } = req.body;
+    const { rideType, originCity, destinationCity, departureTime, returnTime, pricePerSeat, totalSeats, description,
+            originLat, originLng, destLat, destLng } = req.body;
     if (!originCity || !destinationCity || !departureTime || !pricePerSeat || !totalSeats) return res.status(400).json({ error: "Preencha todos os campos." });
     if (rideType === "boat" && !(await storage.getCaptainProfile(user.id))) return res.status(400).json({ error: "Complete seu perfil de capitão primeiro." });
     if (rideType === "car" && !(await storage.getDriverProfile(user.id))) return res.status(400).json({ error: "Complete seu perfil de motorista primeiro." });
     const seats = parseInt(totalSeats);
+    // Coordinates come from the drop-pin map picker; nullable so text-only rides still work.
+    const coord = (v: any) => (v === undefined || v === null || v === "" ? null : parseFloat(v).toString());
     const ride = await storage.createRide({
       captainId: user.id,
       rideType: rideType || "boat",
       originCity, destinationCity,
+      originLat: coord(originLat), originLng: coord(originLng),
+      destLat: coord(destLat), destLng: coord(destLng),
       departureTime: new Date(departureTime),
       returnTime: returnTime ? new Date(returnTime) : null,
       pricePerSeat: parseFloat(pricePerSeat).toString(),
@@ -338,7 +343,21 @@ router.get("/captain/:userId/reviews", async (req: Request, res: Response) => {
   const userId = parseInt(req.params.userId as string);
   if (isNaN(userId)) return res.status(400).json({ error: "ID inválido." });
   const [reviewList, avgRating] = await Promise.all([storage.getReviewsByCaptain(userId), storage.getCaptainAverageRating(userId)]);
-  res.json({ reviews: reviewList, avgRating });
+  const enriched = await Promise.all(reviewList.map(async (r) => {
+    const reviewer = await storage.getUser(r.reviewerId);
+    return { ...r, reviewerName: reviewer?.fullName || "Passageiro" };
+  }));
+  res.json({ reviews: enriched, avgRating });
+});
+
+// ── PUBLIC DRIVER PROFILE ──
+router.get("/driver/:userId/profile", async (req: Request, res: Response) => {
+  const userId = parseInt(req.params.userId as string);
+  if (isNaN(userId)) return res.status(400).json({ error: "ID inválido." });
+  const [profile, user] = await Promise.all([storage.getDriverProfile(userId), storage.getUser(userId)]);
+  if (!profile || !user) return res.status(404).json({ error: "Motorista não encontrado." });
+  const { password: _, ...safe } = user;
+  res.json({ profile, user: safe });
 });
 
 export default router;

@@ -56,6 +56,11 @@ export const rides = pgTable("rides", {
   rideType: text("ride_type").notNull().default("boat"), // "boat" | "car"
   originCity: text("origin_city").notNull(),
   destinationCity: text("destination_city").notNull(),
+  // Map coordinates (nullable for legacy rows). Set via drop-pin when posting a ride.
+  originLat: numeric("origin_lat", { precision: 9, scale: 6 }),
+  originLng: numeric("origin_lng", { precision: 9, scale: 6 }),
+  destLat: numeric("dest_lat", { precision: 9, scale: 6 }),
+  destLng: numeric("dest_lng", { precision: 9, scale: 6 }),
   departureTime: timestamp("departure_time").notNull(),
   returnTime: timestamp("return_time"),
   pricePerSeat: numeric("price_per_seat", { precision: 10, scale: 2 }).notNull(),

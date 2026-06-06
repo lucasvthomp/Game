@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { Link, useSearch } from "wouter";
-import { Anchor, Clock, Star, Search, Car, Users, ArrowRight, MapPin } from "lucide-react";
+import { Anchor, Calendar, Clock, Star, Search, Car, Users, ArrowRight, MapPin } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
@@ -27,6 +27,9 @@ export default function Rides({ defaultType }: { defaultType?: "car" | "boat"; [
   const typeFromUrl = params.get("type") as TabType | null;
   const [activeTab, setActiveTab] = useState<TabType>(typeFromUrl || defaultType || "car");
   const [searchText, setSearchText] = useState("");
+  const [sortBy, setSortBy] = useState<"price" | "rating" | "departure">("departure");
+  const [dateFilter, setDateFilter] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
 
   const { data, isLoading } = useQuery({
     queryKey: ["/api/rides", activeTab],
@@ -36,11 +39,23 @@ export default function Rides({ defaultType }: { defaultType?: "car" | "boat"; [
   const liveRides = data?.rides || [];
   const source = liveRides.length > 0 ? liveRides : PLACEHOLDER_RIDES;
 
-  const rides = source.filter((r: any) => {
-    const matchType = r.rideType === activeTab;
-    const matchSearch = !searchText.trim() || r.originCity.toLowerCase().includes(searchText.toLowerCase()) || r.destinationCity.toLowerCase().includes(searchText.toLowerCase());
-    return matchType && matchSearch;
+  const allRides = source.filter((r: any) => r.rideType === activeTab);
+
+  let filtered = allRides.filter((r: any) => {
+    const q = searchText.toLowerCase();
+    const matchesCity = !q || r.originCity?.toLowerCase().includes(q) || r.destinationCity?.toLowerCase().includes(q);
+    const matchesDate = !dateFilter || new Date(r.departureTime).toDateString() === new Date(dateFilter).toDateString();
+    const matchesPrice = !maxPrice || parseFloat(r.pricePerSeat) <= parseFloat(maxPrice);
+    return matchesCity && matchesDate && matchesPrice;
   });
+
+  filtered = [...filtered].sort((a: any, b: any) => {
+    if (sortBy === "price") return parseFloat(a.pricePerSeat) - parseFloat(b.pricePerSeat);
+    if (sortBy === "rating") return (b.avgRating || 0) - (a.avgRating || 0);
+    return new Date(a.departureTime).getTime() - new Date(b.departureTime).getTime();
+  });
+
+  const rides = filtered;
 
   const isBoatPage = activeTab === "boat";
   const isCarPage = activeTab === "car";

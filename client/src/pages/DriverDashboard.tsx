@@ -4,8 +4,11 @@ import { apiRequest } from "@/lib/queryClient";
 import { Link } from "wouter";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Car, Plus, Clock, Users, ChevronRight, TrendingUp, Star, MapPin, X } from "lucide-react";
-import { useState } from "react";
+import { Car, Plus, Clock, Users, ChevronRight, TrendingUp, Star, MapPin, X, Map } from "lucide-react";
+import { useState, lazy, Suspense } from "react";
+
+const MapPicker = lazy(() => import("@/components/RouteMap").then(m => ({ default: m.MapPicker })));
+const RideRouteMap = lazy(() => import("@/components/RouteMap").then(m => ({ default: m.RideRouteMap })));
 
 const EMPTY_FORM = {
   originCity: "", destinationCity: "", departureTime: "", returnTime: "",
@@ -17,6 +20,9 @@ export default function DriverDashboard() {
   const qc = useQueryClient();
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(EMPTY_FORM);
+  const [originPin, setOriginPin] = useState<[number, number] | null>(null);
+  const [destPin, setDestPin] = useState<[number, number] | null>(null);
+  const [showMap, setShowMap] = useState(false);
   const [error, setError] = useState("");
 
   const { data: profileData } = useQuery({
@@ -26,8 +32,8 @@ export default function DriverDashboard() {
   });
 
   const { data: ridesData } = useQuery({
-    queryKey: ["/api/rides/mine"],
-    queryFn: () => apiRequest("GET", "/api/rides/mine"),
+    queryKey: ["/api/my/rides"],
+    queryFn: () => apiRequest("GET", "/api/my/rides"),
     enabled: !!user,
   });
 
@@ -37,11 +43,18 @@ export default function DriverDashboard() {
       rideType: "car",
       totalSeats: parseInt(form.totalSeats),
       pricePerSeat: parseFloat(form.pricePerSeat),
+      originLat: originPin?.[0] ?? null,
+      originLng: originPin?.[1] ?? null,
+      destLat: destPin?.[0] ?? null,
+      destLng: destPin?.[1] ?? null,
     }),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["/api/rides/mine"] });
+      qc.invalidateQueries({ queryKey: ["/api/my/rides"] });
       setShowForm(false);
       setForm(EMPTY_FORM);
+      setOriginPin(null);
+      setDestPin(null);
+      setShowMap(false);
       setError("");
     },
     onError: (e: any) => setError(e.message || "Erro ao criar viagem"),
@@ -49,7 +62,7 @@ export default function DriverDashboard() {
 
   const cancelMutation = useMutation({
     mutationFn: (rideId: number) => apiRequest("DELETE", `/api/rides/${rideId}`),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["/api/rides/mine"] }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["/api/my/rides"] }),
   });
 
   if (!user) return (
@@ -189,12 +202,39 @@ export default function DriverDashboard() {
               <label>Observações</label>
               <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} placeholder="Ponto de encontro, bagagem permitida..." rows={2} />
             </div>
+
+            {/* Optional map pin picker */}
+            <div className="form-group">
+              <button type="button" className="btn-secondary" style={{ fontSize: 12, padding: "6px 14px", display: "flex", alignItems: "center", gap: 6 }} onClick={() => setShowMap(v => !v)}>
+                <Map size={13} /> {showMap ? "Esconder mapa" : "Marcar no mapa (opcional)"}
+              </button>
+              {showMap && (
+                <div style={{ marginTop: 10 }}>
+                  <Suspense fallback={<div style={{ height: 300, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text3)" }}>Carregando mapa...</div>}>
+                    <MapPicker
+                      type="car"
+                      originPin={originPin}
+                      destPin={destPin}
+                      onOriginPick={(lat, lng) => setOriginPin([lat, lng])}
+                      onDestPick={(lat, lng) => setDestPin([lat, lng])}
+                    />
+                  </Suspense>
+                  {(originPin || destPin) && (
+                    <div style={{ display: "flex", gap: 8, marginTop: 6, flexWrap: "wrap" }}>
+                      {originPin && <span style={{ fontSize: 11, color: "var(--green)", background: "color-mix(in srgb, var(--green) 10%, transparent)", padding: "3px 8px", borderRadius: 6 }}>Origem marcada</span>}
+                      {destPin && <span style={{ fontSize: 11, color: "var(--green)", background: "color-mix(in srgb, var(--green) 10%, transparent)", padding: "3px 8px", borderRadius: 6 }}>Destino marcado</span>}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
             {error && <div className="form-error">{error}</div>}
             <div style={{ display: "flex", gap: 10 }}>
               <button className="btn-primary btn-primary-car" onClick={() => createMutation.mutate()} disabled={createMutation.isPending}>
                 {createMutation.isPending ? "Publicando..." : "Publicar carona"}
               </button>
-              <button className="btn-secondary" onClick={() => { setShowForm(false); setError(""); }}>Cancelar</button>
+              <button className="btn-secondary" onClick={() => { setShowForm(false); setError(""); setOriginPin(null); setDestPin(null); setShowMap(false); }}>Cancelar</button>
             </div>
           </div>
         )}

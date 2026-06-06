@@ -2,10 +2,12 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
-import { Anchor, Plus, Clock, Users, Trash2, CheckCircle, TrendingUp } from "lucide-react";
+import { Anchor, Plus, Clock, Users, Trash2, CheckCircle, TrendingUp, Map } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
+
+const MapPicker = lazy(() => import("@/components/RouteMap").then(m => ({ default: m.MapPicker })));
 
 const BLANK = { originCity: "", destinationCity: "", departureTime: "", returnTime: "", pricePerSeat: "", totalSeats: "", description: "" };
 
@@ -17,6 +19,9 @@ export default function CaptainDashboard() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [form, setForm] = useState(BLANK);
+  const [originPin, setOriginPin] = useState<[number, number] | null>(null);
+  const [destPin, setDestPin] = useState<[number, number] | null>(null);
+  const [showMap, setShowMap] = useState(false);
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setForm(f => ({ ...f, [k]: e.target.value }));
 
   const { data: profileData } = useQuery({
@@ -31,8 +36,25 @@ export default function CaptainDashboard() {
   });
 
   const createMutation = useMutation({
-    mutationFn: () => apiRequest("POST", "/api/rides", { ...form, pricePerSeat: parseFloat(form.pricePerSeat), totalSeats: parseInt(form.totalSeats), returnTime: form.returnTime || undefined }),
-    onSuccess: () => { setSuccess("Viagem criada!"); setShowForm(false); setForm(BLANK); qc.invalidateQueries({ queryKey: ["/api/my/rides"] }); },
+    mutationFn: () => apiRequest("POST", "/api/rides", {
+      ...form,
+      pricePerSeat: parseFloat(form.pricePerSeat),
+      totalSeats: parseInt(form.totalSeats),
+      returnTime: form.returnTime || undefined,
+      originLat: originPin?.[0] ?? null,
+      originLng: originPin?.[1] ?? null,
+      destLat: destPin?.[0] ?? null,
+      destLng: destPin?.[1] ?? null,
+    }),
+    onSuccess: () => {
+      setSuccess("Viagem criada!");
+      setShowForm(false);
+      setForm(BLANK);
+      setOriginPin(null);
+      setDestPin(null);
+      setShowMap(false);
+      qc.invalidateQueries({ queryKey: ["/api/my/rides"] });
+    },
     onError: (err: any) => setError(err.message),
   });
   const cancelMutation = useMutation({
@@ -41,7 +63,7 @@ export default function CaptainDashboard() {
   });
 
   if (!user) { navigate("/entrar"); return null; }
-  if (user.role !== "captain") { navigate("/perfil-capitao"); return null; }
+  if (!["captain", "both"].includes(user.role)) { navigate("/perfil-capitao"); return null; }
 
   const rides = ridesData?.rides || [];
   const totalEarnings = rides.filter((r: any) => r.status === "active").reduce((s: number, r: any) => s + parseFloat(r.pricePerSeat) * r.confirmedSeats, 0);
@@ -115,13 +137,37 @@ export default function CaptainDashboard() {
                   <label className="field-label">DESCRIÇÃO (opcional)</label>
                   <textarea className="field-input" value={form.description} onChange={set("description")} placeholder="Ponto de encontro, o que levar, informações extras..." style={{ minHeight: 72, resize: "vertical" }} />
                 </div>
+                <div className="form-full">
+                  <button type="button" style={{ background: "none", border: "1px solid var(--border)", color: "var(--text2)", borderRadius: 8, padding: "6px 14px", cursor: "pointer", fontSize: 12, fontWeight: 600, display: "flex", alignItems: "center", gap: 6 }} onClick={() => setShowMap(v => !v)}>
+                    <Map size={13} /> {showMap ? "Esconder mapa" : "Marcar no mapa (opcional)"}
+                  </button>
+                  {showMap && (
+                    <div style={{ marginTop: 10 }}>
+                      <Suspense fallback={<div style={{ height: 300, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text3)" }}>Carregando mapa...</div>}>
+                        <MapPicker
+                          type="boat"
+                          originPin={originPin}
+                          destPin={destPin}
+                          onOriginPick={(lat, lng) => setOriginPin([lat, lng])}
+                          onDestPick={(lat, lng) => setDestPin([lat, lng])}
+                        />
+                      </Suspense>
+                      {(originPin || destPin) && (
+                        <div style={{ display: "flex", gap: 8, marginTop: 6, flexWrap: "wrap" }}>
+                          {originPin && <span style={{ fontSize: 11, color: "#28C76F", background: "rgba(40,199,111,0.1)", padding: "3px 8px", borderRadius: 6 }}>Origem marcada</span>}
+                          {destPin && <span style={{ fontSize: 11, color: "#28C76F", background: "rgba(40,199,111,0.1)", padding: "3px 8px", borderRadius: 6 }}>Destino marcado</span>}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
               {error && <div className="alert-error" style={{ marginTop: 12 }}>{error}</div>}
               <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
                 <button type="submit" disabled={createMutation.isPending} className="btn-add" style={{ flex: 1, justifyContent: "center" }}>
                   {createMutation.isPending ? "Criando..." : "Criar viagem"}
                 </button>
-                <button type="button" onClick={() => setShowForm(false)} style={{ background: "none", border: "1px solid var(--border)", color: "var(--text2)", borderRadius: 10, padding: "10px 20px", cursor: "pointer", fontSize: 14 }}>
+                <button type="button" onClick={() => { setShowForm(false); setOriginPin(null); setDestPin(null); setShowMap(false); }} style={{ background: "none", border: "1px solid var(--border)", color: "var(--text2)", borderRadius: 10, padding: "10px 20px", cursor: "pointer", fontSize: 14 }}>
                   Cancelar
                 </button>
               </div>

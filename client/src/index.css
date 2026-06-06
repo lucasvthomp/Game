@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
 
 @tailwind base;
 @tailwind components;
@@ -25,72 +26,62 @@ input, select, textarea, button { font-family: inherit; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
 
-/* ─── BRAZIL COASTAL · LIGHT TOKENS ─── */
+/* ─── BRAZIL COASTAL · LIGHT TOKENS (warm-minimal, airy) ─── */
 :root {
-  --bg:         #F8F9FC;
-  --bg2:        #EFF1F7;
+  --bg:         #FDFBF7;
+  --bg2:        #F7F2EA;
   --card:       #FFFFFF;
-  --surface:    #F0F2F8;
-  --border:     #E2E6F0;
-  --border2:    #C8CFDF;
-  --text1:      #111827;
-  --text2:      #4B5563;
-  --text3:      #9CA3AF;
-  --boat:       #2563EB;
-  --boat-light: #DBEAFE;
-  --boat-dark:  #1D4ED8;
-  --car:        #F05A28;
-  --car-light:  #FEE8DF;
-  --car-dark:   #C84820;
-  --amber:      #F59E0B;
-  --dark:       #111827;
-  --dark2:      #1F2937;
-  --red:        #EF4444;
-  --green:      #10B981;
-  --brazil1:    #10B981;
-  --brazil2:    #F59E0B;
-  --brazil3:    #2563EB;
-  --sunset:     #F05A28;
-  --ocean:      #2563EB;
-  --shadow-sm:  0 1px 8px rgba(17,24,39,0.06);
-  --shadow-md:  0 8px 28px rgba(17,24,39,0.10);
-  --shadow-lg:  0 20px 48px rgba(17,24,39,0.14);
-  --glow-car:   rgba(240,90,40,0.20);
-  --glow-boat:  rgba(37,99,235,0.18);
+  --surface:    #FAF6EF;
+  --border:     #EDE6DA;
+  --border2:    #DED4C6;
+  --text1:      #211E1A;
+  --text2:      #6F665B;
+  --text3:      #A99E8E;
+  --boat:       #3C7A89;
+  --boat-light: #E3EFF1;
+  --boat-dark:  #2C5E6B;
+  --car:        #E2725B;
+  --car-light:  #FBEAE4;
+  --car-dark:   #C25742;
+  --amber:      #D99A2B;
+  --dark:       #211E1A;
+  --dark2:      #2B2722;
+  --red:        #D6553F;
+  --green:      #4E9D6B;
+  --shadow-sm:  0 1px 6px rgba(40,28,16,0.05);
+  --shadow-md:  0 6px 24px rgba(40,28,16,0.08);
+  --shadow-lg:  0 16px 48px rgba(40,28,16,0.12);
+  --glow-car:   rgba(226,114,91,0.16);
+  --glow-boat:  rgba(60,122,137,0.16);
 }
 
-/* ─── BRAZIL COASTAL · DARK TOKENS (ocean night) ─── */
+/* ─── BRAZIL COASTAL · DARK TOKENS (warm night) ─── */
 [data-theme="dark"] {
-  --bg:         #0F1117;
-  --bg2:        #171B26;
-  --card:       #1C2130;
-  --surface:    #232A3E;
-  --border:     #2E3650;
-  --border2:    #3D4D6E;
-  --text1:      #F1F5F9;
-  --text2:      #94A3B8;
-  --text3:      #64748B;
-  --boat:       #60A5FA;
-  --boat-light: #1E3A5F;
-  --boat-dark:  #3B82F6;
-  --car:        #FB7A50;
-  --car-light:  #3D1F10;
-  --car-dark:   #F06030;
-  --amber:      #FBB840;
-  --dark:       #060810;
-  --dark2:      #0F1117;
-  --red:        #F87171;
-  --green:      #34D399;
-  --brazil1:    #34D399;
-  --brazil2:    #FBB840;
-  --brazil3:    #60A5FA;
-  --sunset:     #FB7A50;
-  --ocean:      #60A5FA;
-  --shadow-sm:  0 2px 10px rgba(0,0,0,0.35);
-  --shadow-md:  0 10px 30px rgba(0,0,0,0.50);
-  --shadow-lg:  0 20px 48px rgba(0,0,0,0.65);
-  --glow-car:   rgba(251,122,80,0.22);
-  --glow-boat:  rgba(96,165,250,0.22);
+  --bg:         #15120F;
+  --bg2:        #1C1815;
+  --card:       #221D19;
+  --surface:    #2A241F;
+  --border:     #332C25;
+  --border2:    #443A31;
+  --text1:      #F2EBE0;
+  --text2:      #B3A695;
+  --text3:      #7D7264;
+  --boat:       #5FA3B2;
+  --boat-light: #1E2A2E;
+  --boat-dark:  #3C7A89;
+  --car:        #EC8770;
+  --car-light:  #2E211C;
+  --car-dark:   #E2725B;
+  --amber:      #E8B24A;
+  --dark:       #0E0B08;
+  --dark2:      #15120F;
+  --red:        #E06A54;
+  --green:      #5FB57E;
+  --shadow-sm:  0 2px 10px rgba(0,0,0,0.40);
+  --shadow-md:  0 8px 28px rgba(0,0,0,0.52);
+  --shadow-lg:  0 20px 56px rgba(0,0,0,0.66);
+  --glow-car:   rgba(236,135,112,0.24);
+  --glow-boat:  rgba(95,163,178,0.24);
 }
 
 /* ─── ANIMATIONS ─── */
@@ -124,8 +115,8 @@ input, select, textarea, button { font-family: inherit; }
   100% { background-position: 200% center; }
 }
 @keyframes pulse {
-  0%,100% { box-shadow: 0 0 0 0 rgba(14,134,200,0.30); }
-  50%      { box-shadow: 0 0 0 10px rgba(14,134,200,0); }
+  0%,100% { box-shadow: 0 0 0 0 rgba(46,125,156,0.30); }
+  50%      { box-shadow: 0 0 0 10px rgba(46,125,156,0); }
 }
 @keyframes scaleIn {
   from { opacity: 0; transform: scale(0.92); }
@@ -210,14 +201,14 @@ input, select, textarea, button { font-family: inherit; }
 
 /* ─── NAVBAR ─── */
 .nav-root {
-  background: rgba(255,255,255,0.88);
+  background: rgba(253,251,247,0.85);
   border-bottom: 1px solid var(--border);
   position: sticky; top: 0; z-index: 100;
-  backdrop-filter: blur(24px) saturate(1.3);
-  -webkit-backdrop-filter: blur(24px) saturate(1.3);
+  backdrop-filter: blur(20px) saturate(1.3);
+  -webkit-backdrop-filter: blur(20px) saturate(1.3);
 }
 [data-theme="dark"] .nav-root {
-  background: rgba(13,27,42,0.90);
+  background: rgba(21,18,15,0.85);
   border-bottom: 1px solid var(--border);
 }
 .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 58px; }
@@ -290,9 +281,9 @@ input, select, textarea, button { font-family: inherit; }
 /* ─── HERO ─── */
 .hero-pro {
   background:
-    radial-gradient(ellipse 80% 60% at 15% -10%, rgba(212,96,58,0.09) 0%, transparent 60%),
-    radial-gradient(ellipse 70% 50% at 88% 5%, rgba(46,125,156,0.07) 0%, transparent 55%),
-    linear-gradient(180deg, #FDFCF9 0%, var(--bg) 60%, var(--bg2) 100%);
+    radial-gradient(ellipse 80% 60% at 15% -10%, rgba(226,114,91,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 88% 5%, rgba(60,122,137,0.08) 0%, transparent 55%),
+    linear-gradient(180deg, #FFFFFF 0%, var(--bg) 55%, var(--bg2) 100%);
   padding: 96px 24px 0;
   position: relative;
   overflow: hidden;
@@ -301,9 +292,9 @@ input, select, textarea, button { font-family: inherit; }
 }
 [data-theme="dark"] .hero-pro {
   background:
-    radial-gradient(ellipse 80% 60% at 15% -10%, rgba(224,122,90,0.11) 0%, transparent 60%),
-    radial-gradient(ellipse 70% 50% at 88% 5%, rgba(79,168,196,0.09) 0%, transparent 55%),
-    linear-gradient(180deg, #1A1410 0%, var(--bg) 60%, var(--bg2) 100%);
+    radial-gradient(ellipse 80% 60% at 15% -10%, rgba(236,135,112,0.13) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 88% 5%, rgba(95,163,178,0.11) 0%, transparent 55%),
+    linear-gradient(180deg, #1F1A15 0%, var(--bg) 55%, var(--bg2) 100%);
 }
 /* warm sun-glow that gently drifts */
 .hero-pro::before {
@@ -311,21 +302,30 @@ input, select, textarea, button { font-family: inherit; }
   position: absolute;
   bottom: -100px; left: 50%; transform: translateX(-50%);
   width: 900px; height: 400px;
-  background: radial-gradient(ellipse at center, rgba(212,96,58,0.06) 0%, rgba(46,125,156,0.04) 50%, transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(226,114,91,0.07) 0%, rgba(60,122,137,0.05) 50%, transparent 70%);
   pointer-events: none;
   animation: glowDrift 10s ease-in-out infinite;
+}
+[data-theme="dark"] .hero-pro::before {
+  background: radial-gradient(ellipse at center, rgba(236,135,112,0.10) 0%, rgba(95,163,178,0.07) 50%, transparent 70%);
 }
 /* soft warm dot texture */
 .hero-pro::after {
   content: '';
   position: absolute; inset: 0;
   background-image:
-    radial-gradient(circle, rgba(14,134,200,0.07) 1px, transparent 1px),
-    radial-gradient(circle, rgba(245,158,11,0.06) 1px, transparent 1px);
+    radial-gradient(circle, rgba(60,122,137,0.08) 1px, transparent 1px),
+    radial-gradient(circle, rgba(226,114,91,0.07) 1px, transparent 1px);
   background-size: 64px 64px, 104px 104px;
   background-position: 0 0, 32px 32px;
   opacity: 0.7;
   pointer-events: none;
+}
+[data-theme="dark"] .hero-pro::after {
+  background-image:
+    radial-gradient(circle, rgba(95,163,178,0.10) 1px, transparent 1px),
+    radial-gradient(circle, rgba(236,135,112,0.09) 1px, transparent 1px);
+  opacity: 0.5;
 }
 .hero-pro-bg, .hero-blob, .hero-grid-lines, .hero-bg-svg { display: none; }
 
@@ -344,7 +344,7 @@ input, select, textarea, button { font-family: inherit; }
 .hero-pro-eyebrow {
   display: inline-flex; align-items: center; gap: 8px;
   background: var(--car-light);
-  border: 1px solid rgba(245,158,11,0.28);
+  border: 1px solid rgba(212,96,58,0.28);
   border-radius: 100px; padding: 6px 16px;
   font-size: 12px; font-weight: 700; color: var(--car-dark);
   margin-bottom: 28px;
@@ -462,10 +462,10 @@ input, select, textarea, button { font-family: inherit; }
 }
 .split-panel:first-child { border-right: 1px solid var(--border); }
 @media (max-width: 680px) { .split-panel:first-child { border-right: none; border-bottom: 1px solid var(--border); } }
-.split-panel-car  { background: linear-gradient(135deg, var(--bg2) 0%, rgba(245,158,11,0.07) 100%); }
-.split-panel-boat { background: linear-gradient(135deg, var(--bg2) 0%, rgba(14,134,200,0.07) 100%); }
-.split-panel-car:hover  { background: linear-gradient(135deg, var(--bg2) 0%, rgba(245,158,11,0.13) 100%); }
-.split-panel-boat:hover { background: linear-gradient(135deg, var(--bg2) 0%, rgba(14,134,200,0.12) 100%); }
+.split-panel-car  { background: linear-gradient(135deg, var(--bg2) 0%, rgba(212,96,58,0.07) 100%); }
+.split-panel-boat { background: linear-gradient(135deg, var(--bg2) 0%, rgba(46,125,156,0.07) 100%); }
+.split-panel-car:hover  { background: linear-gradient(135deg, var(--bg2) 0%, rgba(212,96,58,0.13) 100%); }
+.split-panel-boat:hover { background: linear-gradient(135deg, var(--bg2) 0%, rgba(46,125,156,0.12) 100%); }
 /* glow orb behind icon */
 .split-panel::before {
   content: '';
@@ -501,8 +501,8 @@ input, select, textarea, button { font-family: inherit; }
   border: 1px solid; cursor: pointer;
   transition: background 0.25s ease, color 0.25s ease, transform 0.25s cubic-bezier(.16,1,.3,1), box-shadow 0.25s ease;
 }
-.split-panel-car  .split-panel-btn { border-color: rgba(245,158,11,0.55);  color: var(--car-dark);  background: var(--car-light); }
-.split-panel-boat .split-panel-btn { border-color: rgba(14,134,200,0.40); color: var(--boat-dark); background: var(--boat-light); }
+.split-panel-car  .split-panel-btn { border-color: rgba(212,96,58,0.45);  color: var(--car-dark);  background: var(--car-light); }
+.split-panel-boat .split-panel-btn { border-color: rgba(46,125,156,0.35); color: var(--boat-dark); background: var(--boat-light); }
 [data-theme="dark"] .split-panel-car  .split-panel-btn { color: var(--car); }
 [data-theme="dark"] .split-panel-boat .split-panel-btn { color: var(--boat); }
 .split-panel-car:hover  .split-panel-btn { background: var(--car);  color: #fff; transform: translateX(4px); box-shadow: 0 6px 18px var(--glow-car); border-color: var(--car); }
@@ -517,8 +517,8 @@ input, select, textarea, button { font-family: inherit; }
   padding: 64px 0;
 }
 .map-section-inner {
-  max-width: 1020px; margin: 0 auto; padding: 0 24px;
-  display: grid; grid-template-columns: 1fr 1.2fr; gap: 56px; align-items: center;
+  max-width: 1080px; margin: 0 auto; padding: 0 24px;
+  display: grid; grid-template-columns: 1fr 1.4fr; gap: 64px; align-items: center;
 }
 @media (max-width: 768px) { .map-section-inner { grid-template-columns: 1fr; gap: 32px; } }
 .map-text-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--boat); margin-bottom: 12px; }
@@ -852,40 +852,64 @@ input, select, textarea, button { font-family: inherit; }
 [data-theme="dark"] .btn-reserve-boat { color: var(--boat); }
 [data-theme="dark"] .btn-reserve-car  { color: var(--car); }
 
-/* ─── RIDE CARDS (pro) ─── */
-.ride-grid-pro { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-.ride-card-pro { border-radius: 18px; overflow: hidden; transition: transform 0.28s cubic-bezier(.16,1,.3,1), box-shadow 0.28s ease; cursor: pointer; position: relative; }
-.ride-card-pro:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-.ride-card-pro:hover .ride-card-pro-inner { border-color: var(--border2); box-shadow: var(--shadow-md); }
+/* ─── RIDE CARDS (pro · premium warm redesign) ─── */
+.ride-grid-pro { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 18px; }
+.ride-card-pro {
+  border-radius: 20px; overflow: hidden; cursor: pointer; position: relative;
+  transition: transform 0.32s cubic-bezier(.16,1,.3,1), box-shadow 0.32s ease;
+}
+.ride-card-pro:hover { transform: translateY(-6px); }
 .ride-card-pro-inner {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 18px; padding: 22px;
-  height: 100%; display: flex; flex-direction: column; gap: 14px;
+  border-radius: 20px; padding: 24px 22px 20px;
+  height: 100%; display: flex; flex-direction: column; gap: 15px;
   box-shadow: var(--shadow-sm);
-  transition: border-color 0.22s, box-shadow 0.22s, transform 0.22s;
+  transition: border-color 0.28s ease, box-shadow 0.28s ease;
   position: relative; overflow: hidden;
 }
+/* Always-visible accent strip per type, grows on hover */
 .ride-card-pro-inner::before {
   content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  opacity: 0;
-  transition: opacity 0.22s;
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  transform: scaleX(1); transform-origin: left;
+  transition: height 0.3s cubic-bezier(.16,1,.3,1), opacity 0.3s ease;
+}
+/* Soft corner glow tint per type */
+.ride-card-pro-inner::after {
+  content: '';
+  position: absolute; top: -50px; right: -50px;
+  width: 130px; height: 130px; border-radius: 50%;
+  opacity: 0; transition: opacity 0.35s ease;
+  pointer-events: none;
 }
 .ride-card-pro.boat-card .ride-card-pro-inner::before { background: linear-gradient(90deg, var(--boat), var(--boat-dark)); }
 .ride-card-pro.car-card  .ride-card-pro-inner::before { background: linear-gradient(90deg, var(--car), var(--amber)); }
-.ride-card-pro:hover .ride-card-pro-inner::before { opacity: 1; }
-.ride-card-pro-top { display: flex; align-items: center; justify-content: space-between; }
-.ride-card-pro-route { display: flex; flex-direction: column; gap: 5px; }
-.ride-card-pro-city { font-size: 1.15rem; font-weight: 800; color: var(--text1); letter-spacing: -0.3px; }
-.ride-card-pro-arrow { display: flex; align-items: center; gap: 6px; }
-.arrow-line-pro { flex: 1; height: 1px; background: var(--border); }
-.ride-card-pro-meta { display: flex; flex-direction: column; gap: 5px; }
-.ride-card-pro-meta span { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text2); }
-.ride-card-pro-footer { margin-top: auto; display: flex; align-items: center; justify-content: space-between; padding-top: 14px; border-top: 1px solid var(--border); }
-.ride-card-pro-price { font-size: 1.25rem; font-weight: 900; color: var(--text1); letter-spacing: -0.5px; }
-.ride-card-pro-per { font-size: 11px; color: var(--text3); }
-.ride-card-pro-rating { display: flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: var(--amber); }
+.ride-card-pro.boat-card .ride-card-pro-inner::after  { background: radial-gradient(circle, var(--glow-boat) 0%, transparent 70%); }
+.ride-card-pro.car-card  .ride-card-pro-inner::after  { background: radial-gradient(circle, var(--glow-car) 0%, transparent 70%); }
+.ride-card-pro:hover .ride-card-pro-inner::before { height: 5px; }
+.ride-card-pro:hover .ride-card-pro-inner::after  { opacity: 1; }
+.ride-card-pro:hover .ride-card-pro-inner { border-color: var(--border2); }
+
+.ride-card-pro-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; position: relative; z-index: 1; }
+.ride-card-pro-route { display: flex; flex-direction: column; gap: 6px; position: relative; z-index: 1; }
+.ride-card-pro-city { font-size: 1.22rem; font-weight: 800; color: var(--text1); letter-spacing: -0.4px; line-height: 1.15; }
+.ride-card-pro-arrow { display: flex; align-items: center; gap: 8px; padding: 1px 0; }
+.arrow-line-pro { flex: 1; height: 0; border-top: 1.5px dashed var(--border2); opacity: 0.7; }
+.ride-card-pro-meta { display: flex; flex-direction: column; gap: 7px; position: relative; z-index: 1; }
+.ride-card-pro-meta span { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--text2); }
+.ride-card-pro-meta span svg { flex-shrink: 0; opacity: 0.85; }
+.ride-card-pro-footer { margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; padding-top: 15px; border-top: 1px solid var(--border); position: relative; z-index: 1; }
+.ride-card-pro-price { font-size: 1.4rem; font-weight: 900; letter-spacing: -0.6px; }
+.ride-card-pro.car-card  .ride-card-pro-price { color: var(--car); }
+.ride-card-pro.boat-card .ride-card-pro-price { color: var(--boat); }
+.ride-card-pro-per { font-size: 11px; color: var(--text3); font-weight: 500; }
+.ride-card-pro-rating {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px; font-weight: 800; color: var(--amber);
+  background: color-mix(in srgb, var(--amber) 12%, transparent);
+  padding: 4px 9px; border-radius: 100px;
+}
 
 /* ─── RIDE CARDS V2 ─── */
 .ride-grid-v2 {
@@ -1182,10 +1206,10 @@ input, select, textarea, button { font-family: inherit; }
 @media (max-width: 600px) { .category-grid { grid-template-columns: 1fr; } }
 .category-card { border-radius: 20px; padding: 32px 28px; cursor: pointer; transition: transform 0.28s cubic-bezier(.16,1,.3,1), box-shadow 0.28s ease; position: relative; overflow: hidden; display: flex; flex-direction: column; }
 .category-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
-.category-card-car  { background: var(--car-light); border: 1px solid rgba(245,158,11,0.28); }
-.category-card-boat { background: var(--boat-light); border: 1px solid rgba(14,134,200,0.22); }
+.category-card-car  { background: var(--car-light); border: 1px solid rgba(212,96,58,0.28); }
+.category-card-boat { background: var(--boat-light); border: 1px solid rgba(46,125,156,0.22); }
 .category-card-icon-wrap { width: 48px; height: 48px; border-radius: 13px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; flex-shrink: 0; }
-.category-card-car  .category-card-icon-wrap { background: rgba(245,158,11,0.18); color: var(--car-dark); }
+.category-card-car  .category-card-icon-wrap { background: rgba(212,96,58,0.15); color: var(--car-dark); }
 .category-card-boat .category-card-icon-wrap { background: rgba(60,122,137,0.15); color: var(--boat-dark); }
 .category-card-title { font-size: 1.3rem; font-weight: 900; margin-bottom: 6px; letter-spacing: -0.3px; color: var(--text1); }
 .category-card-desc { font-size: 14px; line-height: 1.6; margin-bottom: 14px; color: var(--text2); }
@@ -1441,7 +1465,8 @@ input, select, textarea, button { font-family: inherit; }
   .hero-pro-gradient,
   .map-dot-ping,
   .map-route-line { animation: none !important; }
-  .fade-up, .fade-in, .slide-left, .slide-right, .scale-in, .slide-up {
+  .fade-up, .fade-in, .slide-left, .slide-right, .scale-in, .slide-up,
+  .reveal {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
@@ -1449,7 +1474,7 @@ input, select, textarea, button { font-family: inherit; }
 }
 
 /* ─── LEAFLET MAP ─── */
-@import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
+/* ─── LEAFLET OVERRIDES ─── */
 .leaflet-container {
   border-radius: 18px;
   z-index: 0;
@@ -1476,6 +1501,8 @@ input, select, textarea, button { font-family: inherit; }
 .leaflet-popup-content { margin: 14px 18px !important; color: var(--text1) !important; font-size: 13px !important; }
 .leaflet-popup-tip { background: var(--card) !important; }
 .leaflet-popup-close-button { color: var(--text3) !important; font-size: 18px !important; top: 8px !important; right: 10px !important; }
+.leaflet-popup-content b { font-weight: 800; }
+.leaflet-attribution-flag { display: none !important; }
 
 /* Map section on home page */
 .home-map-section {
@@ -1528,24 +1555,30 @@ input, select, textarea, button { font-family: inherit; }
   transition: border-color 0.22s, box-shadow 0.22s !important;
 }
 .ride-card-pro:hover .ride-card-pro-inner {
-  box-shadow: 0 8px 32px rgba(14,134,200,0.10) !important;
+  box-shadow: 0 10px 34px rgba(60,122,137,0.12) !important;
+}
+.ride-card-pro.car-card:hover .ride-card-pro-inner {
+  box-shadow: 0 10px 34px rgba(226,114,91,0.14) !important;
 }
 [data-theme="dark"] .ride-card-pro:hover .ride-card-pro-inner {
-  box-shadow: 0 8px 32px rgba(56,189,248,0.12) !important;
+  box-shadow: 0 10px 34px rgba(95,163,178,0.16) !important;
+}
+[data-theme="dark"] .ride-card-pro.car-card:hover .ride-card-pro-inner {
+  box-shadow: 0 10px 34px rgba(236,135,112,0.18) !important;
 }
 
-/* Glassy hero search in dark mode */
+/* Warm glassy hero search in dark mode (uses --card so it matches the night palette) */
 [data-theme="dark"] .hero-search {
-  background: rgba(25,43,61,0.9);
+  background: rgba(34,29,25,0.92);
   border-color: var(--border2);
   backdrop-filter: blur(12px);
 }
 [data-theme="dark"] .hero-search-field input { color: var(--text1); }
 [data-theme="dark"] .hero-search-divider { background: var(--border2); }
 
-/* Hero search btn in dark uses boat color */
-[data-theme="dark"] .hero-search-btn { background: var(--boat); }
-[data-theme="dark"] .hero-search-btn:hover { background: var(--boat-dark); }
+/* Hero search btn stays terracotta in both themes */
+[data-theme="dark"] .hero-search-btn { background: var(--car); }
+[data-theme="dark"] .hero-search-btn:hover { background: var(--car-dark); }
 
 /* Smoother section transitions */
 .section-pro { transition: background 0.3s ease; }
@@ -1557,7 +1590,8 @@ input, select, textarea, button { font-family: inherit; }
   font-weight: 700 !important;
 }
 [data-theme="dark"] .nav-link.active {
-  background: rgba(56,189,248,0.08) !important;
+  color: var(--boat) !important;
+  background: rgba(95,163,178,0.12) !important;
 }
 
 /* Better split panel btns in light mode */
@@ -1565,9 +1599,10 @@ input, select, textarea, button { font-family: inherit; }
 .split-panel-boat:hover .split-panel-btn { color: #fff !important; }
 
 /* Floating label on inputs - focus glow */
-.form-input:focus { border-color: var(--boat); box-shadow: 0 0 0 3px rgba(14,134,200,0.12); }
-[data-theme="dark"] .form-input:focus { box-shadow: 0 0 0 3px rgba(56,189,248,0.12); }
-.field-input:focus { border-color: var(--boat); box-shadow: 0 0 0 3px rgba(14,134,200,0.12); }
+.form-input:focus { border-color: var(--boat); box-shadow: 0 0 0 3px rgba(60,122,137,0.14); }
+[data-theme="dark"] .form-input:focus { box-shadow: 0 0 0 3px rgba(95,163,178,0.16); }
+.field-input:focus { border-color: var(--boat); box-shadow: 0 0 0 3px rgba(60,122,137,0.14); }
+[data-theme="dark"] .field-input:focus { box-shadow: 0 0 0 3px rgba(95,163,178,0.16); }
 
 /* Smooth card entrance on scroll - use with JS IntersectionObserver or just keep fade-up */
 .card-reveal {
@@ -1625,7 +1660,7 @@ input, select, textarea, button { font-family: inherit; }
   overflow: hidden;
   border: 1px solid var(--border);
   box-shadow: var(--shadow-md);
-  height: 380px;
+  height: 420px;
   position: relative;
   z-index: 0;
 }
@@ -1663,22 +1698,20 @@ input, select, textarea, button { font-family: inherit; }
   border: 1px solid rgba(255,255,255,0.5);
 }
 [data-theme="dark"] .glass-card {
-  background: rgba(28,33,48,0.75);
-  border-color: rgba(255,255,255,0.08);
+  background: rgba(34,29,25,0.78);
+  border-color: rgba(255,255,255,0.07);
 }
 
 /* ─── MAP SECTION OVERRIDE ─── */
 .map-section-inner {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 32px !important;
-  max-width: 900px !important;
+  max-width: 1080px; margin: 0 auto; padding: 0 24px;
+  display: grid; grid-template-columns: 1fr 1.4fr; gap: 64px; align-items: center;
 }
 @media (min-width: 900px) {
   .map-section-inner {
     display: grid !important;
     grid-template-columns: 1fr 1.4fr !important;
-    gap: 48px !important;
+    gap: 64px !important;
     flex-direction: unset !important;
   }
 }

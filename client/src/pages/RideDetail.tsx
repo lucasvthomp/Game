@@ -2,10 +2,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useParams, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
-import { Anchor, Clock, Users, Star, ChevronLeft, CheckCircle, Shield, AlertCircle, MapPin } from "lucide-react";
+import { Anchor, Car, Clock, Users, Star, ChevronLeft, CheckCircle, Shield, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
+import { RideRouteMap } from "@/components/RouteMap";
 
 function StarRating({ value, onChange }: { value: number; onChange?: (v: number) => void }) {
   const [hovered, setHovered] = useState(0);
@@ -15,10 +16,7 @@ function StarRating({ value, onChange }: { value: number; onChange?: (v: number)
         const filled = (hovered || value) > i;
         return (
           <Star
-            key={i}
-            size={26}
-            color="var(--amber)"
-            fill={filled ? "var(--amber)" : "none"}
+            key={i} size={26} color="var(--amber)" fill={filled ? "var(--amber)" : "none"}
             style={{ cursor: onChange ? "pointer" : "default", transition: "transform 0.1s", transform: hovered === i + 1 ? "scale(1.18)" : "scale(1)" }}
             onMouseEnter={() => onChange && setHovered(i + 1)}
             onMouseLeave={() => onChange && setHovered(0)}
@@ -97,7 +95,7 @@ export default function RideDetail() {
     </div>
   );
 
-  const { ride, captain, captainProfile } = data;
+  const { ride, captain, captainProfile, driverProfile } = data;
   const reviews = reviewsData?.reviews || [];
   const avgRating: number = reviewsData?.avgRating ?? data.avgRating ?? 0;
   const totalPrice = (parseFloat(ride.pricePerSeat) * seats).toFixed(2).replace(".", ",");
@@ -119,7 +117,7 @@ export default function RideDetail() {
         <div className="detail-card fade-up">
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             <span className="badge badge-green">{ride.availableSeats} vagas disponíveis</span>
-            {captainProfile?.verified && (
+            {(captainProfile?.verified || driverProfile?.verified) && (
               <span className="badge" style={{ background: "color-mix(in srgb, var(--boat) 10%, transparent)", color: "var(--boat)", border: "1px solid color-mix(in srgb, var(--boat) 22%, transparent)", display: "flex", alignItems: "center", gap: 4 }}>
                 <Shield size={10} /> Verificado
               </span>
@@ -133,7 +131,9 @@ export default function RideDetail() {
             </div>
             <div className="detail-anchor">
               <div className="detail-anchor-line" />
-              <Anchor size={16} color="var(--boat)" />
+              {ride.rideType === "boat"
+                ? <Anchor size={16} color="var(--boat)" />
+                : <Car size={16} color="var(--car)" />}
               <div className="detail-anchor-line" />
             </div>
             <div className="detail-city-right">
@@ -141,6 +141,17 @@ export default function RideDetail() {
               <div className="detail-city">{ride.destinationCity}</div>
             </div>
           </div>
+
+          <RideRouteMap
+            originCity={ride.originCity}
+            destCity={ride.destinationCity}
+            originLat={ride.originLat}
+            originLng={ride.originLng}
+            destLat={ride.destLat}
+            destLng={ride.destLng}
+            type={ride.rideType as "boat" | "car"}
+            height="260px"
+          />
 
           <div className="detail-meta-row">
             <div className="detail-meta-item">
@@ -164,9 +175,11 @@ export default function RideDetail() {
 
         {/* Captain card */}
         <div className="detail-card fade-up" style={{ animationDelay: "80ms" }}>
-          <p className="section-label" style={{ marginBottom: 16 }}>CAPITÃO</p>
+          <p className="section-label" style={{ marginBottom: 16 }}>{ride.rideType === "boat" ? "CAPITÃO" : "MOTORISTA"}</p>
           <div className="captain-row">
-            <div className="captain-avatar"><Anchor size={20} color="#fff" /></div>
+            <div className="captain-avatar" style={ride.rideType === "car" ? { background: "var(--car)" } : {}}>
+              {ride.rideType === "boat" ? <Anchor size={20} color="#fff" /> : <Car size={20} color="#fff" />}
+            </div>
             <div className="captain-info">
               <div className="captain-name">{captain.fullName}</div>
               <div className="captain-user">@{captain.username}</div>
@@ -181,13 +194,23 @@ export default function RideDetail() {
               </div>
             )}
           </div>
-          {captainProfile && (
+          {ride.rideType === "boat" && captainProfile && (
             <div className="captain-meta">
               <span><strong>Lancha:</strong> {captainProfile.boatName}{captainProfile.boatModel ? ` · ${captainProfile.boatModel}` : ""}</span>
               <span><strong>Capacidade:</strong> {captainProfile.boatCapacity} pessoas</span>
             </div>
           )}
-          {captainProfile?.bio && <p style={{ marginTop: 12, color: "var(--text2)", fontSize: 13, lineHeight: 1.7 }}>{captainProfile.bio}</p>}
+          {ride.rideType === "car" && driverProfile && (
+            <div className="captain-meta">
+              <span><strong>Veículo:</strong> {driverProfile.carMake} {driverProfile.carModel}{driverProfile.carColor ? ` · ${driverProfile.carColor}` : ""}{driverProfile.carYear ? ` (${driverProfile.carYear})` : ""}</span>
+              <span><strong>Capacidade:</strong> {driverProfile.carCapacity} pessoas</span>
+            </div>
+          )}
+          {(captainProfile?.bio || driverProfile?.bio) && (
+            <p style={{ marginTop: 12, color: "var(--text2)", fontSize: 13, lineHeight: 1.7 }}>
+              {ride.rideType === "boat" ? captainProfile?.bio : driverProfile?.bio}
+            </p>
+          )}
         </div>
 
         {/* Booking */}

@@ -49,6 +49,11 @@ export default function Home() {
       <section className="hero-pro">
         <div className="hero-pro-inner fade-up">
 
+          <div className="hero-pro-eyebrow">
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--boat)", display: "inline-block" }} />
+            Brasil · Carro & Lancha · Verificados
+          </div>
+
           <h1 className="hero-pro-title">
             Compartilhe o<br />
             <span className="hero-pro-gradient">caminho</span>
@@ -89,6 +94,13 @@ export default function Home() {
             <Link href="/lanchas"><span className="hero-quick-link hero-quick-link-boat"><Anchor size={12} /> Lancha</span></Link>
             <Link href="/recorrentes"><span className="hero-quick-link"><Calendar size={12} /> Recorrentes</span></Link>
           </div>
+        </div>
+
+        {/* wave transition */}
+        <div className="hero-wave">
+          <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="var(--bg2)" />
+          </svg>
         </div>
       </section>
 
@@ -354,7 +366,7 @@ export default function Home() {
 function RideCard({ ride, i }: { ride: any; i: number }) {
   const isBoat = ride.rideType === "boat";
   return (
-    <div className="ride-card-pro fade-up" style={{ animationDelay: `${i * 70}ms` }}>
+    <div className={`ride-card-pro ${isBoat ? "boat-card" : "car-card"} fade-up`} style={{ animationDelay: `${i * 70}ms` }}>
       <Link href={`/viagens/${ride.id}`}>
         <div className="ride-card-pro-inner">
           <div className="ride-card-pro-top">
@@ -385,7 +397,7 @@ function RideCard({ ride, i }: { ride: any; i: number }) {
               <span className="ride-card-pro-per"> / pessoa</span>
             </div>
             {ride.avgRating > 0 && (
-              <div className="ride-card-pro-rating"><Star size={11} fill="currentColor" /> {ride.avgRating.toFixed(1)}</div>
+              <div className="ride-card-pro-rating"><Star size={11} fill="currentColor" style={{ color: "var(--amber)" }} /> {ride.avgRating.toFixed(1)}</div>
             )}
           </div>
         </div>

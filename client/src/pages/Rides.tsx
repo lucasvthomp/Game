@@ -6,7 +6,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState, lazy, Suspense } from "react";
 
-const RouteMap = lazy(() => import("@/components/RouteMap"));
+const RidesMap = lazy(() => import("@/components/map/RidesMap"));
 
 const PLACEHOLDER_RIDES = [
   { id: 1, rideType: "boat", originCity: "Bertioga", destinationCity: "Ilhabela", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 18).toISOString(), pricePerSeat: "85.00", availableSeats: 4, captainName: "Rafael M.", boatName: "Veneza III", avgRating: 4.9 },
@@ -148,31 +148,7 @@ export default function Rides({ defaultType }: { defaultType?: "car" | "boat"; [
       <div className="rides-body">
         {viewMode === "map" && (
           <Suspense fallback={<div style={{ height: 480, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text3)" }}>Carregando mapa...</div>}>
-            <RouteMap
-              height="480px"
-              points={rides.flatMap((r: any) => {
-                const pts = [];
-                const getCityCoords = (city: string): [number, number] | null => {
-                  const MAP: Record<string, [number, number]> = {
-                    "santos": [-23.9618, -46.3322], "ilhabela": [-23.7781, -45.3581],
-                    "angra dos reis": [-23.0067, -44.3181], "paraty": [-23.2178, -44.7131],
-                    "ilha grande": [-23.1711, -44.1927], "bertioga": [-23.8542, -46.1388],
-                    "são paulo": [-23.5505, -46.6333], "campinas": [-22.9056, -47.0608],
-                    "são josé dos campos": [-23.1794, -45.8869], "sjc": [-23.1794, -45.8869],
-                    "taubaté": [-23.0260, -45.5553], "pindamonhangaba": [-22.9239, -45.4614],
-                    "guarulhos": [-23.4543, -46.5333], "rio de janeiro": [-22.9068, -43.1729],
-                    "guarujá": [-23.9932, -46.2567], "ubatuba": [-23.4336, -45.0838],
-                    "são sebastião": [-23.7969, -45.4081],
-                  };
-                  return MAP[city.toLowerCase()] ?? null;
-                };
-                const oC = r.originLat ? [Number(r.originLat), Number(r.originLng)] as [number,number] : getCityCoords(r.originCity);
-                const dC = r.destLat ? [Number(r.destLat), Number(r.destLng)] as [number,number] : getCityCoords(r.destinationCity);
-                if (oC) pts.push({ lat: oC[0], lng: oC[1], city: r.originCity, type: r.rideType as "boat" | "car" });
-                if (dC) pts.push({ lat: dC[0], lng: dC[1], city: r.destinationCity, type: r.rideType as "boat" | "car" });
-                return pts;
-              })}
-            />
+            <RidesMap height="480px" rides={rides} />
           </Suspense>
         )}
         {isLoading ? (

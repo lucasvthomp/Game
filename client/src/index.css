@@ -1467,7 +1467,8 @@ input, select, textarea, button { font-family: inherit; }
   .hero-float-car,
   .hero-pro-gradient,
   .map-dot-ping,
-  .map-route-line { animation: none !important; }
+  .map-route-line,
+  .lc-pin-drop .lc-pin-body { animation: none !important; }
   .fade-up, .fade-in, .slide-left, .slide-right, .scale-in, .slide-up,
   .reveal {
     animation: none !important;

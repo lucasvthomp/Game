@@ -6,8 +6,9 @@ import { Anchor, Plus, Clock, Users, Trash2, CheckCircle, TrendingUp, Map } from
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState, lazy, Suspense } from "react";
+import type { LatLng } from "@/components/map/LocationPicker";
 
-const MapPicker = lazy(() => import("@/components/RouteMap").then(m => ({ default: m.MapPicker })));
+const LocationPicker = lazy(() => import("@/components/map/LocationPicker"));
 
 const BLANK = { originCity: "", destinationCity: "", departureTime: "", returnTime: "", pricePerSeat: "", totalSeats: "", description: "" };
 
@@ -44,8 +45,8 @@ export default function CaptainDashboard() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [form, setForm] = useState(BLANK);
-  const [originPin, setOriginPin] = useState<[number, number] | null>(null);
-  const [destPin, setDestPin] = useState<[number, number] | null>(null);
+  const [originPin, setOriginPin] = useState<LatLng | null>(null);
+  const [destPin, setDestPin] = useState<LatLng | null>(null);
   const [showMap, setShowMap] = useState(false);
   const [expandedRide, setExpandedRide] = useState<number | null>(null);
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setForm(f => ({ ...f, [k]: e.target.value }));
@@ -67,10 +68,10 @@ export default function CaptainDashboard() {
       pricePerSeat: parseFloat(form.pricePerSeat),
       totalSeats: parseInt(form.totalSeats),
       returnTime: form.returnTime || undefined,
-      originLat: originPin?.[0] ?? null,
-      originLng: originPin?.[1] ?? null,
-      destLat: destPin?.[0] ?? null,
-      destLng: destPin?.[1] ?? null,
+      originLat: originPin?.lat ?? null,
+      originLng: originPin?.lng ?? null,
+      destLat: destPin?.lat ?? null,
+      destLng: destPin?.lng ?? null,
     }),
     onSuccess: () => {
       setSuccess("Viagem criada!");
@@ -168,22 +169,21 @@ export default function CaptainDashboard() {
                     <Map size={13} /> {showMap ? "Esconder mapa" : "Marcar no mapa (opcional)"}
                   </button>
                   {showMap && (
-                    <div style={{ marginTop: 10 }}>
-                      <Suspense fallback={<div style={{ height: 300, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text3)" }}>Carregando mapa...</div>}>
-                        <MapPicker
-                          type="boat"
-                          originPin={originPin}
-                          destPin={destPin}
-                          onOriginPick={(lat, lng) => setOriginPin([lat, lng])}
-                          onDestPick={(lat, lng) => setDestPin([lat, lng])}
+                    <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 14 }}>
+                      <Suspense fallback={<div style={{ height: 280, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text3)" }}>Carregando mapa...</div>}>
+                        <LocationPicker
+                          label="Origem (clique para marcar)"
+                          variant="origin"
+                          value={originPin}
+                          onChange={setOriginPin}
+                        />
+                        <LocationPicker
+                          label="Destino (clique para marcar)"
+                          variant="dest"
+                          value={destPin}
+                          onChange={setDestPin}
                         />
                       </Suspense>
-                      {(originPin || destPin) && (
-                        <div style={{ display: "flex", gap: 8, marginTop: 6, flexWrap: "wrap" }}>
-                          {originPin && <span style={{ fontSize: 11, color: "#28C76F", background: "rgba(40,199,111,0.1)", padding: "3px 8px", borderRadius: 6 }}>Origem marcada</span>}
-                          {destPin && <span style={{ fontSize: 11, color: "#28C76F", background: "rgba(40,199,111,0.1)", padding: "3px 8px", borderRadius: 6 }}>Destino marcado</span>}
-                        </div>
-                      )}
                     </div>
                   )}
                 </div>

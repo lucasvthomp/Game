@@ -6,9 +6,9 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Car, Plus, Clock, Users, ChevronRight, TrendingUp, Star, MapPin, X, Map } from "lucide-react";
 import { useState, lazy, Suspense } from "react";
+import type { LatLng } from "@/components/map/LocationPicker";
 
-const MapPicker = lazy(() => import("@/components/RouteMap").then(m => ({ default: m.MapPicker })));
-const RideRouteMap = lazy(() => import("@/components/RouteMap").then(m => ({ default: m.RideRouteMap })));
+const LocationPicker = lazy(() => import("@/components/map/LocationPicker"));
 
 const EMPTY_FORM = {
   originCity: "", destinationCity: "", departureTime: "", returnTime: "",

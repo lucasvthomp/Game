@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Clock, Star, ChevronRight, Anchor, Car, Calendar, Shield, MapPin, Users, ArrowRight, Check, Navigation, Zap, Globe } from "lucide-react";
 import { useState, useEffect } from "react";
-import RouteMap, { type MapPoint } from "@/components/RouteMap";
+import RidesMap, { type RideMarker } from "@/components/map/RidesMap";
 
 const PLACEHOLDER_BOAT_RIDES = [
   { id: 1, rideType: "boat", originCity: "Bertioga", destinationCity: "Ilhabela", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 18).toISOString(), pricePerSeat: "85.00", availableSeats: 4, captainName: "Rafael M.", boatName: "Veneza III", avgRating: 4.9 },
@@ -20,22 +20,18 @@ const PLACEHOLDER_CAR_RIDES = [
 
 const DAY_LABELS = ["Seg", "Ter", "Qua", "Qui", "Sex"];
 
-const MAP_POINTS: MapPoint[] = [
-  { city: "Campinas",            lat: -22.9056, lng: -47.0608, type: "car",  rides: 4 },
-  { city: "São Paulo",           lat: -23.5505, lng: -46.6333, type: "car",  rides: 12 },
-  { city: "São José dos Campos", lat: -23.1794, lng: -45.8869, type: "car",  rides: 5 },
-  { city: "Taubaté",             lat: -23.0260, lng: -45.5553, type: "car",  rides: 3 },
-  { city: "Pindamonhangaba",     lat: -22.9239, lng: -45.4614, type: "car",  rides: 2 },
-  { city: "Guarulhos",           lat: -23.4543, lng: -46.5333, type: "car",  rides: 6 },
-  { city: "Santos",              lat: -23.9618, lng: -46.3322, type: "boat", rides: 8 },
-  { city: "Guarujá",             lat: -23.9932, lng: -46.2567, type: "boat", rides: 3 },
-  { city: "Bertioga",            lat: -23.8542, lng: -46.1388, type: "boat", rides: 2 },
-  { city: "Ilhabela",            lat: -23.7781, lng: -45.3581, type: "boat", rides: 5 },
-  { city: "São Sebastião",       lat: -23.7969, lng: -45.4081, type: "boat", rides: 4 },
-  { city: "Ubatuba",             lat: -23.4336, lng: -45.0838, type: "boat", rides: 3 },
-  { city: "Angra dos Reis",      lat: -23.0067, lng: -44.3181, type: "boat", rides: 6 },
-  { city: "Paraty",              lat: -23.2178, lng: -44.7131, type: "boat", rides: 4 },
-  { city: "Ilha Grande",         lat: -23.1711, lng: -44.1927, type: "boat", rides: 2 },
+// Sample rides shown on the home map when no live rides have coordinates yet.
+// Origin coords are real São Paulo coast / Vale do Paraíba points.
+const SAMPLE_MAP_RIDES: RideMarker[] = [
+  { id: 1,  rideType: "boat", originCity: "Santos",          destinationCity: "Ilha Grande",  pricePerSeat: "120.00", originLat: -23.9618, originLng: -46.3322 },
+  { id: 2,  rideType: "boat", originCity: "Bertioga",        destinationCity: "Ilhabela",     pricePerSeat: "85.00",  originLat: -23.8542, originLng: -46.1388 },
+  { id: 3,  rideType: "boat", originCity: "Ilhabela",        destinationCity: "São Sebastião",pricePerSeat: "40.00",  originLat: -23.7781, originLng: -45.3581 },
+  { id: 4,  rideType: "boat", originCity: "Ubatuba",         destinationCity: "Paraty",       pricePerSeat: "70.00",  originLat: -23.4336, originLng: -45.0838 },
+  { id: 5,  rideType: "boat", originCity: "Angra dos Reis",  destinationCity: "Paraty",       pricePerSeat: "65.00",  originLat: -23.0067, originLng: -44.3181 },
+  { id: 101, rideType: "car", originCity: "São Paulo",       destinationCity: "Santos",       pricePerSeat: "30.00",  originLat: -23.5505, originLng: -46.6333 },
+  { id: 102, rideType: "car", originCity: "Campinas",        destinationCity: "São Paulo",    pricePerSeat: "22.00",  originLat: -22.9056, originLng: -47.0608 },
+  { id: 103, rideType: "car", originCity: "São José dos Campos", destinationCity: "Taubaté",  pricePerSeat: "18.00",  originLat: -23.1794, originLng: -45.8869 },
+  { id: 104, rideType: "car", originCity: "Pindamonhangaba", destinationCity: "São José dos Campos", pricePerSeat: "15.00", originLat: -22.9239, originLng: -45.4614 },
 ];
 
 export default function Home() {
@@ -51,6 +47,11 @@ export default function Home() {
   const liveRides: any[] = data?.rides?.slice(0, 6) || [];
   const boatRides = liveRides.length > 0 ? liveRides.filter((r: any) => r.rideType === "boat").slice(0, 3) : PLACEHOLDER_BOAT_RIDES;
   const carRides  = liveRides.length > 0 ? liveRides.filter((r: any) => r.rideType === "car").slice(0, 3)  : PLACEHOLDER_CAR_RIDES;
+
+  // Real rides that can be plotted (have origin coords). RidesMap also resolves
+  // coords from city names, so any live ride with a known city shows up too.
+  const allLive: any[] = data?.rides || [];
+  const mapRides: RideMarker[] = allLive.length > 0 ? allLive : SAMPLE_MAP_RIDES;
 
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -207,7 +208,7 @@ export default function Home() {
             </div>
           </div>
           <div className="scale-in" style={{ animationDelay: "120ms" }}>
-            <RouteMap points={MAP_POINTS} center={[-23.5, -45.8]} zoom={8} height="380px" />
+            <RidesMap rides={mapRides} height="380px" />
           </div>
         </div>
       </section>

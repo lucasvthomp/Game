@@ -6,7 +6,7 @@ import { Anchor, Car, Clock, Users, Star, ChevronLeft, CheckCircle, Shield, Aler
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
-import { RideRouteMap } from "@/components/RouteMap";
+import RouteMap from "@/components/map/RouteMap";
 
 function StarRating({ value, onChange }: { value: number; onChange?: (v: number) => void }) {
   const [hovered, setHovered] = useState(0);
@@ -142,16 +142,14 @@ export default function RideDetail() {
             </div>
           </div>
 
-          <RideRouteMap
-            originCity={ride.originCity}
-            destCity={ride.destinationCity}
-            originLat={ride.originLat}
-            originLng={ride.originLng}
-            destLat={ride.destLat}
-            destLng={ride.destLng}
-            type={ride.rideType as "boat" | "car"}
-            height="260px"
-          />
+          <div style={{ marginTop: 20 }}>
+            <RouteMap
+              origin={{ lat: ride.originLat, lng: ride.originLng, city: ride.originCity, label: ride.originCity }}
+              dest={{ lat: ride.destLat, lng: ride.destLng, city: ride.destinationCity, label: ride.destinationCity }}
+              type={ride.rideType as "boat" | "car"}
+              height="260px"
+            />
+          </div>
 
           <div className="detail-meta-row">
             <div className="detail-meta-item">

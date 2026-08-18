@@ -197,5 +197,5 @@ if (process.env.NODE_ENV === "production") {
 
 app.listen(PORT, async () => {
   await runMigrations();
-  console.log(`LanchaCarona rodando na porta ${PORT}`);
+  console.log(`Marcamar rodando na porta ${PORT}`);
 });

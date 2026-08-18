@@ -7,21 +7,13 @@ import { Calendar, Car, Anchor, Plus, Trash2, Users } from "lucide-react";
 const DAYS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 const WEEKDAY_INDICES = [1, 2, 3, 4, 5];
 
-const PLACEHOLDER_SCHEDULES = [
-  { id: 1, rideType: "car", originCity: "Pindamonhangaba", destinationCity: "São José dos Campos", daysOfWeek: "[1,2,3,4,5]", departureTime: "07:30", returnTime: "18:00", pricePerSeat: "18.00", totalSeats: 3, userName: "Fernanda R." },
-  { id: 2, rideType: "car", originCity: "Taubaté", destinationCity: "São Paulo", daysOfWeek: "[1,2,3,4,5]", departureTime: "06:45", returnTime: "19:30", pricePerSeat: "32.00", totalSeats: 2, userName: "Guilherme A." },
-  { id: 3, rideType: "boat", originCity: "Santos", destinationCity: "Ilhabela", daysOfWeek: "[2,4]", departureTime: "06:00", returnTime: null, pricePerSeat: "85.00", totalSeats: 4, userName: "Rafael M." },
-  { id: 4, rideType: "car", originCity: "Jacareí", destinationCity: "São Paulo", daysOfWeek: "[1,2,3,4,5]", departureTime: "07:00", returnTime: "18:30", pricePerSeat: "28.00", totalSeats: 3, userName: "Beatriz L." },
-  { id: 5, rideType: "boat", originCity: "Angra dos Reis", destinationCity: "Ilha Grande", daysOfWeek: "[6,0]", departureTime: "09:00", returnTime: "17:00", pricePerSeat: "65.00", totalSeats: 6, userName: "Bruno S." },
-];
-
 export default function Recurring() {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const [tab, setTab] = useState<"car" | "boat">("car");
+  const [tab, setTab] = useState<"car" | "boat">("boat");
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
-    rideType: "car",
+    rideType: "boat",
     originCity: "",
     destinationCity: "",
     daysOfWeek: WEEKDAY_INDICES,
@@ -73,21 +65,21 @@ export default function Recurring() {
   };
 
   const liveSchedules = allData?.schedules || [];
-  const schedules = liveSchedules.length > 0 ? liveSchedules : PLACEHOLDER_SCHEDULES.filter(s => s.rideType === tab);
-  const mySchedules = mineData?.schedules || [];
+  const schedules = tab === "car" ? [] : liveSchedules;
+  const mySchedules = (mineData?.schedules || []).filter((s: any) => s.rideType === tab);
 
   return (
     <div className="page-wrapper">
       <div className="rides-header">
         <div className="rides-header-inner">
           <p className="section-label" style={{ color: "var(--boat)", borderColor: "color-mix(in srgb, var(--amber) 28%, transparent)" }}>ROTAS RECORRENTES</p>
-          <h1 className="page-title" style={{ marginBottom: 8 }}>Commuters do Brasil</h1>
+          <h1 className="page-title" style={{ marginBottom: 8 }}>Rotas recorrentes em planejamento</h1>
           <p style={{ color: "var(--text2)", fontSize: 15, marginBottom: 20 }}>
-            Encontre companheiros de viagem fixos para sua rota semanal — de carro ou de lancha.
+            Esta área fica reservada para a próxima fase: aproximar moradores e operadores com trajetos regulares, começando pelo transporte na água.
           </p>
 
           <div className="type-tabs">
-            <button className={`type-tab type-tab-car ${tab === "car" ? "active-car" : ""}`} onClick={() => setTab("car")}><Car size={12} /> Carro</button>
+            <button className={`type-tab type-tab-car ${tab === "car" ? "active-car" : ""}`} onClick={() => setTab("car")}><Car size={12} /> Carro · futuro</button>
             <button className={`type-tab type-tab-boat ${tab === "boat" ? "active-boat" : ""}`} onClick={() => setTab("boat")}><Anchor size={12} /> Lancha</button>
           </div>
         </div>
@@ -96,7 +88,7 @@ export default function Recurring() {
       <div className="rides-body">
 
         {/* My schedules */}
-        {user && mySchedules.length > 0 && (
+        {user && tab === "boat" && mySchedules.length > 0 && (
           <div className="my-schedules-section">
             <h3 style={{ fontWeight: 700, fontSize: 15, marginBottom: 12, color: "var(--text1)" }}>Minhas rotas recorrentes</h3>
             <div className="recurring-list">
@@ -108,7 +100,7 @@ export default function Recurring() {
         )}
 
         {/* Add button */}
-        {user && (
+        {user && tab === "boat" && (
           <div style={{ marginBottom: 24 }}>
             <button className="btn-boat-solid" onClick={() => setShowForm(!showForm)}>
               <Plus size={14} /> {showForm ? "Fechar formulário" : "Cadastrar minha rota recorrente"}
@@ -117,16 +109,13 @@ export default function Recurring() {
         )}
 
         {/* Create form */}
-        {showForm && (
+        {showForm && tab === "boat" && (
           <div className="create-ride-form" style={{ borderColor: "var(--boat)", borderTopWidth: 3, marginBottom: 32 }}>
             <h4 style={{ marginBottom: 16, color: "var(--boat)", fontWeight: 700 }}>Nova rota recorrente</h4>
 
             <div className="form-group">
               <label>Tipo de transporte</label>
-              <div className="type-tabs" style={{ gap: 8 }}>
-                <button type="button" className={`type-tab type-tab-car ${form.rideType === "car" ? "active-car" : ""}`} onClick={() => setForm(f => ({ ...f, rideType: "car" }))}>Carro</button>
-                <button type="button" className={`type-tab type-tab-boat ${form.rideType === "boat" ? "active-boat" : ""}`} onClick={() => setForm(f => ({ ...f, rideType: "boat" }))}>Lancha</button>
-              </div>
+              <p style={{ color: "var(--boat)", fontWeight: 700, fontSize: 13 }}>Lancha · piloto aquático</p>
             </div>
 
             <div className="form-row">
@@ -194,17 +183,25 @@ export default function Recurring() {
 
         {/* All schedules */}
         <p className="rides-count">{schedules.length} {schedules.length === 1 ? "rota encontrada" : "rotas encontradas"}</p>
-        <div className="recurring-list">
-          {schedules.map((s: any, i: number) => (
-            <ScheduleCard key={s.id || i} schedule={s} />
-          ))}
-        </div>
+        {schedules.length > 0 ? (
+          <div className="recurring-list">
+            {schedules.map((s: any, i: number) => (
+              <ScheduleCard key={s.id || i} schedule={s} />
+            ))}
+          </div>
+        ) : (
+          <div style={{ textAlign: "center", marginTop: 12, padding: "36px 24px", background: "var(--card)", border: "1px dashed var(--border)", borderRadius: 16 }}>
+            <Calendar size={36} color="var(--boat)" style={{ marginBottom: 12 }} />
+            <p style={{ fontWeight: 700, marginBottom: 8, color: "var(--text1)" }}>{tab === "car" ? "Rotas recorrentes de carro ficam para a próxima fase" : "Nenhuma rota recorrente publicada"}</p>
+            <p style={{ maxWidth: 520, margin: "0 auto", fontSize: 13, lineHeight: 1.55, color: "var(--text2)" }}>{tab === "car" ? "A aba continua visível para essa expansão, mas o piloto atual concentra a experiência no transporte por água." : "Quando o piloto tiver trajetos regulares e oferta suficiente, esta área poderá organizar dias, horários, vagas e operadores recorrentes."}</p>
+          </div>
+        )}
 
-        {!user && (
+        {!user && tab === "boat" && (
           <div style={{ textAlign: "center", marginTop: 32, padding: "24px", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16 }}>
             <Calendar size={32} color="var(--boat)" style={{ marginBottom: 12 }} />
-            <p style={{ fontWeight: 600, marginBottom: 8 }}>Quer cadastrar sua rota recorrente?</p>
-            <p style={{ fontSize: 13, color: "var(--text2)", marginBottom: 16 }}>Faça login para encontrar companheiros de viagem fixos.</p>
+            <p style={{ fontWeight: 600, marginBottom: 8 }}>Quer participar do piloto?</p>
+            <p style={{ fontSize: 13, color: "var(--text2)", marginBottom: 16 }}>Faça login para cadastrar uma rota aquática recorrente quando houver operação disponível.</p>
             <a href="/entrar" className="btn-boat-solid">Entrar</a>
           </div>
         )}

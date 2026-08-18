@@ -24,9 +24,9 @@ export default function Navbar() {
   const isDriver  = role === "driver"  || role === "both";
 
   const links = [
-    { href: "/caronas",   label: "Carro" },
     { href: "/lanchas",   label: "Lancha" },
     { href: "/recorrentes", label: "Recorrentes" },
+    { href: "/caronas",   label: "Carro · futuro" },
     ...(isCaptain ? [{ href: "/minha-lancha", label: "Minha Lancha" }] : []),
     ...(isDriver  ? [{ href: "/meu-carro",    label: "Meu Carro"    }] : []),
     ...(user      ? [{ href: "/minhas-reservas", label: "Reservas"  }] : []),
@@ -41,7 +41,7 @@ export default function Navbar() {
             <div className="nav-logo-icon">
               <Anchor size={14} color="#fff" />
             </div>
-            <span className="nav-logo-text">LanchaCarona</span>
+            <span className="nav-logo-text">Marcamar</span>
           </div>
         </Link>
 

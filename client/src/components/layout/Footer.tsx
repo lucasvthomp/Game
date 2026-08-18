@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Anchor, Car, Mail, Phone } from "lucide-react";
+import { Anchor, Car } from "lucide-react";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -14,28 +14,23 @@ export default function Footer() {
               <Car size={12} color="#fff" />
               <Anchor size={12} color="#fff" />
             </div>
-            <span className="footer-logo-text">LanchaCarona</span>
+            <span className="footer-logo-text">Marcamar</span>
           </div>
           <p className="footer-tagline">
-            A plataforma brasileira de caronas compartilhadas — de carro e de lancha.
+            Transporte compartilhado na água, começando por um piloto regional no litoral paulista.
           </p>
-          <div className="footer-contact">
-            <a href="mailto:contato@lanchacarona.com.br" className="footer-contact-item">
-              <Mail size={13} /> contato@lanchacarona.com.br
-            </a>
-          </div>
         </div>
 
         <div className="footer-links-group">
-          <p className="footer-group-title">Encontrar carona</p>
-          <Link href="/caronas"><span className="footer-link">Caronas de carro</span></Link>
-          <Link href="/lanchas"><span className="footer-link">Caronas de lancha</span></Link>
+          <p className="footer-group-title">Encontrar uma viagem</p>
+          <Link href="/caronas"><span className="footer-link">Caronas de carro · futuro</span></Link>
+          <Link href="/lanchas"><span className="footer-link">Travessias de lancha</span></Link>
           <Link href="/recorrentes"><span className="footer-link">Rotas recorrentes</span></Link>
           <Link href="/viagens"><span className="footer-link">Todas as viagens</span></Link>
         </div>
 
         <div className="footer-links-group">
-          <p className="footer-group-title">Oferecer carona</p>
+          <p className="footer-group-title">Oferecer uma viagem</p>
           <Link href="/perfil-motorista"><span className="footer-link">Cadastro de motorista</span></Link>
           <Link href="/perfil-capitao"><span className="footer-link">Cadastro de capitão</span></Link>
           <Link href="/meu-carro"><span className="footer-link">Painel do motorista</span></Link>
@@ -54,7 +49,7 @@ export default function Footer() {
 
       <div className="footer-bottom">
         <div className="footer-bottom-inner">
-          <span>© {year} LanchaCarona. Todos os direitos reservados.</span>
+          <span>© {year} Marcamar. Todos os direitos reservados.</span>
           <div className="footer-bottom-links">
             <a href="#" className="footer-bottom-link">Termos de uso</a>
             <a href="#" className="footer-bottom-link">Privacidade</a>

@@ -31,7 +31,7 @@ export default function Auth({ mode }: { mode: "login" | "register" }) {
             <Anchor size={22} color="#fff" />
           </div>
           <div className="auth-title">{mode === "login" ? "Bem-vindo de volta" : "Criar conta"}</div>
-          <div className="auth-sub">{mode === "login" ? "Entre na sua conta LanchaCarona" : "Junte-se à comunidade de caronas no mar"}</div>
+          <div className="auth-sub">{mode === "login" ? "Entre na sua conta Marcamar" : "Junte-se ao piloto de transporte compartilhado na água"}</div>
         </div>
 
         <div className="auth-card">

@@ -8,19 +8,6 @@ import { useState, lazy, Suspense } from "react";
 
 const RidesMap = lazy(() => import("@/components/map/RidesMap"));
 
-const PLACEHOLDER_RIDES = [
-  { id: 1, rideType: "boat", originCity: "Bertioga", destinationCity: "Ilhabela", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 18).toISOString(), pricePerSeat: "85.00", availableSeats: 4, captainName: "Rafael M.", boatName: "Veneza III", avgRating: 4.9 },
-  { id: 2, rideType: "boat", originCity: "Santos", destinationCity: "Ilha Grande", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 30).toISOString(), pricePerSeat: "120.00", availableSeats: 2, captainName: "Carlos P.", boatName: "Acqua Viva", avgRating: 4.7 },
-  { id: 3, rideType: "boat", originCity: "Angra dos Reis", destinationCity: "Paraty", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 44).toISOString(), pricePerSeat: "65.00", availableSeats: 6, captainName: "Bruno S.", boatName: "Mar Aberto", avgRating: 5.0 },
-  { id: 4, rideType: "boat", originCity: "Guarujá", destinationCity: "Ubatuba", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 60).toISOString(), pricePerSeat: "95.00", availableSeats: 3, captainName: "Diego F.", boatName: "Brisa do Mar", avgRating: 4.8 },
-  { id: 5, rideType: "boat", originCity: "Ilhabela", destinationCity: "São Sebastião", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 72).toISOString(), pricePerSeat: "40.00", availableSeats: 5, captainName: "Marcos T.", boatName: "Veleiro Sul", avgRating: 4.6 },
-  { id: 6, rideType: "boat", originCity: "Paraty", destinationCity: "Angra dos Reis", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 80).toISOString(), pricePerSeat: "55.00", availableSeats: 1, captainName: "André L.", boatName: "Ondas do Sul", avgRating: 4.9 },
-  { id: 101, rideType: "car", originCity: "Pindamonhangaba", destinationCity: "São José dos Campos", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 8).toISOString(), pricePerSeat: "18.00", availableSeats: 3, captainName: "Fernanda R.", carName: "Honda Civic", avgRating: 4.8 },
-  { id: 102, rideType: "car", originCity: "Taubaté", destinationCity: "Guarulhos", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 12).toISOString(), pricePerSeat: "25.00", availableSeats: 2, captainName: "Guilherme A.", carName: "Toyota Corolla", avgRating: 4.9 },
-  { id: 103, rideType: "car", originCity: "Campinas", destinationCity: "São Paulo", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 10).toISOString(), pricePerSeat: "22.00", availableSeats: 1, captainName: "Juliana C.", carName: "VW Golf", avgRating: 4.7 },
-  { id: 104, rideType: "car", originCity: "São Paulo", destinationCity: "Santos", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 14).toISOString(), pricePerSeat: "30.00", availableSeats: 2, captainName: "Roberto M.", carName: "Hyundai HB20", avgRating: 4.5 },
-];
-
 type TabType = "car" | "boat";
 
 export default function Rides({ defaultType }: { defaultType?: "car" | "boat"; [key: string]: any }) {
@@ -40,9 +27,7 @@ export default function Rides({ defaultType }: { defaultType?: "car" | "boat"; [
   });
 
   const liveRides = data?.rides || [];
-  const source = liveRides.length > 0 ? liveRides : PLACEHOLDER_RIDES;
-
-  const allRides = source.filter((r: any) => r.rideType === activeTab);
+  const allRides = liveRides.filter((r: any) => r.rideType === activeTab);
 
   let filtered = allRides.filter((r: any) => {
     const q = searchText.toLowerCase();
@@ -68,10 +53,10 @@ export default function Rides({ defaultType }: { defaultType?: "car" | "boat"; [
       <div className="rides-header">
         <div className="rides-header-inner">
           <p className="section-label" style={{ color: isBoatPage ? "var(--boat)" : "var(--car)" }}>
-            {isBoatPage ? "CARONAS DE LANCHA" : "CARONAS DE CARRO"}
+            {isBoatPage ? "CARONAS DE LANCHA" : "CARRO · EM BREVE"}
           </p>
           <h1 className="page-title" style={{ marginBottom: 16 }}>
-            {isBoatPage ? "Travessias de lancha" : "Caronas de carro"}
+            {isBoatPage ? "Travessias de lancha" : "Caronas de carro em planejamento"}
           </h1>
 
           {/* Type tabs — no "Todos" */}
@@ -84,13 +69,13 @@ export default function Rides({ defaultType }: { defaultType?: "car" | "boat"; [
             </button>
           </div>
 
-          <div className="rides-search">
+          <div className="rides-search" style={{ display: isCarPage ? "none" : undefined }}>
             <Search size={15} className="rides-search-icon" />
             <input value={searchText} onChange={e => setSearchText(e.target.value)} placeholder="Buscar por cidade..." />
           </div>
 
           {/* Filter bar */}
-          <div style={{ display: "flex", gap: 10, marginTop: 14, flexWrap: "wrap", alignItems: "center" }}>
+          <div style={{ display: isCarPage ? "none" : "flex", gap: 10, marginTop: 14, flexWrap: "wrap", alignItems: "center" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 10, padding: "7px 12px" }}>
               <Calendar size={13} style={{ color: "var(--text3)" }} />
               <input
@@ -146,6 +131,9 @@ export default function Rides({ defaultType }: { defaultType?: "car" | "boat"; [
       </div>
 
       <div className="rides-body">
+        {isCarPage ? (
+          <FutureFeaturePanel />
+        ) : <>
         {viewMode === "map" && (
           <Suspense fallback={<div style={{ height: 480, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text3)" }}>Carregando mapa...</div>}>
             <RidesMap height="480px" rides={rides} />
@@ -160,7 +148,7 @@ export default function Rides({ defaultType }: { defaultType?: "car" | "boat"; [
         ) : viewMode === "map" ? null : rides.length === 0 ? (
           <div className="rides-empty">
             {isBoatPage ? <Anchor size={44} className="empty-state-icon" /> : <Car size={44} className="empty-state-icon" />}
-            <p style={{ fontWeight: 600, fontSize: "1.05rem", marginBottom: 6 }}>Nenhuma carona encontrada</p>
+            <p style={{ fontWeight: 600, fontSize: "1.05rem", marginBottom: 6 }}>Nenhuma travessia encontrada</p>
             <p style={{ fontSize: 13 }}>Tente outra cidade ou volte mais tarde</p>
           </div>
         ) : (
@@ -257,7 +245,19 @@ export default function Rides({ defaultType }: { defaultType?: "car" | "boat"; [
             </div>
           </>
         )}
+        </>}
       </div>
+    </div>
+  );
+}
+
+function FutureFeaturePanel() {
+  return (
+    <div style={{ maxWidth: 720, margin: "32px auto", padding: "40px 28px", textAlign: "center", background: "var(--card)", border: "1px dashed var(--border)", borderRadius: 20 }}>
+      <Car size={42} color="var(--car)" style={{ marginBottom: 14 }} />
+      <span style={{ display: "block", fontSize: 11, letterSpacing: "0.12em", fontWeight: 800, color: "var(--car)", marginBottom: 10 }}>ÁREA FUTURA</span>
+      <h2 style={{ fontSize: "1.25rem", marginBottom: 10, color: "var(--text1)" }}>Caronas de carro ficam preservadas para a próxima fase</h2>
+      <p style={{ maxWidth: 520, margin: "0 auto", color: "var(--text2)", fontSize: 14, lineHeight: 1.6 }}>O piloto atual concentra a operação em transporte por água. Quando houver viagens terrestres reais publicadas, esta aba passa a exibi-las com o mesmo padrão de informação.</p>
     </div>
   );
 }

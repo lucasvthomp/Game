@@ -3,55 +3,25 @@ import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Clock, Star, ChevronRight, Anchor, Car, Calendar, Shield, MapPin, Users, ArrowRight, Check, Navigation, Zap, Globe } from "lucide-react";
+import { Clock, Star, ChevronRight, Anchor, Car, Calendar, Shield, MapPin, ArrowRight, Check, Navigation, Zap, Globe } from "lucide-react";
 import { useState, useEffect } from "react";
 import RidesMap, { type RideMarker } from "@/components/map/RidesMap";
-
-const PLACEHOLDER_BOAT_RIDES = [
-  { id: 1, rideType: "boat", originCity: "Bertioga", destinationCity: "Ilhabela", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 18).toISOString(), pricePerSeat: "85.00", availableSeats: 4, captainName: "Rafael M.", boatName: "Veneza III", avgRating: 4.9 },
-  { id: 2, rideType: "boat", originCity: "Santos", destinationCity: "Ilha Grande", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 30).toISOString(), pricePerSeat: "120.00", availableSeats: 2, captainName: "Carlos P.", boatName: "Acqua Viva", avgRating: 4.7 },
-  { id: 3, rideType: "boat", originCity: "Angra dos Reis", destinationCity: "Paraty", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 44).toISOString(), pricePerSeat: "65.00", availableSeats: 6, captainName: "Bruno S.", boatName: "Mar Aberto", avgRating: 5.0 },
-];
-const PLACEHOLDER_CAR_RIDES = [
-  { id: 101, rideType: "car", originCity: "Pindamonhangaba", destinationCity: "São José dos Campos", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 8).toISOString(), pricePerSeat: "18.00", availableSeats: 3, captainName: "Fernanda R.", carName: "Honda Civic", avgRating: 4.8 },
-  { id: 102, rideType: "car", originCity: "Taubaté", destinationCity: "Guarulhos", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 12).toISOString(), pricePerSeat: "25.00", availableSeats: 2, captainName: "Guilherme A.", carName: "Toyota Corolla", avgRating: 4.9 },
-  { id: 103, rideType: "car", originCity: "Campinas", destinationCity: "São Paulo", departureTime: new Date(Date.now() + 1000 * 60 * 60 * 10).toISOString(), pricePerSeat: "22.00", availableSeats: 1, captainName: "Juliana C.", carName: "VW Golf", avgRating: 4.7 },
-];
-
-const DAY_LABELS = ["Seg", "Ter", "Qua", "Qui", "Sex"];
-
-// Sample rides shown on the home map when no live rides have coordinates yet.
-// Origin coords are real São Paulo coast / Vale do Paraíba points.
-const SAMPLE_MAP_RIDES: RideMarker[] = [
-  { id: 1,  rideType: "boat", originCity: "Santos",          destinationCity: "Ilha Grande",  pricePerSeat: "120.00", originLat: -23.9618, originLng: -46.3322 },
-  { id: 2,  rideType: "boat", originCity: "Bertioga",        destinationCity: "Ilhabela",     pricePerSeat: "85.00",  originLat: -23.8542, originLng: -46.1388 },
-  { id: 3,  rideType: "boat", originCity: "Ilhabela",        destinationCity: "São Sebastião",pricePerSeat: "40.00",  originLat: -23.7781, originLng: -45.3581 },
-  { id: 4,  rideType: "boat", originCity: "Ubatuba",         destinationCity: "Paraty",       pricePerSeat: "70.00",  originLat: -23.4336, originLng: -45.0838 },
-  { id: 5,  rideType: "boat", originCity: "Angra dos Reis",  destinationCity: "Paraty",       pricePerSeat: "65.00",  originLat: -23.0067, originLng: -44.3181 },
-  { id: 101, rideType: "car", originCity: "São Paulo",       destinationCity: "Santos",       pricePerSeat: "30.00",  originLat: -23.5505, originLng: -46.6333 },
-  { id: 102, rideType: "car", originCity: "Campinas",        destinationCity: "São Paulo",    pricePerSeat: "22.00",  originLat: -22.9056, originLng: -47.0608 },
-  { id: 103, rideType: "car", originCity: "São José dos Campos", destinationCity: "Taubaté",  pricePerSeat: "18.00",  originLat: -23.1794, originLng: -45.8869 },
-  { id: 104, rideType: "car", originCity: "Pindamonhangaba", destinationCity: "São José dos Campos", pricePerSeat: "15.00", originLat: -22.9239, originLng: -45.4614 },
-];
 
 export default function Home() {
   const [searchFrom, setSearchFrom] = useState("");
   const [searchTo, setSearchTo] = useState("");
-  const [searchType, setSearchType] = useState<"car" | "boat">("car");
+  const [searchType, setSearchType] = useState<"car" | "boat">("boat");
 
   const { data } = useQuery({
     queryKey: ["/api/rides"],
     queryFn: () => apiRequest("GET", "/api/rides"),
   });
 
-  const liveRides: any[] = data?.rides?.slice(0, 6) || [];
-  const boatRides = liveRides.length > 0 ? liveRides.filter((r: any) => r.rideType === "boat").slice(0, 3) : PLACEHOLDER_BOAT_RIDES;
-  const carRides  = liveRides.length > 0 ? liveRides.filter((r: any) => r.rideType === "car").slice(0, 3)  : PLACEHOLDER_CAR_RIDES;
+  const liveRides: any[] = data?.rides || [];
+  const boatRides = liveRides.filter((r: any) => r.rideType === "boat").slice(0, 3);
 
-  // Real rides that can be plotted (have origin coords). RidesMap also resolves
-  // coords from city names, so any live ride with a known city shows up too.
-  const allLive: any[] = data?.rides || [];
-  const mapRides: RideMarker[] = allLive.length > 0 ? allLive : SAMPLE_MAP_RIDES;
+  // The map is water-first: only published boat rides appear on the pilot surface.
+  const mapRides: RideMarker[] = liveRides.filter((r: any) => r.rideType === "boat");
 
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -77,30 +47,35 @@ export default function Home() {
 
       {/* ─── HERO ─── */}
       <section className="hero-pro">
+        <video className="hero-video" autoPlay muted loop playsInline preload="metadata" aria-hidden="true">
+          <source src="/videos/marcamar-hero-boat.mp4" type="video/mp4" />
+        </video>
+        <div className="hero-video-overlay" aria-hidden="true" />
         <div className="hero-float-anchor"><Anchor size={120} /></div>
         <div className="hero-float-car"><Car size={100} /></div>
 
+        <div className="hero-pro-shell">
         <div className="hero-pro-inner fade-up">
           <div className="hero-pro-eyebrow">
             <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--boat)", display: "inline-block" }} />
-            Brasil · Carro & Lancha · Verificados
+            Piloto water-first · litoral paulista
           </div>
           <h1 className="hero-pro-title">
-            Compartilhe o<br />
-            <span className="hero-pro-gradient">caminho</span>
+            O caminho fica<br />
+            <span className="hero-pro-gradient">melhor compartilhado.</span>
           </h1>
           <p className="hero-pro-sub">
-            Caronas de carro e de lancha por todo o Brasil.<br />
-            Motoristas e capitães verificados.
+            Encontre uma travessia, veja o que está publicado e combine o embarque<br />
+            com um operador independente — tudo em um só lugar.
           </p>
 
           <form className="hero-search" onSubmit={handleSearch}>
             <div className="hero-search-type">
               <button type="button" className={`search-type-btn ${searchType === "car" ? "active-car" : ""}`} onClick={() => setSearchType("car")} style={{ minHeight: 44 }}>
-                <Car size={12} /> Carro
+                <Car size={12} /> Carro · futuro
               </button>
               <button type="button" className={`search-type-btn ${searchType === "boat" ? "active-boat" : ""}`} onClick={() => setSearchType("boat")} style={{ minHeight: 44 }}>
-                <Anchor size={12} /> Lancha
+                <Anchor size={12} /> Lancha · piloto
               </button>
             </div>
             <div className="hero-search-fields">
@@ -113,7 +88,7 @@ export default function Home() {
                 <MapPin size={14} className="search-field-icon" />
                 <input value={searchTo} onChange={e => setSearchTo(e.target.value)} placeholder="Para onde?" />
               </div>
-              <button type="submit" className="hero-search-btn">
+              <button type="submit" className={`hero-search-btn ${searchType === "boat" ? "hero-search-btn-boat" : "hero-search-btn-car"}`}>
                 Buscar <ArrowRight size={14} />
               </button>
             </div>
@@ -124,6 +99,38 @@ export default function Home() {
             <Link href="/lanchas"><span className="hero-quick-link hero-quick-link-boat"><Anchor size={12} /> Lancha</span></Link>
             <Link href="/recorrentes"><span className="hero-quick-link"><Calendar size={12} /> Recorrentes</span></Link>
           </div>
+          <div className="hero-pro-utility">
+            <span><Shield size={13} /> Informação antes do embarque</span>
+            <span><Anchor size={13} /> Operadores independentes</span>
+          </div>
+        </div>
+
+        <aside className="hero-pro-rail fade-up" style={{ animationDelay: "120ms" }}>
+          <div className="hero-rail-card">
+            <div className="hero-rail-header">
+              <span className="hero-rail-kicker"><span className="hero-rail-dot" /> O piloto começa por</span>
+              <Anchor size={18} />
+            </div>
+            <div className="hero-rail-route">
+              <div>
+                <span>Região</span>
+                <strong>Ilhabela</strong>
+              </div>
+              <div className="hero-rail-route-line" aria-hidden="true"><span /><Anchor size={15} /></div>
+              <div>
+                <span>Litoral norte</span>
+                <strong>São Sebastião</strong>
+              </div>
+            </div>
+            <p className="hero-rail-copy">
+              A disponibilidade aparece conforme operadores publicam viagens reais na plataforma.
+            </p>
+            <Link href="/lanchas">
+              <span className="hero-rail-link">Explorar travessias <ArrowRight size={14} /></span>
+            </Link>
+          </div>
+          <div className="hero-rail-note"><MapPin size={14} /> Uma operação local, construída com quem navega</div>
+        </aside>
         </div>
 
         <div className="hero-wave">
@@ -133,18 +140,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── STATS ─── */}
-      <div style={{ background: 'var(--bg2)', borderBottom: '1px solid var(--border)', padding: '0' }}>
-        <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', justifyContent: 'space-around', padding: '20px 24px', flexWrap: 'wrap', gap: 8 }}>
+      {/* ─── PILOT STATUS ─── */}
+      <div className="pilot-status">
+        <div className="pilot-status-inner">
           {[
-            { val: '4.800+', label: 'viagens realizadas' },
-            { val: '1.200+', label: 'motoristas e capitães' },
-            { val: '4.9★', label: 'avaliação média' },
-            { val: '98%', label: 'pontualidade' },
+            { title: 'Piloto regional', label: 'Foco inicial em Ilhabela e São Sebastião' },
+            { title: 'Confiança em construção', label: 'Perfis e documentação entram na operação com revisão manual' },
+            { title: 'Sem frota própria', label: 'A Marcamar conecta passageiros e operadores independentes' },
           ].map((s, i) => (
-            <div key={i} style={{ textAlign: 'center', padding: '8px 16px' }}>
-              <div style={{ fontSize: '1.4rem', fontWeight: 900, color: 'var(--text1)', letterSpacing: '-0.5px' }}>{s.val}</div>
-              <div style={{ fontSize: '12px', color: 'var(--text3)', marginTop: 2 }}>{s.label}</div>
+            <div key={i} style={{ textAlign: 'center', padding: '8px 16px', maxWidth: 260 }}>
+              <div style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--text1)' }}>{s.title}</div>
+              <div style={{ fontSize: '12px', color: 'var(--text3)', marginTop: 4, lineHeight: 1.4 }}>{s.label}</div>
             </div>
           ))}
         </div>
@@ -156,19 +162,19 @@ export default function Home() {
           <div className="split-panel split-panel-car reveal">
             <div className="split-panel-accent" />
             <div className="split-panel-icon"><Car size={26} /></div>
-            <p className="split-panel-label">Caronas de Carro</p>
-            <h2 className="split-panel-title">Divida o trajeto</h2>
-            <p className="split-panel-desc">Motoristas verificados em rotas diárias. Economize no combustível e pedágio.</p>
-            <span className="split-panel-btn">Encontrar carona <ArrowRight size={13} /></span>
+            <p className="split-panel-label">Carro · em breve</p>
+            <h2 className="split-panel-title">Uma próxima fase</h2>
+            <p className="split-panel-desc">A camada de caronas terrestres continua no produto, mas o piloto atual está concentrado no transporte por água.</p>
+            <span className="split-panel-btn">Conhecer a área futura <ArrowRight size={13} /></span>
           </div>
         </Link>
         <Link href="/lanchas">
           <div className="split-panel split-panel-boat reveal reveal-delay-1">
             <div className="split-panel-accent" />
             <div className="split-panel-icon"><Anchor size={26} /></div>
-            <p className="split-panel-label">Caronas de Lancha</p>
-            <h2 className="split-panel-title">Navegue pelo litoral</h2>
-            <p className="split-panel-desc">Capitães credenciados em travessias costeiras. Ilhabela, Angra, Paraty.</p>
+            <p className="split-panel-label">Marcamar · piloto na água</p>
+            <h2 className="split-panel-title">Navegue com mais confiança</h2>
+            <p className="split-panel-desc">Encontre opções de travessia, compare rota e disponibilidade e converse com o operador antes do embarque.</p>
             <span className="split-panel-btn">Ver travessias <ArrowRight size={13} /></span>
           </div>
         </Link>
@@ -179,13 +185,13 @@ export default function Home() {
         <div className="map-section-inner" style={{ margin: "0 auto", padding: "0 24px" }}>
           <div className="fade-up">
             <p className="map-text-label">Cobertura de rotas</p>
-            <h2 className="map-text-title">Litoral e interior do Brasil</h2>
-            <p className="map-text-desc">Do Vale do Paraíba ao litoral paulista — encontre caronas nas rotas que você já faz todo dia.</p>
+            <h2 className="map-text-title">Rotas reais do piloto Marcamar</h2>
+            <p className="map-text-desc">O mapa mostra apenas viagens publicadas na plataforma. À medida que operadores entrarem no piloto, novas rotas aparecerão aqui.</p>
             <div className="map-features">
               {[
-                { dot: "car",  title: "Rotas terrestres",  desc: "São Paulo, Vale do Paraíba, Campinas" },
-                { dot: "boat", title: "Rotas marítimas",   desc: "Santos, Ilhabela, Angra, Paraty, Ilha Grande" },
-                { dot: "car",  title: "Rotas recorrentes", desc: "Comute diariamente com os mesmos companheiros" },
+                { dot: "boat", title: "Piloto aquático", desc: "Ilhabela e São Sebastião como ponto de partida" },
+                { dot: "boat", title: "Disponibilidade publicada", desc: "Horário, capacidade e preço dependem de viagens reais" },
+                { dot: "car",  title: "Carro em planejamento", desc: "A aba permanece para uma próxima etapa do produto" },
               ].map((f, i) => (
                 <div key={i} className="map-feature-item fade-up" style={{ animationDelay: `${i * 80}ms` }}>
                   <div className={`map-feature-dot map-feature-dot-${f.dot}`} />
@@ -199,11 +205,11 @@ export default function Home() {
             <div style={{ display: "flex", gap: 16, marginTop: 20, flexWrap: "wrap" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 13, color: "var(--text2)" }}>
                 <span style={{ width: 12, height: 12, borderRadius: "50%", background: "var(--car)", display: "inline-block" }} />
-                Caronas de carro
+                Carro · futuro
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 13, color: "var(--text2)" }}>
                 <span style={{ width: 12, height: 12, borderRadius: "50%", background: "var(--boat)", display: "inline-block" }} />
-                Travessias de lancha
+                Travessias publicadas
               </div>
             </div>
           </div>
@@ -220,14 +226,15 @@ export default function Home() {
             <div>
               <p className="section-label" style={{ color: "var(--car)" }}>
                 <Car size={11} style={{ display: "inline", verticalAlign: "middle", marginRight: 5 }} />
-                SAÍDAS DE CARRO
+                ÁREA FUTURA
               </p>
-              <h2 className="section-title-pro">Próximas caronas</h2>
+              <h2 className="section-title-pro">Caronas de carro em breve</h2>
             </div>
             <Link href="/caronas"><span className="link-more-pro">Ver todas <ChevronRight size={14} /></span></Link>
           </div>
-          <div className="ride-grid-pro">
-            {carRides.map((ride: any, i: number) => <RideCard key={ride.id} ride={ride} i={i} />)}
+          <div style={{ padding: "24px", border: "1px dashed var(--border)", borderRadius: 16, background: "var(--bg2)", color: "var(--text2)" }}>
+            <p style={{ fontWeight: 700, color: "var(--text1)", marginBottom: 6 }}>Esta área fica reservada para a expansão terrestre.</p>
+            <p style={{ fontSize: 13, lineHeight: 1.5 }}>O produto atual não inventa viagens, motoristas ou preços: quando houver caronas de carro publicadas, elas aparecerão aqui.</p>
           </div>
 
           <div className="feed-header fade-up" style={{ marginTop: 56 }}>
@@ -240,9 +247,16 @@ export default function Home() {
             </div>
             <Link href="/lanchas"><span className="link-more-pro">Ver todas <ChevronRight size={14} /></span></Link>
           </div>
-          <div className="ride-grid-pro">
-            {boatRides.map((ride: any, i: number) => <RideCard key={ride.id} ride={ride} i={i} />)}
-          </div>
+          {boatRides.length > 0 ? (
+            <div className="ride-grid-pro">
+              {boatRides.map((ride: any, i: number) => <RideCard key={ride.id} ride={ride} i={i} />)}
+            </div>
+          ) : (
+            <div style={{ padding: "24px", border: "1px dashed var(--border)", borderRadius: 16, background: "var(--bg2)", color: "var(--text2)" }}>
+              <p style={{ fontWeight: 700, color: "var(--text1)", marginBottom: 6 }}>Ainda não há travessias publicadas.</p>
+              <p style={{ fontSize: 13, lineHeight: 1.5 }}>Estamos começando com um piloto concentrado. Operadores podem cadastrar sua rota para formar a primeira oferta local.</p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -255,10 +269,10 @@ export default function Home() {
           </div>
           <div className="steps-pro">
             {[
-              { icon: <Car size={20} />,        step: "01", title: "Escolha o tipo",     desc: "Carro para rotas terrestres, lancha para travessias no litoral." },
-              { icon: <Navigation size={20} />, step: "02", title: "Busque sua rota",    desc: "Filtre por cidade, data e tipo. Veja preço e vagas em tempo real." },
-              { icon: <Zap size={20} />,        step: "03", title: "Reserve um assento", desc: "Confirme quantas vagas precisa com poucos cliques." },
-              { icon: <Shield size={20} />,     step: "04", title: "Viaje com segurança", desc: "Motoristas e capitães verificados. Avaliações reais após cada viagem." },
+              { icon: <Anchor size={20} />,    step: "01", title: "Encontre a travessia", desc: "Começamos por rotas e pedidos de transporte na água, com foco no litoral paulista." },
+              { icon: <Navigation size={20} />, step: "02", title: "Confira a opção",      desc: "Veja rota, horário, capacidade, preço e o perfil do operador quando houver uma viagem publicada." },
+              { icon: <Zap size={20} />,        step: "03", title: "Solicite sua viagem",  desc: "Reserve uma vaga disponível e mantenha os detalhes da solicitação registrados." },
+              { icon: <Shield size={20} />,     step: "04", title: "Alinhe o embarque",   desc: "Use as mensagens da reserva para combinar ponto de encontro e próximos passos." },
             ].map((s, i) => (
               <div key={i} className={`step-pro reveal reveal-delay-${i + 1}`}>
                 <div className="step-pro-num">{s.step}</div>
@@ -278,9 +292,9 @@ export default function Home() {
             <div>
               <p className="section-label" style={{ color: "var(--boat)" }}>ROTAS RECORRENTES</p>
               <h2 className="recurring-pro-title">Vai todo dia pro mesmo lugar?</h2>
-              <p className="recurring-pro-sub">Cadastre sua rota semanal e encontre companheiros fixos. Menos gasto, menos trânsito.</p>
+              <p className="recurring-pro-sub">A camada de rotas recorrentes está sendo preparada para moradores e operadores com trajetos regulares.</p>
               <div className="recurring-pro-checks">
-                {["De carro ou de lancha", "Horários flexíveis", "Companheiros verificados"].map(c => (
+                {["Começa pelo transporte na água", "Rotas repetidas do piloto", "Perfis e disponibilidade claros"].map(c => (
                   <div key={c} className="recurring-check-item"><Check size={14} /> {c}</div>
                 ))}
               </div>
@@ -288,29 +302,16 @@ export default function Home() {
                 <span className="btn-boat-solid">Ver rotas recorrentes <ArrowRight size={14} /></span>
               </Link>
             </div>
-            <div className="recurring-pro-visual">
-              {[
-                { label: "Pindamonhangaba → SJC", days: [1,2,3,4,5], time: "07:30 · 18:00", peers: "3 companheiros", type: "car" as const },
-                { label: "Santos → Ilhabela",     days: [2,4,5],     time: "06:00",         peers: "2 companheiros", type: "boat" as const },
-              ].map((card, ci) => (
-                <div key={ci} className="recurring-preview-card">
-                  <div className="recurring-preview-label-row">
-                    {card.type === "car" ? <Car size={13} color="var(--car)" /> : <Anchor size={13} color="var(--boat)" />}
-                    <p className="recurring-preview-label">{card.label}</p>
-                  </div>
-                  <div className="day-row">
-                    {DAY_LABELS.map((d, i) => (
-                      <span key={d} className={`day-pill-pro ${card.days.includes(i + 1) ? "active" : ""}`} style={{ animationDelay: `${ci * 250 + i * 90}ms` }}>
-                        {d}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="recurring-preview-meta">
-                    <span>{card.time}</span>
-                    <span>{card.peers}</span>
-                  </div>
+            <div className="recurring-pro-visual" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div className="recurring-preview-card" style={{ width: "100%" }}>
+                <div className="recurring-preview-label-row">
+                  <Calendar size={13} color="var(--boat)" />
+                  <p className="recurring-preview-label">Recorrentes em planejamento</p>
                 </div>
-              ))}
+                <p style={{ color: "var(--text2)", fontSize: 13, lineHeight: 1.5, marginTop: 12 }}>
+                  Quando o piloto tiver rotas repetidas, esta área poderá aproximar passageiros e operadores que fazem o mesmo trajeto com frequência.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -321,14 +322,14 @@ export default function Home() {
         <div className="section-inner">
           <div className="section-label-row fade-up" style={{ marginBottom: 32 }}>
             <p className="section-label" style={{ color: "var(--text3)" }}>POR QUE USAR</p>
-            <h2 className="section-title-pro">Por que a LanchaCarona?</h2>
+            <h2 className="section-title-pro">Por que a Marcamar?</h2>
           </div>
           <div className="trust-grid">
             {[
-              { icon: <Shield size={22} />,   title: "Verificação rigorosa",  desc: "CNH e licença marítima confirmadas antes de qualquer publicação.", color: "var(--car)" },
-              { icon: <Star size={22} />,     title: "Avaliações reais",       desc: "Passageiros avaliam após cada viagem. Histórico público.", color: "var(--boat)" },
-              { icon: <Globe size={22} />,    title: "Comunidade brasileira",  desc: "Motoristas e capitães de todo o litoral e interior do país.", color: "var(--boat)" },
-              { icon: <Clock size={22} />,    title: "Sem espera",             desc: "Viagens agendadas com antecedência. Sem surpresa no preço.", color: "var(--car)" },
+              { icon: <Shield size={22} />,   title: "Confiança como produto", desc: "A visão começa separando identidade, qualificação marítima, embarcação e capacidade.", color: "var(--boat)" },
+              { icon: <Star size={22} />,     title: "Informação antes do embarque", desc: "Rota, horário, preço, capacidade e perfil do operador devem estar claros para decidir.", color: "var(--boat)" },
+              { icon: <Globe size={22} />,    title: "Piloto concentrado", desc: "Começamos em uma região pequena para aprender com viagens reais antes de expandir.", color: "var(--boat)" },
+              { icon: <Clock size={22} />,    title: "Conversas registradas", desc: "Cada reserva tem um contexto de mensagens para alinhar ponto de encontro e execução.", color: "var(--boat)" },
             ].map((t, i) => (
               <div key={i} className={`trust-card reveal reveal-delay-${i + 1}`}>
                 <div className="trust-icon" style={{ background: `${t.color}15`, color: t.color }}>{t.icon}</div>
@@ -346,14 +347,14 @@ export default function Home() {
           <div className="cta-pro-grid fade-up">
             <div className="cta-pro-card cta-pro-car reveal">
               <div className="cta-pro-icon-wrap"><Car size={24} /></div>
-              <h3>Você tem carro?</h3>
-              <p>Publique sua rota. Divida o custo de combustível e pedágio com passageiros verificados.</p>
-              <Link href="/cadastro"><span className="cta-pro-btn cta-pro-btn-car">Cadastrar como motorista</span></Link>
+              <h3>Você opera no transporte terrestre?</h3>
+              <p>A área de carro fica preservada no produto para uma próxima fase, depois que o piloto aquático validar a operação.</p>
+              <Link href="/caronas"><span className="cta-pro-btn cta-pro-btn-car">Conhecer a área futura</span></Link>
             </div>
             <div className="cta-pro-card cta-pro-boat reveal reveal-delay-1">
               <div className="cta-pro-icon-wrap"><Anchor size={24} /></div>
               <h3>Você tem lancha?</h3>
-              <p>Publique suas travessias costeiras e encontre passageiros para dividir a experiência.</p>
+              <p>Ajude a formar a primeira oferta local: publique uma travessia e apresente rota, capacidade e condições com clareza.</p>
               <Link href="/cadastro"><span className="cta-pro-btn cta-pro-btn-boat">Cadastrar como capitão</span></Link>
             </div>
           </div>

@@ -94,19 +94,53 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── SPLIT LANE ─── */}
-      <div className="split-lane split-lane-single">
-        <Link href="/lanchas">
-          <div className="split-panel split-panel-boat reveal reveal-delay-1">
-            <div className="split-panel-accent" />
-            <div className="split-panel-icon"><Anchor size={26} /></div>
-            <p className="split-panel-label">Marcamar · piloto na água</p>
-            <h2 className="split-panel-title">Navegue com mais confiança</h2>
-            <p className="split-panel-desc">Encontre opções de travessia, compare rota e disponibilidade e converse com o operador antes do embarque.</p>
-            <span className="split-panel-btn">Ver travessias <ArrowRight size={13} /></span>
+      {/* ─── EVERYDAY WATER ─── */}
+      <section className="everyday-water-section">
+        <div className="everyday-water-inner">
+          <div className="everyday-water-copy reveal">
+            <p className="everyday-water-kicker"><span /> TRAVESSIAS DO DIA A DIA</p>
+            <h2>Nem toda viagem precisa de estrada.</h2>
+            <p className="everyday-water-lead">Quem cruza a água toda semana precisa de menos improviso. A Marcamar aproxima quem precisa chegar e quem já faz a travessia — com rota, horário e conversa no mesmo lugar.</p>
+
+            <div className="everyday-water-route" aria-label="Rota em destaque entre Ilhabela e São Sebastião">
+              <div className="everyday-water-stop">
+                <span>SAÍDA</span>
+                <strong>Ilhabela</strong>
+              </div>
+              <svg className="everyday-water-route-line" viewBox="0 0 160 42" role="img" aria-label="Travessia pela água">
+                <path d="M4 21 C38 4 54 38 82 21 S126 5 156 21" />
+                <circle cx="4" cy="21" r="3" />
+                <circle cx="156" cy="21" r="3" />
+              </svg>
+              <div className="everyday-water-stop everyday-water-stop-end">
+                <span>CHEGADA</span>
+                <strong>São Sebastião</strong>
+              </div>
+            </div>
+
+            <div className="everyday-water-actions">
+              <Link href="/lanchas"><span className="everyday-water-link">Ver travessias <ArrowRight size={15} /></span></Link>
+              <span className="everyday-water-note-inline"><Anchor size={14} /> Publicadas por quem navega</span>
+            </div>
           </div>
-        </Link>
-      </div>
+
+          <div className="everyday-water-visual reveal reveal-delay-1" aria-label="Cenas de uma travessia cotidiana">
+            <figure className="everyday-water-main-image">
+              <img src="/images/marcamar-dock.jpg" alt="Passageiros caminhando junto a um barco no cais" />
+              <figcaption>O caminho começa no cais.</figcaption>
+            </figure>
+            <figure className="everyday-water-inset everyday-water-inset-boarding">
+              <img src="/images/marcamar-ferry-boarding.jpg" alt="Passageiros embarcando em uma balsa" />
+              <figcaption>Embarque sem adivinhação.</figcaption>
+            </figure>
+            <figure className="everyday-water-inset everyday-water-inset-passenger">
+              <img src="/images/marcamar-ferry-passenger.jpg" alt="Passageira sentada dentro de uma balsa" />
+              <figcaption>Tempo para seguir o dia.</figcaption>
+            </figure>
+            <div className="everyday-water-sticker"><Anchor size={14} /> água como caminho</div>
+          </div>
+        </div>
+      </section>
 
       {/* ─── MAP SECTION (real Leaflet) ─── */}
       <section className="map-section">

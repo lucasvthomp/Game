@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import { Calendar, Car, Anchor, Plus, Trash2, Users } from "lucide-react";
+import { Calendar, Anchor, Plus, Trash2, Users } from "lucide-react";
 
 const DAYS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 const WEEKDAY_INDICES = [1, 2, 3, 4, 5];
@@ -10,7 +10,7 @@ const WEEKDAY_INDICES = [1, 2, 3, 4, 5];
 export default function Recurring() {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const [tab, setTab] = useState<"car" | "boat">("boat");
+  const tab = "boat" as const;
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
     rideType: "boat",
@@ -65,7 +65,7 @@ export default function Recurring() {
   };
 
   const liveSchedules = allData?.schedules || [];
-  const schedules = tab === "car" ? [] : liveSchedules;
+  const schedules = liveSchedules;
   const mySchedules = (mineData?.schedules || []).filter((s: any) => s.rideType === tab);
 
   return (
@@ -78,10 +78,6 @@ export default function Recurring() {
             Esta área fica reservada para a próxima fase: aproximar moradores e operadores com trajetos regulares, começando pelo transporte na água.
           </p>
 
-          <div className="type-tabs">
-            <button className={`type-tab type-tab-car ${tab === "car" ? "active-car" : ""}`} onClick={() => setTab("car")}><Car size={12} /> Carro · futuro</button>
-            <button className={`type-tab type-tab-boat ${tab === "boat" ? "active-boat" : ""}`} onClick={() => setTab("boat")}><Anchor size={12} /> Lancha</button>
-          </div>
         </div>
       </div>
 
@@ -192,8 +188,8 @@ export default function Recurring() {
         ) : (
           <div style={{ textAlign: "center", marginTop: 12, padding: "36px 24px", background: "var(--card)", border: "1px dashed var(--border)", borderRadius: 16 }}>
             <Calendar size={36} color="var(--boat)" style={{ marginBottom: 12 }} />
-            <p style={{ fontWeight: 700, marginBottom: 8, color: "var(--text1)" }}>{tab === "car" ? "Rotas recorrentes de carro ficam para a próxima fase" : "Nenhuma rota recorrente publicada"}</p>
-            <p style={{ maxWidth: 520, margin: "0 auto", fontSize: 13, lineHeight: 1.55, color: "var(--text2)" }}>{tab === "car" ? "A aba continua visível para essa expansão, mas o piloto atual concentra a experiência no transporte por água." : "Quando o piloto tiver trajetos regulares e oferta suficiente, esta área poderá organizar dias, horários, vagas e operadores recorrentes."}</p>
+            <p style={{ fontWeight: 700, marginBottom: 8, color: "var(--text1)" }}>Nenhuma rota recorrente publicada</p>
+            <p style={{ maxWidth: 520, margin: "0 auto", fontSize: 13, lineHeight: 1.55, color: "var(--text2)" }}>Quando o piloto tiver trajetos regulares e oferta suficiente, esta área poderá organizar dias, horários, vagas e operadores recorrentes.</p>
           </div>
         )}
 
@@ -212,16 +208,12 @@ export default function Recurring() {
 }
 
 function ScheduleCard({ schedule: s, onDelete, isOwn }: { schedule: any; onDelete?: () => void; isOwn?: boolean }) {
-  const isBoat = s.rideType === "boat";
   let days: number[] = [];
   try { days = JSON.parse(s.daysOfWeek); } catch { days = []; }
 
   return (
-    <div className="recurring-card-full fade-up" style={{ borderLeft: `3px solid ${isBoat ? "var(--boat)" : "var(--car)"}` }}>
+    <div className="recurring-card-full fade-up" style={{ borderLeft: "3px solid var(--boat)" }}>
       <div className="recurring-card-header">
-        <span className={`type-badge ${isBoat ? "type-badge-boat" : "type-badge-car"}`}>
-          {isBoat ? "Lancha" : "Carro"}
-        </span>
         <span className="recurring-route">
           <strong>{s.originCity}</strong> → <strong>{s.destinationCity}</strong>
         </span>
@@ -248,3 +240,4 @@ function ScheduleCard({ schedule: s, onDelete, isOwn }: { schedule: any; onDelet
     </div>
   );
 }
+

@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Anchor, Car } from "lucide-react";
+import { Anchor } from "lucide-react";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -11,7 +11,6 @@ export default function Footer() {
         <div className="footer-brand">
           <div className="footer-logo">
             <div className="footer-logo-icon">
-              <Car size={12} color="#fff" />
               <Anchor size={12} color="#fff" />
             </div>
             <span className="footer-logo-text">Marcamar</span>
@@ -23,7 +22,6 @@ export default function Footer() {
 
         <div className="footer-links-group">
           <p className="footer-group-title">Encontrar uma viagem</p>
-          <Link href="/caronas"><span className="footer-link">Caronas de carro · futuro</span></Link>
           <Link href="/lanchas"><span className="footer-link">Travessias de lancha</span></Link>
           <Link href="/recorrentes"><span className="footer-link">Rotas recorrentes</span></Link>
           <Link href="/viagens"><span className="footer-link">Todas as viagens</span></Link>
@@ -31,9 +29,7 @@ export default function Footer() {
 
         <div className="footer-links-group">
           <p className="footer-group-title">Oferecer uma viagem</p>
-          <Link href="/perfil-motorista"><span className="footer-link">Cadastro de motorista</span></Link>
           <Link href="/perfil-capitao"><span className="footer-link">Cadastro de capitão</span></Link>
-          <Link href="/meu-carro"><span className="footer-link">Painel do motorista</span></Link>
           <Link href="/minha-lancha"><span className="footer-link">Painel do capitão</span></Link>
         </div>
 
@@ -60,3 +56,4 @@ export default function Footer() {
     </footer>
   );
 }
+

@@ -29,8 +29,8 @@ export default function App() {
           <Route path="/entrar" component={() => <Auth mode="login" />} />
           <Route path="/cadastro" component={() => <Auth mode="register" />} />
           <Route path="/viagens" component={Rides} />
-          <Route path="/caronas">{() => <Rides defaultType="car" />}</Route>
-          <Route path="/lanchas">{() => <Rides defaultType="boat" />}</Route>
+          <Route path="/caronas">{() => <Rides />}</Route>
+          <Route path="/lanchas">{() => <Rides />}</Route>
           <Route path="/viagens/:id" component={RideDetail} />
           <Route path="/perfil-capitao" component={CaptainProfile} />
           <Route path="/minha-lancha" component={CaptainDashboard} />
@@ -54,3 +54,4 @@ export default function App() {
     </QueryClientProvider>
   );
 }
+

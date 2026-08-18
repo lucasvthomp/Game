@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
-import { Home, Anchor, Car, CalendarCheck, User } from "lucide-react";
+import { Home, Anchor, CalendarCheck, User } from "lucide-react";
 
 export default function BottomNav() {
   const { user } = useAuth();
@@ -9,7 +9,6 @@ export default function BottomNav() {
   const tabs = [
     { href: "/", icon: Home, label: "Início" },
     { href: "/lanchas", icon: Anchor, label: "Lanchas" },
-    { href: "/caronas", icon: Car, label: "Caronas" },
     { href: "/minhas-reservas", icon: CalendarCheck, label: "Reservas" },
     { href: "/perfil", icon: User, label: "Perfil" },
   ];
@@ -39,3 +38,4 @@ export default function BottomNav() {
     </nav>
   );
 }
+

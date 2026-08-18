@@ -6,7 +6,7 @@ import { PIN, pinIcon, getCityCoords, num, SP_REGION_CENTER, SP_REGION_ZOOM, TIL
 
 export interface RideMarker {
   id: number;
-  rideType: "car" | "boat";
+  rideType: "boat";
   originCity: string;
   destinationCity: string;
   pricePerSeat: string | number;
@@ -39,8 +39,8 @@ function originCoord(r: RideMarker): [number, number] | null {
 }
 
 /**
- * RidesMap — plots every ride (that has resolvable origin coords) as a clickable
- * pin coloured by type. Clicking a pin opens a popup with the route, price and a
+ * RidesMap — plots every published boat ride (that has resolvable origin coords)
+ * as a clickable pin. Clicking a pin opens a popup with the route, price and a
  * link to the ride detail page. Fits to pins, falling back to the SP region.
  */
 export default function RidesMap({ rides, height = "480px" }: RidesMapProps) {
@@ -53,7 +53,6 @@ export default function RidesMap({ rides, height = "480px" }: RidesMapProps) {
 
   const coords = markers.map((m) => m.coord);
   const boatIcon = pinIcon(PIN.boat, "⚓");
-  const carIcon = pinIcon(PIN.car, "🚗");
 
   if (markers.length === 0) {
     return (
@@ -71,15 +70,11 @@ export default function RidesMap({ rides, height = "480px" }: RidesMapProps) {
         <TileLayer url={TILE_URL} attribution={TILE_ATTRIBUTION} />
         <FitToPins coords={coords} />
         {markers.map(({ ride, coord }) => {
-          const isBoat = ride.rideType === "boat";
           const price = parseFloat(String(ride.pricePerSeat)).toFixed(2).replace(".", ",");
           return (
-            <Marker key={ride.id} position={coord} icon={isBoat ? boatIcon : carIcon}>
+            <Marker key={ride.id} position={coord} icon={boatIcon}>
               <Popup>
                 <div className="lc-popup">
-                  <span className={`lc-popup-type lc-popup-type-${ride.rideType}`}>
-                    {isBoat ? "⚓ Lancha" : "🚗 Carro"}
-                  </span>
                   <div className="lc-popup-route">{ride.originCity} → {ride.destinationCity}</div>
                   <div className="lc-popup-price">R$ {price} <span>/ pessoa</span></div>
                   <Link href={`/viagens/${ride.id}`}>
@@ -94,3 +89,4 @@ export default function RidesMap({ rides, height = "480px" }: RidesMapProps) {
     </div>
   );
 }
+

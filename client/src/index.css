@@ -2072,3 +2072,32 @@ input, select, textarea, button { font-family: inherit; }
   border-radius: 50%;
   animation: pulseRing 2s ease-out infinite;
 }
+
+/* ─── BOAT-FIRST SURFACE CLEANUP ─── */
+.hero-pro-shell {
+  display: block;
+}
+.hero-pro-inner {
+  max-width: 780px;
+}
+.hero-pro-gradient {
+  background: none;
+  background-size: auto;
+  -webkit-background-clip: initial;
+  -webkit-text-fill-color: inherit;
+  background-clip: initial;
+  animation: none;
+}
+.split-lane-single {
+  display: block;
+}
+.split-lane-single .split-panel-boat {
+  border-right: none;
+}
+.cta-pro-grid-single {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 580px;
+  margin-left: auto;
+  margin-right: auto;
+}
+

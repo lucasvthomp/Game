@@ -21,14 +21,11 @@ export default function Navbar() {
 
   const role = user?.role;
   const isCaptain = role === "captain" || role === "both";
-  const isDriver  = role === "driver"  || role === "both";
 
   const links = [
     { href: "/lanchas",   label: "Lancha" },
     { href: "/recorrentes", label: "Recorrentes" },
-    { href: "/caronas",   label: "Carro · futuro" },
     ...(isCaptain ? [{ href: "/minha-lancha", label: "Minha Lancha" }] : []),
-    ...(isDriver  ? [{ href: "/meu-carro",    label: "Meu Carro"    }] : []),
     ...(user      ? [{ href: "/minhas-reservas", label: "Reservas"  }] : []),
   ];
 
@@ -118,3 +115,4 @@ export default function Navbar() {
     </nav>
   );
 }
+

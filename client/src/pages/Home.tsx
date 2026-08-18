@@ -3,14 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Clock, Star, ChevronRight, Anchor, Car, Calendar, Shield, MapPin, ArrowRight, Check, Navigation, Zap, Globe } from "lucide-react";
+import { Clock, Star, ChevronRight, Anchor, Calendar, Shield, MapPin, ArrowRight, Check, Navigation, Zap, Globe } from "lucide-react";
 import { useState, useEffect } from "react";
 import RidesMap, { type RideMarker } from "@/components/map/RidesMap";
 
 export default function Home() {
   const [searchFrom, setSearchFrom] = useState("");
   const [searchTo, setSearchTo] = useState("");
-  const [searchType, setSearchType] = useState<"car" | "boat">("boat");
 
   const { data } = useQuery({
     queryKey: ["/api/rides"],
@@ -34,11 +33,10 @@ export default function Home() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    const base = searchType === "car" ? "/caronas" : "/lanchas";
     const params = new URLSearchParams();
     if (searchFrom) params.set("from", searchFrom);
     if (searchTo)   params.set("to", searchTo);
-    window.location.href = `${base}?${params.toString()}`;
+    window.location.href = `/lanchas?${params.toString()}`;
   };
 
   return (
@@ -52,17 +50,12 @@ export default function Home() {
         </video>
         <div className="hero-video-overlay" aria-hidden="true" />
         <div className="hero-float-anchor"><Anchor size={120} /></div>
-        <div className="hero-float-car"><Car size={100} /></div>
 
         <div className="hero-pro-shell">
         <div className="hero-pro-inner fade-up">
-          <div className="hero-pro-eyebrow">
-            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--boat)", display: "inline-block" }} />
-            Piloto water-first · litoral paulista
-          </div>
           <h1 className="hero-pro-title">
             O caminho fica<br />
-            <span className="hero-pro-gradient">melhor compartilhado.</span>
+            melhor compartilhado.
           </h1>
           <p className="hero-pro-sub">
             Encontre uma travessia, veja o que está publicado e combine o embarque<br />
@@ -70,14 +63,6 @@ export default function Home() {
           </p>
 
           <form className="hero-search" onSubmit={handleSearch}>
-            <div className="hero-search-type">
-              <button type="button" className={`search-type-btn ${searchType === "car" ? "active-car" : ""}`} onClick={() => setSearchType("car")} style={{ minHeight: 44 }}>
-                <Car size={12} /> Carro · futuro
-              </button>
-              <button type="button" className={`search-type-btn ${searchType === "boat" ? "active-boat" : ""}`} onClick={() => setSearchType("boat")} style={{ minHeight: 44 }}>
-                <Anchor size={12} /> Lancha · piloto
-              </button>
-            </div>
             <div className="hero-search-fields">
               <div className="hero-search-field">
                 <MapPin size={14} className="search-field-icon" />
@@ -88,49 +73,18 @@ export default function Home() {
                 <MapPin size={14} className="search-field-icon" />
                 <input value={searchTo} onChange={e => setSearchTo(e.target.value)} placeholder="Para onde?" />
               </div>
-              <button type="submit" className={`hero-search-btn ${searchType === "boat" ? "hero-search-btn-boat" : "hero-search-btn-car"}`}>
+              <button type="submit" className="hero-search-btn">
                 Buscar <ArrowRight size={14} />
               </button>
             </div>
           </form>
 
-          <div className="hero-pro-links">
-            <Link href="/caronas"><span className="hero-quick-link hero-quick-link-car"><Car size={12} /> Carro</span></Link>
-            <Link href="/lanchas"><span className="hero-quick-link hero-quick-link-boat"><Anchor size={12} /> Lancha</span></Link>
-            <Link href="/recorrentes"><span className="hero-quick-link"><Calendar size={12} /> Recorrentes</span></Link>
-          </div>
           <div className="hero-pro-utility">
             <span><Shield size={13} /> Informação antes do embarque</span>
             <span><Anchor size={13} /> Operadores independentes</span>
           </div>
         </div>
 
-        <aside className="hero-pro-rail fade-up" style={{ animationDelay: "120ms" }}>
-          <div className="hero-rail-card">
-            <div className="hero-rail-header">
-              <span className="hero-rail-kicker"><span className="hero-rail-dot" /> O piloto começa por</span>
-              <Anchor size={18} />
-            </div>
-            <div className="hero-rail-route">
-              <div>
-                <span>Região</span>
-                <strong>Ilhabela</strong>
-              </div>
-              <div className="hero-rail-route-line" aria-hidden="true"><span /><Anchor size={15} /></div>
-              <div>
-                <span>Litoral norte</span>
-                <strong>São Sebastião</strong>
-              </div>
-            </div>
-            <p className="hero-rail-copy">
-              A disponibilidade aparece conforme operadores publicam viagens reais na plataforma.
-            </p>
-            <Link href="/lanchas">
-              <span className="hero-rail-link">Explorar travessias <ArrowRight size={14} /></span>
-            </Link>
-          </div>
-          <div className="hero-rail-note"><MapPin size={14} /> Uma operação local, construída com quem navega</div>
-        </aside>
         </div>
 
         <div className="hero-wave">
@@ -157,17 +111,7 @@ export default function Home() {
       </div>
 
       {/* ─── SPLIT LANE ─── */}
-      <div className="split-lane">
-        <Link href="/caronas">
-          <div className="split-panel split-panel-car reveal">
-            <div className="split-panel-accent" />
-            <div className="split-panel-icon"><Car size={26} /></div>
-            <p className="split-panel-label">Carro · em breve</p>
-            <h2 className="split-panel-title">Uma próxima fase</h2>
-            <p className="split-panel-desc">A camada de caronas terrestres continua no produto, mas o piloto atual está concentrado no transporte por água.</p>
-            <span className="split-panel-btn">Conhecer a área futura <ArrowRight size={13} /></span>
-          </div>
-        </Link>
+      <div className="split-lane split-lane-single">
         <Link href="/lanchas">
           <div className="split-panel split-panel-boat reveal reveal-delay-1">
             <div className="split-panel-accent" />
@@ -191,7 +135,6 @@ export default function Home() {
               {[
                 { dot: "boat", title: "Piloto aquático", desc: "Ilhabela e São Sebastião como ponto de partida" },
                 { dot: "boat", title: "Disponibilidade publicada", desc: "Horário, capacidade e preço dependem de viagens reais" },
-                { dot: "car",  title: "Carro em planejamento", desc: "A aba permanece para uma próxima etapa do produto" },
               ].map((f, i) => (
                 <div key={i} className="map-feature-item fade-up" style={{ animationDelay: `${i * 80}ms` }}>
                   <div className={`map-feature-dot map-feature-dot-${f.dot}`} />
@@ -203,10 +146,6 @@ export default function Home() {
               ))}
             </div>
             <div style={{ display: "flex", gap: 16, marginTop: 20, flexWrap: "wrap" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 13, color: "var(--text2)" }}>
-                <span style={{ width: 12, height: 12, borderRadius: "50%", background: "var(--car)", display: "inline-block" }} />
-                Carro · futuro
-              </div>
               <div style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 13, color: "var(--text2)" }}>
                 <span style={{ width: 12, height: 12, borderRadius: "50%", background: "var(--boat)", display: "inline-block" }} />
                 Travessias publicadas
@@ -222,21 +161,6 @@ export default function Home() {
       {/* ─── LIVE FEED ─── */}
       <section className="section-pro" style={{ background: "var(--bg)" }}>
         <div className="section-inner">
-          <div className="feed-header fade-up">
-            <div>
-              <p className="section-label" style={{ color: "var(--car)" }}>
-                <Car size={11} style={{ display: "inline", verticalAlign: "middle", marginRight: 5 }} />
-                ÁREA FUTURA
-              </p>
-              <h2 className="section-title-pro">Caronas de carro em breve</h2>
-            </div>
-            <Link href="/caronas"><span className="link-more-pro">Ver todas <ChevronRight size={14} /></span></Link>
-          </div>
-          <div style={{ padding: "24px", border: "1px dashed var(--border)", borderRadius: 16, background: "var(--bg2)", color: "var(--text2)" }}>
-            <p style={{ fontWeight: 700, color: "var(--text1)", marginBottom: 6 }}>Esta área fica reservada para a expansão terrestre.</p>
-            <p style={{ fontSize: 13, lineHeight: 1.5 }}>O produto atual não inventa viagens, motoristas ou preços: quando houver caronas de carro publicadas, elas aparecerão aqui.</p>
-          </div>
-
           <div className="feed-header fade-up" style={{ marginTop: 56 }}>
             <div>
               <p className="section-label" style={{ color: "var(--boat)" }}>
@@ -344,13 +268,7 @@ export default function Home() {
       {/* ─── CTA ─── */}
       <section className="cta-pro-section">
         <div className="section-inner">
-          <div className="cta-pro-grid fade-up">
-            <div className="cta-pro-card cta-pro-car reveal">
-              <div className="cta-pro-icon-wrap"><Car size={24} /></div>
-              <h3>Você opera no transporte terrestre?</h3>
-              <p>A área de carro fica preservada no produto para uma próxima fase, depois que o piloto aquático validar a operação.</p>
-              <Link href="/caronas"><span className="cta-pro-btn cta-pro-btn-car">Conhecer a área futura</span></Link>
-            </div>
+          <div className="cta-pro-grid cta-pro-grid-single fade-up">
             <div className="cta-pro-card cta-pro-boat reveal reveal-delay-1">
               <div className="cta-pro-icon-wrap"><Anchor size={24} /></div>
               <h3>Você tem lancha?</h3>
@@ -365,32 +283,22 @@ export default function Home() {
 }
 
 function RideCard({ ride, i }: { ride: any; i: number }) {
-  const isBoat = ride.rideType === "boat";
   return (
-    <div className={`ride-card-pro ${isBoat ? "boat-card" : "car-card"} fade-up`} style={{ animationDelay: `${i * 70}ms` }}>
+    <div className="ride-card-pro boat-card fade-up" style={{ animationDelay: `${i * 70}ms` }}>
       <Link href={`/viagens/${ride.id}`}>
         <div className="ride-card-pro-inner">
-          <div className="ride-card-pro-top">
-            <span className={`type-pill ${isBoat ? "type-pill-boat" : "type-pill-car"}`}>
-              {isBoat ? <Anchor size={10} /> : <Car size={10} />}
-              {isBoat ? "Lancha" : "Carro"}
-            </span>
-            <span className={`avail-pill ${ride.availableSeats > 0 ? "avail-yes" : "avail-no"}`}>
-              {ride.availableSeats > 0 ? `${ride.availableSeats} vagas` : "Esgotado"}
-            </span>
-          </div>
           <div className="ride-card-pro-route">
             <div className="ride-card-pro-city">{ride.originCity}</div>
             <div className="ride-card-pro-arrow">
               <div className="arrow-line-pro" />
-              {isBoat ? <Anchor size={12} color="var(--boat)" /> : <Car size={12} color="var(--car)" />}
+              <Anchor size={12} color="var(--boat)" />
               <div className="arrow-line-pro" />
             </div>
             <div className="ride-card-pro-city">{ride.destinationCity}</div>
           </div>
           <div className="ride-card-pro-meta">
             <span><Clock size={11} /> {format(new Date(ride.departureTime), "dd MMM · HH:mm", { locale: ptBR })}</span>
-            <span>{isBoat ? <><Anchor size={10} />{ride.boatName} · Cap. {ride.captainName}</> : <><Car size={10} />{ride.carName} · {ride.captainName}</>}</span>
+            <span><Anchor size={10} />{ride.boatName} · Cap. {ride.captainName}</span>
           </div>
           <div className="ride-card-pro-footer">
             <div>
@@ -406,3 +314,4 @@ function RideCard({ ride, i }: { ride: any; i: number }) {
     </div>
   );
 }
+

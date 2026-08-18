@@ -94,22 +94,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── PILOT STATUS ─── */}
-      <div className="pilot-status">
-        <div className="pilot-status-inner">
-          {[
-            { title: 'Piloto regional', label: 'Foco inicial em Ilhabela e São Sebastião' },
-            { title: 'Confiança em construção', label: 'Perfis e documentação entram na operação com revisão manual' },
-            { title: 'Sem frota própria', label: 'A Marcamar conecta passageiros e operadores independentes' },
-          ].map((s, i) => (
-            <div key={i} style={{ textAlign: 'center', padding: '8px 16px', maxWidth: 260 }}>
-              <div style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--text1)' }}>{s.title}</div>
-              <div style={{ fontSize: '12px', color: 'var(--text3)', marginTop: 4, lineHeight: 1.4 }}>{s.label}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* ─── SPLIT LANE ─── */}
       <div className="split-lane split-lane-single">
         <Link href="/lanchas">

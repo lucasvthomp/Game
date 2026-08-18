@@ -1,8 +1,8 @@
 # Marcamar homepage media
 
-The homepage hero is a muted montage assembled from three lightweight, free-to-use Pexels clips. `client/src/pages/Home.tsx` plays them sequentially and restarts the montage after the third clip. Each individual clip is encoded forward and then in reverse so the scene itself does not hard-cut when it repeats.
+The homepage hero is a muted, approximately 32-second commuter-water montage assembled from three lightweight, free-to-use Pexels clips. The final file repeats the opening boarding scene at the end so the browser's native loop returns to the same scene instead of hard-cutting to a new one. It is intentionally compact for dependable delivery on the production host.
 
-- `marcamar-hero-boat.mp4`: [People are boarding a boat at a dock](https://www.pexels.com/video/people-are-boarding-a-boat-at-a-dock-19321988/) by Sururi Ballıdağ
+- `marcamar-hero-boat.mp4`: final montage, opening with [People are boarding a boat at a dock](https://www.pexels.com/video/people-are-boarding-a-boat-at-a-dock-19321988/) by Sururi Ballıdağ
 - `marcamar-hero-crossing.mp4`: [Passengers on a Ferry Boat](https://www.pexels.com/video/passengers-on-a-ferry-boat-3999742/) by Creative Film
 - `marcamar-hero-dock.mp4`: [Boats Docked At The Pier During Daytime](https://www.pexels.com/video/boats-docked-at-the-pier-during-daytime-4123330/) by 宋 小天
 

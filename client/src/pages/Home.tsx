@@ -7,16 +7,9 @@ import { Clock, Star, ChevronRight, Anchor, Calendar, Shield, MapPin, ArrowRight
 import { useState, useEffect } from "react";
 import RidesMap, { type RideMarker } from "@/components/map/RidesMap";
 
-const HERO_VIDEO_SOURCES = [
-  "/videos/marcamar-hero-boat.mp4",
-  "/videos/marcamar-hero-crossing.mp4",
-  "/videos/marcamar-hero-dock.mp4",
-];
-
 export default function Home() {
   const [searchFrom, setSearchFrom] = useState("");
   const [searchTo, setSearchTo] = useState("");
-  const [heroVideoIndex, setHeroVideoIndex] = useState(0);
 
   const { data } = useQuery({
     queryKey: ["/api/rides"],
@@ -52,18 +45,8 @@ export default function Home() {
 
       {/* ─── HERO ─── */}
       <section className="hero-pro">
-        <video
-          key={HERO_VIDEO_SOURCES[heroVideoIndex]}
-          className="hero-video"
-          autoPlay
-          muted
-          playsInline
-          preload="auto"
-          aria-hidden="true"
-          onEnded={() => setHeroVideoIndex((current) => (current + 1) % HERO_VIDEO_SOURCES.length)}
-          onError={() => setHeroVideoIndex((current) => (current + 1) % HERO_VIDEO_SOURCES.length)}
-        >
-          <source src={HERO_VIDEO_SOURCES[heroVideoIndex]} type="video/mp4" />
+        <video className="hero-video" autoPlay muted loop playsInline preload="auto" aria-hidden="true">
+          <source src="/videos/marcamar-hero-boat.mp4" type="video/mp4" />
         </video>
         <div className="hero-video-overlay" aria-hidden="true" />
         <div className="hero-float-anchor"><Anchor size={120} /></div>

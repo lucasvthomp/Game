@@ -45,7 +45,7 @@ export default function Home() {
 
       {/* ─── HERO ─── */}
       <section className="hero-pro">
-        <video className="hero-video" autoPlay muted loop playsInline preload="metadata" aria-hidden="true">
+        <video className="hero-video" autoPlay muted loop playsInline preload="auto" aria-hidden="true">
           <source src="/videos/marcamar-hero-boat.mp4" type="video/mp4" />
         </video>
         <div className="hero-video-overlay" aria-hidden="true" />

@@ -2101,3 +2101,36 @@ input, select, textarea, button { font-family: inherit; }
   margin-right: auto;
 }
 
+/* Keep the hero video tall enough to frame the message, with the copy centered
+   between the top and bottom edges of the moving image. */
+.hero-pro {
+  min-height: clamp(740px, calc(100svh - 72px), 920px);
+  display: flex;
+  flex-direction: column;
+}
+.hero-pro-shell {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  width: min(1180px, 100%);
+  padding-bottom: 26px;
+}
+.hero-pro-inner {
+  width: 100%;
+}
+.hero-video {
+  object-position: center center;
+}
+.hero-wave {
+  margin-top: 0;
+}
+
+@media (max-width: 700px) {
+  .hero-pro {
+    min-height: 760px;
+  }
+  .hero-pro-shell {
+    padding-bottom: 18px;
+  }
+}
+

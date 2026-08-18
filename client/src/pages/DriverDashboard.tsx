@@ -20,8 +20,8 @@ export default function DriverDashboard() {
   const qc = useQueryClient();
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(EMPTY_FORM);
-  const [originPin, setOriginPin] = useState<[number, number] | null>(null);
-  const [destPin, setDestPin] = useState<[number, number] | null>(null);
+  const [originPin, setOriginPin] = useState<LatLng | null>(null);
+  const [destPin, setDestPin] = useState<LatLng | null>(null);
   const [showMap, setShowMap] = useState(false);
   const [error, setError] = useState("");
 
@@ -43,10 +43,10 @@ export default function DriverDashboard() {
       rideType: "car",
       totalSeats: parseInt(form.totalSeats),
       pricePerSeat: parseFloat(form.pricePerSeat),
-      originLat: originPin?.[0] ?? null,
-      originLng: originPin?.[1] ?? null,
-      destLat: destPin?.[0] ?? null,
-      destLng: destPin?.[1] ?? null,
+      originLat: originPin?.lat ?? null,
+      originLng: originPin?.lng ?? null,
+      destLat: destPin?.lat ?? null,
+      destLng: destPin?.lng ?? null,
     }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["/api/my/rides"] });
@@ -211,13 +211,20 @@ export default function DriverDashboard() {
               {showMap && (
                 <div style={{ marginTop: 10 }}>
                   <Suspense fallback={<div style={{ height: 300, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text3)" }}>Carregando mapa...</div>}>
-                    <MapPicker
-                      type="car"
-                      originPin={originPin}
-                      destPin={destPin}
-                      onOriginPick={(lat, lng) => setOriginPin([lat, lng])}
-                      onDestPick={(lat, lng) => setDestPin([lat, lng])}
-                    />
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 14 }}>
+                      <LocationPicker
+                        label="Origem (clique para marcar)"
+                        variant="origin"
+                        value={originPin}
+                        onChange={setOriginPin}
+                      />
+                      <LocationPicker
+                        label="Destino (clique para marcar)"
+                        variant="dest"
+                        value={destPin}
+                        onChange={setDestPin}
+                      />
+                    </div>
                   </Suspense>
                   {(originPin || destPin) && (
                     <div style={{ display: "flex", gap: 8, marginTop: 6, flexWrap: "wrap" }}>

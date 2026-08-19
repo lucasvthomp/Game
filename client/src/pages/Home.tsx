@@ -156,6 +156,8 @@ export default function Home() {
 
       {/* ─── MAP SECTION (real Leaflet) ─── */}
       <section className="map-section">
+        <div className="map-chart-note map-chart-note-top" aria-hidden="true">PILOTO / MAPA DE ROTAS</div>
+        <div className="map-chart-note map-chart-note-bottom" aria-hidden="true"><Navigation size={15} /> litoral paulista</div>
         <div className="map-section-inner" style={{ margin: "0 auto", padding: "0 24px" }}>
           <div className="fade-up">
             <p className="map-text-label">Cobertura de rotas</p>
@@ -175,11 +177,9 @@ export default function Home() {
                 </div>
               ))}
             </div>
-            <div style={{ display: "flex", gap: 16, marginTop: 20, flexWrap: "wrap" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 13, color: "var(--text2)" }}>
-                <span style={{ width: 12, height: 12, borderRadius: "50%", background: "var(--boat)", display: "inline-block" }} />
-                Travessias publicadas
-              </div>
+            <div className="map-published-legend">
+              <span className="map-published-legend-dot" />
+              Travessias publicadas
             </div>
           </div>
           <div className="scale-in" style={{ animationDelay: "120ms" }}>
@@ -189,7 +189,7 @@ export default function Home() {
       </section>
 
       {/* ─── LIVE FEED ─── */}
-      <section className="section-pro" style={{ background: "var(--bg)" }}>
+      <section className="section-pro live-feed-section" style={{ background: "var(--bg)" }}>
         <div className="section-inner">
           <div className="feed-header fade-up" style={{ marginTop: 56 }}>
             <div>
@@ -206,22 +206,35 @@ export default function Home() {
               {boatRides.map((ride: any, i: number) => <RideCard key={ride.id} ride={ride} i={i} />)}
             </div>
           ) : (
-            <div style={{ padding: "24px", border: "1px dashed var(--border)", borderRadius: 16, background: "var(--bg2)", color: "var(--text2)" }}>
-              <p style={{ fontWeight: 700, color: "var(--text1)", marginBottom: 6 }}>Ainda não há travessias publicadas.</p>
-              <p style={{ fontSize: 13, lineHeight: 1.5 }}>Estamos começando com um piloto concentrado. Operadores podem cadastrar sua rota para formar a primeira oferta local.</p>
+            <div className="live-feed-empty">
+              <div className="live-feed-empty-photo">
+                <img src="/images/marcamar-ferry-boarding.jpg" alt="Passageiros se preparando para embarcar" />
+                <span>primeiro embarque</span>
+              </div>
+              <div className="live-feed-empty-copy">
+                <div className="live-feed-empty-kicker"><Anchor size={14} /> oferta em construção</div>
+                <p className="live-feed-empty-title">Ainda não há travessias publicadas.</p>
+                <p className="live-feed-empty-desc">Estamos começando com um piloto concentrado. Operadores podem cadastrar sua rota para formar a primeira oferta local.</p>
+              </div>
+              <div className="live-feed-empty-tail" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+              </div>
             </div>
           )}
         </div>
       </section>
 
       {/* ─── HOW IT WORKS ─── */}
-      <section className="section-pro" style={{ background: "var(--bg2)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
+      <section className="section-pro how-it-works-section" style={{ background: "var(--bg2)", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
         <div className="section-inner">
           <div className="section-label-row fade-up">
             <p className="section-label" style={{ color: "var(--text3)" }}>COMO FUNCIONA</p>
             <h2 className="section-title-pro">Simples assim</h2>
           </div>
           <div className="steps-pro">
+            <div className="steps-waterline" aria-hidden="true" />
             {[
               { icon: <Anchor size={20} />,    step: "01", title: "Encontre a travessia", desc: "Começamos por rotas e pedidos de transporte na água, com foco no litoral paulista." },
               { icon: <Navigation size={20} />, step: "02", title: "Confira a opção",      desc: "Veja rota, horário, capacidade, preço e o perfil do operador quando houver uma viagem publicada." },
@@ -256,15 +269,27 @@ export default function Home() {
                 <span className="btn-boat-solid">Ver rotas recorrentes <ArrowRight size={14} /></span>
               </Link>
             </div>
-            <div className="recurring-pro-visual" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <div className="recurring-preview-card" style={{ width: "100%" }}>
-                <div className="recurring-preview-label-row">
-                  <Calendar size={13} color="var(--boat)" />
-                  <p className="recurring-preview-label">Recorrentes em planejamento</p>
+            <div className="recurring-pro-visual">
+              <div className="recurring-route-sheet" aria-label="Exemplo visual de rota recorrente em planejamento">
+                <div className="recurring-route-sheet-photo">
+                  <img src="/images/marcamar-ferry-passenger.jpg" alt="Passageiro a bordo durante uma travessia" />
                 </div>
-                <p style={{ color: "var(--text2)", fontSize: 13, lineHeight: 1.5, marginTop: 12 }}>
-                  Quando o piloto tiver rotas repetidas, esta área poderá aproximar passageiros e operadores que fazem o mesmo trajeto com frequência.
-                </p>
+                <div className="recurring-route-sheet-body">
+                  <div className="recurring-route-sheet-head">
+                    <span><Calendar size={14} /> rota em preparação</span>
+                    <strong>horário a definir</strong>
+                  </div>
+                  <div className="recurring-route-line">
+                    <span>ILHABELA</span>
+                    <i />
+                    <span>SÃO SEBASTIÃO</span>
+                  </div>
+                  <p>Quando o piloto tiver rotas repetidas, esta área poderá aproximar passageiros e operadores que fazem o mesmo trajeto com frequência.</p>
+                  <div className="recurring-route-sheet-footer">
+                    <span>frequência a definir</span>
+                    <span>disponibilidade publicada</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -272,7 +297,7 @@ export default function Home() {
       </section>
 
       {/* ─── TRUST ─── */}
-      <section className="section-pro" style={{ background: "var(--bg)" }}>
+      <section className="section-pro trust-section" style={{ background: "var(--bg)" }}>
         <div className="section-inner">
           <div className="section-label-row fade-up" style={{ marginBottom: 32 }}>
             <p className="section-label" style={{ color: "var(--text3)" }}>POR QUE USAR</p>
@@ -285,7 +310,7 @@ export default function Home() {
               { icon: <Globe size={22} />,    title: "Piloto concentrado", desc: "Começamos em uma região pequena para aprender com viagens reais antes de expandir.", color: "var(--boat)" },
               { icon: <Clock size={22} />,    title: "Conversas registradas", desc: "Cada reserva tem um contexto de mensagens para alinhar ponto de encontro e execução.", color: "var(--boat)" },
             ].map((t, i) => (
-              <div key={i} className={`trust-card reveal reveal-delay-${i + 1}`}>
+              <div key={i} className={`trust-card trust-card-${i} reveal reveal-delay-${i + 1}`}>
                 <div className="trust-icon" style={{ background: `${t.color}15`, color: t.color }}>{t.icon}</div>
                 <h3 className="trust-title">{t.title}</h3>
                 <p className="trust-desc">{t.desc}</p>
@@ -298,6 +323,11 @@ export default function Home() {
       {/* ─── CTA ─── */}
       <section className="cta-pro-section">
         <div className="section-inner">
+          <div className="cta-pro-orbit" aria-hidden="true">
+            <Anchor size={42} />
+            <span>primeira oferta local</span>
+            <span>quem navega, publica</span>
+          </div>
           <div className="cta-pro-grid cta-pro-grid-single fade-up">
             <div className="cta-pro-card cta-pro-boat reveal reveal-delay-1">
               <div className="cta-pro-icon-wrap"><Anchor size={24} /></div>

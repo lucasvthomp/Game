@@ -182,7 +182,15 @@ export default function Home() {
               Travessias publicadas
             </div>
           </div>
-          <div className="scale-in" style={{ animationDelay: "120ms" }}>
+          <div className="map-media-stage scale-in" style={{ animationDelay: "120ms" }}>
+            <figure className="map-media-photo map-media-photo-a" aria-hidden="true">
+              <img src="https://images.pexels.com/photos/27677750/pexels-photo-27677750/free-photo-of-passengers-getting-off-a-boat.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1200" alt="" loading="lazy" decoding="async" />
+            </figure>
+            <figure className="map-media-video map-media-video-a" aria-hidden="true">
+              <video autoPlay muted loop playsInline preload="metadata" poster="/images/marcamar-dock.jpg">
+                <source src="https://videos.pexels.com/video-files/13842416/13842416-hd_1920_1080_30fps.mp4" type="video/mp4" />
+              </video>
+            </figure>
             <RidesMap rides={mapRides} height="380px" />
           </div>
         </div>
@@ -211,6 +219,9 @@ export default function Home() {
                 <img src="/images/marcamar-ferry-boarding.jpg" alt="Passageiros se preparando para embarcar" />
                 <span>primeiro embarque</span>
               </div>
+              <div className="live-feed-empty-photo-secondary" aria-hidden="true">
+                <img src="https://images.pexels.com/photos/17959078/pexels-photo-17959078/free-photo-of-passengers-boarding-on-ferry.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900" alt="" loading="lazy" decoding="async" />
+              </div>
               <div className="live-feed-empty-copy">
                 <div className="live-feed-empty-kicker"><Anchor size={14} /> oferta em construção</div>
                 <p className="live-feed-empty-title">Ainda não há travessias publicadas.</p>
@@ -232,6 +243,19 @@ export default function Home() {
           <div className="section-label-row fade-up">
             <p className="section-label" style={{ color: "var(--text3)" }}>COMO FUNCIONA</p>
             <h2 className="section-title-pro">Simples assim</h2>
+          </div>
+          <div className="steps-media-curve" aria-hidden="true">
+            <figure className="steps-media-frame steps-media-frame-a">
+              <img src="/images/marcamar-ferry-boarding.jpg" alt="" />
+            </figure>
+            <figure className="steps-media-frame steps-media-frame-b">
+              <video autoPlay muted loop playsInline preload="metadata" poster="/images/marcamar-dock.jpg">
+                <source src="https://videos.pexels.com/video-files/13842416/13842416-hd_1920_1080_30fps.mp4" type="video/mp4" />
+              </video>
+            </figure>
+            <figure className="steps-media-frame steps-media-frame-c">
+              <img src="https://images.unsplash.com/photo-1738042184029-e5c1bd541e31?auto=format&fit=crop&fm=jpg&q=84&w=1200" alt="" loading="lazy" decoding="async" />
+            </figure>
           </div>
           <div className="steps-pro">
             <div className="steps-waterline" aria-hidden="true">
@@ -279,6 +303,11 @@ export default function Home() {
                   <path d="M20 276 C 126 214, 180 300, 278 246 S 398 173, 504 202" />
                   <path d="M48 304 C 142 265, 202 318, 300 278 S 406 233, 486 250" />
                 </svg>
+                <div className="recurring-route-video" aria-hidden="true">
+                  <video autoPlay muted loop playsInline preload="metadata" poster="/images/marcamar-dock.jpg">
+                    <source src="https://videos.pexels.com/video-files/13842416/13842416-hd_1920_1080_30fps.mp4" type="video/mp4" />
+                  </video>
+                </div>
                 <div className="recurring-route-sheet-photo">
                   <img src="/images/marcamar-ferry-passenger.jpg" alt="Passageiro a bordo durante uma travessia" />
                 </div>
@@ -322,6 +351,14 @@ export default function Home() {
               { icon: <Clock size={22} />,    title: "Conversas registradas", desc: "Cada reserva tem um contexto de mensagens para alinhar ponto de encontro e execução.", color: "var(--boat)" },
             ].map((t, i) => (
               <div key={i} className={`trust-card trust-card-${i} reveal reveal-delay-${i + 1}`}>
+                <div className="trust-card-media" aria-hidden="true">
+                  <img src={[
+                    "/images/marcamar-dock.jpg",
+                    "https://images.pexels.com/photos/17959078/pexels-photo-17959078/free-photo-of-passengers-boarding-on-ferry.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900",
+                    "/images/marcamar-ferry-passenger.jpg",
+                    "https://images.pexels.com/photos/27677750/pexels-photo-27677750/free-photo-of-passengers-getting-off-a-boat.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900",
+                  ][i]} alt="" loading="lazy" decoding="async" />
+                </div>
                 <div className="trust-icon" style={{ background: `${t.color}15`, color: t.color }}>{t.icon}</div>
                 <h3 className="trust-title">{t.title}</h3>
                 <p className="trust-desc">{t.desc}</p>
@@ -344,6 +381,11 @@ export default function Home() {
               <div className="cta-pro-photo" aria-hidden="true">
                 <img src="/images/marcamar-dock.jpg" alt="" />
                 <span>água como caminho</span>
+              </div>
+              <div className="cta-pro-video" aria-hidden="true">
+                <video autoPlay muted loop playsInline preload="metadata" poster="/images/marcamar-dock.jpg">
+                  <source src="https://videos.pexels.com/video-files/13842416/13842416-hd_1920_1080_30fps.mp4" type="video/mp4" />
+                </video>
               </div>
               <div className="cta-pro-icon-wrap"><Anchor size={24} /></div>
               <h3>Você tem lancha?</h3>

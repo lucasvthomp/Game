@@ -6,6 +6,7 @@ import { Anchor, Plus, Clock, Users, Trash2, CheckCircle, TrendingUp, Map } from
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState, lazy, Suspense } from "react";
+import { BoatMediaCluster } from "@/components/layout/BoatMediaCluster";
 import type { LatLng } from "@/components/map/LocationPicker";
 
 const LocationPicker = lazy(() => import("@/components/map/LocationPicker"));
@@ -103,6 +104,7 @@ export default function CaptainDashboard() {
           <h1 className="page-title">Minha Lancha</h1>
           <p className="page-sub">Gerencie suas viagens e passageiros</p>
         </div>
+        <BoatMediaCluster variant="compact" />
         <button className="btn-add" onClick={() => { setShowForm(!showForm); setError(""); setSuccess(""); }}>
           <Plus size={16} /> Nova viagem
         </button>
@@ -247,3 +249,4 @@ export default function CaptainDashboard() {
     </div>
   );
 }
+

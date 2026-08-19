@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useLocation, Link } from "wouter";
 import { Anchor, Clock, MapPin, Trash2 } from "lucide-react";
 import { format } from "date-fns";
+import { BoatMediaCluster } from "@/components/layout/BoatMediaCluster";
 
 export default function MyReservations() {
   const { user } = useAuth();
@@ -33,6 +34,7 @@ export default function MyReservations() {
           <h1 className="page-title">Minhas Reservas</h1>
           <p className="page-sub">Suas caronas agendadas</p>
         </div>
+        <BoatMediaCluster variant="compact" />
       </div>
 
       {isLoading ? (
@@ -105,3 +107,4 @@ function ResCard({ res, onCancel, messagesHref }: { res: any; onCancel?: () => v
     </div>
   );
 }
+

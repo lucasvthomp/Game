@@ -6,6 +6,7 @@ import { ptBR } from "date-fns/locale";
 import { Clock, Star, ChevronRight, Anchor, Calendar, Shield, MapPin, ArrowRight, Check, Navigation, Zap, Globe } from "lucide-react";
 import { useState, useEffect } from "react";
 import RidesMap, { type RideMarker } from "@/components/map/RidesMap";
+import { BOAT_MEDIA } from "@/lib/boat-media";
 
 export default function Home() {
   const [searchFrom, setSearchFrom] = useState("");
@@ -45,7 +46,7 @@ export default function Home() {
 
       {/* ─── HERO ─── */}
       <section className="hero-pro">
-        <video className="hero-video" autoPlay muted playsInline preload="auto" poster="/images/marcamar-dock.jpg" aria-hidden="true">
+        <video className="hero-video" autoPlay muted playsInline preload="auto" poster={BOAT_MEDIA.dock} aria-hidden="true">
           <source src="https://videos.pexels.com/video-files/5579142/5579142-hd_1920_1080_30fps.mp4" type="video/mp4" />
         </video>
         <div className="hero-video-overlay" aria-hidden="true" />
@@ -126,27 +127,27 @@ export default function Home() {
 
           <div className="everyday-water-visual reveal reveal-delay-1" aria-label="Cenas de uma travessia cotidiana">
             <figure className="everyday-water-main-image">
-              <img src="/images/marcamar-dock.jpg" alt="Passageiros caminhando junto a um barco no cais" />
+              <img src={BOAT_MEDIA.dock} alt="Passageiros caminhando junto a um barco no cais" />
               <figcaption>O caminho começa no cais.</figcaption>
             </figure>
             <figure className="everyday-water-inset everyday-water-inset-boarding">
-              <img src="/images/marcamar-ferry-boarding.jpg" alt="Passageiros embarcando em uma balsa" />
+              <img src={BOAT_MEDIA.boarding} alt="Passageiros embarcando em uma balsa" />
               <figcaption>Embarque sem adivinhação.</figcaption>
             </figure>
             <figure className="everyday-water-inset everyday-water-inset-passenger">
-              <img src="/images/marcamar-ferry-passenger.jpg" alt="Passageira sentada dentro de uma balsa" />
+              <img src={BOAT_MEDIA.passenger} alt="Passageira sentada dentro de uma balsa" />
               <figcaption>Tempo para seguir o dia.</figcaption>
             </figure>
             <figure className="everyday-water-inset everyday-water-inset-commute">
-              <img src="https://images.unsplash.com/photo-1656231902670-4fee9bb15973?auto=format&fit=crop&fm=jpg&q=84&w=1200" alt="Pessoa observando a cidade pela janela de uma balsa" loading="lazy" decoding="async" />
+              <img src={BOAT_MEDIA.commute} alt="Pessoa observando a cidade pela janela de uma balsa" loading="lazy" decoding="async" />
               <figcaption>Um trajeto no meio do dia.</figcaption>
             </figure>
             <figure className="everyday-water-inset everyday-water-inset-window">
-              <img src="https://images.unsplash.com/photo-1656336654638-acb56962b5e8?auto=format&fit=crop&fm=jpg&q=84&w=1200" alt="Passageiros junto à rampa de uma balsa" loading="lazy" decoding="async" />
+              <img src={BOAT_MEDIA.boarding} alt="Passageiros junto à rampa de uma balsa" loading="lazy" decoding="async" />
               <figcaption>Cada embarque tem seu ritmo.</figcaption>
             </figure>
             <figure className="everyday-water-inset everyday-water-inset-interior">
-              <img src="https://images.unsplash.com/photo-1661764337630-4314beba1c20?auto=format&fit=crop&fm=jpg&q=84&w=1200" alt="Passageiros sentados dentro de uma balsa" loading="lazy" decoding="async" />
+              <img src={BOAT_MEDIA.passenger} alt="Passageiros sentados dentro de uma balsa" loading="lazy" decoding="async" />
               <figcaption>A travessia também é pausa.</figcaption>
             </figure>
             <div className="everyday-water-sticker"><Anchor size={14} /> água como caminho</div>
@@ -184,10 +185,10 @@ export default function Home() {
           </div>
           <div className="map-media-stage scale-in" style={{ animationDelay: "120ms" }}>
             <figure className="map-media-photo map-media-photo-a" aria-hidden="true">
-              <img src="https://images.pexels.com/photos/27677750/pexels-photo-27677750/free-photo-of-passengers-getting-off-a-boat.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1200" alt="" loading="lazy" decoding="async" />
+                <img src={BOAT_MEDIA.boarding} alt="" loading="lazy" decoding="async" />
             </figure>
             <figure className="map-media-video map-media-video-a" aria-hidden="true">
-              <video autoPlay muted loop playsInline preload="metadata" poster="/images/marcamar-dock.jpg">
+              <video autoPlay muted loop playsInline preload="metadata" poster={BOAT_MEDIA.dock}>
                 <source src="https://videos.pexels.com/video-files/13842416/13842416-hd_1920_1080_30fps.mp4" type="video/mp4" />
               </video>
             </figure>
@@ -216,11 +217,11 @@ export default function Home() {
           ) : (
             <div className="live-feed-empty">
               <div className="live-feed-empty-photo">
-                <img src="/images/marcamar-ferry-boarding.jpg" alt="Passageiros se preparando para embarcar" />
+                <img src={BOAT_MEDIA.boarding} alt="Passageiros se preparando para embarcar" />
                 <span>primeiro embarque</span>
               </div>
               <div className="live-feed-empty-photo-secondary" aria-hidden="true">
-                <img src="https://images.pexels.com/photos/17959078/pexels-photo-17959078/free-photo-of-passengers-boarding-on-ferry.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900" alt="" loading="lazy" decoding="async" />
+                <img src={BOAT_MEDIA.boarding} alt="" loading="lazy" decoding="async" />
               </div>
               <div className="live-feed-empty-copy">
                 <div className="live-feed-empty-kicker"><Anchor size={14} /> oferta em construção</div>
@@ -246,15 +247,15 @@ export default function Home() {
           </div>
           <div className="steps-media-curve" aria-hidden="true">
             <figure className="steps-media-frame steps-media-frame-a">
-              <img src="/images/marcamar-ferry-boarding.jpg" alt="" />
+              <img src={BOAT_MEDIA.boarding} alt="" />
             </figure>
             <figure className="steps-media-frame steps-media-frame-b">
-              <video autoPlay muted loop playsInline preload="metadata" poster="/images/marcamar-dock.jpg">
+              <video autoPlay muted loop playsInline preload="metadata" poster={BOAT_MEDIA.dock}>
                 <source src="https://videos.pexels.com/video-files/13842416/13842416-hd_1920_1080_30fps.mp4" type="video/mp4" />
               </video>
             </figure>
             <figure className="steps-media-frame steps-media-frame-c">
-              <img src="https://images.unsplash.com/photo-1738042184029-e5c1bd541e31?auto=format&fit=crop&fm=jpg&q=84&w=1200" alt="" loading="lazy" decoding="async" />
+              <img src={BOAT_MEDIA.commute} alt="" loading="lazy" decoding="async" />
             </figure>
           </div>
           <div className="steps-pro">
@@ -304,12 +305,12 @@ export default function Home() {
                   <path d="M48 304 C 142 265, 202 318, 300 278 S 406 233, 486 250" />
                 </svg>
                 <div className="recurring-route-video" aria-hidden="true">
-                  <video autoPlay muted loop playsInline preload="metadata" poster="/images/marcamar-dock.jpg">
+                  <video autoPlay muted loop playsInline preload="metadata" poster={BOAT_MEDIA.dock}>
                     <source src="https://videos.pexels.com/video-files/13842416/13842416-hd_1920_1080_30fps.mp4" type="video/mp4" />
                   </video>
                 </div>
                 <div className="recurring-route-sheet-photo">
-                  <img src="/images/marcamar-ferry-passenger.jpg" alt="Passageiro a bordo durante uma travessia" />
+                  <img src={BOAT_MEDIA.passenger} alt="Passageiro a bordo durante uma travessia" />
                 </div>
                 <div className="recurring-route-sheet-body">
                   <div className="recurring-route-sheet-head">
@@ -353,10 +354,10 @@ export default function Home() {
               <div key={i} className={`trust-card trust-card-${i} reveal reveal-delay-${i + 1}`}>
                 <div className="trust-card-media" aria-hidden="true">
                   <img src={[
-                    "/images/marcamar-dock.jpg",
-                    "https://images.pexels.com/photos/17959078/pexels-photo-17959078/free-photo-of-passengers-boarding-on-ferry.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900",
-                    "/images/marcamar-ferry-passenger.jpg",
-                    "https://images.pexels.com/photos/27677750/pexels-photo-27677750/free-photo-of-passengers-getting-off-a-boat.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900",
+                    BOAT_MEDIA.dock,
+                    BOAT_MEDIA.boarding,
+                    BOAT_MEDIA.passenger,
+                    BOAT_MEDIA.dock,
                   ][i]} alt="" loading="lazy" decoding="async" />
                 </div>
                 <div className="trust-icon" style={{ background: `${t.color}15`, color: t.color }}>{t.icon}</div>
@@ -379,11 +380,11 @@ export default function Home() {
           <div className="cta-pro-grid cta-pro-grid-single fade-up">
             <div className="cta-pro-card cta-pro-boat reveal reveal-delay-1">
               <div className="cta-pro-photo" aria-hidden="true">
-                <img src="/images/marcamar-dock.jpg" alt="" />
+                <img src={BOAT_MEDIA.dock} alt="" />
                 <span>água como caminho</span>
               </div>
               <div className="cta-pro-video" aria-hidden="true">
-                <video autoPlay muted loop playsInline preload="metadata" poster="/images/marcamar-dock.jpg">
+                <video autoPlay muted loop playsInline preload="metadata" poster={BOAT_MEDIA.dock}>
                   <source src="https://videos.pexels.com/video-files/13842416/13842416-hd_1920_1080_30fps.mp4" type="video/mp4" />
                 </video>
               </div>

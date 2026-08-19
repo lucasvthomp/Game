@@ -6,6 +6,7 @@ import { Anchor, Car, Clock, Users, Star, ChevronLeft, CheckCircle, Shield, Aler
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
+import { BoatMediaCluster } from "@/components/layout/BoatMediaCluster";
 import RouteMap from "@/components/map/RouteMap";
 
 function StarRating({ value, onChange }: { value: number; onChange?: (v: number) => void }) {
@@ -111,6 +112,16 @@ export default function RideDetail() {
           <ChevronLeft size={16} /> Todas as viagens
         </button>
       </div>
+
+      {ride.rideType === "boat" && (
+        <div className="detail-media-rail">
+          <div className="detail-media-copy">
+            <p className="section-label" style={{ color: "var(--boat)" }}>A TRAVESSIA POR PERTO</p>
+            <p>Confira o caminho, o ponto de encontro e quem está no comando antes de embarcar.</p>
+          </div>
+          <BoatMediaCluster variant="compact" />
+        </div>
+      )}
 
       <div className="detail-body">
         {/* Route card */}
@@ -348,3 +359,4 @@ export default function RideDetail() {
     </div>
   );
 }
+

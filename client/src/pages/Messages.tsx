@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Send, ChevronLeft, MapPin, Clock } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { BoatMediaCluster } from "@/components/layout/BoatMediaCluster";
 
 export default function Messages() {
   const { reservationId } = useParams<{ reservationId: string }>();
@@ -64,6 +65,10 @@ export default function Messages() {
           )}
         </div>
       )}
+
+      <div className="messages-media-strip">
+        <BoatMediaCluster variant="wide" />
+      </div>
 
       {/* Messages */}
       <div style={{ flex: 1, overflowY: "auto", padding: "20px 16px", display: "flex", flexDirection: "column", gap: 10, maxWidth: 600, width: "100%", margin: "0 auto" }}>
@@ -126,3 +131,4 @@ export default function Messages() {
     </div>
   );
 }
+

@@ -5,6 +5,7 @@ import { Anchor, Calendar, Clock, Star, Search, Users, ArrowRight, Map, List } f
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState, lazy, Suspense } from "react";
+import { BOAT_MEDIA } from "@/lib/boat-media";
 
 const RidesMap = lazy(() => import("@/components/map/RidesMap"));
 
@@ -62,13 +63,13 @@ export default function Rides() {
                 <img src="/images/marcamar-map-coast.svg" alt="" />
               </figure>
               <figure className="lancha-cluster-photo lancha-cluster-photo-dock">
-                <img src="/images/marcamar-dock.jpg" alt="" />
+                <img src={BOAT_MEDIA.dock} alt="" />
               </figure>
               <figure className="lancha-cluster-map lancha-cluster-map-route">
                 <img src="/images/marcamar-map-route.svg" alt="" />
               </figure>
               <figure className="lancha-cluster-photo lancha-cluster-photo-passenger">
-                <img src="/images/marcamar-ferry-passenger.jpg" alt="" />
+                <img src={BOAT_MEDIA.passenger} alt="" />
               </figure>
               <span className="lancha-cluster-note">rotas reais · litoral paulista</span>
             </div>

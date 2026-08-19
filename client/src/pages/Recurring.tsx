@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { BoatMediaCluster } from "@/components/layout/BoatMediaCluster";
 import { useAuth } from "@/hooks/use-auth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -72,11 +73,16 @@ export default function Recurring() {
     <div className="page-wrapper">
       <div className="rides-header">
         <div className="rides-header-inner">
-          <p className="section-label" style={{ color: "var(--boat)", borderColor: "color-mix(in srgb, var(--amber) 28%, transparent)" }}>ROTAS RECORRENTES</p>
-          <h1 className="page-title" style={{ marginBottom: 8 }}>Rotas recorrentes em planejamento</h1>
-          <p style={{ color: "var(--text2)", fontSize: 15, marginBottom: 20 }}>
-            Esta área fica reservada para a próxima fase: aproximar moradores e operadores com trajetos regulares, começando pelo transporte na água.
-          </p>
+          <div className="recurring-page-hero">
+            <div>
+              <p className="section-label" style={{ color: "var(--boat)", borderColor: "color-mix(in srgb, var(--amber) 28%, transparent)" }}>ROTAS RECORRENTES</p>
+              <h1 className="page-title" style={{ marginBottom: 8 }}>Rotas recorrentes em planejamento</h1>
+              <p style={{ color: "var(--text2)", fontSize: 15, marginBottom: 20 }}>
+                Esta área fica reservada para a próxima fase: aproximar moradores e operadores com trajetos regulares, começando pelo transporte na água.
+              </p>
+            </div>
+            <BoatMediaCluster variant="compact" />
+          </div>
 
         </div>
       </div>

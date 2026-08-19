@@ -4,6 +4,7 @@ import { Anchor, Calendar, LogOut, ChevronRight, User } from "lucide-react";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import { BoatMediaCluster } from "@/components/layout/BoatMediaCluster";
 
 export default function Profile() {
   const { user, logout } = useAuth();
@@ -22,7 +23,13 @@ export default function Profile() {
 
   return (
     <div className="profile-page">
-      <h1 className="page-title" style={{ marginBottom: 28 }}>Perfil</h1>
+      <div className="profile-page-heading">
+        <div>
+          <h1 className="page-title" style={{ marginBottom: 8 }}>Perfil</h1>
+          <p className="page-sub">Seu ponto de partida para viajar e publicar na água.</p>
+        </div>
+        <BoatMediaCluster variant="compact" />
+      </div>
 
       {/* User card */}
       <div className="profile-card" style={{ marginBottom: 16 }}>
@@ -122,3 +129,4 @@ export default function Profile() {
     </div>
   );
 }
+

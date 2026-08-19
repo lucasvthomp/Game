@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { apiRequest } from "@/lib/queryClient";
 import { Anchor } from "lucide-react";
+import { BoatMediaCluster } from "@/components/layout/BoatMediaCluster";
 
 function GoogleMark() {
   return (
@@ -49,6 +50,10 @@ export default function Auth({ mode }: { mode: "login" | "register" }) {
 
   return (
     <div className="auth-wrap">
+      <div className="auth-story" aria-hidden="true">
+        <BoatMediaCluster variant="compact" />
+        <p>Entre para encontrar uma travessia que cabe no seu dia.</p>
+      </div>
       <div className="auth-box">
         <div className="auth-logo">
           <div style={{ width: 44, height: 44, borderRadius: 14, background: "var(--boat)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>

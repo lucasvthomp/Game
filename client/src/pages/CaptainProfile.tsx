@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { BoatMediaCluster } from "@/components/layout/BoatMediaCluster";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
@@ -58,6 +59,10 @@ export default function CaptainProfile() {
         </div>
         <h1 className="page-title">Perfil de Capitão</h1>
         <p className="page-sub">Preencha seus dados para começar a publicar viagens</p>
+      </div>
+
+      <div className="captain-form-media">
+        <BoatMediaCluster variant="compact" />
       </div>
 
       <div className="card">
@@ -123,3 +128,4 @@ export default function CaptainProfile() {
     </div>
   );
 }
+

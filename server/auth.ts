@@ -2,6 +2,7 @@ import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
 import { storage } from "./storage.js";
@@ -58,6 +59,68 @@ export function setupAuth(app: Express) {
     })
   );
 
+  const googleClientId = process.env.GOOGLE_CLIENT_ID;
+  const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
+  const googleCallbackUrl = process.env.GOOGLE_CALLBACK_URL ||
+    `${process.env.APP_URL || "http://localhost:5000"}/api/auth/google/callback`;
+
+  if (googleClientId && googleClientSecret) {
+    passport.use(
+      new GoogleStrategy(
+        {
+          clientID: googleClientId,
+          clientSecret: googleClientSecret,
+          callbackURL: googleCallbackUrl,
+        },
+        async (_accessToken, _refreshToken, profile, done) => {
+          try {
+            const email = profile.emails?.[0]?.value?.toLowerCase().trim();
+            if (!email) return done(null, false, { message: "Sua conta Google não informou um email." });
+
+            const existingGoogleUser = await storage.getUserByGoogleId(profile.id);
+            if (existingGoogleUser) return done(null, existingGoogleUser);
+
+            const existingEmailUser = await storage.getUserByEmail(email);
+            if (existingEmailUser) {
+              const linkedUser = await storage.updateUser(existingEmailUser.id, {
+                googleId: profile.id,
+                avatarUrl: existingEmailUser.avatarUrl || profile.photos?.[0]?.value || null,
+              });
+              return done(null, linkedUser);
+            }
+
+            const baseUsername = (profile.username || email.split("@")[0])
+              .normalize("NFKD")
+              .replace(/[\\u0300-\\u036f]/g, "")
+              .replace(/[^a-zA-Z0-9_]/g, "")
+              .toLowerCase()
+              .slice(0, 24) || "marinheiro";
+            let username = baseUsername;
+            let suffix = 2;
+            while (await storage.getUserByUsername(username)) {
+              username = `${baseUsername.slice(0, 24 - String(suffix).length)}${suffix}`;
+              suffix += 1;
+            }
+
+            const user = await storage.createUser({
+              email,
+              googleId: profile.id,
+              username,
+              password: randomBytes(32).toString("hex"),
+              fullName: profile.displayName || email.split("@")[0],
+              phone: null,
+              avatarUrl: profile.photos?.[0]?.value || null,
+              role: "passenger",
+            });
+            return done(null, user);
+          } catch (err) {
+            return done(err as Error);
+          }
+        },
+      ),
+    );
+  }
+
   passport.serializeUser((user: any, done) => done(null, user.id));
   passport.deserializeUser(async (id: number, done) => {
     try {
@@ -68,3 +131,4 @@ export function setupAuth(app: Express) {
     }
   });
 }
+

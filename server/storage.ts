@@ -23,6 +23,9 @@ export const storage = {
   async getUserByEmail(email: string): Promise<User | undefined> {
     return (await db.select().from(users).where(eq(users.email, email)))[0];
   },
+  async getUserByGoogleId(googleId: string): Promise<User | undefined> {
+    return (await db.select().from(users).where(eq(users.googleId, googleId)))[0];
+  },
   async getUserByUsername(username: string): Promise<User | undefined> {
     return (await db.select().from(users).where(eq(users.username, username)))[0];
   },
@@ -158,3 +161,4 @@ export const storage = {
     return parseFloat(result[0]?.avg || "0");
   },
 };
+

@@ -704,6 +704,12 @@ input, select, textarea, button { font-family: inherit; }
 .form-submit:disabled { opacity: 0.5; cursor: not-allowed; }
 .auth-switch { text-align: center; margin-top: 18px; font-size: 14px; color: var(--text2); }
 .auth-switch a { color: var(--car); font-weight: 600; }
+.auth-google-button { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 11px; padding: 12px 14px; color: var(--text1); font-weight: 700; font-size: 14px; cursor: pointer; transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease; }
+.auth-google-button:hover:not(:disabled) { border-color: var(--text2); background: var(--card); transform: translateY(-1px); }
+.auth-google-button:disabled { opacity: 0.58; cursor: not-allowed; }
+.auth-google-mark { width: 18px; height: 18px; flex: 0 0 auto; }
+.auth-divider { display: flex; align-items: center; gap: 12px; color: var(--text3); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin: 20px 0; }
+.auth-divider::before, .auth-divider::after { content: ""; height: 1px; flex: 1; background: var(--border); }
 
 /* ─── CARDS / LAYOUT ─── */
 .card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }

@@ -29,7 +29,31 @@ function requireCaptainOrDriver(req: Request, res: Response, next: NextFunction)
   next();
 }
 
+function googleConfigured() {
+  return Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
+}
+
 // ── AUTH ──
+router.get("/auth/providers", (_req: Request, res: Response) => {
+  res.json({ google: googleConfigured(), email: true });
+});
+
+router.get("/auth/google", (req: Request, res: Response, next: NextFunction) => {
+  if (!googleConfigured()) {
+    return res.status(503).json({ error: "Login com Google ainda não foi configurado." });
+  }
+  passport.authenticate("google", { scope: ["profile", "email"], prompt: "select_account" })(req, res, next);
+});
+
+router.get(
+  "/auth/google/callback",
+  (req: Request, res: Response, next: NextFunction) => {
+    if (!googleConfigured()) return res.redirect("/entrar?error=google_unavailable");
+    passport.authenticate("google", { failureRedirect: "/entrar?error=google" })(req, res, next);
+  },
+  (_req: Request, res: Response) => res.redirect("/viagens"),
+);
+
 router.post("/auth/register", async (req: Request, res: Response) => {
   try {
     const { email, username, password, fullName, phone } = req.body;
@@ -397,3 +421,4 @@ router.get("/driver/:userId/profile", async (req: Request, res: Response) => {
 });
 
 export default router;
+

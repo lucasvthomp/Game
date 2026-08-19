@@ -52,6 +52,7 @@ async function runMigrations() {
       CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
         email TEXT NOT NULL UNIQUE,
+        google_id TEXT UNIQUE,
         username TEXT NOT NULL UNIQUE,
         password TEXT NOT NULL,
         full_name TEXT NOT NULL,
@@ -60,6 +61,8 @@ async function runMigrations() {
         role TEXT NOT NULL DEFAULT 'passenger',
         created_at TIMESTAMP DEFAULT NOW() NOT NULL
       );
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS google_id TEXT;
+      CREATE UNIQUE INDEX IF NOT EXISTS users_google_id_idx ON users (google_id) WHERE google_id IS NOT NULL;
 
       CREATE TABLE IF NOT EXISTS captain_profiles (
         id SERIAL PRIMARY KEY,
@@ -199,3 +202,4 @@ app.listen(PORT, async () => {
   await runMigrations();
   console.log(`Marcamar rodando na porta ${PORT}`);
 });
+

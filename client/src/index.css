@@ -2366,3 +2366,49 @@ input, select, textarea, button { font-family: inherit; }
   .everyday-water-sticker { right: 4%; bottom: 3px; font-size: 10px; }
 }
 
+/* Extra editorial fragments keep the section feeling collected from real trips. */
+.everyday-water-inset-commute {
+  top: 198px;
+  left: 0;
+  width: 24%;
+  aspect-ratio: 1.05;
+  border-radius: 28px 8px 18px 8px;
+  transform: rotate(-4deg);
+  z-index: 3;
+}
+.everyday-water-inset-window {
+  right: 1%;
+  bottom: 104px;
+  width: 25%;
+  aspect-ratio: 1.05;
+  border-radius: 8px 22px 8px 26px;
+  transform: rotate(4deg);
+  z-index: 3;
+}
+.everyday-water-inset-interior {
+  top: 336px;
+  left: 24%;
+  width: 24%;
+  aspect-ratio: 1.18;
+  border-radius: 18px 8px 24px 8px;
+  transform: rotate(3deg);
+  z-index: 3;
+}
+@media (max-width: 620px) {
+  .everyday-water-inset-commute {
+    top: 184px;
+    left: 0;
+    width: 27%;
+  }
+  .everyday-water-inset-window {
+    right: 0;
+    bottom: 94px;
+    width: 27%;
+  }
+  .everyday-water-inset-interior {
+    top: 304px;
+    left: 22%;
+    width: 25%;
+  }
+}
+

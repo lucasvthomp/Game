@@ -45,8 +45,8 @@ export default function Home() {
 
       {/* ─── HERO ─── */}
       <section className="hero-pro">
-        <video className="hero-video" autoPlay muted loop playsInline preload="auto" aria-hidden="true">
-          <source src="/videos/marcamar-hero-boat.mp4" type="video/mp4" />
+        <video className="hero-video" autoPlay muted playsInline preload="auto" poster="/images/marcamar-dock.jpg" aria-hidden="true">
+          <source src="https://videos.pexels.com/video-files/5579142/5579142-hd_1920_1080_30fps.mp4" type="video/mp4" />
         </video>
         <div className="hero-video-overlay" aria-hidden="true" />
         <div className="hero-float-anchor"><Anchor size={120} /></div>
@@ -136,6 +136,18 @@ export default function Home() {
             <figure className="everyday-water-inset everyday-water-inset-passenger">
               <img src="/images/marcamar-ferry-passenger.jpg" alt="Passageira sentada dentro de uma balsa" />
               <figcaption>Tempo para seguir o dia.</figcaption>
+            </figure>
+            <figure className="everyday-water-inset everyday-water-inset-commute">
+              <img src="https://images.unsplash.com/photo-1656231902670-4fee9bb15973?auto=format&fit=crop&fm=jpg&q=84&w=1200" alt="Pessoa observando a cidade pela janela de uma balsa" loading="lazy" decoding="async" />
+              <figcaption>Um trajeto no meio do dia.</figcaption>
+            </figure>
+            <figure className="everyday-water-inset everyday-water-inset-window">
+              <img src="https://images.unsplash.com/photo-1656336654638-acb56962b5e8?auto=format&fit=crop&fm=jpg&q=84&w=1200" alt="Passageiros junto à rampa de uma balsa" loading="lazy" decoding="async" />
+              <figcaption>Cada embarque tem seu ritmo.</figcaption>
+            </figure>
+            <figure className="everyday-water-inset everyday-water-inset-interior">
+              <img src="https://images.unsplash.com/photo-1661764337630-4314beba1c20?auto=format&fit=crop&fm=jpg&q=84&w=1200" alt="Passageiros sentados dentro de uma balsa" loading="lazy" decoding="async" />
+              <figcaption>A travessia também é pausa.</figcaption>
             </figure>
             <div className="everyday-water-sticker"><Anchor size={14} /> água como caminho</div>
           </div>

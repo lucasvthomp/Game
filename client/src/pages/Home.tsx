@@ -234,7 +234,11 @@ export default function Home() {
             <h2 className="section-title-pro">Simples assim</h2>
           </div>
           <div className="steps-pro">
-            <div className="steps-waterline" aria-hidden="true" />
+            <div className="steps-waterline" aria-hidden="true">
+              <svg viewBox="0 0 1000 110" preserveAspectRatio="none">
+                <path d="M8 62 C 128 12, 218 100, 350 51 S 614 17, 748 64 S 890 99, 992 39" />
+              </svg>
+            </div>
             {[
               { icon: <Anchor size={20} />,    step: "01", title: "Encontre a travessia", desc: "Começamos por rotas e pedidos de transporte na água, com foco no litoral paulista." },
               { icon: <Navigation size={20} />, step: "02", title: "Confira a opção",      desc: "Veja rota, horário, capacidade, preço e o perfil do operador quando houver uma viagem publicada." },
@@ -271,6 +275,10 @@ export default function Home() {
             </div>
             <div className="recurring-pro-visual">
               <div className="recurring-route-sheet" aria-label="Exemplo visual de rota recorrente em planejamento">
+                <svg className="recurring-route-doodle" viewBox="0 0 520 330" preserveAspectRatio="none" aria-hidden="true">
+                  <path d="M20 276 C 126 214, 180 300, 278 246 S 398 173, 504 202" />
+                  <path d="M48 304 C 142 265, 202 318, 300 278 S 406 233, 486 250" />
+                </svg>
                 <div className="recurring-route-sheet-photo">
                   <img src="/images/marcamar-ferry-passenger.jpg" alt="Passageiro a bordo durante uma travessia" />
                 </div>
@@ -304,6 +312,9 @@ export default function Home() {
             <h2 className="section-title-pro">Por que a Marcamar?</h2>
           </div>
           <div className="trust-grid">
+            <svg className="trust-grid-curve" viewBox="0 0 1000 90" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0 50 C 130 10, 210 74, 345 43 S 580 8, 704 47 S 870 77, 1000 28" />
+            </svg>
             {[
               { icon: <Shield size={22} />,   title: "Confiança como produto", desc: "A visão começa separando identidade, qualificação marítima, embarcação e capacidade.", color: "var(--boat)" },
               { icon: <Star size={22} />,     title: "Informação antes do embarque", desc: "Rota, horário, preço, capacidade e perfil do operador devem estar claros para decidir.", color: "var(--boat)" },
@@ -330,6 +341,10 @@ export default function Home() {
           </div>
           <div className="cta-pro-grid cta-pro-grid-single fade-up">
             <div className="cta-pro-card cta-pro-boat reveal reveal-delay-1">
+              <div className="cta-pro-photo" aria-hidden="true">
+                <img src="/images/marcamar-dock.jpg" alt="" />
+                <span>água como caminho</span>
+              </div>
               <div className="cta-pro-icon-wrap"><Anchor size={24} /></div>
               <h3>Você tem lancha?</h3>
               <p>Ajude a formar a primeira oferta local: publique uma travessia e apresente rota, capacidade e condições com clareza.</p>

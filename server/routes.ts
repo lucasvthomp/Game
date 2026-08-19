@@ -56,12 +56,12 @@ router.get(
 
 router.post("/auth/register", async (req: Request, res: Response) => {
   try {
-    const { email, username, password, fullName, phone } = req.body;
-    if (!email || !password || !username || !fullName) return res.status(400).json({ error: "Preencha todos os campos." });
+    const { email, username, password, fullName, homeCity, phone } = req.body;
+    if (!email || !password || !username || !fullName || !homeCity) return res.status(400).json({ error: "Preencha todos os campos obrigatórios." });
     if (password.length < 6) return res.status(400).json({ error: "Senha deve ter pelo menos 6 caracteres." });
     if (await storage.getUserByEmail(email.toLowerCase().trim())) return res.status(400).json({ error: "Email já cadastrado." });
     if (await storage.getUserByUsername(username.trim())) return res.status(400).json({ error: "Nome de usuário já em uso." });
-    const user = await storage.createUser({ email: email.toLowerCase().trim(), username: username.trim(), password, fullName: fullName.trim(), phone: phone?.trim() || null, role: "passenger" });
+    const user = await storage.createUser({ email: email.toLowerCase().trim(), username: username.trim(), password, fullName: fullName.trim(), homeCity: homeCity.trim(), phone: phone?.trim() || null, role: "passenger" });
     req.login(user, (err) => {
       if (err) return res.status(500).json({ error: "Erro ao fazer login." });
       const { password: _, ...safe } = user;
@@ -259,9 +259,10 @@ router.get("/rides/:id/reservations", requireAuth, async (req: Request, res: Res
 router.patch("/me", requireAuth, async (req: Request, res: Response) => {
   try {
     const user = req.user as any;
-    const { fullName, phone } = req.body;
+    const { fullName, homeCity, phone } = req.body;
     const updates: any = {};
     if (fullName !== undefined) updates.fullName = fullName.trim();
+    if (homeCity !== undefined) updates.homeCity = homeCity.trim() || null;
     if (phone !== undefined) updates.phone = phone.trim() || null;
     const updated = await storage.updateUser(user.id, updates);
     const { password: _, ...safe } = updated;

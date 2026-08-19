@@ -26,7 +26,7 @@ export default function Auth({ mode }: { mode: "login" | "register" }) {
   });
   const [loading, setLoading] = useState(false);
   const [googleAvailable, setGoogleAvailable] = useState(false);
-  const [form, setForm] = useState({ email: "", password: "", username: "", fullName: "", phone: "" });
+  const [form, setForm] = useState({ email: "", password: "", username: "", fullName: "", homeCity: "", phone: "" });
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement>) => setForm(f => ({ ...f, [k]: e.target.value }));
 
   useEffect(() => {
@@ -79,6 +79,11 @@ export default function Auth({ mode }: { mode: "login" | "register" }) {
                 <div className="form-field">
                   <label className="form-label">USUÁRIO *</label>
                   <input className="form-input" value={form.username} onChange={set("username")} required placeholder="joaosilva" />
+                </div>
+                <div className="form-field">
+                  <label className="form-label">CIDADE ONDE MORA (SÃO PAULO) *</label>
+                  <input className="form-input" value={form.homeCity} onChange={set("homeCity")} required placeholder="São Sebastião" autoComplete="address-level2" />
+                  <div className="form-hint">Informe a cidade ou município onde você mora no estado de São Paulo.</div>
                 </div>
               </>
             )}

@@ -6,6 +6,7 @@ interface User {
   email: string;
   username: string;
   fullName: string;
+  homeCity?: string | null;
   phone?: string;
   avatarUrl?: string;
   role: string;
@@ -25,6 +26,7 @@ interface RegisterData {
   username: string;
   password: string;
   fullName: string;
+  homeCity: string;
   phone?: string;
 }
 
@@ -74,3 +76,4 @@ export function useAuth() {
   if (!ctx) throw new Error("useAuth must be used within AuthProvider");
   return ctx;
 }
+

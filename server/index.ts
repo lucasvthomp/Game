@@ -56,6 +56,7 @@ async function runMigrations() {
         username TEXT NOT NULL UNIQUE,
         password TEXT NOT NULL,
         full_name TEXT NOT NULL,
+        home_city TEXT,
         phone TEXT,
         avatar_url TEXT,
         role TEXT NOT NULL DEFAULT 'passenger',
@@ -63,6 +64,7 @@ async function runMigrations() {
       );
       ALTER TABLE users ADD COLUMN IF NOT EXISTS google_id TEXT;
       CREATE UNIQUE INDEX IF NOT EXISTS users_google_id_idx ON users (google_id) WHERE google_id IS NOT NULL;
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS home_city TEXT;
 
       CREATE TABLE IF NOT EXISTS captain_profiles (
         id SERIAL PRIMARY KEY,

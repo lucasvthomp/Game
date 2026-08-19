@@ -108,6 +108,7 @@ export function setupAuth(app: Express) {
               username,
               password: randomBytes(32).toString("hex"),
               fullName: profile.displayName || email.split("@")[0],
+              homeCity: null,
               phone: null,
               avatarUrl: profile.photos?.[0]?.value || null,
               role: "passenger",

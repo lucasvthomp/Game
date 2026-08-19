@@ -3429,3 +3429,61 @@ input, select, textarea, button { font-family: inherit; }
   .cta-pro-video { position: relative; right: auto; top: auto; width: 142px; height: 94px; margin: -4px 0 22px 26px; transform: rotate(5deg); }
 }
 
+/* ─── LANCHA PAGE: MAP + BOAT EDITORIAL CLUSTER ─── */
+.rides-header { position: relative; overflow: hidden; padding: 42px 0 32px; }
+.rides-header::before { content: ""; position: absolute; width: 420px; height: 240px; left: -190px; top: 28px; background: radial-gradient(ellipse, var(--boat-light), transparent 68%); opacity: .55; pointer-events: none; }
+.rides-header-inner { position: relative; z-index: 1; max-width: 1180px; }
+.lancha-header-intro { display: grid; grid-template-columns: minmax(0, .82fr) minmax(420px, 1.18fr); align-items: center; gap: clamp(28px, 6vw, 90px); min-height: 310px; }
+.lancha-header-copy { position: relative; z-index: 3; max-width: 440px; }
+.lancha-header-copy .page-title { font-size: clamp(2rem, 4.2vw, 3.45rem); line-height: .98; letter-spacing: -1.8px; }
+.lancha-header-dek { max-width: 410px; color: var(--text2); font-size: 15px; line-height: 1.7; margin: 0; }
+.lancha-media-cluster { position: relative; min-height: 310px; isolation: isolate; }
+.lancha-media-cluster figure { position: absolute; display: block; margin: 0; overflow: hidden; border: 1px solid rgba(23,57,65,.15); box-shadow: 0 22px 40px rgba(18,52,58,.13); }
+.lancha-media-cluster img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.lancha-cluster-map { background: #eee9dc; }
+.lancha-cluster-map-coast { width: 325px; height: 248px; left: 16px; top: 24px; z-index: 1; border-radius: 38% 9% 32% 12%; transform: rotate(-4deg); }
+.lancha-cluster-photo { background: var(--card); }
+.lancha-cluster-photo-dock { width: 174px; height: 142px; left: 254px; top: -4px; z-index: 3; border-radius: 50% 12% 44% 16%; transform: rotate(8deg); }
+.lancha-cluster-map-route { width: 240px; height: 158px; right: 12px; bottom: 8px; z-index: 4; border-radius: 12% 48% 15% 38%; transform: rotate(5deg); }
+.lancha-cluster-photo-passenger { width: 155px; height: 122px; right: 156px; bottom: -4px; z-index: 2; border-radius: 13% 46% 18% 41%; transform: rotate(-7deg); }
+.lancha-cluster-note { position: absolute; right: 22px; top: 45px; z-index: 6; color: var(--boat-dark); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; transform: rotate(7deg); }
+.lancha-live-map-cluster { position: relative; max-width: 900px; margin: 4px auto 36px; padding: 26px 20px 40px; isolation: isolate; }
+.lancha-live-map { position: relative; z-index: 3; filter: drop-shadow(0 22px 26px rgba(18,52,58,.12)); transform: rotate(.45deg); }
+.lancha-live-map .lc-map-frame { border: 1px solid rgba(23,57,65,.18); border-radius: 30% 8% 24% 7% / 8% 18% 7% 24%; overflow: hidden; }
+.lancha-live-map .leaflet-container { border-radius: inherit; }
+.lancha-live-map-print { position: absolute; z-index: 1; margin: 0; overflow: hidden; border: 1px solid rgba(23,57,65,.14); box-shadow: 0 16px 28px rgba(18,52,58,.11); }
+.lancha-live-map-print img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.lancha-live-map-print-a { width: 220px; height: 145px; left: -34px; top: 8px; border-radius: 45% 10% 37% 14%; transform: rotate(-8deg); }
+.lancha-live-map-print-b { width: 180px; height: 140px; right: -24px; bottom: 12px; border-radius: 12% 43% 14% 39%; transform: rotate(9deg); }
+.lancha-live-map-caption { position: absolute; z-index: 5; right: 28px; bottom: 4px; color: var(--boat-dark); font-size: 10px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; transform: rotate(-3deg); }
+
+@media (max-width: 820px) {
+  .lancha-header-intro { grid-template-columns: 1fr; gap: 12px; }
+  .lancha-header-copy { max-width: 560px; }
+  .lancha-media-cluster { min-height: 280px; max-width: 610px; width: 100%; margin: 0 auto; }
+  .lancha-cluster-map-coast { left: 7%; }
+  .lancha-cluster-photo-dock { left: 43%; }
+  .lancha-cluster-photo-passenger { right: 24%; }
+  .lancha-cluster-map-route { right: 2%; }
+  .lancha-live-map-print-a { left: -16px; }
+  .lancha-live-map-print-b { right: -12px; }
+}
+
+@media (max-width: 560px) {
+  .rides-header { padding-top: 32px; }
+  .lancha-header-copy .page-title { font-size: 2.25rem; }
+  .lancha-header-dek { font-size: 14px; }
+  .lancha-media-cluster { min-height: 244px; transform: scale(.92); transform-origin: top center; margin-bottom: -16px; }
+  .lancha-cluster-map-coast { width: 250px; height: 190px; left: 0; top: 20px; }
+  .lancha-cluster-photo-dock { width: 136px; height: 110px; left: 40%; top: 2px; }
+  .lancha-cluster-map-route { width: 190px; height: 126px; right: 0; bottom: 4px; }
+  .lancha-cluster-photo-passenger { width: 126px; height: 98px; right: 29%; bottom: -1px; }
+  .lancha-cluster-note { right: 2px; top: 31px; font-size: 8px; }
+  .lancha-live-map-cluster { padding: 12px 0 32px; margin-top: 0; }
+  .lancha-live-map .lc-map-frame { border-radius: 22px; }
+  .lancha-live-map-print { opacity: .74; }
+  .lancha-live-map-print-a { width: 128px; height: 96px; left: -18px; top: -14px; }
+  .lancha-live-map-print-b { width: 118px; height: 88px; right: -14px; bottom: 18px; }
+  .lancha-live-map-caption { right: 6px; bottom: 0; font-size: 8px; }
+}
+

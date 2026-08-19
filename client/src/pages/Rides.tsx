@@ -44,12 +44,35 @@ export default function Rides() {
     <div className="rides-page">
       <div className="rides-header">
         <div className="rides-header-inner">
-          <p className="section-label" style={{ color: "var(--boat)" }}>
-            CARONAS DE LANCHA
-          </p>
-          <h1 className="page-title" style={{ marginBottom: 16 }}>
-            Travessias de lancha
-          </h1>
+          <div className="lancha-header-intro">
+            <div className="lancha-header-copy">
+              <p className="section-label" style={{ color: "var(--boat)" }}>
+                CARONAS DE LANCHA
+              </p>
+              <h1 className="page-title" style={{ marginBottom: 16 }}>
+                Travessias de lancha
+              </h1>
+              <p className="lancha-header-dek">
+                Rotas publicadas por quem já navega pelo litoral de São Paulo. Encontre um embarque, confira os detalhes e escolha o seu caminho pela água.
+              </p>
+            </div>
+
+            <div className="lancha-media-cluster" aria-hidden="true">
+              <figure className="lancha-cluster-map lancha-cluster-map-coast">
+                <img src="/images/marcamar-map-coast.svg" alt="" />
+              </figure>
+              <figure className="lancha-cluster-photo lancha-cluster-photo-dock">
+                <img src="/images/marcamar-dock.jpg" alt="" />
+              </figure>
+              <figure className="lancha-cluster-map lancha-cluster-map-route">
+                <img src="/images/marcamar-map-route.svg" alt="" />
+              </figure>
+              <figure className="lancha-cluster-photo lancha-cluster-photo-passenger">
+                <img src="/images/marcamar-ferry-passenger.jpg" alt="" />
+              </figure>
+              <span className="lancha-cluster-note">rotas reais · litoral paulista</span>
+            </div>
+          </div>
 
           <div className="rides-search">
             <Search size={15} className="rides-search-icon" />
@@ -115,9 +138,20 @@ export default function Rides() {
       <div className="rides-body">
         <>
         {viewMode === "map" && (
-          <Suspense fallback={<div style={{ height: 480, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text3)" }}>Carregando mapa...</div>}>
-            <RidesMap height="480px" rides={rides} />
-          </Suspense>
+          <div className="lancha-live-map-cluster">
+            <figure className="lancha-live-map-print lancha-live-map-print-a" aria-hidden="true">
+              <img src="/images/marcamar-map-route.svg" alt="" />
+            </figure>
+            <figure className="lancha-live-map-print lancha-live-map-print-b" aria-hidden="true">
+              <img src="/images/marcamar-map-coast.svg" alt="" />
+            </figure>
+            <div className="lancha-live-map">
+              <Suspense fallback={<div style={{ height: 480, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text3)" }}>Carregando mapa...</div>}>
+                <RidesMap height="480px" rides={rides} />
+              </Suspense>
+            </div>
+            <span className="lancha-live-map-caption">mapa vivo · viagens publicadas</span>
+          </div>
         )}
         {isLoading ? (
           <div className="ride-grid-v2">

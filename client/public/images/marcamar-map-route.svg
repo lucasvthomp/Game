@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 340" role="img" aria-labelledby="title desc">
+  <title id="title">Mapa de uma rota marítima Marcamar</title>
+  <desc id="desc">Recorte de mapa com uma linha de travessia entre dois pontos do litoral.</desc>
+  <rect width="520" height="340" fill="#f5f1e7"/>
+  <path d="M-20 278c54-32 90-40 137-24 52 17 77 10 111-21 42-38 77-44 132-28 47 14 95 6 180-46" fill="none" stroke="#d7cfbe" stroke-width="2"/>
+  <path d="M-20 226c54-31 92-41 144-25 46 14 80 7 117-27 42-39 74-41 126-25 49 15 94 4 172-43" fill="none" stroke="#ddd5c5" stroke-width="2"/>
+  <path d="M33 92c47 19 91 22 131 2 42-21 79-22 124-2 44 20 91 20 160-9" fill="none" stroke="#ddd5c5" stroke-width="2"/>
+  <path d="M92 250C169 209 205 178 247 132c25-27 65-39 105-27 34 10 57 8 91-7" fill="none" stroke="#13818b" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 12"/>
+  <path d="M92 250C166 211 206 176 247 132" fill="none" stroke="#13818b" stroke-width="1.5"/>
+  <circle cx="92" cy="250" r="8" fill="#e38a42"/>
+  <circle cx="247" cy="132" r="8" fill="#13818b"/>
+  <circle cx="443" cy="98" r="6" fill="#13818b"/>
+  <g fill="#173941" font-family="Arial, sans-serif">
+    <text x="37" y="299" font-size="13" font-weight="700">EMBARQUE</text>
+    <text x="250" y="113" font-size="13" font-weight="700">TRAVESSIA</text>
+    <text x="388" y="76" font-size="13" font-weight="700">COSTA</text>
+    <text x="28" y="35" font-size="11" letter-spacing="3" fill="#13818b">MARCADOR DE ROTA</text>
+  </g>
+</svg>
+

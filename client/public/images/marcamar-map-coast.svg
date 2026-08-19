@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 470" role="img" aria-labelledby="title desc">
+  <title id="title">Mapa editorial do litoral norte de São Paulo</title>
+  <desc id="desc">Mapa ilustrado com Ilhabela, São Sebastião e Caraguatatuba ligados por uma rota marítima.</desc>
+  <rect width="620" height="470" fill="#eee9dc"/>
+  <path d="M505-15c-27 54-27 92-9 134 18 43 18 84-7 125-26 43-29 89-4 126 14 21 18 48 7 100H645V-15Z" fill="#c8e4db"/>
+  <path d="M496-15c-25 56-25 91-7 135 18 44 17 84-8 127-24 42-28 88-3 126 14 22 18 49 7 97" fill="none" stroke="#75a99b" stroke-width="3"/>
+  <path d="M492 60C390 72 334 116 281 170c-34 35-74 46-128 42-49-4-82 9-119 35" fill="none" stroke="#d3c9b4" stroke-width="2" stroke-dasharray="8 10"/>
+  <path d="M470 102C389 113 346 147 300 202c-35 42-76 59-137 58-47-1-91 12-127 39" fill="none" stroke="#d3c9b4" stroke-width="1.5"/>
+  <path d="M451 154C385 164 350 191 318 240c-27 41-64 67-117 74-49 7-82 23-106 47" fill="none" stroke="#d3c9b4" stroke-width="1.5"/>
+  <path d="M454 342C378 306 315 275 249 270c-55-4-111 10-167 46" fill="none" stroke="#13818b" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 13"/>
+  <path d="M454 342C393 313 332 293 272 287" fill="none" stroke="#13818b" stroke-width="1.5"/>
+  <circle cx="454" cy="342" r="8" fill="#13818b"/>
+  <circle cx="249" cy="270" r="8" fill="#13818b"/>
+  <circle cx="151" cy="319" r="5" fill="#e38a42"/>
+  <g fill="#173941" font-family="Arial, sans-serif">
+    <text x="455" y="375" font-size="16" font-weight="700">SÃO SEBASTIÃO</text>
+    <text x="245" y="247" font-size="16" font-weight="700">ILHABELA</text>
+    <text x="155" y="349" font-size="14" font-weight="700">CARAGUATATUBA</text>
+    <text x="39" y="40" font-size="12" letter-spacing="3" fill="#13818b">LITORAL NORTE · ROTAS DE ÁGUA</text>
+  </g>
+  <g transform="translate(553 44)" fill="none" stroke="#173941" stroke-width="2">
+    <path d="M0 30V0M0 0l-7 12h14Z"/>
+  </g>
+  <text x="547" y="91" font-size="11" fill="#173941" font-family="Arial, sans-serif" letter-spacing="2">N</text>
+</svg>
+

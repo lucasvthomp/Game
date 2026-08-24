@@ -4,6 +4,7 @@ import passport from "passport";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
+import { PILOT_ROUTES } from "../shared/pilot-routes.js";
 
 const router = Router();
 
@@ -92,6 +93,10 @@ router.get("/auth/me", (req: Request, res: Response) => {
   res.json({ user: safe });
 });
 
+router.get("/routes/popular", (_req: Request, res: Response) => {
+  res.json({ routes: PILOT_ROUTES.filter((route) => route.active) });
+});
+
 // ── CAPTAIN PROFILE ──
 router.post("/captain/profile", requireAuth, upload.fields([{ name: "licenseImage", maxCount: 1 }, { name: "boatImage", maxCount: 1 }]), async (req: Request, res: Response) => {
   try {
@@ -148,7 +153,17 @@ router.get("/driver/profile", requireAuth, async (req: Request, res: Response) =
 router.get("/rides", async (req: Request, res: Response) => {
   try {
     const type = req.query.type as "boat" | "car" | undefined;
-    const activeRides = await storage.getActiveRides(type);
+    const from = typeof req.query.from === "string" ? req.query.from.trim().toLocaleLowerCase("pt-BR") : "";
+    const to = typeof req.query.to === "string" ? req.query.to.trim().toLocaleLowerCase("pt-BR") : "";
+    const date = typeof req.query.date === "string" ? req.query.date : "";
+    const passengers = Math.max(1, parseInt(String(req.query.passengers || "1"), 10) || 1);
+    let activeRides = await storage.getActiveRides(type);
+    activeRides = activeRides.filter((ride) => {
+      const matchesFrom = !from || ride.originCity.toLocaleLowerCase("pt-BR").includes(from);
+      const matchesTo = !to || ride.destinationCity.toLocaleLowerCase("pt-BR").includes(to);
+      const matchesDate = !date || ride.departureTime.toISOString().slice(0, 10) === date;
+      return matchesFrom && matchesTo && matchesDate && ride.availableSeats >= passengers;
+    });
     const enriched = await Promise.all(activeRides.map(async (ride) => {
       const captain = await storage.getUser(ride.captainId);
       const [captainProfile, driverProfile, avgRating] = await Promise.all([

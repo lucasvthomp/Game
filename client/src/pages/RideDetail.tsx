@@ -64,6 +64,12 @@ export default function RideDetail() {
     enabled: !!data?.ride?.captainId,
   });
 
+  const marineWeatherQuery = useQuery({
+    queryKey: ["/api/weather/marine", data?.ride?.originLat, data?.ride?.originLng, data?.ride?.departureTime],
+    queryFn: () => apiRequest("GET", `/api/weather/marine?latitude=${data.ride.originLat}&longitude=${data.ride.originLng}&date=${new Date(data.ride.departureTime).toISOString().slice(0, 10)}`),
+    enabled: !!data?.ride?.originLat && !!data?.ride?.originLng,
+  });
+
   const reserveMutation = useMutation({
     mutationFn: () => apiRequest("POST", "/api/reservations", { rideId: parseInt(id!), seats }),
     onSuccess: () => { setSuccess(true); qc.invalidateQueries({ queryKey: [`/api/rides/${id}`] }); qc.invalidateQueries({ queryKey: ["/api/my/reservations"] }); },
@@ -263,6 +269,19 @@ export default function RideDetail() {
             </div>
           </div>
         ) : null}
+
+        {marineWeatherQuery.data?.conditions && (
+          <div className="detail-card marine-conditions-card">
+            <p className="section-label">CONDIÇÕES PREVISTAS</p>
+            <div className="marine-conditions-grid">
+              <span>Vento <strong>{marineWeatherQuery.data.conditions.windSpeedKmh ?? "—"} km/h</strong></span>
+              <span>Ondas <strong>{marineWeatherQuery.data.conditions.waveHeightMeters ?? "—"} m</strong></span>
+              <span>Período <strong>{marineWeatherQuery.data.conditions.wavePeriodSeconds ?? "—"} s</strong></span>
+              <span>Temperatura <strong>{marineWeatherQuery.data.conditions.seaSurfaceTemperatureC ?? "—"} °C</strong></span>
+            </div>
+            <p className="marine-conditions-disclaimer">{marineWeatherQuery.data.disclaimer}</p>
+          </div>
+        )}
 
         {/* Reviews */}
         {reviews.length > 0 && (

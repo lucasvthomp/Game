@@ -17,6 +17,7 @@ import Recurring from "@/pages/Recurring";
 import MyReservations from "@/pages/MyReservations";
 import Messages from "@/pages/Messages";
 import Profile from "@/pages/Profile";
+import Admin from "@/pages/Admin";
 
 export default function App() {
   return (
@@ -40,6 +41,7 @@ export default function App() {
           <Route path="/minhas-reservas" component={MyReservations} />
           <Route path="/mensagens/:reservationId" component={Messages} />
           <Route path="/perfil" component={Profile} />
+          <Route path="/admin" component={Admin} />
           <Route>
             <div style={{ textAlign: "center", padding: 80, color: "var(--text2)" }}>
               <h2 style={{ color: "var(--text1)" }}>404 — Página não encontrada</h2>

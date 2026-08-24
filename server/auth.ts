@@ -26,11 +26,15 @@ export async function comparePassword(supplied: string, stored: string): Promise
 
 export function setupAuth(app: Express) {
   const PgSession = connectPgSimple(session);
+  const sessionSecret = process.env.SESSION_SECRET;
+  if (!sessionSecret && process.env.NODE_ENV === "production") {
+    throw new Error("SESSION_SECRET is required in production.");
+  }
 
   app.use(
     session({
       store: new PgSession({ pool, tableName: "sessions", createTableIfMissing: true }),
-      secret: process.env.SESSION_SECRET || "lancha-carona-secret-dev",
+      secret: sessionSecret || "lancha-carona-secret-dev",
       resave: false,
       saveUninitialized: false,
       cookie: {

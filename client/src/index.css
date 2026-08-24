@@ -3720,3 +3720,35 @@ input, select, textarea, button { font-family: inherit; }
   width: 100%;
   min-width: 220px;
 }
+
+
+/* ─── ADMIN VERIFICATION ─── */
+.admin-page { padding: 48px 24px 80px; }
+.admin-heading { display: flex; align-items: center; gap: 16px; margin-bottom: 34px; }
+.admin-heading-icon { width: 52px; height: 52px; display: grid; place-items: center; border-radius: 16px; color: var(--boat); background: var(--boat-light); }
+.admin-section { margin-bottom: 30px; }
+.admin-section-heading { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.admin-section-heading h2 { font-size: 18px; color: var(--text1); }
+.admin-section-heading span { min-width: 24px; padding: 3px 7px; border-radius: 99px; background: var(--surface); color: var(--text3); font-size: 12px; text-align: center; }
+.admin-verification-card { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 16px 18px; margin-bottom: 8px; border: 1px solid var(--border); border-radius: 14px; background: var(--card); }
+.admin-verification-card strong, .admin-verification-card span { display: block; }
+.admin-verification-card strong { color: var(--text1); font-size: 14px; }
+.admin-verification-card > div:first-child span { margin-top: 4px; color: var(--text3); font-size: 12px; }
+.admin-verification-actions { display: flex; align-items: center; gap: 12px; }
+.admin-status { color: var(--amber); font-size: 12px; font-weight: 700; }
+.admin-status.verified { color: var(--green); }
+.admin-verify-button { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border); border-radius: 9px; padding: 7px 10px; background: var(--surface); color: var(--text2); font: inherit; font-size: 12px; cursor: pointer; }
+.admin-verify-button:hover { border-color: var(--boat); color: var(--boat); }
+.admin-empty { color: var(--text3); font-size: 13px; padding: 12px 0; }
+@media (max-width: 600px) {
+  .admin-verification-card { align-items: flex-start; flex-direction: column; }
+  .admin-verification-actions { width: 100%; justify-content: space-between; }
+}
+
+
+.marine-conditions-card { border-color: color-mix(in srgb, var(--boat) 28%, var(--border)); }
+.marine-conditions-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 14px 0; }
+.marine-conditions-grid span { color: var(--text3); font-size: 12px; }
+.marine-conditions-grid strong { display: block; margin-top: 4px; color: var(--text1); font-size: 15px; }
+.marine-conditions-disclaimer { color: var(--text3); font-size: 11px; line-height: 1.5; }
+@media (max-width: 560px) { .marine-conditions-grid { grid-template-columns: repeat(2, 1fr); } }

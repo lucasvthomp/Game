@@ -5,6 +5,7 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import { PILOT_ROUTES } from "../shared/pilot-routes.js";
+import { getMarineConditions } from "./providers/marine-weather.js";
 
 const router = Router();
 
@@ -27,6 +28,12 @@ function requireCaptainOrDriver(req: Request, res: Response, next: NextFunction)
   if (!req.isAuthenticated()) return res.status(401).json({ error: "Não autenticado." });
   const role = (req.user as any).role;
   if (!["captain", "driver", "both"].includes(role)) return res.status(403).json({ error: "Complete seu perfil de motorista ou capitão primeiro." });
+  next();
+}
+
+function requireAdmin(req: Request, res: Response, next: NextFunction) {
+  if (!req.isAuthenticated()) return res.status(401).json({ error: "Não autenticado." });
+  if ((req.user as any).role !== "admin") return res.status(403).json({ error: "Acesso restrito à equipe Marcamar." });
   next();
 }
 
@@ -95,6 +102,41 @@ router.get("/auth/me", (req: Request, res: Response) => {
 
 router.get("/routes/popular", (_req: Request, res: Response) => {
   res.json({ routes: PILOT_ROUTES.filter((route) => route.active) });
+});
+
+router.get("/weather/marine", async (req: Request, res: Response) => {
+  const latitude = Number(req.query.latitude);
+  const longitude = Number(req.query.longitude);
+  const date = typeof req.query.date === "string" ? req.query.date : undefined;
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return res.status(400).json({ error: "Latitude e longitude são obrigatórias." });
+  try {
+    const conditions = await getMarineConditions(latitude, longitude, date);
+    res.json({ conditions, disclaimer: "Condições previstas. Consulte o operador e informações marítimas oficiais antes da viagem." });
+  } catch (error: any) {
+    res.status(502).json({ error: "Condições marítimas indisponíveis no momento.", detail: process.env.NODE_ENV === "development" ? error.message : undefined });
+  }
+});
+
+// ── ADMIN VERIFICATION ──
+router.get("/admin/verifications", requireAdmin, async (_req: Request, res: Response) => {
+  const [captains, drivers] = await Promise.all([storage.listCaptainProfiles(), storage.listDriverProfiles()]);
+  res.json({ captains, drivers });
+});
+
+router.patch("/admin/verifications/captain/:id", requireAdmin, async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id as string);
+  if (isNaN(id) || typeof req.body.verified !== "boolean") return res.status(400).json({ error: "Dados inválidos." });
+  const profile = await storage.setCaptainVerified(id, req.body.verified);
+  if (!profile) return res.status(404).json({ error: "Perfil não encontrado." });
+  res.json({ profile });
+});
+
+router.patch("/admin/verifications/driver/:id", requireAdmin, async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id as string);
+  if (isNaN(id) || typeof req.body.verified !== "boolean") return res.status(400).json({ error: "Dados inválidos." });
+  const profile = await storage.setDriverVerified(id, req.body.verified);
+  if (!profile) return res.status(404).json({ error: "Perfil não encontrado." });
+  res.json({ profile });
 });
 
 // ── CAPTAIN PROFILE ──

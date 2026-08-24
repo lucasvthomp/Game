@@ -45,16 +45,16 @@ export default function Messages() {
   if (!user) { navigate("/entrar"); return null; }
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--bg)", display: "flex", flexDirection: "column" }}>
+    <div className="messages-page" style={{ minHeight: "100vh", background: "var(--bg)", display: "flex", flexDirection: "column" }}>
       {/* Header */}
-      <div style={{ padding: "16px 20px", background: "var(--card)", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", gap: 12, position: "sticky", top: 60, zIndex: 10 }}>
+      <div className="messages-header" style={{ padding: "16px 20px", background: "var(--card)", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", gap: 12, position: "sticky", top: 60, zIndex: 10 }}>
         <button onClick={() => navigate(-1 as any)} style={{ background: "none", border: "none", color: "var(--text2)", cursor: "pointer", display: "flex", alignItems: "center", gap: 6, fontSize: 14 }}>
           <ChevronLeft size={18} /> Voltar
         </button>
         <span style={{ fontWeight: 700, color: "var(--text1)", fontSize: 16 }}>Mensagens</span>
       </div>
       {reservation && (
-        <div style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)", padding: "10px 20px", fontSize: 13, color: "var(--text2)", display: "flex", gap: 16, flexWrap: "wrap" }}>
+        <div className="messages-trip-meta" style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)", padding: "10px 20px", fontSize: 13, color: "var(--text2)", display: "flex", gap: 16, flexWrap: "wrap" }}>
           <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
             <MapPin size={12} /> {reservation.originCity} → {reservation.destinationCity}
           </span>
@@ -71,7 +71,7 @@ export default function Messages() {
       </div>
 
       {/* Messages */}
-      <div style={{ flex: 1, overflowY: "auto", padding: "20px 16px", display: "flex", flexDirection: "column", gap: 10, maxWidth: 600, width: "100%", margin: "0 auto" }}>
+      <div className="messages-thread">
         {messages.length === 0 && (
           <div style={{ textAlign: "center", color: "var(--text3)", fontSize: 14, marginTop: 40 }}>
             Nenhuma mensagem ainda. Seja o primeiro a escrever!
@@ -101,9 +101,9 @@ export default function Messages() {
       </div>
 
       {/* Input */}
-      <div style={{ padding: "12px 16px", background: "var(--card)", borderTop: "1px solid var(--border)", position: "sticky", bottom: 0 }}>
-        <div style={{ display: "flex", gap: 10, maxWidth: 600, margin: "0 auto" }}>
-          <input
+      <div className="messages-composer" style={{ padding: "12px 16px", background: "var(--card)", borderTop: "1px solid var(--border)", position: "sticky", bottom: 0 }}>
+        <div className="messages-composer-inner">
+          <input className="messages-input"
             value={text}
             onChange={e => setText(e.target.value)}
             onKeyDown={e => e.key === "Enter" && !e.shiftKey && text.trim() && sendMutation.mutate()}
@@ -114,7 +114,7 @@ export default function Messages() {
               color: "var(--text1)", fontSize: 14, outline: "none",
             }}
           />
-          <button
+          <button className="messages-send"
             onClick={() => text.trim() && sendMutation.mutate()}
             disabled={!text.trim() || sendMutation.isPending}
             style={{

@@ -66,6 +66,39 @@ async function runMigrations() {
       CREATE UNIQUE INDEX IF NOT EXISTS users_google_id_idx ON users (google_id) WHERE google_id IS NOT NULL;
       ALTER TABLE users ADD COLUMN IF NOT EXISTS home_city TEXT;
 
+      CREATE TABLE IF NOT EXISTS locations (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        slug TEXT NOT NULL UNIQUE,
+        type TEXT NOT NULL,
+        latitude NUMERIC(9,6),
+        longitude NUMERIC(9,6),
+        municipality TEXT,
+        state TEXT DEFAULT 'SP',
+        country TEXT DEFAULT 'BR',
+        place_id TEXT,
+        description TEXT,
+        meeting_instructions TEXT,
+        photos JSONB,
+        active BOOLEAN NOT NULL DEFAULT true
+      );
+      CREATE TABLE IF NOT EXISTS maritime_routes (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        origin_location_id INTEGER NOT NULL REFERENCES locations(id),
+        destination_location_id INTEGER NOT NULL REFERENCES locations(id),
+        geojson JSONB,
+        distance_nm NUMERIC(8,2),
+        typical_duration_minutes INTEGER,
+        active BOOLEAN NOT NULL DEFAULT false,
+        region TEXT,
+        notes TEXT,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL
+      );
+      CREATE INDEX IF NOT EXISTS maritime_routes_origin_idx ON maritime_routes(origin_location_id);
+      CREATE INDEX IF NOT EXISTS maritime_routes_destination_idx ON maritime_routes(destination_location_id);
+      CREATE INDEX IF NOT EXISTS maritime_routes_active_idx ON maritime_routes(active);
+
       CREATE TABLE IF NOT EXISTS captain_profiles (
         id SERIAL PRIMARY KEY,
         user_id INTEGER NOT NULL REFERENCES users(id),

@@ -169,6 +169,10 @@ export const storage = {
     await db.update(rides).set({ availableSeats: sql`available_seats - ${data.seats}` }).where(eq(rides.id, data.rideId));
     return res;
   },
+  async updateReservationStatus(id: number, status: string): Promise<Reservation | undefined> {
+    const [reservation] = await db.update(reservations).set({ status }).where(eq(reservations.id, id)).returning();
+    return reservation;
+  },
   async cancelReservation(id: number): Promise<void> {
     const res = await this.getReservation(id);
     if (!res) return;

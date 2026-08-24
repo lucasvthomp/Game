@@ -5,6 +5,7 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import { PILOT_ROUTES } from "../shared/pilot-routes.js";
+import { getMarineConditions } from "./providers/marine-weather.js";
 
 const router = Router();
 
@@ -101,6 +102,19 @@ router.get("/auth/me", (req: Request, res: Response) => {
 
 router.get("/routes/popular", (_req: Request, res: Response) => {
   res.json({ routes: PILOT_ROUTES.filter((route) => route.active) });
+});
+
+router.get("/weather/marine", async (req: Request, res: Response) => {
+  const latitude = Number(req.query.latitude);
+  const longitude = Number(req.query.longitude);
+  const date = typeof req.query.date === "string" ? req.query.date : undefined;
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return res.status(400).json({ error: "Latitude e longitude são obrigatórias." });
+  try {
+    const conditions = await getMarineConditions(latitude, longitude, date);
+    res.json({ conditions, disclaimer: "Condições previstas. Consulte o operador e informações marítimas oficiais antes da viagem." });
+  } catch (error: any) {
+    res.status(502).json({ error: "Condições marítimas indisponíveis no momento.", detail: process.env.NODE_ENV === "development" ? error.message : undefined });
+  }
 });
 
 // ── ADMIN VERIFICATION ──

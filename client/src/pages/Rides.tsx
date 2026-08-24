@@ -12,13 +12,12 @@ const RidesMap = lazy(() => import("@/components/map/RidesMap"));
 
 export default function Rides() {
   const activeTab = "boat" as const;
+  const initialParams = new URLSearchParams(window.location.search);
   const [searchText, setSearchText] = useState(initialParams.get("from") || initialParams.get("to") || "");
   const [sortBy, setSortBy] = useState<"price" | "rating" | "departure">("departure");
   const [dateFilter, setDateFilter] = useState(initialParams.get("date") || "");
   const [maxPrice, setMaxPrice] = useState("");
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
-  const initialParams = new URLSearchParams(window.location.search);
-
   const { data, isLoading } = useQuery({
     queryKey: ["/api/rides", activeTab],
     queryFn: () => {

@@ -152,6 +152,19 @@ router.patch("/admin/maritime-routes/:id", requireAdmin, async (req: Request, re
   res.json({ route });
 });
 
+router.get("/admin/incidents", requireAdmin, async (_req: Request, res: Response) => {
+  res.json({ incidents: await storage.listIncidents() });
+});
+
+router.patch("/admin/incidents/:id", requireAdmin, async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id as string);
+  const allowed = ["open", "investigating", "resolved", "dismissed"];
+  if (isNaN(id) || !allowed.includes(req.body.status)) return res.status(400).json({ error: "Status inválido." });
+  const incident = await storage.updateIncidentStatus(id, req.body.status);
+  if (!incident) return res.status(404).json({ error: "Incidente não encontrado." });
+  res.json({ incident });
+});
+
 // ── ADMIN VERIFICATION ──
 router.get("/admin/verifications", requireAdmin, async (_req: Request, res: Response) => {
   const [captains, drivers] = await Promise.all([storage.listCaptainProfiles(), storage.listDriverProfiles()]);

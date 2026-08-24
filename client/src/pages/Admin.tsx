@@ -11,6 +11,7 @@ export default function Admin() {
     queryFn: () => apiRequest("GET", "/api/admin/verifications"),
   });
   const { data: routeData } = useQuery({ queryKey: ["/api/admin/maritime-routes"], queryFn: () => apiRequest("GET", "/api/admin/maritime-routes") });
+  const { data: incidentData } = useQuery({ queryKey: ["/api/admin/incidents"], queryFn: () => apiRequest("GET", "/api/admin/incidents") });
   const mutation = useMutation({
     mutationFn: ({ kind, id, verified }: { kind: "captain" | "driver"; id: number; verified: boolean }) =>
       apiRequest("PATCH", `/api/admin/verifications/${kind}/${id}`, { verified }),
@@ -37,6 +38,19 @@ export default function Admin() {
               <div className="admin-verification-actions">
                 <span className={route.active ? "admin-status verified" : "admin-status"}>{route.active ? "Publicada" : "Rascunho"}</span>
                 <button className="admin-verify-button" onClick={() => apiRequest("PATCH", `/api/admin/maritime-routes/${route.id}`, { active: !route.active }).then(() => qc.invalidateQueries({ queryKey: ["/api/admin/maritime-routes"] }))}>{route.active ? "Desativar" : "Publicar"}</button>
+              </div>
+            </div>
+          ))}
+        </section>
+        <section className="admin-section">
+          <div className="admin-section-heading"><h2>Incidentes</h2><span>{incidentData?.incidents?.length || 0}</span></div>
+          {(incidentData?.incidents || []).length === 0 ? <p className="admin-empty">Nenhum incidente registrado.</p> : (incidentData?.incidents || []).map((incident: any) => (
+            <div className="admin-verification-card" key={incident.id}>
+              <div><strong>{incident.type}</strong><span>Reserva #{incident.reservationId} · {incident.description}</span></div>
+              <div className="admin-verification-actions">
+                <span className={incident.status === "resolved" || incident.status === "dismissed" ? "admin-status verified" : "admin-status"}>{incident.status}</span>
+                {incident.status === "open" && <button className="admin-verify-button" onClick={() => apiRequest("PATCH", `/api/admin/incidents/${incident.id}`, { status: "investigating" }).then(() => qc.invalidateQueries({ queryKey: ["/api/admin/incidents"] }))}>Investigar</button>}
+                {incident.status === "investigating" && <button className="admin-verify-button" onClick={() => apiRequest("PATCH", `/api/admin/incidents/${incident.id}`, { status: "resolved" }).then(() => qc.invalidateQueries({ queryKey: ["/api/admin/incidents"] }))}>Resolver</button>}
               </div>
             </div>
           ))}

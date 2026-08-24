@@ -138,6 +138,90 @@ router.get("/maritime-routes", async (_req: Request, res: Response) => {
   res.json({ routes: (await storage.listMaritimeRoutes()).filter((route) => route.active) });
 });
 
+router.post("/route-requests", requireAuth, async (req: Request, res: Response) => {
+  try {
+    const origin = typeof req.body.origin === "string" ? req.body.origin.trim() : "";
+    const destination = typeof req.body.destination === "string" ? req.body.destination.trim() : "";
+    const notes = typeof req.body.notes === "string" ? req.body.notes.trim() : "";
+    const passengers = Number(req.body.passengers || 1);
+    const requestedDate = req.body.requestedDate ? new Date(req.body.requestedDate) : null;
+
+    if (!origin || !destination) return res.status(400).json({ error: "Informe a origem e o destino." });
+    if (origin.toLocaleLowerCase("pt-BR") === destination.toLocaleLowerCase("pt-BR")) {
+      return res.status(400).json({ error: "Origem e destino precisam ser diferentes." });
+    }
+    if (!Number.isInteger(passengers) || passengers < 1 || passengers > 12) {
+      return res.status(400).json({ error: "Escolha entre 1 e 12 passageiros." });
+    }
+    if (requestedDate && Number.isNaN(requestedDate.getTime())) {
+      return res.status(400).json({ error: "A data solicitada é inválida." });
+    }
+    if (origin.length > 120 || destination.length > 120 || notes.length > 1000) {
+      return res.status(400).json({ error: "Revise os limites de texto do pedido." });
+    }
+
+    const request = await storage.createRouteRequest({
+      userId: (req.user as any).id,
+      origin,
+      destination,
+      requestedDate,
+      passengers,
+      notes: notes || null,
+      status: "open",
+      adminNotes: null,
+    });
+    res.status(201).json({ request });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Não foi possível registrar o pedido." });
+  }
+});
+
+router.get("/my/route-requests", requireAuth, async (req: Request, res: Response) => {
+  res.json({ requests: await storage.getRouteRequestsByUser((req.user as any).id) });
+});
+
+router.get("/admin/route-requests", requireAdmin, async (_req: Request, res: Response) => {
+  const requests = await storage.listRouteRequests();
+  const enriched = await Promise.all(requests.map(async (request) => {
+    const user = await storage.getUser(request.userId);
+    return {
+      ...request,
+      user: user ? { id: user.id, fullName: user.fullName, email: user.email } : null,
+    };
+  }));
+  res.json({ requests: enriched });
+});
+
+router.patch("/admin/route-requests/:id", requireAdmin, async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  const status = typeof req.body.status === "string" ? req.body.status : undefined;
+  const adminNotes = typeof req.body.adminNotes === "string" ? req.body.adminNotes.trim() : undefined;
+  const allowedStatuses = ["open", "reviewing", "matched", "closed"];
+  if (!Number.isInteger(id) || !status || !allowedStatuses.includes(status)) {
+    return res.status(400).json({ error: "Status de pedido inválido." });
+  }
+  const request = await storage.updateRouteRequest(id, {
+    status,
+    ...(adminNotes !== undefined ? { adminNotes: adminNotes || null } : {}),
+  });
+  if (!request) return res.status(404).json({ error: "Pedido de rota não encontrado." });
+
+  const statusLabel: Record<string, string> = {
+    open: "recebido",
+    reviewing: "em análise",
+    matched: "encontramos uma possibilidade",
+    closed: "encerrado",
+  };
+  await storage.createNotification({
+    userId: request.userId,
+    type: "route_request",
+    title: "Atualização do pedido de rota",
+    body: "Seu pedido de " + request.origin + " para " + request.destination + " foi " + statusLabel[status] + ".",
+    href: "/solicitar-rota",
+  });
+  res.json({ request });
+});
+
 router.post("/admin/locations", requireAdmin, async (req: Request, res: Response) => {
   const { name, slug, type, latitude, longitude, municipality, meetingInstructions } = req.body;
   if (!name || !slug || !type) return res.status(400).json({ error: "Nome, slug e tipo são obrigatórios." });

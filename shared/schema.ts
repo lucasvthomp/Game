@@ -134,7 +134,50 @@ export const messages = pgTable("messages", {
 export type Message = typeof messages.$inferSelect;
 export type InsertMessage = typeof messages.$inferInsert;
 
+export const locations = pgTable("locations", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  type: text("type").notNull(), // city | island | beach | marina | pier | community | pickup
+  latitude: numeric("latitude", { precision: 9, scale: 6 }),
+  longitude: numeric("longitude", { precision: 9, scale: 6 }),
+  municipality: text("municipality"),
+  state: text("state").default("SP"),
+  country: text("country").default("BR"),
+  placeId: text("place_id"),
+  description: text("description"),
+  meetingInstructions: text("meeting_instructions"),
+  photos: jsonb("photos"),
+  active: boolean("active").notNull().default(true),
+});
+
+export const maritimeRoutes = pgTable("maritime_routes", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  originLocationId: integer("origin_location_id").notNull().references(() => locations.id),
+  destinationLocationId: integer("destination_location_id").notNull().references(() => locations.id),
+  geojson: jsonb("geojson"),
+  distanceNm: numeric("distance_nm", { precision: 8, scale: 2 }),
+  typicalDurationMinutes: integer("typical_duration_minutes"),
+  active: boolean("active").notNull().default(false),
+  region: text("region"),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (t) => [
+  index("maritime_routes_origin_idx").on(t.originLocationId),
+  index("maritime_routes_destination_idx").on(t.destinationLocationId),
+  index("maritime_routes_active_idx").on(t.active),
+]);
+
 // Zod schemas
+export const insertLocationSchema = createInsertSchema(locations).omit({ id: true });
+export const insertMaritimeRouteSchema = createInsertSchema(maritimeRoutes).omit({ id: true, createdAt: true });
+
+export type Location = typeof locations.$inferSelect;
+export type InsertLocation = typeof locations.$inferInsert;
+export type MaritimeRoute = typeof maritimeRoutes.$inferSelect;
+export type InsertMaritimeRoute = typeof maritimeRoutes.$inferInsert;
+
 export const insertUserSchema = createInsertSchema(users).omit({ id: true, createdAt: true });
 export const insertCaptainProfileSchema = createInsertSchema(captainProfiles).omit({ id: true, createdAt: true, verified: true });
 export const insertDriverProfileSchema = createInsertSchema(driverProfiles).omit({ id: true, createdAt: true, verified: true });

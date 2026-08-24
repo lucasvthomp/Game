@@ -78,6 +78,19 @@ async function runMigrations() {
       CREATE INDEX IF NOT EXISTS incidents_reservation_id_idx ON incidents(reservation_id);
       CREATE INDEX IF NOT EXISTS incidents_status_idx ON incidents(status);
 
+      CREATE TABLE IF NOT EXISTS notifications (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id),
+        type TEXT NOT NULL,
+        title TEXT NOT NULL,
+        body TEXT NOT NULL,
+        href TEXT,
+        read_at TIMESTAMP,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL
+      );
+      CREATE INDEX IF NOT EXISTS notifications_user_idx ON notifications(user_id);
+      CREATE INDEX IF NOT EXISTS notifications_unread_idx ON notifications(user_id, read_at);
+
       CREATE TABLE IF NOT EXISTS locations (
         id SERIAL PRIMARY KEY,
         name TEXT NOT NULL,

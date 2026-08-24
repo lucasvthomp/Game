@@ -90,6 +90,9 @@ export const storage = {
     const [request] = await db.insert(routeRequests).values(data).returning();
     return request;
   },
+  async getRouteRequest(id: number): Promise<RouteRequest | undefined> {
+    return (await db.select().from(routeRequests).where(eq(routeRequests.id, id)))[0];
+  },
   async getRouteRequestsByUser(userId: number): Promise<RouteRequest[]> {
     return db.select().from(routeRequests).where(eq(routeRequests.userId, userId)).orderBy(desc(routeRequests.createdAt));
   },

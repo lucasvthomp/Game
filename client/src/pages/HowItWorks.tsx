@@ -1,0 +1,45 @@
+import { Anchor, ArrowRight, Check, Clock3, MapPin, ShieldCheck, UsersRound, Waves } from "lucide-react";
+import { Link } from "wouter";
+
+const passengerSteps = [
+  { number: "01", icon: <MapPin size={20} />, title: "Escolha o trecho", copy: "Busque a saída, a chegada, a data e quantas pessoas vão embarcar." },
+  { number: "02", icon: <Clock3 size={20} />, title: "Confira a viagem", copy: "Compare horário, capacidade, preço e as informações publicadas pelo operador." },
+  { number: "03", icon: <Anchor size={20} />, title: "Combine o cais", copy: "Depois da reserva, use a conversa da viagem para alinhar o ponto de encontro." },
+];
+
+export default function HowItWorks() {
+  return (
+    <div className="content-page-v2 content-page-how-v2">
+      <section className="content-page-v2-hero">
+        <div className="content-page-v2-hero-copy">
+          <div className="home-v2-eyebrow content-eyebrow"><Waves size={15} /> Um jeito mais simples de cruzar</div>
+          <h1>A água pode ser<br /><em>o caminho.</em></h1>
+          <p>O Marcamar aproxima passageiros e operadores locais para que cada travessia comece com informação clara.</p>
+          <div className="content-page-v2-actions">
+            <Link href="/lanchas"><span className="home-v2-coral-button">Encontrar uma lancha <ArrowRight size={17} /></span></Link>
+            <Link href="/rotas"><span className="content-page-v2-secondary-link">Ver rotas e pontos <ArrowRight size={16} /></span></Link>
+          </div>
+        </div>
+        <div className="content-page-v2-hero-note">
+          <span className="content-note-number">03</span>
+          <strong>passos até o embarque</strong>
+          <span>Rota, detalhe, conversa.</span>
+        </div>
+      </section>
+
+      <section className="content-page-v2-section">
+        <div className="content-page-v2-section-heading"><p className="home-v2-kicker">PARA PASSAGEIROS</p><h2>Do ponto de saída ao cais.</h2><p>Você sabe o que procurar e o que esperar em cada etapa.</p></div>
+        <div className="content-step-grid-v2">
+          {passengerSteps.map((step) => <article key={step.number} className="content-step-v2"><span className="content-step-number">{step.number}</span><span className="content-step-icon">{step.icon}</span><h3>{step.title}</h3><p>{step.copy}</p></article>)}
+        </div>
+      </section>
+
+      <section className="content-page-v2-split">
+        <div><p className="home-v2-kicker">PARA OPERADORES</p><h2>Publique o que você já faz.</h2><p>Capitães independentes podem apresentar a rota, a capacidade e os detalhes que ajudam uma pessoa a decidir com segurança.</p><Link href="/perfil-capitao"><span className="content-page-v2-secondary-link">Conhecer o cadastro de capitão <ArrowRight size={16} /></span></Link></div>
+        <div className="content-check-list"><span><Check size={16} /> Rota e horário publicados</span><span><Check size={16} /> Capacidade da lancha visível</span><span><Check size={16} /> Conversa depois da reserva</span><span><Check size={16} /> Verificação como camada do piloto</span></div>
+      </section>
+
+      <section className="content-page-v2-callout"><div className="content-callout-icon"><ShieldCheck size={22} /></div><div><p className="home-v2-kicker">NÃO ENCONTROU?</p><h2>Peça a rota que falta.</h2><p>Os pedidos ajudam a descobrir quais conexões precisam existir no próximo trecho do piloto.</p></div><Link href="/solicitar-rota"><span className="home-v2-coral-button">Solicitar uma rota <ArrowRight size={17} /></span></Link></section>
+    </div>
+  );
+}

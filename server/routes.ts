@@ -472,6 +472,47 @@ router.delete("/reservations/:id", requireAuth, async (req: Request, res: Respon
   res.json({ success: true });
 });
 
+router.post("/reservations/:id/check-in", requireAuth, async (req: Request, res: Response) => {
+  const reservation = await storage.getReservation(parseInt(req.params.id as string));
+  if (!reservation) return res.status(404).json({ error: "Reserva não encontrada." });
+  const ride = await storage.getRide(reservation.rideId);
+  const userId = (req.user as any).id;
+  if (userId !== reservation.passengerId && userId !== ride?.captainId) return res.status(403).json({ error: "Sem permissão." });
+  if (!["confirmed", "payment_succeeded"].includes(reservation.status)) return res.status(400).json({ error: "Reserva não está pronta para check-in." });
+  const updated = await storage.updateReservationStatus(reservation.id, "checked_in");
+  res.json({ reservation: updated });
+});
+
+router.post("/reservations/:id/complete", requireAuth, async (req: Request, res: Response) => {
+  const reservation = await storage.getReservation(parseInt(req.params.id as string));
+  if (!reservation) return res.status(404).json({ error: "Reserva não encontrada." });
+  const ride = await storage.getRide(reservation.rideId);
+  if ((req.user as any).id !== ride?.captainId) return res.status(403).json({ error: "Somente o operador pode concluir a viagem." });
+  const updated = await storage.updateReservationStatus(reservation.id, "completed");
+  res.json({ reservation: updated });
+});
+
+router.post("/reservations/:id/incidents", requireAuth, async (req: Request, res: Response) => {
+  const reservation = await storage.getReservation(parseInt(req.params.id as string));
+  if (!reservation) return res.status(404).json({ error: "Reserva não encontrada." });
+  const ride = await storage.getRide(reservation.rideId);
+  const userId = (req.user as any).id;
+  if (userId !== reservation.passengerId && userId !== ride?.captainId) return res.status(403).json({ error: "Sem permissão." });
+  const { type, description } = req.body;
+  if (!type || !description?.trim()) return res.status(400).json({ error: "Tipo e descrição são obrigatórios." });
+  const incident = await storage.createIncident({ reservationId: reservation.id, reporterId: userId, type, description: description.trim(), status: "open" });
+  res.status(201).json({ incident });
+});
+
+router.get("/reservations/:id/incidents", requireAuth, async (req: Request, res: Response) => {
+  const reservation = await storage.getReservation(parseInt(req.params.id as string));
+  if (!reservation) return res.status(404).json({ error: "Reserva não encontrada." });
+  const ride = await storage.getRide(reservation.rideId);
+  const userId = (req.user as any).id;
+  if (userId !== reservation.passengerId && userId !== ride?.captainId && (req.user as any).role !== "admin") return res.status(403).json({ error: "Sem permissão." });
+  res.json({ incidents: await storage.getIncidentsByReservation(reservation.id) });
+});
+
 // ── MESSAGES ──
 router.get("/messages/:reservationId", requireAuth, async (req: Request, res: Response) => {
   const reservationId = parseInt(req.params.reservationId as string);

@@ -165,6 +165,9 @@ export default function Rides() {
             <Anchor size={44} className="empty-state-icon" />
             <p style={{ fontWeight: 600, fontSize: "1.05rem", marginBottom: 6 }}>Nenhuma travessia encontrada</p>
             <p style={{ fontSize: 13 }}>Tente outra cidade ou volte mais tarde</p>
+            <Link href={`/solicitar-rota?${initialParams.toString()}`}>
+              <span className="rides-request-route-link">Pedir esta rota <ArrowRight size={14} /></span>
+            </Link>
           </div>
         ) : (
           <>

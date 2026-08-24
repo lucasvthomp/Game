@@ -118,6 +118,40 @@ router.get("/weather/marine", async (req: Request, res: Response) => {
   }
 });
 
+router.get("/locations", async (_req: Request, res: Response) => {
+  res.json({ locations: await storage.listLocations() });
+});
+
+router.get("/maritime-routes", async (_req: Request, res: Response) => {
+  res.json({ routes: (await storage.listMaritimeRoutes()).filter((route) => route.active) });
+});
+
+router.post("/admin/locations", requireAdmin, async (req: Request, res: Response) => {
+  const { name, slug, type, latitude, longitude, municipality, meetingInstructions } = req.body;
+  if (!name || !slug || !type) return res.status(400).json({ error: "Nome, slug e tipo são obrigatórios." });
+  const location = await storage.createLocation({ name, slug, type, latitude: latitude ?? null, longitude: longitude ?? null, municipality: municipality ?? null, meetingInstructions: meetingInstructions ?? null });
+  res.status(201).json({ location });
+});
+
+router.get("/admin/maritime-routes", requireAdmin, async (_req: Request, res: Response) => {
+  res.json({ routes: await storage.listMaritimeRoutes() });
+});
+
+router.post("/admin/maritime-routes", requireAdmin, async (req: Request, res: Response) => {
+  const { name, originLocationId, destinationLocationId, geojson, distanceNm, typicalDurationMinutes, region, notes } = req.body;
+  if (!name || !originLocationId || !destinationLocationId) return res.status(400).json({ error: "Nome, origem e destino são obrigatórios." });
+  const route = await storage.createMaritimeRoute({ name, originLocationId: Number(originLocationId), destinationLocationId: Number(destinationLocationId), geojson: geojson ?? null, distanceNm: distanceNm ?? null, typicalDurationMinutes: typicalDurationMinutes ?? null, region: region ?? null, notes: notes ?? null, active: false });
+  res.status(201).json({ route });
+});
+
+router.patch("/admin/maritime-routes/:id", requireAdmin, async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id as string);
+  if (isNaN(id) || typeof req.body.active !== "boolean") return res.status(400).json({ error: "Dados inválidos." });
+  const route = await storage.setMaritimeRouteActive(id, req.body.active);
+  if (!route) return res.status(404).json({ error: "Rota não encontrada." });
+  res.json({ route });
+});
+
 // ── ADMIN VERIFICATION ──
 router.get("/admin/verifications", requireAdmin, async (_req: Request, res: Response) => {
   const [captains, drivers] = await Promise.all([storage.listCaptainProfiles(), storage.listDriverProfiles()]);

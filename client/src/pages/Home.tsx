@@ -7,6 +7,7 @@ import { Clock, Star, ChevronRight, Anchor, Calendar, Shield, MapPin, ArrowRight
 import { useState, useEffect } from "react";
 import RidesMap, { type RideMarker } from "@/components/map/RidesMap";
 import { BOAT_MEDIA } from "@/lib/boat-media";
+import { SiteAutocomplete } from "@/components/SiteSelect";
 
 const COASTAL_SP_CITIES = [
   "Ubatuba",
@@ -85,23 +86,23 @@ export default function Home() {
             <div className="hero-search-fields">
               <div className="hero-search-field">
                 <MapPin size={14} className="search-field-icon" />
-                <input
+                <SiteAutocomplete
                   value={searchFrom}
-                  onChange={e => setSearchFrom(e.target.value)}
+                  onChange={setSearchFrom}
+                  options={COASTAL_SP_CITIES}
                   placeholder="De onde?"
-                  list="coastal-sp-cities"
-                  autoComplete="address-level2"
+                  ariaLabel="Cidade de origem"
                 />
               </div>
               <div className="hero-search-divider" />
               <div className="hero-search-field">
                 <MapPin size={14} className="search-field-icon" />
-                <input
+                <SiteAutocomplete
                   value={searchTo}
-                  onChange={e => setSearchTo(e.target.value)}
+                  onChange={setSearchTo}
+                  options={COASTAL_SP_CITIES}
                   placeholder="Para onde?"
-                  list="coastal-sp-cities"
-                  autoComplete="address-level2"
+                  ariaLabel="Cidade de destino"
                 />
               </div>
               <button type="submit" className="hero-search-btn">
@@ -109,10 +110,6 @@ export default function Home() {
               </button>
             </div>
           </form>
-
-          <datalist id="coastal-sp-cities">
-            {COASTAL_SP_CITIES.map((city) => <option key={city} value={city} />)}
-          </datalist>
 
           <div className="hero-pro-utility">
             <span><Shield size={13} /> Informação antes do embarque</span>

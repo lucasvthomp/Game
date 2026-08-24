@@ -1,6 +1,6 @@
 import { db } from "./db.js";
 import {
-  users, captainProfiles, driverProfiles, rides, recurringSchedules, reservations, reviews, messages, locations, maritimeRoutes
+  users, captainProfiles, driverProfiles, rides, recurringSchedules, reservations, reviews, messages, locations, maritimeRoutes, incidents
 } from "@shared/schema";
 import type {
   User, InsertUser,
@@ -11,7 +11,7 @@ import type {
   Reservation, InsertReservation,
   Review, InsertReview,
   Message, InsertMessage,
-  Location, InsertLocation, MaritimeRoute, InsertMaritimeRoute,
+  Location, InsertLocation, MaritimeRoute, InsertMaritimeRoute, Incident, InsertIncident,
 } from "@shared/schema";
 import { eq, desc, and, gte, sql, or, ilike, asc } from "drizzle-orm";
 import { hashPassword } from "./auth.js";
@@ -169,11 +169,24 @@ export const storage = {
     await db.update(rides).set({ availableSeats: sql`available_seats - ${data.seats}` }).where(eq(rides.id, data.rideId));
     return res;
   },
+  async updateReservationStatus(id: number, status: string): Promise<Reservation | undefined> {
+    const [reservation] = await db.update(reservations).set({ status }).where(eq(reservations.id, id)).returning();
+    return reservation;
+  },
   async cancelReservation(id: number): Promise<void> {
     const res = await this.getReservation(id);
     if (!res) return;
     await db.update(reservations).set({ status: "cancelled" }).where(eq(reservations.id, id));
     await db.update(rides).set({ availableSeats: sql`available_seats + ${res.seats}` }).where(eq(rides.id, res.rideId));
+  },
+
+  // ── Incidents ──
+  async createIncident(data: InsertIncident): Promise<Incident> {
+    const [incident] = await db.insert(incidents).values(data).returning();
+    return incident;
+  },
+  async getIncidentsByReservation(reservationId: number): Promise<Incident[]> {
+    return db.select().from(incidents).where(eq(incidents.reservationId, reservationId)).orderBy(desc(incidents.createdAt));
   },
 
   // ── Messages ──

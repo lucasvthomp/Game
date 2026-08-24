@@ -6,6 +6,7 @@ import path from "path";
 import fs from "fs";
 import { PILOT_ROUTES } from "../shared/pilot-routes.js";
 import { getMarineConditions } from "./providers/marine-weather.js";
+import { getPaymentProvider } from "./providers/payment.js";
 
 const router = Router();
 
@@ -397,6 +398,22 @@ router.post("/reservations", requireAuth, async (req: Request, res: Response) =>
     const reservation = await storage.createReservation({ rideId: ride.id, passengerId: user.id, seats: numSeats, totalPrice });
     res.json({ reservation });
   } catch (err: any) { res.status(500).json({ error: err.message }); }
+});
+
+router.post("/reservations/:id/payment-intent", requireAuth, async (req: Request, res: Response) => {
+  const reservationId = parseInt(req.params.id as string);
+  if (isNaN(reservationId)) return res.status(400).json({ error: "ID inválido." });
+  const reservation = await storage.getReservation(reservationId);
+  if (!reservation) return res.status(404).json({ error: "Reserva não encontrada." });
+  if (reservation.passengerId !== (req.user as any).id) return res.status(403).json({ error: "Sem permissão." });
+  try {
+    const amountCents = Math.round(parseFloat(reservation.totalPrice) * 100);
+    const intent = await getPaymentProvider().createPaymentIntent(amountCents, reservation.id);
+    res.json({ intent });
+  } catch (error: any) {
+    if (error.message === "PAYMENT_PROVIDER_NOT_CONFIGURED") return res.status(503).json({ error: "Pagamentos ainda não configurados." });
+    res.status(502).json({ error: "Não foi possível iniciar o pagamento." });
+  }
 });
 
 router.get("/my/reservations", requireAuth, async (req: Request, res: Response) => {

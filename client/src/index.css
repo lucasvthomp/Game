@@ -3752,3 +3752,15 @@ input, select, textarea, button { font-family: inherit; }
 .marine-conditions-grid strong { display: block; margin-top: 4px; color: var(--text1); font-size: 15px; }
 .marine-conditions-disclaimer { color: var(--text3); font-size: 11px; line-height: 1.5; }
 @media (max-width: 560px) { .marine-conditions-grid { grid-template-columns: repeat(2, 1fr); } }
+
+
+/* ─── PROFILE: COMPACT, READABLE DESKTOP LAYOUT ─── */
+.profile-page { width: min(100%, 980px); margin: 0 auto; padding: 44px 24px 72px; }
+.profile-page-heading { grid-template-columns: minmax(0, 1fr) 210px; gap: clamp(24px, 4vw, 52px); min-height: 132px; margin-bottom: 24px; }
+.profile-page-heading .site-media-cluster { width: 210px; height: 132px; margin: 0; }
+.profile-card { padding: 24px; }
+@media (max-width: 700px) {
+  .profile-page { padding: 30px 18px 88px; }
+  .profile-page-heading { grid-template-columns: 1fr; min-height: 0; gap: 14px; }
+  .profile-page-heading .site-media-cluster { width: 170px; height: 108px; justify-self: start; }
+}

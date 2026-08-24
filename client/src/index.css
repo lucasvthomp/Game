@@ -295,8 +295,16 @@ input, select, textarea, button { font-family: inherit; }
     radial-gradient(ellipse 80% 60% at 15% -10%, rgba(240,78,35,0.08) 0%, transparent 60%),
     radial-gradient(ellipse 70% 50% at 88% 5%, rgba(37,99,235,0.07) 0%, transparent 55%),
     linear-gradient(180deg, #FFFFFF 0%, var(--bg) 55%, var(--bg2) 100%);
-  padding: 96px 24px 0;
+  /*
+   * Keep the landing hero within the first desktop viewport. The navbar is
+   * part of normal document flow, so its height is subtracted here.
+   */
+  min-height: calc(100vh - 58px);
+  min-height: calc(100svh - 58px);
+  padding: clamp(48px, 8vh, 96px) 24px 0;
   position: relative;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   border-bottom: 1px solid var(--border);
   text-align: center;
@@ -364,10 +372,22 @@ input, select, textarea, button { font-family: inherit; }
   background: linear-gradient(180deg, rgba(24,28,40,0.72) 0%, rgba(24,28,40,0.52) 42%, rgba(24,28,40,0.92) 100%);
 }
 
+/* The shell consumes available hero height so the next section never peeks
+   into the initial desktop viewport. */
+.hero-pro-shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
 /* Wave at bottom of hero */
 .hero-wave {
   position: relative; z-index: 2;
-  margin-top: 64px;
+  margin-top: 24px;
   line-height: 0;
 }
 .hero-wave svg { display: block; width: 100%; }

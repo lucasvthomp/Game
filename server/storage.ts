@@ -1,6 +1,6 @@
 import { db } from "./db.js";
 import {
-  users, captainProfiles, driverProfiles, rides, recurringSchedules, reservations, reviews, messages
+  users, captainProfiles, driverProfiles, rides, recurringSchedules, reservations, reviews, messages, locations, maritimeRoutes
 } from "@shared/schema";
 import type {
   User, InsertUser,
@@ -11,6 +11,7 @@ import type {
   Reservation, InsertReservation,
   Review, InsertReview,
   Message, InsertMessage,
+  Location, InsertLocation, MaritimeRoute, InsertMaritimeRoute,
 } from "@shared/schema";
 import { eq, desc, and, gte, sql, or, ilike, asc } from "drizzle-orm";
 import { hashPassword } from "./auth.js";
@@ -61,6 +62,26 @@ export const storage = {
     const newRole = user?.role === "captain" ? "both" : "driver";
     await db.update(users).set({ role: newRole }).where(eq(users.id, data.userId));
     return profile;
+  },
+
+  // ── Structured locations and approved routes ──
+  async listLocations(): Promise<Location[]> {
+    return db.select().from(locations).where(eq(locations.active, true)).orderBy(asc(locations.name));
+  },
+  async createLocation(data: InsertLocation): Promise<Location> {
+    const [location] = await db.insert(locations).values(data).returning();
+    return location;
+  },
+  async listMaritimeRoutes(): Promise<MaritimeRoute[]> {
+    return db.select().from(maritimeRoutes).orderBy(desc(maritimeRoutes.createdAt));
+  },
+  async createMaritimeRoute(data: InsertMaritimeRoute): Promise<MaritimeRoute> {
+    const [route] = await db.insert(maritimeRoutes).values(data).returning();
+    return route;
+  },
+  async setMaritimeRouteActive(id: number, active: boolean): Promise<MaritimeRoute | undefined> {
+    const [route] = await db.update(maritimeRoutes).set({ active }).where(eq(maritimeRoutes.id, id)).returning();
+    return route;
   },
 
   // ── Admin verification ──

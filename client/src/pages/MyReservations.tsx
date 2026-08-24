@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation, Link } from "wouter";
-import { Anchor, Clock, MapPin, Trash2 } from "lucide-react";
+import { Anchor, Clock, MapPin, Trash2, CheckCircle, AlertTriangle } from "lucide-react";
 import { format } from "date-fns";
 import { BoatMediaCluster } from "@/components/layout/BoatMediaCluster";
 
@@ -16,6 +16,8 @@ export default function MyReservations() {
     queryFn: () => apiRequest("GET", "/api/my/reservations"),
     enabled: !!user,
   });
+  const checkInMutation = useMutation({ mutationFn: (id: number) => apiRequest("POST", `/api/reservations/${id}/check-in`), onSuccess: () => qc.invalidateQueries({ queryKey: ["/api/my/reservations"] }) });
+  const incidentMutation = useMutation({ mutationFn: ({ id, description }: { id: number; description: string }) => apiRequest("POST", `/api/reservations/${id}/incidents`, { type: "trip_issue", description }), onSuccess: () => alert("Incidente registrado. A equipe Marcamar foi informada.") });
   const cancelMutation = useMutation({
     mutationFn: (id: number) => apiRequest("DELETE", `/api/reservations/${id}`),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["/api/my/reservations"] }),
@@ -24,7 +26,7 @@ export default function MyReservations() {
   if (!user) { navigate("/entrar"); return null; }
 
   const reservations = data?.reservations || [];
-  const active = reservations.filter((r: any) => r.status === "confirmed");
+  const active = reservations.filter((r: any) => ["confirmed", "checked_in"].includes(r.status));
   const past = reservations.filter((r: any) => r.status !== "confirmed");
 
   return (
@@ -51,7 +53,7 @@ export default function MyReservations() {
             <div style={{ marginBottom: 32 }}>
               <p className="section-group-label">CONFIRMADAS</p>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {active.map((res: any) => <ResCard key={res.id} res={res} onCancel={() => { if (confirm("Cancelar esta reserva?")) cancelMutation.mutate(res.id); }} messagesHref={`/mensagens/${res.id}`} />)}
+                {active.map((res: any) => <ResCard key={res.id} res={res} onCancel={() => { if (confirm("Cancelar esta reserva?")) cancelMutation.mutate(res.id); }} messagesHref={`/mensagens/${res.id}`} onCheckIn={() => checkInMutation.mutate(res.id)} onIncident={() => { const description = window.prompt("Descreva o que aconteceu"); if (description?.trim()) incidentMutation.mutate({ id: res.id, description: description.trim() }); }} />)}
               </div>
             </div>
           )}
@@ -69,7 +71,7 @@ export default function MyReservations() {
   );
 }
 
-function ResCard({ res, onCancel, messagesHref }: { res: any; onCancel?: () => void; messagesHref?: string }) {
+function ResCard({ res, onCancel, messagesHref, onCheckIn, onIncident }: { res: any; onCancel?: () => void; messagesHref?: string; onCheckIn?: () => void; onIncident?: () => void }) {
   const ride = res.ride;
   return (
     <div className={`res-card ${res.status !== "confirmed" ? "cancelled" : ""}`}>
@@ -88,7 +90,7 @@ function ResCard({ res, onCancel, messagesHref }: { res: any; onCancel?: () => v
       </div>
       <div className="res-right">
         <span className={`status-pill ${res.status === "confirmed" ? "status-active" : "status-cancelled"}`}>
-          {res.status === "confirmed" ? "Confirmada" : "Cancelada"}
+          {res.status === "checked_in" ? "Check-in realizado" : res.status === "confirmed" ? "Confirmada" : "Cancelada"}
         </span>
         <div className="res-price">R$ {parseFloat(res.totalPrice).toFixed(2).replace(".", ",")}</div>
         {messagesHref && (
@@ -97,6 +99,12 @@ function ResCard({ res, onCancel, messagesHref }: { res: any; onCancel?: () => v
               Mensagens
             </button>
           </Link>
+        )}
+        {onCheckIn && res.status === "confirmed" && (
+          <button className="btn-secondary" onClick={onCheckIn} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, padding: "5px 10px" }}><CheckCircle size={12} /> Check-in</button>
+        )}
+        {onIncident && ["confirmed", "checked_in"].includes(res.status) && (
+          <button className="btn-danger" onClick={onIncident} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, padding: "5px 10px" }}><AlertTriangle size={12} /> Reportar incidente</button>
         )}
         {onCancel && (
           <button className="btn-danger" onClick={onCancel} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, padding: "5px 10px" }}>

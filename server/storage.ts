@@ -1,6 +1,6 @@
 import { db } from "./db.js";
 import {
-  users, captainProfiles, driverProfiles, rides, recurringSchedules, reservations, reviews, messages, locations, maritimeRoutes, incidents, notifications
+  users, captainProfiles, driverProfiles, rides, recurringSchedules, reservations, reviews, messages, locations, maritimeRoutes, incidents, notifications, routeRequests
 } from "@shared/schema";
 import type {
   User, InsertUser,
@@ -12,6 +12,7 @@ import type {
   Review, InsertReview,
   Message, InsertMessage,
   Location, InsertLocation, MaritimeRoute, InsertMaritimeRoute, Incident, InsertIncident, Notification, InsertNotification,
+  RouteRequest, InsertRouteRequest,
 } from "@shared/schema";
 import { eq, desc, and, gte, sql, or, ilike, asc } from "drizzle-orm";
 import { hashPassword } from "./auth.js";
@@ -82,6 +83,25 @@ export const storage = {
   async setMaritimeRouteActive(id: number, active: boolean): Promise<MaritimeRoute | undefined> {
     const [route] = await db.update(maritimeRoutes).set({ active }).where(eq(maritimeRoutes.id, id)).returning();
     return route;
+  },
+
+  // ── Route requests ──
+  async createRouteRequest(data: InsertRouteRequest): Promise<RouteRequest> {
+    const [request] = await db.insert(routeRequests).values(data).returning();
+    return request;
+  },
+  async getRouteRequest(id: number): Promise<RouteRequest | undefined> {
+    return (await db.select().from(routeRequests).where(eq(routeRequests.id, id)))[0];
+  },
+  async getRouteRequestsByUser(userId: number): Promise<RouteRequest[]> {
+    return db.select().from(routeRequests).where(eq(routeRequests.userId, userId)).orderBy(desc(routeRequests.createdAt));
+  },
+  async listRouteRequests(): Promise<RouteRequest[]> {
+    return db.select().from(routeRequests).orderBy(desc(routeRequests.createdAt));
+  },
+  async updateRouteRequest(id: number, data: Partial<RouteRequest>): Promise<RouteRequest | undefined> {
+    const [request] = await db.update(routeRequests).set(data).where(eq(routeRequests.id, id)).returning();
+    return request;
   },
 
   // ── Admin verification ──

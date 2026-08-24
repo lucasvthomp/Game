@@ -10,6 +10,7 @@ export default function Admin() {
     queryKey: ["/api/admin/verifications"],
     queryFn: () => apiRequest("GET", "/api/admin/verifications"),
   });
+  const { data: routeData } = useQuery({ queryKey: ["/api/admin/maritime-routes"], queryFn: () => apiRequest("GET", "/api/admin/maritime-routes") });
   const mutation = useMutation({
     mutationFn: ({ kind, id, verified }: { kind: "captain" | "driver"; id: number; verified: boolean }) =>
       apiRequest("PATCH", `/api/admin/verifications/${kind}/${id}`, { verified }),
@@ -28,6 +29,18 @@ export default function Admin() {
           <div className="admin-heading-icon"><ShieldCheck size={24} /></div>
           <div><p className="section-label">MARCAMAR · ADMIN</p><h1 className="page-title">Verificações</h1><p className="page-sub">Revise documentos e ative operadores antes da publicação.</p></div>
         </div>
+        <section className="admin-section">
+          <div className="admin-section-heading"><h2>Rotas marítimas</h2><span>{routeData?.routes?.length || 0}</span></div>
+          {(routeData?.routes || []).map((route: any) => (
+            <div className="admin-verification-card" key={route.id}>
+              <div><strong>{route.name}</strong><span>Rota #{route.id} · {route.region || "Sem região"}</span></div>
+              <div className="admin-verification-actions">
+                <span className={route.active ? "admin-status verified" : "admin-status"}>{route.active ? "Publicada" : "Rascunho"}</span>
+                <button className="admin-verify-button" onClick={() => apiRequest("PATCH", `/api/admin/maritime-routes/${route.id}`, { active: !route.active }).then(() => qc.invalidateQueries({ queryKey: ["/api/admin/maritime-routes"] }))}>{route.active ? "Desativar" : "Publicar"}</button>
+              </div>
+            </div>
+          ))}
+        </section>
         {isLoading ? <p className="admin-empty">Carregando verificações...</p> : groups.map((group) => (
           <section className="admin-section" key={group.kind}>
             <div className="admin-section-heading"><h2>{group.label}</h2><span>{group.items.length}</span></div>

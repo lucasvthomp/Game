@@ -3635,3 +3635,37 @@ input, select, textarea, button { font-family: inherit; }
   .messages-media-strip { height: 112px; }
 }
 
+
+
+/* ─── PROFILE: COMPACT, READABLE DESKTOP LAYOUT ─── */
+.profile-page {
+  width: min(100%, 980px);
+  margin: 0 auto;
+  padding: 44px 24px 72px;
+}
+.profile-page-heading {
+  grid-template-columns: minmax(0, 1fr) 210px;
+  gap: clamp(24px, 4vw, 52px);
+  min-height: 132px;
+  margin-bottom: 24px;
+}
+.profile-page-heading .site-media-cluster {
+  width: 210px;
+  height: 132px;
+  margin: 0;
+}
+.profile-card { padding: 24px; }
+
+@media (max-width: 700px) {
+  .profile-page { padding: 30px 18px 88px; }
+  .profile-page-heading {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    gap: 14px;
+  }
+  .profile-page-heading .site-media-cluster {
+    width: 170px;
+    height: 108px;
+    justify-self: start;
+  }
+}

@@ -1,5 +1,5 @@
 import { QueryClientProvider } from "@tanstack/react-query";
-import { Router, Route, Switch } from "wouter";
+import { Route, Switch } from "wouter";
 import { queryClient } from "@/lib/queryClient";
 import { AuthProvider } from "@/hooks/use-auth";
 import Navbar from "@/components/layout/Navbar";
@@ -20,6 +20,11 @@ import Profile from "@/pages/Profile";
 import Admin from "@/pages/Admin";
 import RouteRequest from "@/pages/RouteRequest";
 import Routes from "@/pages/Routes";
+import HowItWorks from "@/pages/HowItWorks";
+import Safety from "@/pages/Safety";
+import Help from "@/pages/Help";
+import Terms from "@/pages/Terms";
+import Privacy from "@/pages/Privacy";
 
 export default function App() {
   return (
@@ -35,6 +40,11 @@ export default function App() {
             <Route path="/caronas">{() => <Rides />}</Route>
             <Route path="/lanchas">{() => <Rides />}</Route>
             <Route path="/rotas" component={Routes} />
+            <Route path="/como-funciona" component={HowItWorks} />
+            <Route path="/seguranca" component={Safety} />
+            <Route path="/ajuda" component={Help} />
+            <Route path="/termos" component={Terms} />
+            <Route path="/privacidade" component={Privacy} />
             <Route path="/viagens/:id" component={RideDetail} />
             <Route path="/perfil-capitao" component={CaptainProfile} />
             <Route path="/minha-lancha" component={CaptainDashboard} />

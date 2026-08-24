@@ -42,6 +42,18 @@ function googleConfigured() {
   return Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
 }
 
+router.get("/notifications", requireAuth, async (req: Request, res: Response) => {
+  res.json({ notifications: await storage.getNotificationsByUser((req.user as any).id) });
+});
+
+router.patch("/notifications/:id/read", requireAuth, async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id as string);
+  if (isNaN(id)) return res.status(400).json({ error: "ID inválido." });
+  const notification = await storage.markNotificationRead(id, (req.user as any).id);
+  if (!notification) return res.status(404).json({ error: "Notificação não encontrada." });
+  res.json({ notification });
+});
+
 // ── AUTH ──
 router.get("/auth/providers", (_req: Request, res: Response) => {
   res.json({ google: googleConfigured(), email: true });

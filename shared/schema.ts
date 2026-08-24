@@ -186,6 +186,24 @@ export const insertIncidentSchema = createInsertSchema(incidents).omit({ id: tru
 export type Incident = typeof incidents.$inferSelect;
 export type InsertIncident = typeof incidents.$inferInsert;
 
+export const notifications = pgTable("notifications", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id),
+  type: text("type").notNull(),
+  title: text("title").notNull(),
+  body: text("body").notNull(),
+  href: text("href"),
+  readAt: timestamp("read_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (t) => [
+  index("notifications_user_idx").on(t.userId),
+  index("notifications_unread_idx").on(t.userId, t.readAt),
+]);
+
+export const insertNotificationSchema = createInsertSchema(notifications).omit({ id: true, createdAt: true, readAt: true });
+export type Notification = typeof notifications.$inferSelect;
+export type InsertNotification = typeof notifications.$inferInsert;
+
 // Zod schemas
 export const insertLocationSchema = createInsertSchema(locations).omit({ id: true });
 export const insertMaritimeRouteSchema = createInsertSchema(maritimeRoutes).omit({ id: true, createdAt: true });

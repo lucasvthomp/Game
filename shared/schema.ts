@@ -169,6 +169,23 @@ export const maritimeRoutes = pgTable("maritime_routes", {
   index("maritime_routes_active_idx").on(t.active),
 ]);
 
+export const incidents = pgTable("incidents", {
+  id: serial("id").primaryKey(),
+  reservationId: integer("reservation_id").notNull().references(() => reservations.id),
+  reporterId: integer("reporter_id").notNull().references(() => users.id),
+  type: text("type").notNull(),
+  description: text("description").notNull(),
+  status: text("status").notNull().default("open"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (t) => [
+  index("incidents_reservation_id_idx").on(t.reservationId),
+  index("incidents_status_idx").on(t.status),
+]);
+
+export const insertIncidentSchema = createInsertSchema(incidents).omit({ id: true, createdAt: true });
+export type Incident = typeof incidents.$inferSelect;
+export type InsertIncident = typeof incidents.$inferInsert;
+
 // Zod schemas
 export const insertLocationSchema = createInsertSchema(locations).omit({ id: true });
 export const insertMaritimeRouteSchema = createInsertSchema(maritimeRoutes).omit({ id: true, createdAt: true });

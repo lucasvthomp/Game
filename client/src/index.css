@@ -3925,3 +3925,50 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .messages-page .messages-thread,
   .messages-page .messages-composer-inner { padding-inline: 16px; }
 }
+
+
+/* Message surface alignment */
+.messages-header {
+  padding-inline: var(--page-gutter) !important;
+}
+.messages-trip-meta {
+  padding-inline: var(--page-gutter) !important;
+}
+.messages-thread {
+  flex: 1;
+  overflow-y: auto;
+  width: min(100%, 680px);
+  margin: 0 auto;
+  padding: 24px var(--page-gutter);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.messages-composer {
+  padding: 12px 0 calc(12px + env(safe-area-inset-bottom)) !important;
+}
+.messages-composer-inner {
+  display: flex;
+  gap: 10px;
+  width: min(100%, 680px);
+  margin: 0 auto;
+  padding-inline: var(--page-gutter);
+}
+.messages-input {
+  min-width: 0;
+  flex: 1;
+}
+.messages-send {
+  flex: 0 0 44px;
+  transition: transform .18s ease, background .18s ease, opacity .18s ease;
+}
+.messages-send:not(:disabled):hover {
+  background: var(--boat-dark) !important;
+  transform: translateY(-1px);
+}
+@media (max-width: 560px) {
+  .messages-header,
+  .messages-trip-meta,
+  .messages-thread,
+  .messages-composer-inner { padding-inline: 16px !important; }
+}

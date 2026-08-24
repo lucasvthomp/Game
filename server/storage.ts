@@ -188,6 +188,13 @@ export const storage = {
   async getIncidentsByReservation(reservationId: number): Promise<Incident[]> {
     return db.select().from(incidents).where(eq(incidents.reservationId, reservationId)).orderBy(desc(incidents.createdAt));
   },
+  async listIncidents(): Promise<Incident[]> {
+    return db.select().from(incidents).orderBy(desc(incidents.createdAt));
+  },
+  async updateIncidentStatus(id: number, status: string): Promise<Incident | undefined> {
+    const [incident] = await db.update(incidents).set({ status }).where(eq(incidents.id, id)).returning();
+    return incident;
+  },
 
   // ── Messages ──
   async getMessagesByReservation(reservationId: number): Promise<Message[]> {

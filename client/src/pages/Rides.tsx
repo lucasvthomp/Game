@@ -12,15 +12,22 @@ const RidesMap = lazy(() => import("@/components/map/RidesMap"));
 
 export default function Rides() {
   const activeTab = "boat" as const;
-  const [searchText, setSearchText] = useState("");
+  const initialParams = new URLSearchParams(window.location.search);
+  const [searchText, setSearchText] = useState(initialParams.get("from") || initialParams.get("to") || "");
   const [sortBy, setSortBy] = useState<"price" | "rating" | "departure">("departure");
-  const [dateFilter, setDateFilter] = useState("");
+  const [dateFilter, setDateFilter] = useState(initialParams.get("date") || "");
   const [maxPrice, setMaxPrice] = useState("");
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
-
   const { data, isLoading } = useQuery({
     queryKey: ["/api/rides", activeTab],
-    queryFn: () => apiRequest("GET", `/api/rides?type=${activeTab}`),
+    queryFn: () => {
+      const params = new URLSearchParams({ type: activeTab });
+      ["from", "to", "date", "passengers"].forEach((key) => {
+        const value = initialParams.get(key);
+        if (value) params.set(key, value);
+      });
+      return apiRequest("GET", `/api/rides?${params.toString()}`);
+    },
   });
 
   const liveRides = data?.rides || [];

@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Clock, Star, ChevronRight, Anchor, Calendar, Shield, MapPin, ArrowRight, Check, Navigation, Zap, Globe } from "lucide-react";
+import { Clock, Star, ChevronRight, Anchor, Calendar, Shield, MapPin, ArrowRight, Check, Navigation, Zap, Globe, Users } from "lucide-react";
 import { useState, useEffect } from "react";
 import RidesMap, { type RideMarker } from "@/components/map/RidesMap";
 import { BOAT_MEDIA } from "@/lib/boat-media";
@@ -30,6 +30,8 @@ const COASTAL_SP_CITIES = [
 export default function Home() {
   const [searchFrom, setSearchFrom] = useState("");
   const [searchTo, setSearchTo] = useState("");
+  const [searchDate, setSearchDate] = useState("");
+  const [searchPassengers, setSearchPassengers] = useState("1");
 
   const { data } = useQuery({
     queryKey: ["/api/rides"],
@@ -56,6 +58,8 @@ export default function Home() {
     const params = new URLSearchParams();
     if (searchFrom) params.set("from", searchFrom);
     if (searchTo)   params.set("to", searchTo);
+    if (searchDate) params.set("date", searchDate);
+    if (searchPassengers) params.set("passengers", searchPassengers);
     window.location.href = `/lanchas?${params.toString()}`;
   };
 
@@ -104,6 +108,16 @@ export default function Home() {
                   placeholder="Para onde?"
                   ariaLabel="Cidade de destino"
                 />
+              </div>
+              <div className="hero-search-divider" />
+              <div className="hero-search-field hero-search-date">
+                <Calendar size={14} className="search-field-icon" />
+                <input type="date" value={searchDate} onChange={e => setSearchDate(e.target.value)} aria-label="Data da viagem" />
+              </div>
+              <div className="hero-search-divider" />
+              <div className="hero-search-field hero-search-passengers">
+                <Users size={14} className="search-field-icon" />
+                <input type="number" min="1" max="12" value={searchPassengers} onChange={e => setSearchPassengers(e.target.value)} aria-label="Passageiros" />
               </div>
               <button type="submit" className="hero-search-btn">
                 Buscar <ArrowRight size={14} />

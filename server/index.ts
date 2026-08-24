@@ -112,6 +112,22 @@ async function runMigrations() {
       CREATE INDEX IF NOT EXISTS maritime_routes_destination_idx ON maritime_routes(destination_location_id);
       CREATE INDEX IF NOT EXISTS maritime_routes_active_idx ON maritime_routes(active);
 
+      CREATE TABLE IF NOT EXISTS route_requests (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id),
+        origin TEXT NOT NULL,
+        destination TEXT NOT NULL,
+        requested_date TIMESTAMP,
+        passengers INTEGER NOT NULL DEFAULT 1,
+        notes TEXT,
+        status TEXT NOT NULL DEFAULT 'open',
+        admin_notes TEXT,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL
+      );
+      CREATE INDEX IF NOT EXISTS route_requests_user_idx ON route_requests(user_id);
+      CREATE INDEX IF NOT EXISTS route_requests_status_idx ON route_requests(status);
+      CREATE INDEX IF NOT EXISTS route_requests_created_at_idx ON route_requests(created_at);
+
       CREATE TABLE IF NOT EXISTS captain_profiles (
         id SERIAL PRIMARY KEY,
         user_id INTEGER NOT NULL REFERENCES users(id),

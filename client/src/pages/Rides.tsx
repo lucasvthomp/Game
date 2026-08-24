@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { SiteSelect } from "@/components/SiteSelect";
 import { apiRequest } from "@/lib/queryClient";
 import { Link } from "wouter";
 import { Anchor, Calendar, Clock, Star, Search, Users, ArrowRight, Map, List } from "lucide-react";
@@ -101,15 +102,7 @@ export default function Rides() {
                 style={{ border: "none", background: "none", outline: "none", fontSize: 13, color: "var(--text1)", width: 80 }}
               />
             </div>
-            <select
-              value={sortBy}
-              onChange={e => setSortBy(e.target.value as any)}
-              style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 10, padding: "7px 12px", fontSize: 13, color: "var(--text1)", outline: "none", cursor: "pointer" }}
-            >
-              <option value="departure">Mais próximas</option>
-              <option value="price">Menor preço</option>
-              <option value="rating">Melhor avaliação</option>
-            </select>
+            <SiteSelect value={sortBy} onChange={(value) => setSortBy(value as typeof sortBy)} options={[{ value: "departure", label: "Mais próximas" }, { value: "price", label: "Menor preço" }, { value: "rating", label: "Melhor avaliação" }]} ariaLabel="Ordenar viagens" />
             {(dateFilter || maxPrice || sortBy !== "departure") && (
               <button
                 onClick={() => { setDateFilter(""); setMaxPrice(""); setSortBy("departure"); }}

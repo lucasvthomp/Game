@@ -30,6 +30,12 @@ function requireCaptainOrDriver(req: Request, res: Response, next: NextFunction)
   next();
 }
 
+function requireAdmin(req: Request, res: Response, next: NextFunction) {
+  if (!req.isAuthenticated()) return res.status(401).json({ error: "Não autenticado." });
+  if ((req.user as any).role !== "admin") return res.status(403).json({ error: "Acesso restrito à equipe Marcamar." });
+  next();
+}
+
 function googleConfigured() {
   return Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
 }
@@ -95,6 +101,28 @@ router.get("/auth/me", (req: Request, res: Response) => {
 
 router.get("/routes/popular", (_req: Request, res: Response) => {
   res.json({ routes: PILOT_ROUTES.filter((route) => route.active) });
+});
+
+// ── ADMIN VERIFICATION ──
+router.get("/admin/verifications", requireAdmin, async (_req: Request, res: Response) => {
+  const [captains, drivers] = await Promise.all([storage.listCaptainProfiles(), storage.listDriverProfiles()]);
+  res.json({ captains, drivers });
+});
+
+router.patch("/admin/verifications/captain/:id", requireAdmin, async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id as string);
+  if (isNaN(id) || typeof req.body.verified !== "boolean") return res.status(400).json({ error: "Dados inválidos." });
+  const profile = await storage.setCaptainVerified(id, req.body.verified);
+  if (!profile) return res.status(404).json({ error: "Perfil não encontrado." });
+  res.json({ profile });
+});
+
+router.patch("/admin/verifications/driver/:id", requireAdmin, async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id as string);
+  if (isNaN(id) || typeof req.body.verified !== "boolean") return res.status(400).json({ error: "Dados inválidos." });
+  const profile = await storage.setDriverVerified(id, req.body.verified);
+  if (!profile) return res.status(404).json({ error: "Perfil não encontrado." });
+  res.json({ profile });
 });
 
 // ── CAPTAIN PROFILE ──

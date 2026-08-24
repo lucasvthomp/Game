@@ -19,6 +19,7 @@ import Messages from "@/pages/Messages";
 import Profile from "@/pages/Profile";
 import Admin from "@/pages/Admin";
 import RouteRequest from "@/pages/RouteRequest";
+import Routes from "@/pages/Routes";
 
 export default function App() {
   return (
@@ -26,31 +27,27 @@ export default function App() {
       <AuthProvider>
         <Navbar />
         <div className="app-body">
-        <Switch>
-          <Route path="/" component={Home} />
-          <Route path="/entrar" component={() => <Auth mode="login" />} />
-          <Route path="/cadastro" component={() => <Auth mode="register" />} />
-          <Route path="/viagens" component={Rides} />
-          <Route path="/caronas">{() => <Rides />}</Route>
-          <Route path="/lanchas">{() => <Rides />}</Route>
-          <Route path="/viagens/:id" component={RideDetail} />
-          <Route path="/perfil-capitao" component={CaptainProfile} />
-          <Route path="/minha-lancha" component={CaptainDashboard} />
-          <Route path="/perfil-motorista" component={DriverProfile} />
-          <Route path="/meu-carro" component={DriverDashboard} />
-          <Route path="/recorrentes" component={Recurring} />
-          <Route path="/minhas-reservas" component={MyReservations} />
-          <Route path="/mensagens/:reservationId" component={Messages} />
-          <Route path="/perfil" component={Profile} />
-          <Route path="/admin" component={Admin} />
-          <Route path="/solicitar-rota" component={RouteRequest} />
-          <Route>
-            <div style={{ textAlign: "center", padding: 80, color: "var(--text2)" }}>
-              <h2 style={{ color: "var(--text1)" }}>404 — Página não encontrada</h2>
-              <a href="/" style={{ color: "var(--boat)" }}>Voltar ao início</a>
-            </div>
-          </Route>
-        </Switch>
+          <Switch>
+            <Route path="/" component={Home} />
+            <Route path="/entrar" component={() => <Auth mode="login" />} />
+            <Route path="/cadastro" component={() => <Auth mode="register" />} />
+            <Route path="/viagens" component={Rides} />
+            <Route path="/caronas">{() => <Rides />}</Route>
+            <Route path="/lanchas">{() => <Rides />}</Route>
+            <Route path="/rotas" component={Routes} />
+            <Route path="/viagens/:id" component={RideDetail} />
+            <Route path="/perfil-capitao" component={CaptainProfile} />
+            <Route path="/minha-lancha" component={CaptainDashboard} />
+            <Route path="/perfil-motorista" component={DriverProfile} />
+            <Route path="/meu-carro" component={DriverDashboard} />
+            <Route path="/recorrentes" component={Recurring} />
+            <Route path="/minhas-reservas" component={MyReservations} />
+            <Route path="/mensagens/:reservationId" component={Messages} />
+            <Route path="/perfil" component={Profile} />
+            <Route path="/admin" component={Admin} />
+            <Route path="/solicitar-rota" component={RouteRequest} />
+            <Route><div style={{ textAlign: "center", padding: 80, color: "var(--text2)" }}><h2 style={{ color: "var(--text1)" }}>404 — Página não encontrada</h2><a href="/" style={{ color: "var(--boat)" }}>Voltar ao início</a></div></Route>
+          </Switch>
         </div>
         <Footer />
         <BottomNav />
@@ -58,4 +55,3 @@ export default function App() {
     </QueryClientProvider>
   );
 }
-

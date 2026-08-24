@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { SiteSelect } from "@/components/SiteSelect";
 import { apiRequest } from "@/lib/queryClient";
 import { useParams, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
@@ -249,11 +250,7 @@ export default function RideDetail() {
             <div className="booking-box">
               <div className="booking-select-row">
                 <label>Assentos:</label>
-                <select value={seats} onChange={e => setSeats(parseInt(e.target.value))}>
-                  {Array.from({ length: Math.min(ride.availableSeats, 8) }, (_, i) => i + 1).map(n => (
-                    <option key={n} value={n}>{n} {n === 1 ? "assento" : "assentos"}</option>
-                  ))}
-                </select>
+                <SiteSelect value={String(seats)} onChange={(value) => setSeats(parseInt(value))} options={Array.from({ length: Math.min(ride.availableSeats, 8) }, (_, i) => i + 1).map((n) => ({ value: String(n), label: n + (n === 1 ? " assento" : " assentos") }))} ariaLabel="Número de assentos" />
               </div>
               <div className="booking-total">
                 <span>{seats} × R$ {parseFloat(ride.pricePerSeat).toFixed(2).replace(".", ",")}</span>

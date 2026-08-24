@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { SiteSelect } from "@/components/SiteSelect";
 import { BoatMediaCluster } from "@/components/layout/BoatMediaCluster";
 import { useAuth } from "@/hooks/use-auth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -165,9 +166,7 @@ export default function Recurring() {
               </div>
               <div className="form-group">
                 <label>Vagas</label>
-                <select value={form.totalSeats} onChange={e => setForm(f => ({ ...f, totalSeats: e.target.value }))}>
-                  {[1,2,3,4,5,6,7,8].map(n => <option key={n} value={n}>{n}</option>)}
-                </select>
+                <SiteSelect value={form.totalSeats} onChange={(totalSeats) => setForm((f) => ({ ...f, totalSeats }))} options={[1,2,3,4,5,6,7,8].map((n) => ({ value: String(n), label: String(n) }))} ariaLabel="Número de vagas" />
               </div>
             </div>
 

@@ -169,6 +169,23 @@ export const maritimeRoutes = pgTable("maritime_routes", {
   index("maritime_routes_active_idx").on(t.active),
 ]);
 
+export const routeRequests = pgTable("route_requests", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id),
+  origin: text("origin").notNull(),
+  destination: text("destination").notNull(),
+  requestedDate: timestamp("requested_date"),
+  passengers: integer("passengers").notNull().default(1),
+  notes: text("notes"),
+  status: text("status").notNull().default("open"), // open | reviewing | matched | closed
+  adminNotes: text("admin_notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (t) => [
+  index("route_requests_user_idx").on(t.userId),
+  index("route_requests_status_idx").on(t.status),
+  index("route_requests_created_at_idx").on(t.createdAt),
+]);
+
 export const incidents = pgTable("incidents", {
   id: serial("id").primaryKey(),
   reservationId: integer("reservation_id").notNull().references(() => reservations.id),
@@ -205,9 +222,12 @@ export type Notification = typeof notifications.$inferSelect;
 export type InsertNotification = typeof notifications.$inferInsert;
 
 // Zod schemas
+export const insertRouteRequestSchema = createInsertSchema(routeRequests).omit({ id: true, createdAt: true });
 export const insertLocationSchema = createInsertSchema(locations).omit({ id: true });
 export const insertMaritimeRouteSchema = createInsertSchema(maritimeRoutes).omit({ id: true, createdAt: true });
 
+export type RouteRequest = typeof routeRequests.$inferSelect;
+export type InsertRouteRequest = typeof routeRequests.$inferInsert;
 export type Location = typeof locations.$inferSelect;
 export type InsertLocation = typeof locations.$inferInsert;
 export type MaritimeRoute = typeof maritimeRoutes.$inferSelect;

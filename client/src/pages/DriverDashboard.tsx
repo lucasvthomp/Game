@@ -1,4 +1,5 @@
 import { useAuth } from "@/hooks/use-auth";
+import { SiteSelect } from "@/components/SiteSelect";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { Link } from "wouter";
@@ -193,9 +194,7 @@ export default function DriverDashboard() {
               </div>
               <div className="form-group">
                 <label>Vagas *</label>
-                <select value={form.totalSeats} onChange={e => setForm({ ...form, totalSeats: e.target.value })}>
-                  {[1,2,3,4,5,6].map(n => <option key={n} value={n}>{n} {n === 1 ? "vaga" : "vagas"}</option>)}
-                </select>
+                <SiteSelect value={form.totalSeats} onChange={(totalSeats) => setForm({ ...form, totalSeats })} options={[1,2,3,4,5,6].map((n) => ({ value: String(n), label: n + (n === 1 ? " vaga" : " vagas") }))} ariaLabel="Número de vagas" />
               </div>
             </div>
             <div className="form-group">

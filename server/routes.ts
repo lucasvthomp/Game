@@ -248,8 +248,16 @@ router.post("/rides", requireCaptainOrDriver, async (req: Request, res: Response
     const { rideType, originCity, destinationCity, departureTime, returnTime, pricePerSeat, totalSeats, description,
             originLat, originLng, destLat, destLng } = req.body;
     if (!originCity || !destinationCity || !departureTime || !pricePerSeat || !totalSeats) return res.status(400).json({ error: "Preencha todos os campos." });
-    if (rideType === "boat" && !(await storage.getCaptainProfile(user.id))) return res.status(400).json({ error: "Complete seu perfil de capitão primeiro." });
-    if (rideType === "car" && !(await storage.getDriverProfile(user.id))) return res.status(400).json({ error: "Complete seu perfil de motorista primeiro." });
+    if (rideType === "boat") {
+      const profile = await storage.getCaptainProfile(user.id);
+      if (!profile) return res.status(400).json({ error: "Complete seu perfil de capitão primeiro." });
+      if (!profile.verified) return res.status(403).json({ error: "Seu perfil de capitão ainda aguarda verificação Marcamar." });
+    }
+    if (rideType === "car") {
+      const profile = await storage.getDriverProfile(user.id);
+      if (!profile) return res.status(400).json({ error: "Complete seu perfil de motorista primeiro." });
+      if (!profile.verified) return res.status(403).json({ error: "Seu perfil de motorista ainda aguarda verificação Marcamar." });
+    }
     const seats = parseInt(totalSeats);
     // Coordinates come from the drop-pin map picker; nullable so text-only rides still work.
     const coord = (v: any) => (v === undefined || v === null || v === "" ? null : parseFloat(v).toString());

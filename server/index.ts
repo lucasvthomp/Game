@@ -66,6 +66,18 @@ async function runMigrations() {
       CREATE UNIQUE INDEX IF NOT EXISTS users_google_id_idx ON users (google_id) WHERE google_id IS NOT NULL;
       ALTER TABLE users ADD COLUMN IF NOT EXISTS home_city TEXT;
 
+      CREATE TABLE IF NOT EXISTS incidents (
+        id SERIAL PRIMARY KEY,
+        reservation_id INTEGER NOT NULL REFERENCES reservations(id),
+        reporter_id INTEGER NOT NULL REFERENCES users(id),
+        type TEXT NOT NULL,
+        description TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'open',
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL
+      );
+      CREATE INDEX IF NOT EXISTS incidents_reservation_id_idx ON incidents(reservation_id);
+      CREATE INDEX IF NOT EXISTS incidents_status_idx ON incidents(status);
+
       CREATE TABLE IF NOT EXISTS locations (
         id SERIAL PRIMARY KEY,
         name TEXT NOT NULL,

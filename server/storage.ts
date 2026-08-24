@@ -63,6 +63,22 @@ export const storage = {
     return profile;
   },
 
+  // ── Admin verification ──
+  async listCaptainProfiles(): Promise<CaptainProfile[]> {
+    return db.select().from(captainProfiles).orderBy(asc(captainProfiles.createdAt));
+  },
+  async listDriverProfiles(): Promise<DriverProfile[]> {
+    return db.select().from(driverProfiles).orderBy(asc(driverProfiles.createdAt));
+  },
+  async setCaptainVerified(id: number, verified: boolean): Promise<CaptainProfile | undefined> {
+    const [profile] = await db.update(captainProfiles).set({ verified }).where(eq(captainProfiles.id, id)).returning();
+    return profile;
+  },
+  async setDriverVerified(id: number, verified: boolean): Promise<DriverProfile | undefined> {
+    const [profile] = await db.update(driverProfiles).set({ verified }).where(eq(driverProfiles.id, id)).returning();
+    return profile;
+  },
+
   // ── Rides ──
   async getRide(id: number): Promise<Ride | undefined> {
     return (await db.select().from(rides).where(eq(rides.id, id)))[0];

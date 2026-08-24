@@ -1,6 +1,6 @@
 import { db } from "./db.js";
 import {
-  users, captainProfiles, driverProfiles, rides, recurringSchedules, reservations, reviews, messages, locations, maritimeRoutes, incidents
+  users, captainProfiles, driverProfiles, rides, recurringSchedules, reservations, reviews, messages, locations, maritimeRoutes, incidents, notifications
 } from "@shared/schema";
 import type {
   User, InsertUser,
@@ -11,7 +11,7 @@ import type {
   Reservation, InsertReservation,
   Review, InsertReview,
   Message, InsertMessage,
-  Location, InsertLocation, MaritimeRoute, InsertMaritimeRoute, Incident, InsertIncident,
+  Location, InsertLocation, MaritimeRoute, InsertMaritimeRoute, Incident, InsertIncident, Notification, InsertNotification,
 } from "@shared/schema";
 import { eq, desc, and, gte, sql, or, ilike, asc } from "drizzle-orm";
 import { hashPassword } from "./auth.js";
@@ -178,6 +178,19 @@ export const storage = {
     if (!res) return;
     await db.update(reservations).set({ status: "cancelled" }).where(eq(reservations.id, id));
     await db.update(rides).set({ availableSeats: sql`available_seats + ${res.seats}` }).where(eq(rides.id, res.rideId));
+  },
+
+  // ── Notifications ──
+  async createNotification(data: InsertNotification): Promise<Notification> {
+    const [notification] = await db.insert(notifications).values(data).returning();
+    return notification;
+  },
+  async getNotificationsByUser(userId: number): Promise<Notification[]> {
+    return db.select().from(notifications).where(eq(notifications.userId, userId)).orderBy(desc(notifications.createdAt));
+  },
+  async markNotificationRead(id: number, userId: number): Promise<Notification | undefined> {
+    const [notification] = await db.update(notifications).set({ readAt: new Date() }).where(and(eq(notifications.id, id), eq(notifications.userId, userId))).returning();
+    return notification;
   },
 
   // ── Incidents ──

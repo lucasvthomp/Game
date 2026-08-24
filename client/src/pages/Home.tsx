@@ -8,6 +8,24 @@ import { useState, useEffect } from "react";
 import RidesMap, { type RideMarker } from "@/components/map/RidesMap";
 import { BOAT_MEDIA } from "@/lib/boat-media";
 
+const COASTAL_SP_CITIES = [
+  "Ubatuba",
+  "Caraguatatuba",
+  "São Sebastião",
+  "Ilhabela",
+  "Bertioga",
+  "Guarujá",
+  "Santos",
+  "São Vicente",
+  "Praia Grande",
+  "Mongaguá",
+  "Itanhaém",
+  "Peruíbe",
+  "Iguape",
+  "Ilha Comprida",
+  "Cananéia",
+];
+
 export default function Home() {
   const [searchFrom, setSearchFrom] = useState("");
   const [searchTo, setSearchTo] = useState("");
@@ -67,18 +85,34 @@ export default function Home() {
             <div className="hero-search-fields">
               <div className="hero-search-field">
                 <MapPin size={14} className="search-field-icon" />
-                <input value={searchFrom} onChange={e => setSearchFrom(e.target.value)} placeholder="De onde?" />
+                <input
+                  value={searchFrom}
+                  onChange={e => setSearchFrom(e.target.value)}
+                  placeholder="De onde?"
+                  list="coastal-sp-cities"
+                  autoComplete="address-level2"
+                />
               </div>
               <div className="hero-search-divider" />
               <div className="hero-search-field">
                 <MapPin size={14} className="search-field-icon" />
-                <input value={searchTo} onChange={e => setSearchTo(e.target.value)} placeholder="Para onde?" />
+                <input
+                  value={searchTo}
+                  onChange={e => setSearchTo(e.target.value)}
+                  placeholder="Para onde?"
+                  list="coastal-sp-cities"
+                  autoComplete="address-level2"
+                />
               </div>
               <button type="submit" className="hero-search-btn">
                 Buscar <ArrowRight size={14} />
               </button>
             </div>
           </form>
+
+          <datalist id="coastal-sp-cities">
+            {COASTAL_SP_CITIES.map((city) => <option key={city} value={city} />)}
+          </datalist>
 
           <div className="hero-pro-utility">
             <span><Shield size={13} /> Informação antes do embarque</span>

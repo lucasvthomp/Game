@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { SiteSelect } from "@/components/SiteSelect";
 import { useAuth } from "@/hooks/use-auth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -125,9 +126,7 @@ export default function DriverProfile() {
           </div>
           <div className="form-group">
             <label>Capacidade de passageiros *</label>
-            <select value={form.carCapacity} onChange={e => setForm({ ...form, carCapacity: e.target.value })}>
-              {[2, 3, 4, 5, 6, 7].map(n => <option key={n} value={n}>{n} passageiros</option>)}
-            </select>
+            <SiteSelect value={form.carCapacity} onChange={(carCapacity) => setForm({ ...form, carCapacity })} options={[2,3,4,5,6,7].map((n) => ({ value: String(n), label: n + " passageiros" }))} ariaLabel="Capacidade de passageiros" />
           </div>
           <div className="form-group">
             <label>Foto do carro</label>

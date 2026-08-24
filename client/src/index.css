@@ -3744,3 +3744,11 @@ input, select, textarea, button { font-family: inherit; }
   .admin-verification-card { align-items: flex-start; flex-direction: column; }
   .admin-verification-actions { width: 100%; justify-content: space-between; }
 }
+
+
+.marine-conditions-card { border-color: color-mix(in srgb, var(--boat) 28%, var(--border)); }
+.marine-conditions-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 14px 0; }
+.marine-conditions-grid span { color: var(--text3); font-size: 12px; }
+.marine-conditions-grid strong { display: block; margin-top: 4px; color: var(--text1); font-size: 15px; }
+.marine-conditions-disclaimer { color: var(--text3); font-size: 11px; line-height: 1.5; }
+@media (max-width: 560px) { .marine-conditions-grid { grid-template-columns: repeat(2, 1fr); } }

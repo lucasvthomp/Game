@@ -34,7 +34,7 @@ export default function MyReservations() {
       <div className="page-header">
         <div>
           <h1 className="page-title">Minhas Reservas</h1>
-          <p className="page-sub">Suas caronas agendadas</p>
+          <p className="page-sub">Suas travessias agendadas</p>
         </div>
         <BoatMediaCluster variant="compact" />
       </div>

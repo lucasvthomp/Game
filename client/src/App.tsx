@@ -25,6 +25,7 @@ import Safety from "@/pages/Safety";
 import Help from "@/pages/Help";
 import Terms from "@/pages/Terms";
 import Privacy from "@/pages/Privacy";
+import Notifications from "@/pages/Notifications";
 
 export default function App() {
   return (
@@ -45,6 +46,7 @@ export default function App() {
             <Route path="/ajuda" component={Help} />
             <Route path="/termos" component={Terms} />
             <Route path="/privacidade" component={Privacy} />
+            <Route path="/notificacoes" component={Notifications} />
             <Route path="/viagens/:id" component={RideDetail} />
             <Route path="/perfil-capitao" component={CaptainProfile} />
             <Route path="/minha-lancha" component={CaptainDashboard} />

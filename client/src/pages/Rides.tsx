@@ -56,7 +56,7 @@ export default function Rides() {
           <div className="lancha-header-intro">
             <div className="lancha-header-copy">
               <p className="section-label" style={{ color: "var(--boat)" }}>
-                CARONAS DE LANCHA
+                TRAVESSIAS DE LANCHA
               </p>
               <h1 className="page-title" style={{ marginBottom: 16 }}>
                 Travessias de lancha

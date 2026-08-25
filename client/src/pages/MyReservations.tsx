@@ -26,8 +26,9 @@ export default function MyReservations() {
   if (!user) { navigate("/entrar"); return null; }
 
   const reservations = data?.reservations || [];
-  const active = reservations.filter((r: any) => ["confirmed", "checked_in"].includes(r.status));
-  const past = reservations.filter((r: any) => r.status !== "confirmed");
+  const activeStatuses = ["confirmed", "payment_succeeded", "checked_in"];
+  const active = reservations.filter((r: any) => activeStatuses.includes(r.status));
+  const past = reservations.filter((r: any) => !activeStatuses.includes(r.status));
 
   return (
     <div className="reservations-page">
@@ -73,8 +74,10 @@ export default function MyReservations() {
 
 function ResCard({ res, onCancel, messagesHref, onCheckIn, onIncident }: { res: any; onCancel?: () => void; messagesHref?: string; onCheckIn?: () => void; onIncident?: () => void }) {
   const ride = res.ride;
+  const isActive = ["confirmed", "payment_succeeded", "checked_in"].includes(res.status);
+  const statusLabel = res.status === "checked_in" ? "Check-in realizado" : res.status === "payment_succeeded" ? "Pagamento confirmado" : res.status === "confirmed" ? "Confirmada" : res.status === "completed" ? "Concluída" : "Cancelada";
   return (
-    <div className={`res-card ${res.status !== "confirmed" ? "cancelled" : ""}`}>
+    <div className={`res-card ${isActive ? "" : "cancelled"}`}>
       <div style={{ flex: 1 }}>
         <div className="res-route">
           <MapPin size={14} color="var(--boat)" />
@@ -89,8 +92,8 @@ function ResCard({ res, onCancel, messagesHref, onCheckIn, onIncident }: { res: 
         )}
       </div>
       <div className="res-right">
-        <span className={`status-pill ${res.status === "confirmed" ? "status-active" : "status-cancelled"}`}>
-          {res.status === "checked_in" ? "Check-in realizado" : res.status === "confirmed" ? "Confirmada" : "Cancelada"}
+        <span className={`status-pill ${isActive ? "status-active" : "status-cancelled"}`}>
+          {statusLabel}
         </span>
         <div className="res-price">R$ {parseFloat(res.totalPrice).toFixed(2).replace(".", ",")}</div>
         {messagesHref && (

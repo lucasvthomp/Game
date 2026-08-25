@@ -1,6 +1,6 @@
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation, Link } from "wouter";
-import { Anchor, Calendar, LogOut, ChevronRight, User } from "lucide-react";
+import { Anchor, Calendar, LogOut, ChevronRight, User, Bell } from "lucide-react";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -13,6 +13,7 @@ export default function Profile() {
   const [editing, setEditing] = useState(false);
   const [fullName, setFullName] = useState(user?.fullName || "");
   const [phone, setPhone] = useState(user?.phone || "");
+  const isCaptain = user?.role === "captain" || user?.role === "both";
 
   const updateMutation = useMutation({
     mutationFn: () => apiRequest("PATCH", "/api/me", { fullName, phone }),
@@ -77,7 +78,7 @@ export default function Profile() {
 
       {/* Actions */}
       <div className="profile-list">
-        {user.role !== "captain" && (
+        {!isCaptain && (
           <Link href="/perfil-capitao">
             <button className="profile-action">
               <div style={{ width: 38, height: 38, borderRadius: 10, background: "color-mix(in srgb, var(--boat) 10%, transparent)", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -91,7 +92,7 @@ export default function Profile() {
             </button>
           </Link>
         )}
-        {user.role === "captain" && (
+        {isCaptain && (
           <Link href="/minha-lancha">
             <button className="profile-action">
               <div style={{ width: 38, height: 38, borderRadius: 10, background: "color-mix(in srgb, var(--boat) 10%, transparent)", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -112,7 +113,19 @@ export default function Profile() {
             </div>
             <div style={{ flex: 1 }}>
               <div className="profile-action-title">Minhas Reservas</div>
-              <div className="profile-action-sub">Ver caronas agendadas</div>
+              <div className="profile-action-sub">Ver travessias agendadas</div>
+            </div>
+            <ChevronRight size={16} color="var(--text3)" />
+          </button>
+        </Link>
+        <Link href="/notificacoes">
+          <button className="profile-action">
+            <div style={{ width: 38, height: 38, borderRadius: 10, background: "color-mix(in srgb, var(--boat) 10%, transparent)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Bell size={18} color="var(--boat)" />
+            </div>
+            <div style={{ flex: 1 }}>
+              <div className="profile-action-title">Notificações</div>
+              <div className="profile-action-sub">Atualizações de reservas e pedidos de rota</div>
             </div>
             <ChevronRight size={16} color="var(--text3)" />
           </button>

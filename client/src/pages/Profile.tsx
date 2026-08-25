@@ -41,8 +41,8 @@ export default function Profile() {
           <div>
             <div style={{ fontWeight: 800, fontSize: "1.2rem", color: "var(--text1)" }}>{user.fullName}</div>
             <div style={{ color: "var(--text2)", fontSize: 13 }}>@{user.username}</div>
-            <span style={{ display: "inline-block", marginTop: 5, padding: "2px 10px", borderRadius: 100, fontSize: 11, fontWeight: 700, background: user.role === "captain" ? "color-mix(in srgb, var(--boat) 10%, transparent)" : "var(--surface)", color: user.role === "captain" ? "var(--boat)" : "var(--text2)", border: `1px solid ${user.role === "captain" ? "color-mix(in srgb, var(--boat) 22%, transparent)" : "var(--border)"}` }}>
-              {user.role === "captain" ? "Capitão" : "Passageiro"}
+            <span style={{ display: "inline-block", marginTop: 5, padding: "2px 10px", borderRadius: 100, fontSize: 11, fontWeight: 700, background: isCaptain ? "color-mix(in srgb, var(--boat) 10%, transparent)" : "var(--surface)", color: isCaptain ? "var(--boat)" : "var(--text2)", border: `1px solid ${isCaptain ? "color-mix(in srgb, var(--boat) 22%, transparent)" : "var(--border)"}` }}>
+              {isCaptain ? "Capitão" : "Passageiro"}
             </span>
           </div>
         </div>
@@ -63,7 +63,7 @@ export default function Profile() {
             <input value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Nome completo" className="form-input" />
             <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="Telefone / WhatsApp" className="form-input" />
             <div style={{ display: "flex", gap: 8 }}>
-              <button onClick={() => updateMutation.mutate()} className="btn-car-solid" style={{ padding: "8px 18px", fontSize: 13 }} disabled={updateMutation.isPending}>
+              <button onClick={() => updateMutation.mutate()} className="btn-boat-solid" style={{ padding: "8px 18px", fontSize: 13 }} disabled={updateMutation.isPending}>
                 {updateMutation.isPending ? "Salvando..." : "Salvar"}
               </button>
               <button onClick={() => setEditing(false)} className="btn-secondary" style={{ padding: "8px 18px", fontSize: 13 }}>Cancelar</button>

@@ -77,9 +77,9 @@ export default function Recurring() {
           <div className="recurring-page-hero">
             <div>
               <p className="section-label" style={{ color: "var(--boat)", borderColor: "color-mix(in srgb, var(--amber) 28%, transparent)" }}>ROTAS RECORRENTES</p>
-              <h1 className="page-title" style={{ marginBottom: 8 }}>Rotas recorrentes em planejamento</h1>
+              <h1 className="page-title" style={{ marginBottom: 8 }}>Planeje uma travessia recorrente</h1>
               <p style={{ color: "var(--text2)", fontSize: 15, marginBottom: 20 }}>
-                Esta área fica reservada para a próxima fase: aproximar moradores e operadores com trajetos regulares, começando pelo transporte na água.
+                Combine horários que se repetem no litoral. Publique uma rota de lancha com dias, horários, vagas e preço para que passageiros possam se organizar com antecedência.
               </p>
             </div>
             <BoatMediaCluster variant="compact" />
@@ -194,7 +194,7 @@ export default function Recurring() {
           <div style={{ textAlign: "center", marginTop: 12, padding: "36px 24px", background: "var(--card)", border: "1px dashed var(--border)", borderRadius: 16 }}>
             <Calendar size={36} color="var(--boat)" style={{ marginBottom: 12 }} />
             <p style={{ fontWeight: 700, marginBottom: 8, color: "var(--text1)" }}>Nenhuma rota recorrente publicada</p>
-            <p style={{ maxWidth: 520, margin: "0 auto", fontSize: 13, lineHeight: 1.55, color: "var(--text2)" }}>Quando o piloto tiver trajetos regulares e oferta suficiente, esta área poderá organizar dias, horários, vagas e operadores recorrentes.</p>
+            <p style={{ maxWidth: 520, margin: "0 auto", fontSize: 13, lineHeight: 1.55, color: "var(--text2)" }}>Ainda não há uma rota recorrente publicada. Se você navega com frequência, cadastre a sua e ajude a criar conexões previsíveis no litoral.</p>
           </div>
         )}
 
@@ -202,7 +202,7 @@ export default function Recurring() {
           <div style={{ textAlign: "center", marginTop: 32, padding: "24px", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16 }}>
             <Calendar size={32} color="var(--boat)" style={{ marginBottom: 12 }} />
             <p style={{ fontWeight: 600, marginBottom: 8 }}>Quer participar do piloto?</p>
-            <p style={{ fontSize: 13, color: "var(--text2)", marginBottom: 16 }}>Faça login para cadastrar uma rota aquática recorrente quando houver operação disponível.</p>
+            <p style={{ fontSize: 13, color: "var(--text2)", marginBottom: 16 }}>Faça login para cadastrar uma rota aquática recorrente e avisar passageiros que contam com esse horário.</p>
             <a href="/entrar" className="btn-boat-solid">Entrar</a>
           </div>
         )}

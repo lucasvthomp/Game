@@ -124,6 +124,10 @@ export const storage = {
     const [profile] = await db.update(captainProfiles).set({ verified }).where(eq(captainProfiles.id, id)).returning();
     return profile;
   },
+  async setCaptainTop(id: number, topCaptain: boolean): Promise<CaptainProfile | undefined> {
+    const [profile] = await db.update(captainProfiles).set({ topCaptain }).where(eq(captainProfiles.id, id)).returning();
+    return profile;
+  },
   async setDriverVerified(id: number, verified: boolean): Promise<DriverProfile | undefined> {
     const [profile] = await db.update(driverProfiles).set({ verified }).where(eq(driverProfiles.id, id)).returning();
     return profile;

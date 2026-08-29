@@ -7589,3 +7589,49 @@ body,
     gap: 6px;
   }
 }
+
+
+/* ─── GOOGLE MAPS SURFACES ─── */
+.lc-google-map {
+  position: relative;
+  overflow: hidden;
+}
+
+.lc-google-map-canvas {
+  position: absolute;
+  inset: 0;
+  min-height: 100%;
+  width: 100%;
+  border-radius: inherit;
+}
+
+.lc-google-map-canvas .gm-style {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.lc-google-map-loading {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  color: var(--text2);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .02em;
+  pointer-events: none;
+}
+
+.lc-google-popup {
+  min-width: 160px;
+  color: #17373a;
+}
+
+.lc-google-popup .lc-popup-link {
+  display: inline-flex;
+  margin-top: 8px;
+  color: #2e6869;
+  font-size: 12px;
+  font-weight: 800;
+}

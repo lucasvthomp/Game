@@ -6,8 +6,8 @@ import { SiteAutocomplete } from "@/components/SiteSelect";
 import { apiRequest } from "@/lib/queryClient";
 import { BOAT_MEDIA } from "@/lib/boat-media";
 import { PILOT_ROUTES } from "@shared/pilot-routes";
+import { COASTAL_POINT_NAMES } from "@shared/coastal-locations";
 
-const COASTAL_POINTS = ["São Sebastião", "Ilhabela", "Bonete", "Castelhanos", "Ubatuba", "Caraguatatuba", "Bertioga", "Santos", "Guarujá", "Cananéia"];
 
 function timeLabel(value: string | Date) {
   const date = new Date(value);
@@ -50,7 +50,7 @@ export default function Home() {
           <h1>Seu caminho pela costa,<br /><em>de lancha.</em></h1>
           <p className="home-v2-hero-copy">Transporte rápido entre ilhas, praias e comunidades — com ponto de embarque, horário e capacidade claros.</p>
           <form className="home-v2-search" onSubmit={handleSearch}>
-            <div className="home-v2-search-field"><MapPin size={17} aria-hidden="true" /><SiteAutocomplete value={searchFrom} onChange={setSearchFrom} options={COASTAL_POINTS} placeholder="De onde?" ariaLabel="Ponto de saída" /></div>
+            <div className="home-v2-search-field"><MapPin size={17} aria-hidden="true" /><SiteAutocomplete value={searchFrom} onChange={setSearchFrom} options={COASTAL_POINT_NAMES} placeholder="De onde?" ariaLabel="Ponto de saída" /></div>
             <div className="home-v2-search-field"><MapPin size={17} aria-hidden="true" /><SiteAutocomplete value={searchTo} onChange={setSearchTo} options={COASTAL_POINTS} placeholder="Para onde?" ariaLabel="Ponto de chegada" /></div>
             <label className="home-v2-search-field home-v2-date-field"><CalendarDays size={17} aria-hidden="true" /><input type="date" value={searchDate} onChange={(event) => setSearchDate(event.target.value)} aria-label="Data da viagem" /></label>
             <label className="home-v2-search-field home-v2-passenger-field"><UsersRound size={17} aria-hidden="true" /><input type="number" min="1" max="12" value={searchPassengers} onChange={(event) => setSearchPassengers(event.target.value)} aria-label="Quantidade de passageiros" /></label>

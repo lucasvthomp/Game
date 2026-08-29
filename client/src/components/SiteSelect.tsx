@@ -83,6 +83,7 @@ type SiteAutocompleteProps = {
 
 export function SiteAutocomplete({ value, onChange, options, placeholder, ariaLabel }: SiteAutocompleteProps) {
   const [open, setOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const rootRef = useRef<HTMLDivElement>(null);
   const listId = useId();
   const filteredOptions = options.filter((option) => option.toLocaleLowerCase("pt-BR").includes(value.toLocaleLowerCase("pt-BR")));
@@ -112,6 +113,25 @@ export function SiteAutocomplete({ value, onChange, options, placeholder, ariaLa
           setActiveIndex(-1);
         }}
         onFocus={() => { setOpen(true); setActiveIndex(-1); }}
+        onKeyDown={(event) => {
+          if (event.key === "ArrowDown") {
+            event.preventDefault();
+            setOpen(true);
+            setActiveIndex((current) => Math.min(current + 1, filteredOptions.length - 1));
+          } else if (event.key === "ArrowUp") {
+            event.preventDefault();
+            setActiveIndex((current) => Math.max(current - 1, 0));
+          } else if (event.key === "Enter" && open && activeIndex >= 0) {
+            event.preventDefault();
+            onChange(filteredOptions[activeIndex]);
+            setOpen(false);
+            setActiveIndex(-1);
+          } else if (event.key === "Escape") {
+            setOpen(false);
+            setActiveIndex(-1);
+          }
+        }}
+        aria-activedescendant={activeIndex >= 0 ? `${listId}-option-${activeIndex}` : undefined}
         placeholder={placeholder}
         aria-label={ariaLabel}
         aria-autocomplete="list"
@@ -124,12 +144,15 @@ export function SiteAutocomplete({ value, onChange, options, placeholder, ariaLa
             <button
               key={option}
               type="button"
+              id={`${listId}-option-${filteredOptions.indexOf(option)}`}
               role="option"
-              className="site-autocomplete-option"
+              aria-selected={option === value}
+              className={"site-autocomplete-option" + (filteredOptions.indexOf(option) === activeIndex ? " active" : "")}
               onMouseDown={(event) => event.preventDefault()}
               onClick={() => {
                 onChange(option);
                 setOpen(false);
+                setActiveIndex(-1);
               }}
             >
               {option}

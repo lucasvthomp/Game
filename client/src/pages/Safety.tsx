@@ -1,11 +1,12 @@
 import { Anchor, ArrowRight, Check, Compass, LifeBuoy, MapPin, ShieldCheck, Waves } from "lucide-react";
 import { Link } from "wouter";
+import { MaritimeIcon } from "@/components/MaritimeIcon";
 
 const principles = [
-  { icon: <ShieldCheck size={20} />, title: "Identidade e perfil", copy: "O perfil do operador é a base para entender quem publica a viagem." },
-  { icon: <Anchor size={20} />, title: "Lancha e capacidade", copy: "Capacidade, descrição e o que está publicado aparecem antes da reserva." },
-  { icon: <MapPin size={20} />, title: "Ponto de embarque", copy: "A conversa da reserva ajuda a alinhar o cais e os próximos passos." },
-  { icon: <Compass size={20} />, title: "Condições marítimas", copy: "Consulte o operador e as fontes oficiais antes de qualquer travessia." },
+  { icon: <MaritimeIcon variant="buoy" size={22} />, title: "Identidade e perfil", copy: "O perfil do operador é a base para entender quem publica a viagem." },
+  { icon: <MaritimeIcon variant="lancha" size={22} />, title: "Lancha e capacidade", copy: "Capacidade, descrição e o que está publicado aparecem antes da reserva." },
+  { icon: <MaritimeIcon variant="dock" size={22} />, title: "Ponto de embarque", copy: "A conversa da reserva ajuda a alinhar o cais e os próximos passos." },
+  { icon: <MaritimeIcon variant="route" size={22} />, title: "Condições marítimas", copy: "Consulte o operador e as fontes oficiais antes de qualquer travessia." },
 ];
 
 export default function Safety() {
@@ -18,7 +19,7 @@ export default function Safety() {
           <p>O Marcamar organiza as informações que ajudam passageiros e operadores a tomar decisões melhores no litoral.</p>
           <div className="content-page-v2-actions"><Link href="/rotas"><span className="home-v2-coral-button">Ver rotas e pontos <ArrowRight size={17} /></span></Link><Link href="/ajuda"><span className="content-page-v2-secondary-link">Precisa de ajuda? <ArrowRight size={16} /></span></Link></div>
         </div>
-        <div className="safety-hero-panel"><Waves size={24} /><strong>Antes de sair</strong><span>Confira rota, horário, operador, capacidade e condições.</span></div>
+        <div className="safety-hero-panel"><MaritimeIcon variant="wave" size={25} /><strong>Antes de sair</strong><span>Confira rota, horário, operador, capacidade e condições.</span></div>
       </section>
 
       <section className="content-page-v2-section">

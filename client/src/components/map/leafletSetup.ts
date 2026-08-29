@@ -62,7 +62,7 @@ const CITY_COORDS: Record<string, [number, number]> = {
   "resende": [-22.4695, -44.4503],
 };
 
-const normalizeLocation = (value: string) => value.toLocaleLowerCase("pt-BR").normalize("NFD").replace(/\\p{Diacritic}/gu, "").trim();
+const normalizeLocation = (value: string) => value.toLocaleLowerCase("pt-BR").normalize("NFD").replace(/\p{Diacritic}/gu, "").trim();
 const NAMED_LOCATION_COORDS: Record<string, [number, number]> = Object.fromEntries([
   ...Object.entries(CITY_COORDS),
   ...Object.entries(COASTAL_POINT_COORDS),

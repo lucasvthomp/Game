@@ -45,6 +45,9 @@ export const storage = {
   async getCaptainProfile(userId: number): Promise<CaptainProfile | undefined> {
     return (await db.select().from(captainProfiles).where(eq(captainProfiles.userId, userId)))[0];
   },
+  async getCaptainProfileById(id: number): Promise<CaptainProfile | undefined> {
+    return (await db.select().from(captainProfiles).where(eq(captainProfiles.id, id)))[0];
+  },
   async createCaptainProfile(data: InsertCaptainProfile): Promise<CaptainProfile> {
     const [profile] = await db.insert(captainProfiles).values(data).returning();
     const user = await this.getUser(data.userId);
@@ -122,6 +125,10 @@ export const storage = {
   },
   async setCaptainVerified(id: number, verified: boolean): Promise<CaptainProfile | undefined> {
     const [profile] = await db.update(captainProfiles).set({ verified }).where(eq(captainProfiles.id, id)).returning();
+    return profile;
+  },
+  async setCaptainTop(id: number, topCaptain: boolean): Promise<CaptainProfile | undefined> {
+    const [profile] = await db.update(captainProfiles).set({ topCaptain }).where(eq(captainProfiles.id, id)).returning();
     return profile;
   },
   async setDriverVerified(id: number, verified: boolean): Promise<DriverProfile | undefined> {

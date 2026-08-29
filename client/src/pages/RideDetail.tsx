@@ -295,7 +295,7 @@ export default function RideDetail() {
               <span>Período <strong>{marineWeatherQuery.data.conditions.wavePeriodSeconds ?? "—"} s</strong></span>
               <span>Temperatura <strong>{marineWeatherQuery.data.conditions.seaSurfaceTemperatureC ?? "—"} °C</strong></span>
             </div>
-            <p className="marine-conditions-disclaimer">{marineWeatherQuery.data.disclaimer}</p>
+            <p className="marine-conditions-disclaimer">{marineWeatherQuery.data.disclaimer}</p>\n            <p className="marine-conditions-source">Fonte: <a href={marineWeatherQuery.data.conditions.sourceUrl} target="_blank" rel="noreferrer">{marineWeatherQuery.data.conditions.source}</a> · previsão para o ponto de embarque.</p>
           </div>
         )}
 

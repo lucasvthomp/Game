@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from "react-leaflet";
-import { PIN, pinIcon, SP_REGION_CENTER, SP_REGION_ZOOM, TILE_URL, TILE_ATTRIBUTION } from "./leafletSetup";
+import { MAP_THEME_CLASS, PIN, pinIcon, SP_REGION_CENTER, SP_REGION_ZOOM, TILE_URL, TILE_ATTRIBUTION } from "./leafletSetup";
 
 export interface LatLng { lat: number; lng: number }
 
@@ -55,8 +55,8 @@ export default function LocationPicker({ value, onChange, label, variant = "orig
           </button>
         )}
       </div>
-      <div className="lc-map-frame lc-picker-map" style={{ height }}>
-        <MapContainer center={center} zoom={zoom} style={{ height: "100%", width: "100%" }} scrollWheelZoom attributionControl>
+      <div className="lc-map-frame lc-map-frame-coastal lc-picker-map" style={{ height }}>
+        <MapContainer className={MAP_THEME_CLASS} center={center} zoom={zoom} style={{ height: "100%", width: "100%" }} scrollWheelZoom attributionControl aria-label="Escolha um ponto no mapa costeiro">
           <TileLayer url={TILE_URL} attribution={TILE_ATTRIBUTION} />
           <RecenterOnValue value={value} />
           <ClickToPlace onChange={(point) => onChange(point)} />
@@ -74,6 +74,14 @@ export default function LocationPicker({ value, onChange, label, variant = "orig
             />
           )}
         </MapContainer>
+        <div className="marcamar-map-badge" aria-hidden="true">
+          <span className="marcamar-map-badge-mark">✦</span>
+          <span><strong>Mapa costeiro</strong><small>toque para marcar</small></span>
+        </div>
+        <div className="marcamar-map-legend" aria-hidden="true">
+          <span className={`marcamar-map-legend-dot ${isDestination ? "dest" : "origin"}`} />
+          {isDestination ? "Destino" : "Embarque"}
+        </div>
         <div className="lc-picker-map-hint" aria-hidden="true">
           <span className="lc-picker-map-dot" />
           Clique para posicionar · arraste para ajustar

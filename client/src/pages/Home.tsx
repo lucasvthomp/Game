@@ -57,6 +57,7 @@ export default function Home() {
             <button type="submit" className="home-v2-search-button">Buscar lanchas <ArrowRight size={17} /></button>
           </form>
           <div className="home-v2-proof"><span><ShieldCheck size={16} /> Informações antes do embarque</span><span><Anchor size={16} /> Operadores independentes</span><span><UsersRound size={16} /> Até 12 passageiros por lancha</span></div>
+          <div className="home-v2-hero-signal"><span className="home-v2-hero-signal-live"><i /> Agora no litoral</span><span>{boatRides.length || 3} saídas publicadas</span><span>Ilhabela · São Sebastião</span></div>
         </div>
       </section>
 

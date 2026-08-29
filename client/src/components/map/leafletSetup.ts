@@ -1,5 +1,6 @@
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { COASTAL_POINT_COORDS } from "@shared/coastal-locations";
 
 // ── Default marker icon fix for bundlers (Leaflet + Vite) ──
 // Vite doesn't resolve the relative image URLs Leaflet expects, so we point the
@@ -61,9 +62,15 @@ const CITY_COORDS: Record<string, [number, number]> = {
   "resende": [-22.4695, -44.4503],
 };
 
+const normalizeLocation = (value: string) => value.toLocaleLowerCase("pt-BR").normalize("NFD").replace(/\p{Diacritic}/gu, "").trim();
+const NAMED_LOCATION_COORDS: Record<string, [number, number]> = Object.fromEntries([
+  ...Object.entries(CITY_COORDS),
+  ...Object.entries(COASTAL_POINT_COORDS),
+].map(([name, coords]) => [normalizeLocation(name), coords])) as Record<string, [number, number]>;
+
 export function getCityCoords(city?: string | null): [number, number] | null {
   if (!city) return null;
-  return CITY_COORDS[city.toLowerCase().trim()] ?? null;
+  return NAMED_LOCATION_COORDS[normalizeLocation(city)] ?? null;
 }
 
 /** Coerce a numeric/string/null coord to a finite number or null. */

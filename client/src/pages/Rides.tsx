@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { SiteSelect } from "@/components/SiteSelect";
+import { SiteSelect, SiteAutocomplete } from "@/components/SiteSelect";
 import { apiRequest } from "@/lib/queryClient";
 import { Link } from "wouter";
 import { Anchor, Calendar, Clock, Star, Search, Users, ArrowRight, Map, List } from "lucide-react";
@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState, lazy, Suspense } from "react";
 import { BOAT_MEDIA } from "@/lib/boat-media";
+import { COASTAL_POINT_NAMES } from "@shared/coastal-locations";
 
 const RidesMap = lazy(() => import("@/components/map/RidesMap"));
 
@@ -85,7 +86,7 @@ export default function Rides() {
 
           <div className="rides-search">
             <Search size={15} className="rides-search-icon" />
-            <input value={searchText} onChange={e => setSearchText(e.target.value)} placeholder="Buscar por cidade..." />
+            <SiteAutocomplete value={searchText} onChange={setSearchText} options={COASTAL_POINT_NAMES} placeholder="Buscar por cidade ou praia..." ariaLabel="Buscar por cidade ou praia" />
           </div>
 
           {/* Filter bar */}

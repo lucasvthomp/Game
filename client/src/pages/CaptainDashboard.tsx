@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
+import { SiteAutocomplete } from "@/components/SiteSelect";
 import { useLocation } from "wouter";
 import { Anchor, Plus, Clock, Users, Trash2, CheckCircle, TrendingUp, Map } from "lucide-react";
 import { format } from "date-fns";
@@ -8,6 +9,8 @@ import { ptBR } from "date-fns/locale";
 import { useState, lazy, Suspense } from "react";
 import { BoatMediaCluster } from "@/components/layout/BoatMediaCluster";
 import type { LatLng } from "@/components/map/LocationPicker";
+import { getCityCoords } from "@/components/map/leafletSetup";
+import { COASTAL_POINT_NAMES } from "@shared/coastal-locations";
 
 const LocationPicker = lazy(() => import("@/components/map/LocationPicker"));
 
@@ -48,9 +51,14 @@ export default function CaptainDashboard() {
   const [form, setForm] = useState(BLANK);
   const [originPin, setOriginPin] = useState<LatLng | null>(null);
   const [destPin, setDestPin] = useState<LatLng | null>(null);
-  const [showMap, setShowMap] = useState(false);
+  const [showMap, setShowMap] = useState(true);
   const [expandedRide, setExpandedRide] = useState<number | null>(null);
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setForm(f => ({ ...f, [k]: e.target.value }));
+  const setLocation = (field: "originCity" | "destinationCity", setPin: (value: LatLng | null) => void) => (value: string) => {
+    setForm((current) => ({ ...current, [field]: value }));
+    const coords = getCityCoords(value);
+    setPin(coords ? { lat: coords[0], lng: coords[1] } : null);
+  };
 
   const { data: profileData } = useQuery({
     queryKey: ["/api/captain/profile"],
@@ -140,11 +148,11 @@ export default function CaptainDashboard() {
               <div className="form-grid">
                 <div>
                   <label className="field-label">ORIGEM *</label>
-                  <input className="field-input" value={form.originCity} onChange={set("originCity")} required placeholder="ex: Bertioga" />
+                  <SiteAutocomplete value={form.originCity} onChange={setLocation("originCity", setOriginPin)} options={COASTAL_POINT_NAMES} placeholder="Ex.: Praia do Perequê" ariaLabel="Ponto de embarque" />
                 </div>
                 <div>
                   <label className="field-label">DESTINO *</label>
-                  <input className="field-input" value={form.destinationCity} onChange={set("destinationCity")} required placeholder="ex: Ilhabela" />
+                  <SiteAutocomplete value={form.destinationCity} onChange={setLocation("destinationCity", setDestPin)} options={COASTAL_POINT_NAMES} placeholder="Ex.: Praia do Bonete" ariaLabel="Ponto de desembarque" />
                 </div>
                 <div>
                   <label className="field-label">DATA / HORA DE SAÍDA *</label>
@@ -167,6 +175,7 @@ export default function CaptainDashboard() {
                   <textarea className="field-input" value={form.description} onChange={set("description")} placeholder="Ponto de encontro, o que levar, informações extras..." style={{ minHeight: 72, resize: "vertical" }} />
                 </div>
                 <div className="form-full">
+                  <p style={{ display: "flex", alignItems: "center", gap: 6, color: "var(--text2)", fontSize: 12, margin: "2px 0 10px" }}><Map size={13} color="var(--boat)" /> Selecione uma praia ou ajuste o ponto exato no mapa.</p>
                   <button type="button" style={{ background: "none", border: "1px solid var(--border)", color: "var(--text2)", borderRadius: 8, padding: "6px 14px", cursor: "pointer", fontSize: 12, fontWeight: 600, display: "flex", alignItems: "center", gap: 6 }} onClick={() => setShowMap(v => !v)}>
                     <Map size={13} /> {showMap ? "Esconder mapa" : "Marcar no mapa (opcional)"}
                   </button>

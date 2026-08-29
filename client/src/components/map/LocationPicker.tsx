@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from "react-leaflet";
 import { MAP_THEME_CLASS, PIN, pinIcon, SP_REGION_CENTER, SP_REGION_ZOOM, TILE_URL, TILE_ATTRIBUTION } from "./leafletSetup";
 import { ILHABELA_BEACHES } from "@shared/coastal-locations";
+import GoogleLocationPicker from "./GoogleLocationPicker";
+import { hasGoogleMapsKey } from "./googleMaps";
 
 export interface LatLng { lat: number; lng: number }
 
@@ -58,7 +60,7 @@ function RecenterOnValue({ value }: { value: LatLng | null }) {
  * then drag the pin to refine the exact pier/beach. The clear action lets users
  * start over without touching the text fields.
  */
-export default function LocationPicker({ value, onChange, label, variant = "origin", height = "260px" }: LocationPickerProps) {
+function LeafletLocationPicker({ value, onChange, label, variant = "origin", height = "260px" }: LocationPickerProps) {
   const [notice, setNotice] = useState("");
   const isDestination = variant === "dest";
   const color = isDestination ? PIN.dest : PIN.origin;
@@ -123,4 +125,11 @@ export default function LocationPicker({ value, onChange, label, variant = "orig
       </div>
     </div>
   );
+}
+
+
+export default function LocationPicker(props: LocationPickerProps) {
+  return hasGoogleMapsKey()
+    ? <GoogleLocationPicker {...props} />
+    : <LeafletLocationPicker {...props} />;
 }

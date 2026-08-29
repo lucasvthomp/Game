@@ -1,4 +1,5 @@
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import { useEffect } from "react";
+import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from "react-leaflet";
 import { PIN, pinIcon, SP_REGION_CENTER, SP_REGION_ZOOM, TILE_URL, TILE_ATTRIBUTION } from "./leafletSetup";
 
 export interface LatLng { lat: number; lng: number }
@@ -21,6 +22,17 @@ function ClickToPlace({ onChange }: { onChange: (latlng: LatLng) => void }) {
   return null;
 }
 
+function RecenterOnValue({ value }: { value: LatLng | null }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!value) return;
+    map.setView([value.lat, value.lng], Math.max(map.getZoom(), 13), { animate: true });
+  }, [map, value]);
+
+  return null;
+}
+
 /**
  * LocationPicker — a small map where clicking drops (or moves) a single pin.
  * Used in the create-ride forms to optionally geotag origin/destination.
@@ -37,6 +49,7 @@ export default function LocationPicker({ value, onChange, label, variant = "orig
       <div className="lc-map-frame" style={{ height }}>
         <MapContainer center={SP_REGION_CENTER} zoom={SP_REGION_ZOOM} style={{ height: "100%", width: "100%" }} scrollWheelZoom={false} attributionControl={false}>
           <TileLayer url={TILE_URL} attribution={TILE_ATTRIBUTION} />
+          <RecenterOnValue value={value} />
           <ClickToPlace onChange={onChange} />
           {value && <Marker position={[value.lat, value.lng]} icon={icon} />}
         </MapContainer>

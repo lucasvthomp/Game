@@ -21,6 +21,10 @@ export const PIN = {
   boat: "#3C7A89",   // teal
 } as const;
 
+// Applied to every Leaflet canvas so the map underlay receives the same
+// branded coastal color treatment, regardless of which map component renders it.
+export const MAP_THEME_CLASS = "marcamar-map-theme";
+
 /**
  * Build a warm teardrop divIcon. The `drop` flag adds a CSS bounce so pins can
  * animate in when first placed.

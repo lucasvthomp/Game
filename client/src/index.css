@@ -5019,3 +5019,49 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .notification-card-button { padding: 16px; }
   .notification-read { margin-left: 66px; }
 }
+
+
+/* Named coastal pickup guidance */
+.detail-pickup-note {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid color-mix(in srgb, var(--boat) 20%, var(--border));
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--boat-light) 45%, var(--surface));
+}
+.detail-pickup-point {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  min-width: 0;
+}
+.detail-pickup-icon {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--boat);
+  background: color-mix(in srgb, var(--boat) 12%, transparent);
+}
+.detail-pickup-icon-dest {
+  color: var(--coral);
+  background: color-mix(in srgb, var(--coral) 12%, transparent);
+}
+.detail-pickup-point > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.detail-pickup-point strong { color: var(--text1); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; }
+.detail-pickup-point small { color: var(--text1); font-size: 13px; font-weight: 700; overflow-wrap: anywhere; }
+.detail-pickup-point em { color: var(--text3); font-size: 11px; font-style: normal; line-height: 1.35; }
+@media (max-width: 640px) {
+  .detail-pickup-note { grid-template-columns: 1fr; }
+}

@@ -45,6 +45,9 @@ export const storage = {
   async getCaptainProfile(userId: number): Promise<CaptainProfile | undefined> {
     return (await db.select().from(captainProfiles).where(eq(captainProfiles.userId, userId)))[0];
   },
+  async getCaptainProfileById(id: number): Promise<CaptainProfile | undefined> {
+    return (await db.select().from(captainProfiles).where(eq(captainProfiles.id, id)))[0];
+  },
   async createCaptainProfile(data: InsertCaptainProfile): Promise<CaptainProfile> {
     const [profile] = await db.insert(captainProfiles).values(data).returning();
     const user = await this.getUser(data.userId);

@@ -7,6 +7,7 @@ import { fileURLToPath } from "url";
 import { setupAuth } from "./auth.js";
 import router from "./routes.js";
 import { pool } from "./db.js";
+import { seedDemoData } from "./demo-data.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -276,6 +277,7 @@ if (process.env.NODE_ENV === "production") {
 
 app.listen(PORT, async () => {
   await runMigrations();
+  await seedDemoData();
   console.log(`Marcamar rodando na porta ${PORT}`);
 });
 

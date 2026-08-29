@@ -1,10 +1,11 @@
-import { Anchor, ArrowRight, Check, Clock3, MapPin, ShieldCheck, UsersRound, Waves } from "lucide-react";
+import { ArrowRight, Check, Waves } from "lucide-react";
 import { Link } from "wouter";
+import { MaritimeIcon } from "@/components/MaritimeIcon";
 
 const passengerSteps = [
-  { number: "01", icon: <MapPin size={20} />, title: "Escolha o trecho", copy: "Busque a saída, a chegada, a data e quantas pessoas vão embarcar." },
-  { number: "02", icon: <Clock3 size={20} />, title: "Confira a viagem", copy: "Compare horário, capacidade, preço e as informações publicadas pelo operador." },
-  { number: "03", icon: <Anchor size={20} />, title: "Combine o cais", copy: "Depois da reserva, use a conversa da viagem para alinhar o ponto de encontro." },
+  { number: "01", icon: <MaritimeIcon variant="route" size={22} />, title: "Escolha o trecho", copy: "Busque a saída, a chegada, a data e quantas pessoas vão embarcar." },
+  { number: "02", icon: <MaritimeIcon variant="buoy" size={22} />, title: "Confira a viagem", copy: "Compare horário, capacidade, preço e as informações publicadas pelo operador." },
+  { number: "03", icon: <MaritimeIcon variant="dock" size={22} />, title: "Combine o cais", copy: "Depois da reserva, use a conversa da viagem para alinhar o ponto de encontro." },
 ];
 
 export default function HowItWorks() {
@@ -39,7 +40,7 @@ export default function HowItWorks() {
         <div className="content-check-list"><span><Check size={16} /> Rota e horário publicados</span><span><Check size={16} /> Capacidade da lancha visível</span><span><Check size={16} /> Conversa depois da reserva</span><span><Check size={16} /> Verificação como camada do piloto</span></div>
       </section>
 
-      <section className="content-page-v2-callout"><div className="content-callout-icon"><ShieldCheck size={22} /></div><div><p className="home-v2-kicker">NÃO ENCONTROU?</p><h2>Peça a rota que falta.</h2><p>Os pedidos ajudam a descobrir quais conexões precisam existir no próximo trecho do piloto.</p></div><Link href="/solicitar-rota"><span className="home-v2-coral-button">Solicitar uma rota <ArrowRight size={17} /></span></Link></section>
+      <section className="content-page-v2-callout"><div className="content-callout-icon"><MaritimeIcon variant="buoy" size={22} /></div><div><p className="home-v2-kicker">NÃO ENCONTROU?</p><h2>Peça a rota que falta.</h2><p>Os pedidos ajudam a descobrir quais conexões precisam existir no próximo trecho do piloto.</p></div><Link href="/solicitar-rota"><span className="home-v2-coral-button">Solicitar uma rota <ArrowRight size={17} /></span></Link></section>
     </div>
   );
 }

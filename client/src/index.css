@@ -6086,3 +6086,82 @@ body::before {
   .rcv2-captain-copy small { max-width: 100px; }
   .profile-details > div { align-items: flex-start; flex-direction: column; gap: 3px; }
 }
+
+
+/* Route-first layout and neutral night palette */
+.routes-map-first-top {
+  width: 100%;
+  margin: 0;
+  padding: 20px 0 0;
+}
+
+.routes-map-first-top .routes-map-first-heading {
+  width: min(var(--page-max), calc(100% - (2 * var(--page-gutter))));
+  margin: 0 auto 16px;
+}
+
+.routes-map-first-top .lc-map-frame-coastal {
+  width: 100%;
+  border-radius: 0;
+  border-inline: 0;
+}
+
+@media (max-width: 700px) {
+  .routes-map-first-top {
+    padding-top: 12px;
+  }
+
+  .routes-map-first-top .routes-map-first-heading {
+    margin-bottom: 11px;
+  }
+
+  .routes-map-first-top .routes-map-first-heading h1 {
+    font-size: clamp(1.9rem, 8vw, 3rem);
+  }
+
+  .routes-map-first-top .lc-map-frame-coastal {
+    height: min(62svh, 520px) !important;
+    min-height: 360px;
+  }
+}
+
+[data-theme="dark"] {
+  --bg: #151717;
+  --bg2: #1d201f;
+  --card: #232625;
+  --surface: #292c2b;
+  --border: #3a403e;
+  --border2: #505754;
+  --text1: #f0eee7;
+  --text2: #b8b8ae;
+  --text3: #878e89;
+  --boat: #8eaaa1;
+  --boat-light: #2b3734;
+  --boat-dark: #b7c9c1;
+  --car: #d99a82;
+  --car-light: #46342d;
+  --sunset: #d99a82;
+  --ocean: #8eaaa1;
+  --dark: #101212;
+  --dark2: #151717;
+  --mv-ink: #f0eee7;
+  --mv-ink-soft: #b8b8ae;
+  --mv-teal: #8eaaa1;
+  --mv-teal-dark: #b7c9c1;
+  --mv-coral: #d99a82;
+  --mv-sand: #151717;
+  --mv-sand-deep: #1d201f;
+  --mv-line: rgba(240, 238, 231, .14);
+}
+
+[data-theme="dark"] body {
+  background: #151717;
+}
+
+[data-theme="dark"] .nav-root {
+  background: color-mix(in srgb, var(--card) 94%, transparent);
+}
+
+[data-theme="dark"] .marcamar-map-theme .leaflet-tile-pane {
+  filter: invert(.82) hue-rotate(18deg) saturate(.34) brightness(.66) contrast(1.02);
+}

@@ -33,6 +33,7 @@ export const captainProfiles = pgTable("captain_profiles", {
   boatImageUrl: text("boat_image_url"),
   bio: text("bio"),
   verified: boolean("verified").notNull().default(false),
+  topCaptain: boolean("top_captain").notNull().default(false),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 }, (t) => [index("captain_profiles_user_id_idx").on(t.userId)]);
 

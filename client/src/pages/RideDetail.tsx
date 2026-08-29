@@ -109,6 +109,8 @@ export default function RideDetail() {
   const totalPrice = (parseFloat(ride.pricePerSeat) * seats).toFixed(2).replace(".", ",");
   const hasExactOrigin = ride.originLat != null && ride.originLng != null;
   const hasExactDestination = ride.destLat != null && ride.destLng != null;
+  const isDemoRide = ride.description?.startsWith("[DEMO]") ?? false;
+  const displayDescription = ride.description?.replace(/^\[DEMO\]\s*/, "");
 
   const departurePassed = new Date(ride.departureTime) < new Date();
   const alreadyReviewed = user ? reviews.some((r: any) => r.reviewerId === user.id) : false;
@@ -137,6 +139,7 @@ export default function RideDetail() {
         <div className="detail-card fade-up">
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             <span className="badge badge-green">{ride.availableSeats} vagas disponíveis</span>
+            {isDemoRide && <span className="badge rcv2-demo-badge">Exemplo de teste</span>}
             {(captainProfile?.verified || driverProfile?.verified) && (
               <span className="badge" style={{ background: "color-mix(in srgb, var(--boat) 10%, transparent)", color: "var(--boat)", border: "1px solid color-mix(in srgb, var(--boat) 22%, transparent)", display: "flex", alignItems: "center", gap: 4 }}>
                 <Shield size={10} /> Verificado
@@ -199,7 +202,7 @@ export default function RideDetail() {
             </div>
           </div>
 
-          {ride.description && <div className="detail-description">{ride.description}</div>}
+          {displayDescription && <div className="detail-description">{displayDescription}</div>}
         </div>
 
         {/* Captain card */}

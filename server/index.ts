@@ -7,6 +7,7 @@ import { fileURLToPath } from "url";
 import { setupAuth } from "./auth.js";
 import router from "./routes.js";
 import { pool } from "./db.js";
+import { seedDemoData } from "./demo-data.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -215,6 +216,10 @@ async function runMigrations() {
       CREATE INDEX IF NOT EXISTS driver_profiles_user_id_idx ON driver_profiles (user_id);
 
       ALTER TABLE rides ADD COLUMN IF NOT EXISTS ride_type TEXT NOT NULL DEFAULT 'boat';
+      ALTER TABLE rides ADD COLUMN IF NOT EXISTS origin_lat NUMERIC(9,6);
+      ALTER TABLE rides ADD COLUMN IF NOT EXISTS origin_lng NUMERIC(9,6);
+      ALTER TABLE rides ADD COLUMN IF NOT EXISTS dest_lat NUMERIC(9,6);
+      ALTER TABLE rides ADD COLUMN IF NOT EXISTS dest_lng NUMERIC(9,6);
       CREATE INDEX IF NOT EXISTS rides_type_idx ON rides (ride_type);
 
       CREATE TABLE IF NOT EXISTS recurring_schedules (
@@ -276,6 +281,7 @@ if (process.env.NODE_ENV === "production") {
 
 app.listen(PORT, async () => {
   await runMigrations();
+  await seedDemoData();
   console.log(`Marcamar rodando na porta ${PORT}`);
 });
 

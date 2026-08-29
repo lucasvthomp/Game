@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { Link } from "wouter";
 import L from "leaflet";
-import { PIN, pinIcon, getCityCoords, num, SP_REGION_CENTER, SP_REGION_ZOOM, TILE_URL, TILE_ATTRIBUTION } from "./leafletSetup";
+import { MAP_THEME_CLASS, PIN, pinIcon, getCityCoords, num, SP_REGION_CENTER, SP_REGION_ZOOM, TILE_URL, TILE_ATTRIBUTION } from "./leafletSetup";
 
 export interface RideMarker {
   id: number;
@@ -56,7 +56,7 @@ export default function RidesMap({ rides, height = "480px" }: RidesMapProps) {
 
   if (markers.length === 0) {
     return (
-      <div className="lc-map-frame lc-map-empty" style={{ height }} role="img" aria-label="Mapa indisponível">
+      <div className="lc-map-frame lc-map-frame-coastal lc-map-empty" style={{ height }} role="img" aria-label="Mapa indisponível">
         <span style={{ fontSize: 22, marginBottom: 6 }}>🗺️</span>
         Nenhuma viagem para mostrar no mapa
         <span className="lc-map-empty-sub">As viagens sem localização não aparecem aqui</span>
@@ -65,8 +65,8 @@ export default function RidesMap({ rides, height = "480px" }: RidesMapProps) {
   }
 
   return (
-    <div className="lc-map-frame" style={{ height }}>
-      <MapContainer center={SP_REGION_CENTER} zoom={SP_REGION_ZOOM} style={{ height: "100%", width: "100%" }} scrollWheelZoom>
+    <div className="lc-map-frame lc-map-frame-coastal lc-rides-map" style={{ height }}>
+      <MapContainer className={MAP_THEME_CLASS} center={SP_REGION_CENTER} zoom={SP_REGION_ZOOM} style={{ height: "100%", width: "100%" }} scrollWheelZoom aria-label="Mapa de lanchas disponíveis">
         <TileLayer url={TILE_URL} attribution={TILE_ATTRIBUTION} />
         <FitToPins coords={coords} />
         {markers.map(({ ride, coord }) => {
@@ -75,10 +75,11 @@ export default function RidesMap({ rides, height = "480px" }: RidesMapProps) {
             <Marker key={ride.id} position={coord} icon={boatIcon}>
               <Popup>
                 <div className="lc-popup">
-                  <div className="lc-popup-route">{ride.originCity} → {ride.destinationCity}</div>
+                  <div className="lc-popup-kicker">LANCHA</div>
+                  <div className="lc-popup-route">{ride.originCity} <span aria-hidden="true">→</span> {ride.destinationCity}</div>
                   <div className="lc-popup-price">R$ {price} <span>/ pessoa</span></div>
                   <Link href={`/viagens/${ride.id}`}>
-                    <span className="lc-popup-link">Ver viagem →</span>
+                    <span className="lc-popup-link">Abrir detalhes <span aria-hidden="true">→</span></span>
                   </Link>
                 </div>
               </Popup>
@@ -86,7 +87,14 @@ export default function RidesMap({ rides, height = "480px" }: RidesMapProps) {
           );
         })}
       </MapContainer>
+      <div className="marcamar-map-badge" aria-hidden="true">
+        <span className="marcamar-map-badge-mark">✦</span>
+        <span><strong>Mapa de lanchas</strong><small>litoral em movimento</small></span>
+      </div>
+      <div className="marcamar-map-count" aria-live="polite">{markers.length} {markers.length === 1 ? "lancha" : "lanchas"} visíveis</div>
+      <div className="marcamar-map-legend" aria-hidden="true">
+        <span className="marcamar-map-legend-dot boat" /> Saídas no mapa
+      </div>
     </div>
   );
 }
-

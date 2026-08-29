@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { SiteSelect, SiteAutocomplete } from "@/components/SiteSelect";
 import { apiRequest } from "@/lib/queryClient";
 import { Link } from "wouter";
-import { Anchor, BadgeCheck, Calendar, Clock, Star, Search, Trophy, Users, ArrowRight, Map, List } from "lucide-react";
+import { Anchor, BadgeCheck, Calendar, Clock, MapPin, Star, Search, Trophy, Users, ArrowRight, Map, List } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState, lazy, Suspense } from "react";
@@ -227,39 +227,61 @@ export default function Rides() {
                           </span>
                           <span className="rcv2-captain-copy">
                             <strong>{ride.captainName || "Capitão local"}</strong>
-                            <small>{ride.boatName || "Operador de lancha"}</small>
+                            <small>{ride.captainUsername ? "@" + ride.captainUsername : (ride.boatName || "Operador de lancha")}</small>
+                            {ride.boatName && <small className="rcv2-boat-name">{ride.boatName}{ride.captainBoatModel ? " · " + ride.captainBoatModel : ""}</small>}
                           </span>
-                          <span className="rcv2-captain-badges">
-                            {ride.captainVerified && <span className="rcv2-verified-badge"><BadgeCheck size={13} /> Verificada</span>}
-                            {(ride.captainTop || (ride.captainVerified && Number(ride.avgRating || 0) >= 4.8)) && <span className="rcv2-top-badge"><Trophy size={12} /> Top capitã</span>}
-                          </span>
-                        </div>
-
-                        {/* Meta row */}
-                        <div className="rcv2-meta">
-                          <span>
-                            <Clock size={12} style={{ color: accent }} />
-                            {format(new Date(ride.departureTime), "dd 'de' MMM · HH:mm", { locale: ptBR })}
-                          </span>
-                          <span>
-                            <><Anchor size={12} style={{ color: accent }} />{ride.boatName || "Lancha"} · {ride.captainName}</>
-                          </span>
-                        </div>
-
-                        {/* Footer: price + CTA */}
-                        <div className="rcv2-footer">
-                          <div>
-                            <span className="rcv2-price" style={{ color: accent }}>
-                              R$ {parseFloat(ride.pricePerSeat).toFixed(2).replace(".", ",")}
+                          <span className="rcv2-captain-proof">
+                            {Number(ride.avgRating || 0) > 0 && (
+                              <span className="rcv2-captain-rating" aria-label={`${Number(ride.avgRating).toFixed(1)} de 5 estrelas`}>
+                                <Star size={12} fill="var(--amber)" color="var(--amber)" />
+                                <strong>{Number(ride.avgRating).toFixed(1)}</strong>
+                                {Number(ride.captainReviewCount || 0) > 0 && <small>({ride.captainReviewCount})</small>}
+                              </span>
+                            )}
+                            <span className="rcv2-captain-badges">
+                              {ride.captainVerified && <span className="rcv2-verified-badge"><BadgeCheck size={13} /> Verificado</span>}
+                              {(ride.captainTop || (ride.captainVerified && Number(ride.avgRating || 0) >= 4.8)) && <span className="rcv2-top-badge"><Trophy size={12} /> Top capitão</span>}
                             </span>
-                            <span className="rcv2-per"> / pessoa</span>
+                          </span>
+                        </div>
+
+                        {/* Decision details: date, departure time, coastal meeting point and seats. */}
+                        <div className="rcv2-detail-grid">
+                          <span className="rcv2-detail-item">
+                            <Calendar size={14} style={{ color: accent }} />
+                            <span><strong>{format(new Date(ride.departureTime), "EEE, dd MMM", { locale: ptBR })}</strong><small>data</small></span>
+                          </span>
+                          <span className="rcv2-detail-item">
+                            <Clock size={14} style={{ color: accent }} />
+                            <span><strong>{format(new Date(ride.departureTime), "HH:mm", { locale: ptBR })}</strong><small>saída</small></span>
+                          </span>
+                          <span className="rcv2-detail-item">
+                            <MapPin size={14} style={{ color: accent }} />
+                            <span><strong>{ride.originCity}</strong><small>embarque</small></span>
+                          </span>
+                          <span className="rcv2-detail-item">
+                            <Users size={14} style={{ color: accent }} />
+                            <span><strong>{ride.availableSeats}/{ride.totalSeats || ride.availableSeats}</strong><small>lugares livres</small></span>
+                          </span>
+                        </div>
+
+                        {/* Footer: BlaBlaCar-style starting price and clear next action. */}
+                        <div className="rcv2-footer">
+                          <div className="rcv2-price-stack">
+                            <span className="rcv2-price-label">a partir de</span>
+                            <span>
+                              <span className="rcv2-price" style={{ color: accent }}>
+                                R$ {parseFloat(ride.pricePerSeat).toFixed(2).replace(".", ",")}
+                              </span>
+                              <span className="rcv2-per"> / pessoa</span>
+                            </span>
                           </div>
                           <button
                             className="rcv2-cta"
                             style={{ background: accent, opacity: soldOut ? 0.4 : 1 }}
                             disabled={soldOut}
                           >
-                            {soldOut ? "Esgotado" : "Reservar"}
+                            {soldOut ? "Esgotado" : "Ver detalhes"}
                           </button>
                         </div>
                       </div>

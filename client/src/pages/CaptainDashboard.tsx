@@ -107,10 +107,10 @@ export default function CaptainDashboard() {
 
   return (
     <div className="dashboard-page">
-      <div className="page-header">
+      <div className="page-header dashboard-page-header">
         <div>
           <h1 className="page-title">Minha Lancha</h1>
-          <p className="page-sub">Gerencie suas viagens e passageiros</p>
+          <p className="page-sub">Gerencie suas viagens e passageiros</p><span className="dashboard-live-pill"><i /> Painel operacional</span>
         </div>
         <BoatMediaCluster variant="compact" />
         <button className="btn-add" onClick={() => { setShowForm(!showForm); setError(""); setSuccess(""); }}>
@@ -119,14 +119,14 @@ export default function CaptainDashboard() {
       </div>
 
       {/* Stats */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 12, marginBottom: 28 }}>
+      <div className="dashboard-stats">
         {[
           { label: "Viagens ativas", value: rides.filter((r: any) => r.status === "active").length, icon: <Anchor size={18} color="var(--boat)" /> },
           { label: "Passageiros", value: totalPassengers, icon: <Users size={18} color="var(--boat)" /> },
           { label: "Receita estimada", value: `R$ ${totalEarnings.toFixed(0)}`, icon: <TrendingUp size={18} color="var(--boat)" /> },
         ].map((stat, i) => (
-          <div key={i} className="card" style={{ padding: "18px 20px", display: "flex", alignItems: "center", gap: 14 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 10, background: "color-mix(in srgb, var(--boat) 10%, transparent)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div key={i} className="card dashboard-stat-card">
+            <div className="dashboard-stat-icon">
               {stat.icon}
             </div>
             <div>
@@ -141,7 +141,7 @@ export default function CaptainDashboard() {
 
       {/* New ride form */}
       {showForm && (
-        <div className="card" style={{ marginBottom: 24 }}>
+        <div className="card dashboard-ride-form" style={{ marginBottom: 24 }}>
           <div className="card-section">
             <p className="section-label" style={{ marginBottom: 16 }}>NOVA VIAGEM</p>
             <form onSubmit={e => { e.preventDefault(); setError(""); createMutation.mutate(); }}>
@@ -213,6 +213,8 @@ export default function CaptainDashboard() {
         </div>
       )}
 
+      <div className="dashboard-section-heading"><div><p className="section-label">OPERAÇÃO</p><h2>Suas viagens</h2><p>Veja saídas, reservas e o que precisa de atenção.</p></div><span className="dashboard-count-pill">{rides.length} publicada{rides.length === 1 ? "" : "s"}</span></div>
+
       {/* Ride list */}
       {rides.length === 0 ? (
         <div className="card empty-state">
@@ -221,7 +223,7 @@ export default function CaptainDashboard() {
           <p style={{ fontSize: 13, color: "var(--boat)", marginTop: 4 }}>Clique em "Nova viagem" para começar.</p>
         </div>
       ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <div className="dashboard-ride-list">
           {rides.map((ride: any) => (
             <div key={ride.id} className="ride-row fade-up">
               <div style={{ flex: 1 }}>

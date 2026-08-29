@@ -175,7 +175,8 @@ export default function CaptainDashboard() {
                   <textarea className="field-input" value={form.description} onChange={set("description")} placeholder="Ponto de encontro, o que levar, informações extras..." style={{ minHeight: 72, resize: "vertical" }} />
                 </div>
                 <div className="form-full">
-                  <p style={{ display: "flex", alignItems: "center", gap: 6, color: "var(--text2)", fontSize: 12, margin: "2px 0 10px" }}><Map size={13} color="var(--boat)" /> Selecione uma praia ou ajuste o ponto exato no mapa.</p>\n                  <button type="button" style={{ background: "none", border: "1px solid var(--border)", color: "var(--text2)", borderRadius: 8, padding: "6px 14px", cursor: "pointer", fontSize: 12, fontWeight: 600, display: "flex", alignItems: "center", gap: 6 }} onClick={() => setShowMap(v => !v)}>
+                  <p style={{ display: "flex", alignItems: "center", gap: 6, color: "var(--text2)", fontSize: 12, margin: "2px 0 10px" }}><Map size={13} color="var(--boat)" /> Selecione uma praia ou ajuste o ponto exato no mapa.</p>
+                  <button type="button" style={{ background: "none", border: "1px solid var(--border)", color: "var(--text2)", borderRadius: 8, padding: "6px 14px", cursor: "pointer", fontSize: 12, fontWeight: 600, display: "flex", alignItems: "center", gap: 6 }} onClick={() => setShowMap(v => !v)}>
                     <Map size={13} /> {showMap ? "Esconder mapa" : "Marcar no mapa (opcional)"}
                   </button>
                   {showMap && (

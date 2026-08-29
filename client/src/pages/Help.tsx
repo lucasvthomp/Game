@@ -1,4 +1,4 @@
-import { ArrowRight, ChevronDown, LifeBuoy, Mail, MapPin, Search, Waves } from "lucide-react";
+import { ArrowRight, ChevronDown, LifeBuoy, Mail, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
 import { MaritimeIcon } from "@/components/MaritimeIcon";

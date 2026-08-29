@@ -153,9 +153,11 @@ async function runMigrations() {
         boat_image_url TEXT,
         bio TEXT,
         verified BOOLEAN NOT NULL DEFAULT false,
+        top_captain BOOLEAN NOT NULL DEFAULT false,
         created_at TIMESTAMP DEFAULT NOW() NOT NULL
       );
       CREATE INDEX IF NOT EXISTS captain_profiles_user_id_idx ON captain_profiles (user_id);
+      ALTER TABLE captain_profiles ADD COLUMN IF NOT EXISTS top_captain BOOLEAN NOT NULL DEFAULT false;
 
       CREATE TABLE IF NOT EXISTS rides (
         id SERIAL PRIMARY KEY,

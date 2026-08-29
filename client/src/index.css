@@ -5640,3 +5640,257 @@ body::before {
 @media (min-width: 701px) {
   .bottom-nav { display: none !important; }
 }
+
+
+/* ─── Coastal map system ───
+   A shared wrapper, overlay language and color treatment keeps every map
+   (route search, route detail and exact pickup) recognizably Marcamar. */
+.lc-map-frame-coastal {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--boat) 24%, var(--border));
+  background:
+    radial-gradient(circle at 18% 14%, color-mix(in srgb, var(--boat) 15%, transparent), transparent 38%),
+    linear-gradient(145deg, color-mix(in srgb, var(--boat-light) 88%, var(--card)), var(--card));
+  box-shadow: 0 20px 50px color-mix(in srgb, var(--boat) 12%, transparent);
+}
+.lc-map-frame-coastal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 410;
+  background: linear-gradient(145deg, rgba(255,255,255,.08), transparent 42%, rgba(9, 93, 105, .08));
+}
+.lc-map-frame-coastal .leaflet-container {
+  z-index: 1;
+  background: #dcefeb;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.marcamar-map-theme .leaflet-tile-pane {
+  filter: saturate(.78) hue-rotate(142deg) brightness(1.05) contrast(.95);
+}
+[data-theme="dark"] .marcamar-map-theme .leaflet-tile-pane {
+  filter: invert(.88) hue-rotate(160deg) saturate(.68) brightness(.74) contrast(1.05);
+}
+.lc-map-frame-coastal .leaflet-control-zoom {
+  margin: 14px !important;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--boat) 26%, var(--border)) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 9px 22px rgba(8, 58, 65, .18) !important;
+}
+.lc-map-frame-coastal .leaflet-control-zoom a {
+  width: 34px !important;
+  height: 34px !important;
+  line-height: 34px !important;
+  color: var(--text1) !important;
+  background: color-mix(in srgb, var(--card) 92%, transparent) !important;
+  border-color: var(--border) !important;
+}
+.lc-map-frame-coastal .leaflet-control-zoom a:hover {
+  color: var(--boat) !important;
+  background: var(--boat-light) !important;
+}
+.lc-map-frame-coastal .leaflet-control-attribution {
+  margin: 0 8px 7px 0;
+  padding: 3px 6px !important;
+  border-radius: 7px;
+  color: var(--text3) !important;
+  background: color-mix(in srgb, var(--card) 76%, transparent) !important;
+  font-size: 9px !important;
+}
+.lc-map-frame-coastal .leaflet-control-attribution a { color: var(--boat) !important; }
+.marcamar-map-badge,
+.marcamar-map-count,
+.marcamar-map-legend {
+  position: absolute;
+  z-index: 450;
+  pointer-events: none;
+  border: 1px solid color-mix(in srgb, var(--boat) 22%, var(--border));
+  background: color-mix(in srgb, var(--card) 90%, transparent);
+  box-shadow: 0 12px 26px rgba(8, 58, 65, .15);
+  backdrop-filter: blur(14px);
+}
+.marcamar-map-badge {
+  top: 14px;
+  left: 14px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 42px;
+  padding: 7px 11px 7px 7px;
+  border-radius: 14px;
+}
+.marcamar-map-badge-mark {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 10px;
+  color: #fff;
+  background: linear-gradient(145deg, var(--boat), var(--boat-dark));
+  font-size: 14px;
+}
+.marcamar-map-badge strong,
+.marcamar-map-badge small {
+  display: block;
+  line-height: 1.1;
+}
+.marcamar-map-badge strong {
+  color: var(--text1);
+  font-size: 11px;
+  font-weight: 850;
+}
+.marcamar-map-badge small {
+  margin-top: 3px;
+  color: var(--text3);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+.marcamar-map-count {
+  top: 14px;
+  right: 14px;
+  padding: 9px 11px;
+  border-radius: 999px;
+  color: var(--boat-dark);
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: .02em;
+}
+.marcamar-map-legend {
+  right: 14px;
+  bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  color: var(--text2);
+  font-size: 10px;
+  font-weight: 750;
+}
+.marcamar-map-legend-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: var(--boat);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--boat) 18%, transparent);
+}
+.marcamar-map-legend-dot.origin,
+.marcamar-map-legend-dot.boat { background: var(--boat); }
+.marcamar-map-legend-dot.dest { background: var(--sunset); }
+.lc-popup { min-width: 160px; padding: 2px 1px; }
+.lc-popup-kicker {
+  margin-bottom: 5px;
+  color: var(--boat);
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: .14em;
+}
+.lc-popup-route { color: var(--text1); font-size: 13px; font-weight: 800; line-height: 1.35; }
+.lc-popup-price { margin-top: 8px; color: var(--text1); font-size: 13px; font-weight: 850; }
+.lc-popup-price span { color: var(--text3); font-size: 10px; font-weight: 650; }
+.lc-popup-link {
+  display: inline-flex;
+  margin-top: 10px;
+  color: var(--boat);
+  font-size: 11px;
+  font-weight: 850;
+}
+.lc-popup-link:hover { color: var(--boat-dark); }
+.lc-map-frame-coastal .leaflet-popup-content-wrapper {
+  border: 1px solid color-mix(in srgb, var(--boat) 20%, var(--border));
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--card) 97%, transparent);
+  box-shadow: var(--shadow-lg);
+}
+.lc-map-frame-coastal .leaflet-popup-tip { background: var(--card); }
+.lc-map-frame-coastal .leaflet-popup-content { margin: 13px 15px; }
+.lc-map-frame-coastal .leaflet-popup-close-button { color: var(--text3) !important; }
+.lc-picker-map-hint {
+  left: 50%;
+  bottom: 12px;
+  right: auto;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  border: 1px solid color-mix(in srgb, var(--boat) 20%, transparent);
+  background: color-mix(in srgb, var(--card) 88%, transparent);
+  box-shadow: 0 10px 24px rgba(8, 58, 65, .15);
+  backdrop-filter: blur(12px);
+}
+.lc-picker-map-dot { background: var(--boat) !important; box-shadow: 0 0 0 4px color-mix(in srgb, var(--boat) 16%, transparent) !important; }
+@media (max-width: 700px) {
+  .lc-map-frame-coastal { min-height: 250px; border-radius: 17px; }
+  .lc-picker-map { min-height: 284px; }
+  .lc-rides-map { min-height: 330px; }
+  .lc-route-map { min-height: 250px; }
+  .marcamar-map-badge { top: 10px; left: 10px; min-height: 38px; padding: 6px 9px 6px 6px; border-radius: 12px; }
+  .marcamar-map-badge-mark { width: 25px; height: 25px; border-radius: 8px; font-size: 12px; }
+  .marcamar-map-badge strong { font-size: 10px; }
+  .marcamar-map-badge small { font-size: 8px; }
+  .marcamar-map-count { top: 10px; right: 10px; padding: 7px 9px; font-size: 9px; }
+  .marcamar-map-legend { right: 10px; bottom: 10px; padding: 7px 9px; font-size: 9px; }
+  .lc-picker-map-hint { max-width: calc(100% - 24px); overflow: hidden; text-overflow: ellipsis; font-size: 10px; }
+  .lc-map-frame-coastal .leaflet-control-zoom { margin: 10px !important; }
+  .lc-map-frame-coastal .leaflet-control-zoom a { width: 31px !important; height: 31px !important; line-height: 31px !important; }
+}
+
+/* ─── Mobile polish ─── */
+@media (max-width: 700px) {
+  html { overflow-x: hidden; }
+  body { min-width: 0; }
+  .app-body { width: 100%; overflow-x: clip; }
+  .nav-inner { width: 100%; padding-inline: 14px; }
+  .nav-logo-icon { width: 36px; height: 36px; border-radius: 11px; }
+  .nav-auth { gap: 5px; }
+  .nav-theme-btn { width: 36px; height: 36px; }
+  .nav-login { padding-inline: 10px; }
+  .nav-signup { padding-inline: 12px; }
+  .home-v2-hero { min-height: min(740px, calc(100svh - 64px)); }
+  .home-v2-hero-inner { width: min(100% - 28px, var(--page-max)); padding-block: 62px 68px; }
+  .home-v2-hero h1 { max-width: 100%; font-size: clamp(2.8rem, 13vw, 4.8rem); line-height: .95; }
+  .home-v2-hero-copy { margin-block: 20px 24px; font-size: .98rem; line-height: 1.6; }
+  .home-v2-search { width: 100%; padding: 7px; gap: 4px; border-radius: 16px; }
+  .home-v2-search-field, .home-v2-search-button { min-height: 52px; }
+  .home-v2-search-field { padding-inline: 12px; }
+  .home-v2-search-button { width: 100%; }
+  .home-v2-departures, .home-v2-how { padding-block: 56px; }
+  .home-v2-request { margin-bottom: 30px; }
+  .home-v2-route-row { min-height: 70px; }
+  .rides-header { padding-bottom: 20px; }
+  .rides-body { padding-top: 20px; padding-bottom: 40px; }
+  .lancha-header-intro { padding-top: 34px; gap: 16px; }
+  .lancha-header-copy h1 { font-size: clamp(2.35rem, 11vw, 4rem) !important; line-height: .98; }
+  .lancha-header-dek { font-size: .94rem; line-height: 1.55; }
+  .lancha-media-cluster { width: min(290px, 75vw); }
+  .rides-search { margin-top: 22px; min-height: 50px; }
+  .ride-grid-v2 { gap: 12px; }
+  .rcv2 { border-radius: 17px; }
+  .rcv2-body { padding: 17px 15px 15px; }
+  .routes-hero-v2 { padding-block: 48px 52px; }
+  .routes-hero-v2 h1 { font-size: clamp(3rem, 15vw, 5rem); line-height: .94; }
+  .routes-directory-v2, .routes-points-v2 { padding-block: 52px; }
+  .routes-cta-v2 { margin-bottom: 30px; }
+  .commercial-page { padding-bottom: 34px; }
+  .commercial-hero { padding-block: 48px 48px; }
+  .commercial-hero-copy h1 { font-size: clamp(2.75rem, 13vw, 4.8rem); line-height: .94; }
+  .commercial-hero-panel { min-height: 240px; border-radius: 22px; }
+  .commercial-body { gap: 16px; }
+  .commercial-form-card, .commercial-side-note { border-radius: 17px; }
+  .detail-card, .profile-card, .res-card, .route-request-card { border-radius: 16px; }
+  .detail-card, .profile-card { padding: 18px !important; }
+  .site-select-trigger, .site-autocomplete input, input, textarea, button { min-height: 46px; }
+  .footer-inner { padding-block: 42px 32px; }
+}
+@media (max-width: 380px) {
+  .nav-login { display: none; }
+  .nav-signup { padding-inline: 10px; font-size: 11px; }
+  .home-v2-hero-inner { width: min(100% - 22px, var(--page-max)); }
+  .home-v2-hero h1 { font-size: 2.72rem; }
+  .marcamar-map-count { max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from "react-leaflet";
 import L from "leaflet";
-import { PIN, pinIcon, getCityCoords, num, TILE_URL, TILE_ATTRIBUTION } from "./leafletSetup";
+import { MAP_THEME_CLASS, PIN, pinIcon, getCityCoords, num, TILE_URL, TILE_ATTRIBUTION } from "./leafletSetup";
 
 export interface RoutePoint {
   lat?: number | string | null;
@@ -50,7 +50,7 @@ export default function RouteMap({ origin, dest, height = "260px" }: RouteMapPro
   if (coords.length === 0) {
     return (
       <div
-        className="lc-map-frame lc-map-empty"
+        className="lc-map-frame lc-map-frame-coastal lc-map-empty"
         style={{ height }}
         role="img"
         aria-label="Mapa indisponível"
@@ -70,18 +70,18 @@ export default function RouteMap({ origin, dest, height = "260px" }: RouteMapPro
     : coords[0];
 
   return (
-    <div className="lc-map-frame" style={{ height }}>
-      <MapContainer center={center} zoom={9} style={{ height: "100%", width: "100%" }} scrollWheelZoom={false} attributionControl={false}>
+    <div className="lc-map-frame lc-map-frame-coastal lc-route-map" style={{ height }}>
+      <MapContainer className={MAP_THEME_CLASS} center={center} zoom={9} style={{ height: "100%", width: "100%" }} scrollWheelZoom={false} attributionControl={false} aria-label="Mapa da rota de lancha">
         <TileLayer url={TILE_URL} attribution={TILE_ATTRIBUTION} />
         <FitBounds coords={coords} />
         {o && (
           <Marker position={o} icon={originIcon}>
-            <Popup><b>Origem</b><br />{origin?.label || origin?.city || "Ponto de partida"}</Popup>
+            <Popup><div className="lc-popup"><div className="lc-popup-kicker">EMBARQUE</div><b>{origin?.label || origin?.city || "Ponto de partida"}</b></div></Popup>
           </Marker>
         )}
         {d && (
           <Marker position={d} icon={destIcon}>
-            <Popup><b>Destino</b><br />{dest?.label || dest?.city || "Destino"}</Popup>
+            <Popup><div className="lc-popup"><div className="lc-popup-kicker">DESTINO</div><b>{dest?.label || dest?.city || "Destino"}</b></div></Popup>
           </Marker>
         )}
         {coords.length === 2 && (
@@ -91,6 +91,14 @@ export default function RouteMap({ origin, dest, height = "260px" }: RouteMapPro
           />
         )}
       </MapContainer>
+      <div className="marcamar-map-badge" aria-hidden="true">
+        <span className="marcamar-map-badge-mark">✦</span>
+        <span><strong>Rota costeira</strong><small>embarque → destino</small></span>
+      </div>
+      <div className="marcamar-map-legend" aria-hidden="true">
+        <span className="marcamar-map-legend-dot origin" /> Embarque
+        <span className="marcamar-map-legend-dot dest" /> Destino
+      </div>
     </div>
   );
 }

@@ -25,10 +25,10 @@ function requireAuth(req: Request, res: Response, next: NextFunction) {
   if (!req.isAuthenticated()) return res.status(401).json({ error: "Não autenticado." });
   next();
 }
-function requireCaptainOrDriver(req: Request, res: Response, next: NextFunction) {
+function requireCaptain(req: Request, res: Response, next: NextFunction) {
   if (!req.isAuthenticated()) return res.status(401).json({ error: "Não autenticado." });
   const role = (req.user as any).role;
-  if (!["captain", "driver", "both"].includes(role)) return res.status(403).json({ error: "Complete seu perfil de motorista ou capitão primeiro." });
+  if (!["captain", "both"].includes(role)) return res.status(403).json({ error: "Complete seu perfil de capitão primeiro." });
   next();
 }
 
@@ -348,36 +348,14 @@ router.get("/captain/:userId/profile", async (req: Request, res: Response) => {
   res.json({ profile, user: safe, avgRating });
 });
 
-// ── DRIVER PROFILE ──
-router.post("/driver/profile", requireAuth, upload.fields([{ name: "licenseImage", maxCount: 1 }, { name: "carImage", maxCount: 1 }]), async (req: Request, res: Response) => {
-  try {
-    const user = req.user as any;
-    if (await storage.getDriverProfile(user.id)) return res.status(400).json({ error: "Perfil de motorista já existe." });
-    const files = req.files as { [f: string]: Express.Multer.File[] };
-    const licenseImageUrl = files?.licenseImage?.[0] ? `/uploads/${files.licenseImage[0].filename}` : null;
-    if (!licenseImageUrl) return res.status(400).json({ error: "Foto da CNH é obrigatória." });
-    const { licenseNumber, carMake, carModel, carYear, carColor, carCapacity, bio } = req.body;
-    if (!licenseNumber || !carMake || !carModel || !carCapacity) return res.status(400).json({ error: "Campos obrigatórios faltando." });
-    const profile = await storage.createDriverProfile({ userId: user.id, licenseNumber, licenseImageUrl, carMake, carModel, carYear: carYear ? parseInt(carYear) : null, carColor: carColor || null, carCapacity: parseInt(carCapacity), carImageUrl: files?.carImage?.[0] ? `/uploads/${files.carImage[0].filename}` : null, bio: bio || null });
-    res.json({ profile });
-  } catch (err: any) { res.status(500).json({ error: err.message }); }
-});
-
-router.get("/driver/profile", requireAuth, async (req: Request, res: Response) => {
-  const profile = await storage.getDriverProfile((req.user as any).id);
-  if (!profile) return res.status(404).json({ error: "Perfil não encontrado." });
-  res.json({ profile });
-});
-
-// ── RIDES ──
+// ── LANCHA RIDES ──
 router.get("/rides", async (req: Request, res: Response) => {
   try {
-    const type = req.query.type as "boat" | "car" | undefined;
     const from = typeof req.query.from === "string" ? req.query.from.trim().toLocaleLowerCase("pt-BR") : "";
     const to = typeof req.query.to === "string" ? req.query.to.trim().toLocaleLowerCase("pt-BR") : "";
     const date = typeof req.query.date === "string" ? req.query.date : "";
     const passengers = Math.max(1, parseInt(String(req.query.passengers || "1"), 10) || 1);
-    let activeRides = await storage.getActiveRides(type);
+    let activeRides = await storage.getActiveRides("boat");
     activeRides = activeRides.filter((ride) => {
       const matchesFrom = !from || ride.originCity.toLocaleLowerCase("pt-BR").includes(from);
       const matchesTo = !to || ride.destinationCity.toLocaleLowerCase("pt-BR").includes(to);
@@ -386,17 +364,15 @@ router.get("/rides", async (req: Request, res: Response) => {
     });
     const enriched = await Promise.all(activeRides.map(async (ride) => {
       const captain = await storage.getUser(ride.captainId);
-      const [captainProfile, driverProfile, avgRating] = await Promise.all([
+      const [captainProfile, avgRating] = await Promise.all([
         storage.getCaptainProfile(ride.captainId),
-        storage.getDriverProfile(ride.captainId),
         storage.getCaptainAverageRating(ride.captainId),
       ]);
       return {
         ...ride,
-        captainName: captain?.fullName || "Motorista",
+        captainName: captain?.fullName || "Capitão",
         captainUsername: captain?.username,
         boatName: captainProfile?.boatName,
-        carInfo: driverProfile ? `${driverProfile.carMake} ${driverProfile.carModel}${driverProfile.carColor ? ` · ${driverProfile.carColor}` : ""}` : null,
         avgRating,
       };
     }));
@@ -408,40 +384,31 @@ router.get("/rides/:id", async (req: Request, res: Response) => {
   const id = parseInt(req.params.id as string);
   if (isNaN(id)) return res.status(400).json({ error: "ID inválido." });
   const ride = await storage.getRide(id);
-  if (!ride) return res.status(404).json({ error: "Viagem não encontrada." });
+  if (!ride || ride.rideType !== "boat") return res.status(404).json({ error: "Viagem de lancha não encontrada." });
   const captain = await storage.getUser(ride.captainId);
-  const [captainProfile, driverProfile, avgRating, reviewsData] = await Promise.all([
+  const [captainProfile, avgRating, reviewsData] = await Promise.all([
     storage.getCaptainProfile(ride.captainId),
-    storage.getDriverProfile(ride.captainId),
     storage.getCaptainAverageRating(ride.captainId),
     storage.getReviewsByCaptain(ride.captainId),
   ]);
   const { password: _, ...safe } = captain as any;
-  res.json({ ride, captain: safe, captainProfile, driverProfile, avgRating, reviewCount: reviewsData.length });
+  res.json({ ride, captain: safe, captainProfile, avgRating, reviewCount: reviewsData.length });
 });
 
-router.post("/rides", requireCaptainOrDriver, async (req: Request, res: Response) => {
+router.post("/rides", requireCaptain, async (req: Request, res: Response) => {
   try {
     const user = req.user as any;
-    const { rideType, originCity, destinationCity, departureTime, returnTime, pricePerSeat, totalSeats, description,
+    const { originCity, destinationCity, departureTime, returnTime, pricePerSeat, totalSeats, description,
             originLat, originLng, destLat, destLng } = req.body;
     if (!originCity || !destinationCity || !departureTime || !pricePerSeat || !totalSeats) return res.status(400).json({ error: "Preencha todos os campos." });
-    if (rideType === "boat") {
-      const profile = await storage.getCaptainProfile(user.id);
-      if (!profile) return res.status(400).json({ error: "Complete seu perfil de capitão primeiro." });
-      if (!profile.verified) return res.status(403).json({ error: "Seu perfil de capitão ainda aguarda verificação Marcamar." });
-    }
-    if (rideType === "car") {
-      const profile = await storage.getDriverProfile(user.id);
-      if (!profile) return res.status(400).json({ error: "Complete seu perfil de motorista primeiro." });
-      if (!profile.verified) return res.status(403).json({ error: "Seu perfil de motorista ainda aguarda verificação Marcamar." });
-    }
+    const profile = await storage.getCaptainProfile(user.id);
+    if (!profile) return res.status(400).json({ error: "Complete seu perfil de capitão primeiro." });
+    if (!profile.verified) return res.status(403).json({ error: "Seu perfil de capitão ainda aguarda verificação Marcamar." });
     const seats = parseInt(totalSeats);
-    // Coordinates come from the drop-pin map picker; nullable so text-only rides still work.
     const coord = (v: any) => (v === undefined || v === null || v === "" ? null : parseFloat(v).toString());
     const ride = await storage.createRide({
       captainId: user.id,
-      rideType: rideType || "boat",
+      rideType: "boat",
       originCity, destinationCity,
       originLat: coord(originLat), originLng: coord(originLng),
       destLat: coord(destLat), destLng: coord(destLng),
@@ -456,9 +423,9 @@ router.post("/rides", requireCaptainOrDriver, async (req: Request, res: Response
   } catch (err: any) { res.status(500).json({ error: err.message }); }
 });
 
-router.get("/my/rides", requireCaptainOrDriver, async (req: Request, res: Response) => {
+router.get("/my/rides", requireCaptain, async (req: Request, res: Response) => {
   const user = req.user as any;
-  const myRides = await storage.getRidesByCaptain(user.id);
+  const myRides = (await storage.getRidesByCaptain(user.id)).filter((ride) => ride.rideType === "boat");
   const enriched = await Promise.all(myRides.map(async (ride) => {
     const reservationList = await storage.getReservationsByRide(ride.id);
     const confirmedSeats = reservationList.filter(r => r.status === "confirmed").reduce((s, r) => s + r.seats, 0);
@@ -467,12 +434,12 @@ router.get("/my/rides", requireCaptainOrDriver, async (req: Request, res: Respon
   res.json({ rides: enriched });
 });
 
-router.delete("/rides/:id", requireCaptainOrDriver, async (req: Request, res: Response) => {
+router.delete("/rides/:id", requireCaptain, async (req: Request, res: Response) => {
   const user = req.user as any;
   const id = parseInt(req.params.id as string);
   if (isNaN(id)) return res.status(400).json({ error: "ID inválido." });
   const ride = await storage.getRide(id);
-  if (!ride) return res.status(404).json({ error: "Viagem não encontrada." });
+  if (!ride || ride.rideType !== "boat") return res.status(404).json({ error: "Viagem de lancha não encontrada." });
   if (ride.captainId !== user.id) return res.status(403).json({ error: "Sem permissão." });
   await storage.cancelRide(id);
   res.json({ success: true });
@@ -484,7 +451,7 @@ router.get("/rides/:id/reservations", requireAuth, async (req: Request, res: Res
     if (isNaN(rideId)) return res.status(400).json({ error: "ID inválido." });
     const ride = await storage.getRide(rideId);
     if (!ride) return res.status(404).json({ error: "Ride not found" });
-    // Only the captain/driver can see reservations
+    // Only the captain can see reservations
     if (ride.captainId !== (req.user as any).id) {
       return res.status(403).json({ error: "Forbidden" });
     }
@@ -518,8 +485,7 @@ router.patch("/me", requireAuth, async (req: Request, res: Response) => {
 // ── RECURRING SCHEDULES ──
 router.get("/recurring", async (req: Request, res: Response) => {
   try {
-    const type = req.query.type as "boat" | "car" | undefined;
-    const schedules = await storage.getActiveRecurringSchedules(type);
+    const schedules = await storage.getActiveRecurringSchedules("boat");
     const enriched = await Promise.all(schedules.map(async (s) => {
       const user = await storage.getUser(s.userId);
       return { ...s, userName: user?.fullName, userUsername: user?.username };
@@ -536,10 +502,10 @@ router.get("/recurring/mine", requireAuth, async (req: Request, res: Response) =
 router.post("/recurring", requireAuth, async (req: Request, res: Response) => {
   try {
     const user = req.user as any;
-    const { rideType, originCity, destinationCity, daysOfWeek, departureTime, returnTime, pricePerSeat, totalSeats, description } = req.body;
-    if (!rideType || !originCity || !destinationCity || !daysOfWeek || !departureTime) return res.status(400).json({ error: "Campos obrigatórios faltando." });
+    const { originCity, destinationCity, daysOfWeek, departureTime, returnTime, pricePerSeat, totalSeats, description } = req.body;
+    if (!originCity || !destinationCity || !daysOfWeek || !departureTime) return res.status(400).json({ error: "Campos obrigatórios faltando." });
     const schedule = await storage.createRecurringSchedule({
-      userId: user.id, rideType, originCity, destinationCity,
+      userId: user.id, rideType: "boat", originCity, destinationCity,
       daysOfWeek: JSON.stringify(daysOfWeek),
       departureTime, returnTime: returnTime || null,
       pricePerSeat: pricePerSeat ? parseFloat(pricePerSeat).toString() : null,
@@ -709,16 +675,6 @@ router.get("/captain/:userId/reviews", async (req: Request, res: Response) => {
     return { ...r, reviewerName: reviewer?.fullName || "Passageiro" };
   }));
   res.json({ reviews: enriched, avgRating });
-});
-
-// ── PUBLIC DRIVER PROFILE ──
-router.get("/driver/:userId/profile", async (req: Request, res: Response) => {
-  const userId = parseInt(req.params.userId as string);
-  if (isNaN(userId)) return res.status(400).json({ error: "ID inválido." });
-  const [profile, user] = await Promise.all([storage.getDriverProfile(userId), storage.getUser(userId)]);
-  if (!profile || !user) return res.status(404).json({ error: "Motorista não encontrado." });
-  const { password: _, ...safe } = user;
-  res.json({ profile, user: safe });
 });
 
 export default router;

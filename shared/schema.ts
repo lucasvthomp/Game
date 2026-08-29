@@ -186,6 +186,17 @@ export const routeRequests = pgTable("route_requests", {
   index("route_requests_created_at_idx").on(t.createdAt),
 ]);
 
+export const commercialWaitlist = pgTable("commercial_waitlist", {
+  id: serial("id").primaryKey(),
+  fullName: text("full_name").notNull(),
+  email: text("email").notNull(),
+  company: text("company"),
+  phone: text("phone"),
+  interest: text("interest").notNull(),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export const incidents = pgTable("incidents", {
   id: serial("id").primaryKey(),
   reservationId: integer("reservation_id").notNull().references(() => reservations.id),
@@ -198,6 +209,8 @@ export const incidents = pgTable("incidents", {
   index("incidents_reservation_id_idx").on(t.reservationId),
   index("incidents_status_idx").on(t.status),
 ]);
+
+export const insertCommercialWaitlistSchema = createInsertSchema(commercialWaitlist).omit({ id: true, createdAt: true });
 
 export const insertIncidentSchema = createInsertSchema(incidents).omit({ id: true, createdAt: true });
 export type Incident = typeof incidents.$inferSelect;
@@ -225,6 +238,9 @@ export type InsertNotification = typeof notifications.$inferInsert;
 export const insertRouteRequestSchema = createInsertSchema(routeRequests).omit({ id: true, createdAt: true });
 export const insertLocationSchema = createInsertSchema(locations).omit({ id: true });
 export const insertMaritimeRouteSchema = createInsertSchema(maritimeRoutes).omit({ id: true, createdAt: true });
+
+export type CommercialWaitlist = typeof commercialWaitlist.$inferSelect;
+export type InsertCommercialWaitlist = typeof commercialWaitlist.$inferInsert;
 
 export type RouteRequest = typeof routeRequests.$inferSelect;
 export type InsertRouteRequest = typeof routeRequests.$inferInsert;

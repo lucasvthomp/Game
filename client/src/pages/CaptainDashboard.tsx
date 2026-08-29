@@ -213,6 +213,8 @@ export default function CaptainDashboard() {
         </div>
       )}
 
+      <div className="dashboard-section-heading"><div><p className="section-label">OPERAÇÃO</p><h2>Suas viagens</h2><p>Veja saídas, reservas e o que precisa de atenção.</p></div><span className="dashboard-count-pill">{rides.length} publicada{rides.length === 1 ? "" : "s"}</span></div>
+
       {/* Ride list */}
       {rides.length === 0 ? (
         <div className="card empty-state">

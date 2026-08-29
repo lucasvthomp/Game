@@ -364,6 +364,8 @@ router.get("/rides", async (req: Request, res: Response) => {
         ...ride,
         captainName: captain?.fullName || "Capitão",
         captainUsername: captain?.username,
+        captainAvatarUrl: captain?.avatarUrl || null,
+        captainVerified: Boolean(captainProfile?.verified),
         boatName: captainProfile?.boatName,
         avgRating,
       };
@@ -455,6 +457,18 @@ router.get("/rides/:id/reservations", requireAuth, async (req: Request, res: Res
     res.json({ reservations });
   } catch (e: any) {
     res.status(500).json({ error: "Server error" });
+  }
+});
+
+router.post("/me/avatar", requireAuth, upload.single("avatar"), async (req: Request, res: Response) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: "Escolha uma imagem JPG, PNG ou WebP." });
+    const user = req.user as any;
+    const updated = await storage.updateUser(user.id, { avatarUrl: `/uploads/${req.file.filename}` });
+    const { password: _, ...safe } = updated;
+    res.json({ user: safe });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Não foi possível salvar sua foto." });
   }
 });
 

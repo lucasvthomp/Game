@@ -297,22 +297,14 @@ router.patch("/admin/incidents/:id", requireAdmin, async (req: Request, res: Res
 
 // ── ADMIN VERIFICATION ──
 router.get("/admin/verifications", requireAdmin, async (_req: Request, res: Response) => {
-  const [captains, drivers] = await Promise.all([storage.listCaptainProfiles(), storage.listDriverProfiles()]);
-  res.json({ captains, drivers });
+  const captains = await storage.listCaptainProfiles();
+  res.json({ captains });
 });
 
 router.patch("/admin/verifications/captain/:id", requireAdmin, async (req: Request, res: Response) => {
   const id = parseInt(req.params.id as string);
   if (isNaN(id) || typeof req.body.verified !== "boolean") return res.status(400).json({ error: "Dados inválidos." });
   const profile = await storage.setCaptainVerified(id, req.body.verified);
-  if (!profile) return res.status(404).json({ error: "Perfil não encontrado." });
-  res.json({ profile });
-});
-
-router.patch("/admin/verifications/driver/:id", requireAdmin, async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id as string);
-  if (isNaN(id) || typeof req.body.verified !== "boolean") return res.status(400).json({ error: "Dados inválidos." });
-  const profile = await storage.setDriverVerified(id, req.body.verified);
   if (!profile) return res.status(404).json({ error: "Perfil não encontrado." });
   res.json({ profile });
 });

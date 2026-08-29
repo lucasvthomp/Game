@@ -40,27 +40,27 @@ export default function Routes() {
 
   return (
     <div className="routes-page-v2">
+      <section className="routes-map-first routes-map-first-top">
+        <div className="routes-map-first-heading">
+          <div><p className="home-v2-kicker">MAPA VIVO</p><h1>Veja as rotas disponíveis.</h1></div>
+          <p>Toque em uma lancha para abrir os detalhes da saída.</p>
+        </div>
+        <Suspense fallback={<div className="routes-map-loading">Carregando mapa costeiro…</div>}>
+          <RidesMap height="min(640px, calc(100svh - 178px))" rides={rides.filter((ride) => ride.rideType === "boat")} />
+        </Suspense>
+      </section>
+
       <section className="routes-command">
         <div className="routes-command-copy">
           <p className="section-label">ROTAS DO LITORAL PAULISTA</p>
-          <h1>Encontre seu próximo embarque.</h1>
-          <p>Veja as conexões publicadas no mapa, compare pontos de saída e escolha uma travessia de lancha.</p>
+          <h2>Encontre seu próximo embarque.</h2>
+          <p>Compare pontos de saída e escolha uma travessia de lancha pela costa.</p>
         </div>
         <div className="routes-command-search">
           <div className="routes-search-field"><MapPin size={16} /><SiteAutocomplete value={from} onChange={setFrom} options={locationNames} placeholder="Saída" ariaLabel="Ponto de saída" /></div>
           <div className="routes-search-field"><MapPin size={16} /><SiteAutocomplete value={to} onChange={setTo} options={locationNames} placeholder="Chegada" ariaLabel="Ponto de chegada" /></div>
           <button type="button" onClick={search}>Encontrar rota <ArrowRight size={16} /></button>
         </div>
-      </section>
-
-      <section className="routes-map-first">
-        <div className="routes-map-first-heading">
-          <div><p className="home-v2-kicker">MAPA VIVO</p><h2>As travessias, de verdade.</h2></div>
-          <p>Toque em uma lancha para abrir os detalhes da saída.</p>
-        </div>
-        <Suspense fallback={<div className="routes-map-loading">Carregando mapa costeiro…</div>}>
-          <RidesMap height="560px" rides={rides.filter((ride) => ride.rideType === "boat")} />
-        </Suspense>
       </section>
 
       <section className="routes-directory-v2">

@@ -1,6 +1,6 @@
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation, Link } from "wouter";
-import { Anchor, BadgeCheck, Bell, Camera, Calendar, ChevronRight, LogOut, Upload, User } from "lucide-react";
+import { Anchor, BadgeCheck, Bell, Camera, Calendar, ChevronRight, LogOut, Upload } from "lucide-react";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";

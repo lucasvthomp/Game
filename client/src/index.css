@@ -5669,7 +5669,7 @@ body::before {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 .marcamar-map-theme .leaflet-tile-pane {
-  filter: saturate(.78) hue-rotate(142deg) brightness(1.05) contrast(.95);
+  filter: saturate(.78) hue-rotate(28deg) brightness(1.04) contrast(.97) sepia(.04);
 }
 [data-theme="dark"] .marcamar-map-theme .leaflet-tile-pane {
   filter: invert(.88) hue-rotate(160deg) saturate(.68) brightness(.74) contrast(1.05);

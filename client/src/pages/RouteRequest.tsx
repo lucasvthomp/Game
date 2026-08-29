@@ -122,7 +122,7 @@ export default function RouteRequest() {
                 </label>
                 <label>
                   Destino
-                  <SiteAutocomplete value={form.destination} onChange={(value) => update("destination", value)} options={COASTAL_SP_CITIES} placeholder="Ex.: Bonete" ariaLabel="Destino da rota" />
+                  <SiteAutocomplete value={form.destination} onChange={(value) => update("destination", value)} options={COASTAL_POINT_NAMES} placeholder="Ex.: Bonete" ariaLabel="Destino da rota" />
                 </label>
               </div>
               <div className="route-request-form-row">

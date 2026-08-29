@@ -1,4 +1,4 @@
-import { Anchor, ArrowRight, Check, Compass, LifeBuoy, MapPin, ShieldCheck, Waves } from "lucide-react";
+import { Anchor, ArrowRight, Check, LifeBuoy } from "lucide-react";
 import { Link } from "wouter";
 import { MaritimeIcon } from "@/components/MaritimeIcon";
 

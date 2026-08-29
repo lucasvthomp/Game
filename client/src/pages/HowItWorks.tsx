@@ -1,4 +1,4 @@
-import { Anchor, ArrowRight, Check, Clock3, MapPin, ShieldCheck, UsersRound, Waves } from "lucide-react";
+import { ArrowRight, Check, Waves } from "lucide-react";
 import { Link } from "wouter";
 import { MaritimeIcon } from "@/components/MaritimeIcon";
 

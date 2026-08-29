@@ -306,7 +306,7 @@ router.patch("/admin/verifications/captain/:id", requireAdmin, async (req: Reque
   const verified = typeof req.body.verified === "boolean" ? req.body.verified : undefined;
   const topCaptain = typeof req.body.topCaptain === "boolean" ? req.body.topCaptain : undefined;
   if (isNaN(id) || (verified === undefined && topCaptain === undefined)) return res.status(400).json({ error: "Dados inválidos." });
-  let profile = verified === undefined ? await storage.getCaptainProfile(id) : await storage.setCaptainVerified(id, verified);
+  let profile = verified === undefined ? await storage.getCaptainProfileById(id) : await storage.setCaptainVerified(id, verified);
   if (topCaptain !== undefined) profile = await storage.setCaptainTop(id, topCaptain);
   if (!profile) return res.status(404).json({ error: "Perfil não encontrado." });
   res.json({ profile });

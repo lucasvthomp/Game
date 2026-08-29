@@ -71,7 +71,7 @@ export default function RouteMap({ origin, dest, height = "260px" }: RouteMapPro
 
   return (
     <div className="lc-map-frame lc-map-frame-coastal lc-route-map" style={{ height }}>
-      <MapContainer className={MAP_THEME_CLASS} center={center} zoom={9} style={{ height: "100%", width: "100%" }} scrollWheelZoom={false} attributionControl={false} aria-label="Mapa da rota de lancha">
+      <MapContainer className={MAP_THEME_CLASS} center={center} zoom={9} style={{ height: "100%", width: "100%" }} scrollWheelZoom={false} attributionControl aria-label="Mapa da rota de lancha">
         <TileLayer url={TILE_URL} attribution={TILE_ATTRIBUTION} />
         <FitBounds coords={coords} />
         {o && (

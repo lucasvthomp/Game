@@ -34,13 +34,13 @@ export default function Navbar() {
     ...(isCaptain ? [{ href: "/minha-lancha", label: "Minha Lancha" }] : []),
     ...(user ? [{ href: "/minhas-reservas", label: "Reservas" }] : []),
   ];
-  const isActive = (href: string) => location === href || (href === "/" && location === "/");
+  const isActive = (href: string) => href === "/" ? location === "/" : location === href || location.startsWith(href + "/");
 
   return (
     <nav className="nav-root">
       <div className="brazil-stripe" style={{ opacity: 0.5 }} />
       <div className="nav-inner">
-        <Link href="/"><div className="nav-logo"><div className="nav-logo-icon"><Anchor size={14} color="#fff" /></div><span className="nav-logo-text">Marcamar</span></div></Link>
+        <Link href="/"><div className="nav-logo"><div className="nav-logo-icon"><Anchor size={16} color="#fff" /></div><span className="nav-logo-meta"><span className="nav-logo-text">Marcamar</span><small>costa em movimento</small></span></div></Link>
         <div className="nav-links hidden md-flex">{links.map((link) => <Link key={link.href} href={link.href}><span className={"nav-link " + (isActive(link.href) ? "active" : "")}>{link.label}</span></Link>)}</div>
         <div className="nav-auth hidden md-flex">
           <button className="nav-theme-btn" onClick={() => setDark((value) => !value)} title={dark ? "Modo claro" : "Modo escuro"}>{dark ? <Sun size={16} /> : <Moon size={16} />}</button>{user && <Link href="/notificacoes"><span className="nav-notification-link" title="Notificações"><Bell size={17} />{unreadNotifications > 0 && <span className="nav-notification-count">{unreadNotifications > 9 ? "9+" : unreadNotifications}</span>}</span></Link>}

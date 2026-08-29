@@ -6,6 +6,7 @@ import { SiteAutocomplete } from "@/components/SiteSelect";
 import { apiRequest } from "@/lib/queryClient";
 import { BOAT_MEDIA } from "@/lib/boat-media";
 import { PILOT_ROUTES, type PilotRoute } from "@shared/pilot-routes";
+import { COASTAL_POINT_NAMES, ILHABELA_BEACHES } from "@shared/coastal-locations";
 
 function routeKey(route: PilotRoute) {
   return route.origin + " → " + route.destination;
@@ -23,7 +24,7 @@ export default function Routes() {
   const rides = (ridesQuery.data?.rides ?? []) as any[];
   const locationNames = useMemo(() => {
     const stored = ((locationsQuery.data?.locations ?? []) as any[]).map((location) => location.name).filter(Boolean);
-    return Array.from(new Set([...stored, ...PILOT_ROUTES.flatMap((route) => [route.origin, route.destination])]));
+    return Array.from(new Set([...stored, ...COASTAL_POINT_NAMES, ...PILOT_ROUTES.flatMap((route) => [route.origin, route.destination])]));
   }, [locationsQuery.data]);
   const filteredRoutes = routes.filter((route) => {
     const haystack = (routeKey(route) + " " + route.region).toLocaleLowerCase("pt-BR");
@@ -65,7 +66,7 @@ export default function Routes() {
 
       <section className="routes-points-v2">
         <div className="routes-points-v2-heading"><div><p className="home-v2-kicker">PONTOS CONHECIDOS</p><h2>Onde você pode embarcar.</h2></div><p>Os pontos aparecem conforme operadores e rotas entram no piloto.</p></div>
-        <div className="routes-point-grid-v2">{locationNames.slice(0, 10).map((name) => <span key={name} className="routes-point-item-v2"><MapPin size={15} /><strong>{name}</strong><small>Ponto do litoral</small></span>)}</div>
+        <div className="routes-point-grid-v2">{ILHABELA_BEACHES.slice(0, 16).map((point) => <span key={point.name} className="routes-point-item-v2"><MapPin size={15} /><strong>{point.name}</strong><small>Ilhabela · ponto de referência</small></span>)}</div>
       </section>
 
       <section className="routes-cta-v2">

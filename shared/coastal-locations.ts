@@ -38,7 +38,7 @@ export const ILHABELA_BEACHES: CoastalPoint[] = [
   { name: "Praia do Portinho", municipality: "Ilhabela", type: "beach", latitude: -23.8725, longitude: -45.2860 },
   { name: "Praia do Oscar", municipality: "Ilhabela", type: "beach", latitude: -23.8790, longitude: -45.2830 },
   { name: "Praia do Julião", municipality: "Ilhabela", type: "beach", latitude: -23.8820, longitude: -45.2812 },
-  { name: "Praia Grande", municipality: "Ilhabela", type: "beach", latitude: -23.8872, longitude: -45.2787 },
+  { name: "Praia Grande (Ilhabela)", municipality: "Ilhabela", type: "beach", latitude: -23.8872, longitude: -45.2787 },
   { name: "Praia do Curral", municipality: "Ilhabela", type: "beach", latitude: -23.9000, longitude: -45.2670 },
   { name: "Praia do Veloso", municipality: "Ilhabela", type: "beach", latitude: -23.9165, longitude: -45.2535 },
   { name: "Praia da Caveira", municipality: "Ilhabela", type: "beach", latitude: -23.8220, longitude: -45.1800 },

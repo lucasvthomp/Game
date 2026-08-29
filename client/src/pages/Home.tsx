@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { ArrowRight, Anchor, CalendarDays, Check, Clock3, MapPin, ShieldCheck, UsersRound, Waves } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { SiteAutocomplete } from "@/components/SiteSelect";
+import { MaritimeIcon } from "@/components/MaritimeIcon";
 import { apiRequest } from "@/lib/queryClient";
 import { BOAT_MEDIA } from "@/lib/boat-media";
 import { PILOT_ROUTES } from "@shared/pilot-routes";
@@ -61,19 +62,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="home-v2-lancha-showcase" aria-label="A lancha do Marcamar">
-        <div className="home-v2-lancha-copy">
-          <p className="home-v2-kicker">TRANSPORTE LOCAL</p>
-          <h2>Uma lancha simples, feita para a costa.</h2>
-          <p>Casco aberto, banco corrido e motor de popa: o essencial para cruzar entre praias com quem conhece o caminho.</p>
-          <span className="home-v2-lancha-specs"><span>Banco corrido</span><span>Motor de popa</span><span>Até 12 pessoas</span></span>
-        </div>
-        <div className="home-v2-lancha-art">
-          <img src="/images/marcamar-basic-lancha-3d.png" alt="Ilustração 3D de uma lancha de pesca com banco corrido e motor de popa" />
-          <span className="home-v2-lancha-wake" aria-hidden="true" />
-        </div>
-      </section>
-
       <section className="home-v2-departures">
         <div className="home-v2-section-heading"><div><p className="home-v2-kicker">SAÍDAS PUBLICADAS</p><h2>Próximas travessias</h2></div><Link href="/lanchas"><span className="home-v2-text-link">Ver todas <ArrowRight size={16} /></span></Link></div>
         {boatRides.length > 0 ? (
@@ -102,6 +90,25 @@ export default function Home() {
         <div className="home-v2-trust-mark"><ShieldCheck size={22} /></div>
         <div><p className="home-v2-kicker">FEITO PARA O LITORAL</p><h2>Clareza antes de entrar na lancha.</h2><p>O Marcamar organiza o que importa para uma travessia local: quem oferece, onde embarca, quando sai e quantas vagas existem.</p></div>
         <div className="home-v2-trust-list"><span><Check size={16} /> Rota e ponto visíveis</span><span><Check size={16} /> Capacidade publicada</span><span><Check size={16} /> Conversa registrada</span></div>
+      </section>
+
+      <section className="home-v2-fleet-strip" aria-label="A lancha do Marcamar">
+        <div className="home-v2-fleet-intro">
+          <span className="home-v2-fleet-mark"><MaritimeIcon variant="lancha" size={30} /></span>
+          <div>
+            <p className="home-v2-kicker">A LANCHA POR DENTRO</p>
+            <h2>O básico que faz a costa funcionar.</h2>
+            <p>Casco aberto, banco corrido e motor de popa — transporte local, sem complicação.</p>
+          </div>
+        </div>
+        <div className="home-v2-fleet-art">
+          <img src="/images/marcamar-basic-lancha-3d.png" alt="Lancha de pesca com banco corrido e motor de popa" />
+        </div>
+        <div className="home-v2-fleet-points">
+          <span><MaritimeIcon variant="dock" size={22} /><b>Embarque local</b><small>Pontos reconhecíveis</small></span>
+          <span><MaritimeIcon variant="route" size={22} /><b>Rotas reais</b><small>Praias e comunidades</small></span>
+          <span><MaritimeIcon variant="buoy" size={22} /><b>Informação clara</b><small>Vagas e horários</small></span>
+        </div>
       </section>
 
       <section id="ajuda" className="home-v2-request">

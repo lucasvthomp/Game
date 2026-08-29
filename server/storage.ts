@@ -1,6 +1,6 @@
 import { db } from "./db.js";
 import {
-  users, captainProfiles, driverProfiles, rides, recurringSchedules, reservations, reviews, messages, locations, maritimeRoutes, incidents, notifications, routeRequests
+  users, captainProfiles, driverProfiles, rides, recurringSchedules, reservations, reviews, messages, locations, maritimeRoutes, incidents, notifications, routeRequests, commercialWaitlist
 } from "@shared/schema";
 import type {
   User, InsertUser,
@@ -12,7 +12,7 @@ import type {
   Review, InsertReview,
   Message, InsertMessage,
   Location, InsertLocation, MaritimeRoute, InsertMaritimeRoute, Incident, InsertIncident, Notification, InsertNotification,
-  RouteRequest, InsertRouteRequest,
+  RouteRequest, InsertRouteRequest, CommercialWaitlist, InsertCommercialWaitlist,
 } from "@shared/schema";
 import { eq, desc, and, gte, sql, or, ilike, asc } from "drizzle-orm";
 import { hashPassword } from "./auth.js";
@@ -102,6 +102,15 @@ export const storage = {
   async updateRouteRequest(id: number, data: Partial<RouteRequest>): Promise<RouteRequest | undefined> {
     const [request] = await db.update(routeRequests).set(data).where(eq(routeRequests.id, id)).returning();
     return request;
+  },
+
+  // ── Commercial waitlist ──
+  async createCommercialWaitlist(data: InsertCommercialWaitlist): Promise<CommercialWaitlist> {
+    const [entry] = await db.insert(commercialWaitlist).values(data).returning();
+    return entry;
+  },
+  async getCommercialWaitlistByEmail(email: string): Promise<CommercialWaitlist | undefined> {
+    return (await db.select().from(commercialWaitlist).where(eq(commercialWaitlist.email, email)))[0];
   },
 
   // ── Admin verification ──

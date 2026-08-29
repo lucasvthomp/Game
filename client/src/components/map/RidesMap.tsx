@@ -1,4 +1,6 @@
 import { useEffect, useMemo } from "react";
+import GoogleRidesMap from "./GoogleRidesMap";
+import { hasGoogleMapsKey } from "./googleMaps";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { Link } from "wouter";
 import L from "leaflet";
@@ -44,6 +46,8 @@ function originCoord(r: RideMarker): [number, number] | null {
  * link to the ride detail page. Fits to pins, falling back to the SP region.
  */
 export default function RidesMap({ rides, height = "480px" }: RidesMapProps) {
+  if (hasGoogleMapsKey()) return <GoogleRidesMap rides={rides} height={height} />;
+
   const markers = useMemo(
     () => rides
       .map((r) => ({ ride: r, coord: originCoord(r) }))

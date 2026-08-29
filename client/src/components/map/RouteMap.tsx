@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from "react-leaflet";
 import L from "leaflet";
 import { MAP_THEME_CLASS, PIN, pinIcon, getCityCoords, num, TILE_URL, TILE_ATTRIBUTION } from "./leafletSetup";
+import GoogleRouteMap from "./GoogleRouteMap";
+import { hasGoogleMapsKey } from "./googleMaps";
 
 export interface RoutePoint {
   lat?: number | string | null;
@@ -43,6 +45,8 @@ function resolve(p?: RoutePoint | null): [number, number] | null {
  * when coordinates are unavailable (e.g. older rides without coords).
  */
 export default function RouteMap({ origin, dest, height = "260px" }: RouteMapProps) {
+  if (hasGoogleMapsKey()) return <GoogleRouteMap origin={origin} dest={dest} height={height} />;
+
   const o = resolve(origin);
   const d = resolve(dest);
   const coords = [o, d].filter(Boolean) as [number, number][];

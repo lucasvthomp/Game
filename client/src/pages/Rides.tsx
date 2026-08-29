@@ -186,6 +186,7 @@ export default function Rides() {
                       <div className="rcv2-body">
                         {/* Top row: seats + rating */}
                         <div className="rcv2-top">
+                          {ride.description?.startsWith("[DEMO]") && <span className="rcv2-demo-badge">Exemplo de teste</span>}
                           <div className="rcv2-top-right">
                             {ride.avgRating > 0 && (
                               <span className="rcv2-rating">

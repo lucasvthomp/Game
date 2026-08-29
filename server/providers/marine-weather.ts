@@ -9,12 +9,17 @@ export type MarineConditions = {
   windDirectionDegrees: number | null;
   seaSurfaceTemperatureC: number | null;
   summary: "informational" | "unavailable";
+  source: string;
+  sourceUrl: string;
 };
 
 type OpenMeteoResponse = {
   hourly?: Record<string, Array<number | null>>;
   hourly_units?: Record<string, string>;
 };
+
+const SOURCE_NAME = "Open-Meteo Marine API";
+const SOURCE_URL = "https://open-meteo.com/en/docs/marine-weather-api";
 
 const hourlyFields = [
   "wave_height",
@@ -53,5 +58,7 @@ export async function getMarineConditions(latitude: number, longitude: number, d
     windDirectionDegrees: value("wind_direction_10m"),
     seaSurfaceTemperatureC: value("sea_surface_temperature"),
     summary: "informational",
+    source: SOURCE_NAME,
+    sourceUrl: SOURCE_URL,
   };
 }

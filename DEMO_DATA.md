@@ -23,6 +23,21 @@ All three accounts use the password `marcamar-demo`:
 2. Remove existing fictional rows from the database once, in dependency order:
 
 ```sql
+DELETE FROM messages
+WHERE reservation_id IN (
+  SELECT id FROM reservations
+  WHERE ride_id IN (SELECT id FROM rides WHERE description LIKE '[DEMO]%')
+);
+
+DELETE FROM incidents
+WHERE reservation_id IN (
+  SELECT id FROM reservations
+  WHERE ride_id IN (SELECT id FROM rides WHERE description LIKE '[DEMO]%')
+);
+
+DELETE FROM reviews
+WHERE ride_id IN (SELECT id FROM rides WHERE description LIKE '[DEMO]%');
+
 DELETE FROM reservations
 WHERE ride_id IN (SELECT id FROM rides WHERE description LIKE '[DEMO]%');
 

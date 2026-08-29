@@ -1,41 +1,28 @@
 # MVP status
 
-Updated: 2026-08-24
+Updated: 2026-08-29
 
-This repository is a working Marcamar MVP prototype. It is intentionally a maintainable monolith and keeps the existing passenger/operator flows while adding the marketplace foundations described in the build brief.
+Este repositório é um protótipo MVP funcional do Marcamar, com experiência em português, responsiva e focada em viagens de lancha costeira.
 
-## Complete in the current prototype
+## Entregue no protótipo
 
-- Portuguese, responsive landing page and shared navigation
-- Custom site dropdown/autocomplete controls
-- Passenger search by origin, destination, date, and passenger count
-- Boat trip results with list/map toggle, sorting, price filtering, and empty states
-- Trip detail, reservations, cancellation, payment-provider boundary, messaging, check-in, completion, incidents, and reviews
-- Local coastal location suggestions and approved maritime route records
-- Marine weather provider abstraction with an informational disclaimer
-- Captain/driver onboarding and API-enforced verification gates
-- Admin review surfaces for operator verification, maritime routes, incidents, and route requests
-- In-app notifications
-- Route-request flow: a passenger can request an unavailable origin/destination/date/passenger combination, and admins can move it through received, analysis, possible match, and closed states
-- Startup migrations, CI type/build checks, production session-secret fail-closed behavior, and Railway deployment configuration
+- Landing page responsiva e navegação compartilhada, com títulos curtos e seção Comercial.
+- Dropdowns de site com autocomplete, sem controles nativos nas jornadas principais.
+- Busca por embarque, desembarque, data e passageiros, com praias de Ilhabela e litoral paulista.
+- Resultados de lanchas com mapa, ordenação, filtro de preço, estados vazios e pedido de rota.
+- Mapa interativo com clique e arraste para posicionar os pins de embarque e desembarque.
+- Detalhe da viagem com capitão, reservas, mensagens, check-in, conclusão, incidentes, avaliações e condições marítimas.
+- Condições marítimas via Open-Meteo Marine API, com fonte e aviso visíveis no detalhe.
+- Cadastro e aprovação de capitães, rotas marítimas e incidentes no painel administrativo.
+- Waitlist pública para transporte comercial de pessoas e cargas.
+- Dados fictícios de teste opcionais e documentados, além de migrações de inicialização, CI e configuração de deploy Railway.
 
-## Partially complete / needs production hardening
+## Endurecimento recomendado antes de cobrar
 
-- Verification is currently modeled with legacy captain/driver profile flags; the full per-document verification record and secure private document store still need to be introduced.
-- Maritime routes have structured records and manual admin activation, but visual polyline editing and route-waypoint tooling are not finished.
-- Payments are provider-abstracted and can use a configured provider, but production PIX/card reconciliation, webhooks, refunds, and payouts still require a selected Brazilian provider and credentials.
-- Weather is cached/provider-abstracted at the application boundary but still needs a production commercial account and broader route sampling.
-- Uploads use local/ephemeral storage in Railway; durable private object storage is required before handling real identity documents.
-- Booking capacity and payment state transitions need database transactions and a full concurrency test suite before paid pilots.
-- The admin dashboard is a useful prototype surface, not yet the complete operations/financial/safety console.
+- Registro de verificação por documento e armazenamento privado com retenção/exclusão.
+- Pagamentos PIX/cartão, webhooks, reembolsos e repasses com provedor brasileiro definido.
+- Armazenamento durável para uploads.
+- Transações de capacidade e suíte de concorrência para reservas.
+- Console operacional/financeiro completo, notificações externas, analytics e apps nativos.
 
-## Not implemented or blocked by external decisions
-
-- Automated identity/liveness and maritime-document verification
-- Private object storage, malware scanning, and document retention/deletion workflows
-- Live GPS tracking and operator trip-day location sharing
-- Full email/WhatsApp/SMS notification delivery
-- Production payment provider, legal/compliance review, and Brazilian maritime operating policies
-- Full i18n catalog, analytics warehouse, scheduled expiry jobs, and native apps
-
-See [PROJECT_AUDIT.md](PROJECT_AUDIT.md) for the original audit, reuse decisions, and migration risks.
+Consulte [PROJECT_AUDIT.md](PROJECT_AUDIT.md) para o diagnóstico original e os riscos de migração.

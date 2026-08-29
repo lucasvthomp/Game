@@ -3,7 +3,7 @@ import { SiteSelect } from "@/components/SiteSelect";
 import { apiRequest } from "@/lib/queryClient";
 import { useParams, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
-import { Anchor, Car, Clock, Users, Star, ChevronLeft, CheckCircle, Shield, AlertCircle, MapPin } from "lucide-react";
+import { Anchor, Clock, Users, Star, ChevronLeft, CheckCircle, Shield, AlertCircle, MapPin } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
@@ -103,7 +103,7 @@ export default function RideDetail() {
     </div>
   );
 
-  const { ride, captain, captainProfile, driverProfile } = data;
+  const { ride, captain, captainProfile } = data;
   const reviews = reviewsData?.reviews || [];
   const avgRating: number = reviewsData?.avgRating ?? data.avgRating ?? 0;
   const totalPrice = (parseFloat(ride.pricePerSeat) * seats).toFixed(2).replace(".", ",");
@@ -124,7 +124,7 @@ export default function RideDetail() {
         </button>
       </div>
 
-      {ride.rideType === "boat" && (
+      {
         <div className="detail-media-rail">
           <div className="detail-media-copy">
             <p className="section-label" style={{ color: "var(--boat)" }}>A TRAVESSIA POR PERTO</p>
@@ -132,7 +132,7 @@ export default function RideDetail() {
           </div>
           <BoatMediaCluster variant="compact" />
         </div>
-      )}
+      }
 
       <div className="detail-body">
         {/* Route card */}
@@ -140,7 +140,7 @@ export default function RideDetail() {
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             <span className="badge badge-green">{ride.availableSeats} vagas disponíveis</span>
             {isDemoRide && <span className="badge rcv2-demo-badge">Exemplo de teste</span>}
-            {(captainProfile?.verified || driverProfile?.verified) && (
+            {captainProfile?.verified && (
               <span className="badge" style={{ background: "color-mix(in srgb, var(--boat) 10%, transparent)", color: "var(--boat)", border: "1px solid color-mix(in srgb, var(--boat) 22%, transparent)", display: "flex", alignItems: "center", gap: 4 }}>
                 <Shield size={10} /> Verificado
               </span>
@@ -154,9 +154,7 @@ export default function RideDetail() {
             </div>
             <div className="detail-anchor">
               <div className="detail-anchor-line" />
-              {ride.rideType === "boat"
-                ? <Anchor size={16} color="var(--boat)" />
-                : <Car size={16} color="var(--car)" />}
+              <Anchor size={16} color="var(--boat)" />
               <div className="detail-anchor-line" />
             </div>
             <div className="detail-city-right">
@@ -169,7 +167,6 @@ export default function RideDetail() {
             <RouteMap
               origin={{ lat: ride.originLat, lng: ride.originLng, city: ride.originCity, label: ride.originCity }}
               dest={{ lat: ride.destLat, lng: ride.destLng, city: ride.destinationCity, label: ride.destinationCity }}
-              type={ride.rideType as "boat" | "car"}
               height="260px"
             />
           </div>
@@ -207,11 +204,9 @@ export default function RideDetail() {
 
         {/* Captain card */}
         <div className="detail-card fade-up" style={{ animationDelay: "80ms" }}>
-          <p className="section-label" style={{ marginBottom: 16 }}>{ride.rideType === "boat" ? "CAPITÃO" : "MOTORISTA"}</p>
+          <p className="section-label" style={{ marginBottom: 16 }}>CAPITÃO</p>
           <div className="captain-row">
-            <div className="captain-avatar" style={ride.rideType === "car" ? { background: "var(--car)" } : {}}>
-              {ride.rideType === "boat" ? <Anchor size={20} color="#fff" /> : <Car size={20} color="#fff" />}
-            </div>
+            <div className="captain-avatar"><Anchor size={20} color="#fff" /></div>
             <div className="captain-info">
               <div className="captain-name">{captain.fullName}</div>
               <div className="captain-user">@{captain.username}</div>
@@ -226,21 +221,15 @@ export default function RideDetail() {
               </div>
             )}
           </div>
-          {ride.rideType === "boat" && captainProfile && (
+          {captainProfile && (
             <div className="captain-meta">
               <span><strong>Lancha:</strong> {captainProfile.boatName}{captainProfile.boatModel ? ` · ${captainProfile.boatModel}` : ""}</span>
               <span><strong>Capacidade:</strong> {captainProfile.boatCapacity} pessoas</span>
             </div>
           )}
-          {ride.rideType === "car" && driverProfile && (
-            <div className="captain-meta">
-              <span><strong>Veículo:</strong> {driverProfile.carMake} {driverProfile.carModel}{driverProfile.carColor ? ` · ${driverProfile.carColor}` : ""}{driverProfile.carYear ? ` (${driverProfile.carYear})` : ""}</span>
-              <span><strong>Capacidade:</strong> {driverProfile.carCapacity} pessoas</span>
-            </div>
-          )}
-          {(captainProfile?.bio || driverProfile?.bio) && (
+          {captainProfile?.bio && (
             <p style={{ marginTop: 12, color: "var(--text2)", fontSize: 13, lineHeight: 1.7 }}>
-              {ride.rideType === "boat" ? captainProfile?.bio : driverProfile?.bio}
+              {captainProfile.bio}
             </p>
           )}
         </div>
@@ -296,6 +285,7 @@ export default function RideDetail() {
               <span>Temperatura <strong>{marineWeatherQuery.data.conditions.seaSurfaceTemperatureC ?? "—"} °C</strong></span>
             </div>
             <p className="marine-conditions-disclaimer">{marineWeatherQuery.data.disclaimer}</p>
+            <p className="marine-conditions-source">Fonte: <a href={marineWeatherQuery.data.conditions.sourceUrl} target="_blank" rel="noreferrer">{marineWeatherQuery.data.conditions.source}</a> · previsão para o ponto de embarque.</p>
           </div>
         )}
 

@@ -129,6 +129,19 @@ async function runMigrations() {
       CREATE INDEX IF NOT EXISTS route_requests_status_idx ON route_requests(status);
       CREATE INDEX IF NOT EXISTS route_requests_created_at_idx ON route_requests(created_at);
 
+      CREATE TABLE IF NOT EXISTS commercial_waitlist (
+        id SERIAL PRIMARY KEY,
+        full_name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        company TEXT,
+        phone TEXT,
+        interest TEXT NOT NULL,
+        notes TEXT,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL
+      );
+      CREATE INDEX IF NOT EXISTS commercial_waitlist_created_at_idx ON commercial_waitlist(created_at);
+      CREATE INDEX IF NOT EXISTS commercial_waitlist_email_idx ON commercial_waitlist(email);
+
       CREATE TABLE IF NOT EXISTS captain_profiles (
         id SERIAL PRIMARY KEY,
         user_id INTEGER NOT NULL REFERENCES users(id),

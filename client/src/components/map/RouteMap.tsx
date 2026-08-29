@@ -14,8 +14,6 @@ export interface RoutePoint {
 interface RouteMapProps {
   origin?: RoutePoint | null;
   dest?: RoutePoint | null;
-  /** Ride type tints the route line (terracotta for car, teal for boat). */
-  type?: "car" | "boat";
   height?: string;
 }
 
@@ -44,7 +42,7 @@ function resolve(p?: RoutePoint | null): [number, number] | null {
  * polyline between them, auto-fitting bounds. Renders a friendly placeholder
  * when coordinates are unavailable (e.g. older rides without coords).
  */
-export default function RouteMap({ origin, dest, type = "boat", height = "260px" }: RouteMapProps) {
+export default function RouteMap({ origin, dest, height = "260px" }: RouteMapProps) {
   const o = resolve(origin);
   const d = resolve(dest);
   const coords = [o, d].filter(Boolean) as [number, number][];
@@ -64,9 +62,9 @@ export default function RouteMap({ origin, dest, type = "boat", height = "260px"
     );
   }
 
-  const lineColor = type === "boat" ? PIN.boat : PIN.car;
-  const originIcon = pinIcon(PIN.origin, type === "boat" ? "🚢" : "🚗", true);
-  const destIcon = pinIcon(PIN.dest, type === "boat" ? "⚓" : "🏁", true);
+  const lineColor = PIN.boat;
+  const originIcon = pinIcon(PIN.origin, "🚢", true);
+  const destIcon = pinIcon(PIN.dest, "⚓", true);
   const center: [number, number] = coords.length === 2
     ? [(coords[0][0] + coords[1][0]) / 2, (coords[0][1] + coords[1][1]) / 2]
     : coords[0];
@@ -89,7 +87,7 @@ export default function RouteMap({ origin, dest, type = "boat", height = "260px"
         {coords.length === 2 && (
           <Polyline
             positions={coords}
-            pathOptions={{ color: lineColor, weight: 3.5, opacity: 0.8, dashArray: type === "boat" ? "9,6" : "0" }}
+            pathOptions={{ color: lineColor, weight: 3.5, opacity: 0.8, dashArray: "9,6" }}
           />
         )}
       </MapContainer>

@@ -11,8 +11,6 @@ import Rides from "@/pages/Rides";
 import RideDetail from "@/pages/RideDetail";
 import CaptainProfile from "@/pages/CaptainProfile";
 import CaptainDashboard from "@/pages/CaptainDashboard";
-import DriverProfile from "@/pages/DriverProfile";
-import DriverDashboard from "@/pages/DriverDashboard";
 import Recurring from "@/pages/Recurring";
 import MyReservations from "@/pages/MyReservations";
 import Messages from "@/pages/Messages";
@@ -20,6 +18,7 @@ import Profile from "@/pages/Profile";
 import Admin from "@/pages/Admin";
 import RouteRequest from "@/pages/RouteRequest";
 import Routes from "@/pages/Routes";
+import Commercial from "@/pages/Commercial";
 import HowItWorks from "@/pages/HowItWorks";
 import Safety from "@/pages/Safety";
 import Help from "@/pages/Help";
@@ -38,9 +37,9 @@ export default function App() {
             <Route path="/entrar" component={() => <Auth mode="login" />} />
             <Route path="/cadastro" component={() => <Auth mode="register" />} />
             <Route path="/viagens" component={Rides} />
-            <Route path="/caronas">{() => <Rides />}</Route>
             <Route path="/lanchas">{() => <Rides />}</Route>
             <Route path="/rotas" component={Routes} />
+            <Route path="/comercial" component={Commercial} />
             <Route path="/como-funciona" component={HowItWorks} />
             <Route path="/seguranca" component={Safety} />
             <Route path="/ajuda" component={Help} />
@@ -50,8 +49,6 @@ export default function App() {
             <Route path="/viagens/:id" component={RideDetail} />
             <Route path="/perfil-capitao" component={CaptainProfile} />
             <Route path="/minha-lancha" component={CaptainDashboard} />
-            <Route path="/perfil-motorista" component={DriverProfile} />
-            <Route path="/meu-carro" component={DriverDashboard} />
             <Route path="/recorrentes" component={Recurring} />
             <Route path="/minhas-reservas" component={MyReservations} />
             <Route path="/mensagens/:reservationId" component={Messages} />

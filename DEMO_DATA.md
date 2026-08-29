@@ -1,26 +1,20 @@
 # Demo data mode
 
-Marcamar includes fictional, clearly labelled records so the complete MVP can be
-tested before real operators join the pilot.
+Marcamar inclui registros fictícios, claramente identificados, para testar o MVP antes do piloto.
 
-Demo mode is enabled by default while the product is being tested. On startup it
-creates one verified demo captain, one verified demo driver, one passenger, and
-four future rides (three lanchas and one carona). Every demo ride description is
-prefixed with `[DEMO]` and appears in the UI as **Exemplo de teste**.
+O modo de demonstração fica ativo por padrão durante os testes. No início da aplicação são criados um capitão, um passageiro e três viagens de lancha em Ilhabela. As descrições usam o prefixo `[DEMO]` e aparecem na interface como **Exemplo de teste**.
 
-## Test accounts
+## Contas de teste
 
-All three accounts use the password `marcamar-demo`:
+As contas usam a senha `marcamar-demo`:
 
 - `demo.capitao@marcamar.test`
-- `demo.motorista@marcamar.test`
 - `demo.passageiro@marcamar.test`
 
-## Removing demo records for launch
+## Remover dados de demonstração
 
-1. Set `DEMO_DATA=false` in Railway (and in local `.env`) before launch. New
-   demo records will no longer be created.
-2. Remove existing fictional rows from the database once, in dependency order:
+1. Defina `DEMO_DATA=false` no Railway (e no `.env` local) antes do lançamento. Novos registros de demonstração deixarão de ser criados.
+2. Remova uma vez os registros fictícios, na ordem abaixo:
 
 ```sql
 DELETE FROM messages
@@ -46,12 +40,8 @@ DELETE FROM rides WHERE description LIKE '[DEMO]%';
 DELETE FROM captain_profiles
 WHERE user_id IN (SELECT id FROM users WHERE username = 'demo-capitao');
 
-DELETE FROM driver_profiles
-WHERE user_id IN (SELECT id FROM users WHERE username = 'demo-motorista');
-
 DELETE FROM users
-WHERE username IN ('demo-capitao', 'demo-motorista', 'demo-passageiro');
+WHERE username IN ('demo-capitao', 'demo-passageiro');
 ```
 
-This keeps the switch to real pilot data explicit and reversible during
-development.
+A chave é reversível durante o desenvolvimento: basta remover `DEMO_DATA=false` para recriar os dados fictícios.

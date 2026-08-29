@@ -61,6 +61,19 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="home-v2-lancha-showcase" aria-label="A lancha do Marcamar">
+        <div className="home-v2-lancha-copy">
+          <p className="home-v2-kicker">TRANSPORTE LOCAL</p>
+          <h2>Uma lancha simples, feita para a costa.</h2>
+          <p>Casco aberto, banco corrido e motor de popa: o essencial para cruzar entre praias com quem conhece o caminho.</p>
+          <span className="home-v2-lancha-specs"><span>Banco corrido</span><span>Motor de popa</span><span>Até 12 pessoas</span></span>
+        </div>
+        <div className="home-v2-lancha-art">
+          <img src="/images/marcamar-basic-lancha-3d.png" alt="Ilustração 3D de uma lancha de pesca com banco corrido e motor de popa" />
+          <span className="home-v2-lancha-wake" aria-hidden="true" />
+        </div>
+      </section>
+
       <section className="home-v2-departures">
         <div className="home-v2-section-heading"><div><p className="home-v2-kicker">SAÍDAS PUBLICADAS</p><h2>Próximas travessias</h2></div><Link href="/lanchas"><span className="home-v2-text-link">Ver todas <ArrowRight size={16} /></span></Link></div>
         {boatRides.length > 0 ? (

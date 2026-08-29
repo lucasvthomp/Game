@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { ArrowRight, Anchor, MapPin, Search, ShieldCheck } from "lucide-react";
 import { lazy, Suspense, useMemo, useState } from "react";
 import { SiteAutocomplete } from "@/components/SiteSelect";
+import { MaritimeIcon } from "@/components/MaritimeIcon";
 import { apiRequest } from "@/lib/queryClient";
 import { PILOT_ROUTES, type PilotRoute } from "@shared/pilot-routes";
 import { COASTAL_POINT_NAMES, ILHABELA_BEACHES } from "@shared/coastal-locations";
@@ -42,7 +43,7 @@ export default function Routes() {
     <div className="routes-page-v2">
       <section className="routes-map-first routes-map-first-top">
         <div className="routes-map-first-heading">
-          <div><p className="home-v2-kicker">MAPA VIVO</p><h1>Veja as rotas disponíveis.</h1></div>
+          <div className="routes-map-first-title"><span className="routes-map-first-title-icon"><MaritimeIcon variant="lancha" size={22} /></span><div><p className="home-v2-kicker">MAPA VIVO</p><h1>Veja as rotas disponíveis.</h1></div></div>
           <p>Toque em uma lancha para abrir os detalhes da saída.</p>
         </div>
         <Suspense fallback={<div className="routes-map-loading">Carregando mapa costeiro…</div>}>
@@ -71,7 +72,7 @@ export default function Routes() {
         <div className="routes-list-v2">
           {filteredRoutes.map((route) => {
             const matchingRide = rides.filter((ride) => ride.originCity === route.origin && ride.destinationCity === route.destination).sort((a, b) => new Date(a.departureTime).getTime() - new Date(b.departureTime).getTime())[0];
-            return <Link key={route.id} href={"/lanchas?from=" + encodeURIComponent(route.origin) + "&to=" + encodeURIComponent(route.destination)}><span className="routes-route-row-v2"><span className="routes-route-mark"><MapPin size={18} /></span><span className="routes-route-main"><strong>{route.origin} <ArrowRight size={15} /> {route.destination}</strong><span>{route.region}</span></span><span className="routes-route-detail"><strong>{matchingRide ? new Date(matchingRide.departureTime).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "Consulte saídas"}</strong><span>{matchingRide ? "próxima saída publicada" : "horários conforme publicação"}</span></span><span className="routes-route-detail"><strong>{matchingRide ? "R$ " + Number(matchingRide.pricePerSeat).toFixed(0) : "Até 12 pessoas"}</strong><span>{matchingRide ? "por pessoa" : "capacidade da lancha"}</span></span><ArrowRight className="routes-route-arrow" size={18} /></span></Link>;
+            return <Link key={route.id} href={"/lanchas?from=" + encodeURIComponent(route.origin) + "&to=" + encodeURIComponent(route.destination)}><span className="routes-route-row-v2"><span className="routes-route-mark"><MaritimeIcon variant="route" size={19} /></span><span className="routes-route-main"><strong>{route.origin} <ArrowRight size={15} /> {route.destination}</strong><span>{route.region}</span></span><span className="routes-route-detail"><strong>{matchingRide ? new Date(matchingRide.departureTime).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "Consulte saídas"}</strong><span>{matchingRide ? "próxima saída publicada" : "horários conforme publicação"}</span></span><span className="routes-route-detail"><strong>{matchingRide ? "R$ " + Number(matchingRide.pricePerSeat).toFixed(0) : "Até 12 pessoas"}</strong><span>{matchingRide ? "por pessoa" : "capacidade da lancha"}</span></span><ArrowRight className="routes-route-arrow" size={18} /></span></Link>;
           })}
         </div>
         {filteredRoutes.length === 0 && <div className="routes-empty-v2">Nenhuma rota corresponde a essa busca.</div>}
@@ -79,11 +80,11 @@ export default function Routes() {
 
       <section className="routes-points-v2">
         <div className="routes-points-v2-heading"><div><p className="home-v2-kicker">PONTOS CONHECIDOS</p><h2>Onde você pode embarcar.</h2></div><p>Praias e píeres entram no mapa conforme operadores e rotas são publicados.</p></div>
-        <div className="routes-point-grid-v2">{ILHABELA_BEACHES.slice(0, 16).map((point) => <span key={point.name} className="routes-point-item-v2"><MapPin size={15} /><strong>{point.name}</strong><small>Ilhabela · ponto de referência</small></span>)}</div>
+        <div className="routes-point-grid-v2">{ILHABELA_BEACHES.slice(0, 16).map((point) => <span key={point.name} className="routes-point-item-v2"><MaritimeIcon variant="buoy" size={16} /><strong>{point.name}</strong><small>Ilhabela · ponto de referência</small></span>)}</div>
       </section>
 
       <section className="routes-cta-v2">
-        <div className="routes-cta-v2-icon"><ShieldCheck size={23} /></div>
+        <div className="routes-cta-v2-icon"><MaritimeIcon variant="wave" size={24} /></div>
         <div><p className="home-v2-kicker">A ROTA QUE VOCÊ PRECISA</p><h2>Não encontrou seu caminho?</h2><p>Peça uma rota e ajude a construir a próxima conexão do litoral.</p></div>
         <Link href="/solicitar-rota"><span className="home-v2-coral-button">Solicitar uma rota <ArrowRight size={17} /></span></Link>
       </section>

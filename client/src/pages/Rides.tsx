@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { SiteSelect, SiteAutocomplete } from "@/components/SiteSelect";
 import { apiRequest } from "@/lib/queryClient";
 import { Link } from "wouter";
-import { Anchor, Calendar, Clock, Star, Search, Users, ArrowRight, Map, List } from "lucide-react";
+import { Anchor, BadgeCheck, Calendar, Clock, Star, Search, Trophy, Users, ArrowRight, Map, List } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState, lazy, Suspense } from "react";
@@ -219,6 +219,20 @@ export default function Rides() {
                             <div className="rcv2-city-label">DESTINO</div>
                             <div className="rcv2-city">{ride.destinationCity}</div>
                           </div>
+                        </div>
+
+                        <div className="rcv2-captain">
+                          <span className="rcv2-avatar">
+                            {ride.captainAvatarUrl ? <img src={ride.captainAvatarUrl} alt="" /> : <span>{(ride.captainName || "C")[0]}</span>}
+                          </span>
+                          <span className="rcv2-captain-copy">
+                            <strong>{ride.captainName || "Capitão local"}</strong>
+                            <small>{ride.boatName || "Operador de lancha"}</small>
+                          </span>
+                          <span className="rcv2-captain-badges">
+                            {ride.captainVerified && <span className="rcv2-verified-badge"><BadgeCheck size={13} /> Verificada</span>}
+                            {ride.captainVerified && Number(ride.avgRating || 0) >= 4.8 && <span className="rcv2-top-badge"><Trophy size={12} /> Top capitã</span>}
+                          </span>
                         </div>
 
                         {/* Meta row */}

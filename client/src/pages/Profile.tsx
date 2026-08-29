@@ -1,24 +1,63 @@
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation, Link } from "wouter";
-import { Anchor, Calendar, LogOut, ChevronRight, User, Bell } from "lucide-react";
+import { Anchor, BadgeCheck, Bell, Camera, Calendar, ChevronRight, LogOut, Upload, User } from "lucide-react";
 import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { BoatMediaCluster } from "@/components/layout/BoatMediaCluster";
 
 export default function Profile() {
-  const { user, logout } = useAuth();
+  const { user, logout, refetch } = useAuth();
   const [, navigate] = useLocation();
   const qc = useQueryClient();
   const [editing, setEditing] = useState(false);
   const [fullName, setFullName] = useState(user?.fullName || "");
   const [phone, setPhone] = useState(user?.phone || "");
+  const [avatarState, setAvatarState] = useState<"idle" | "uploading" | "error">("idle");
+  const [avatarError, setAvatarError] = useState("");
   const isCaptain = user?.role === "captain" || user?.role === "both";
+  const { data: captainData } = useQuery({
+    queryKey: ["/api/captain/profile"],
+    queryFn: () => apiRequest("GET", "/api/captain/profile"),
+    enabled: !!user && isCaptain,
+    retry: false,
+  });
+  const captainVerified = Boolean(captainData?.profile?.verified);
 
   const updateMutation = useMutation({
     mutationFn: () => apiRequest("PATCH", "/api/me", { fullName, phone }),
-    onSuccess: () => { setEditing(false); qc.invalidateQueries({ queryKey: ["/api/me"] }); },
+    onSuccess: async () => { setEditing(false); await refetch(); qc.invalidateQueries({ queryKey: ["/api/me"] }); },
   });
+
+  const uploadAvatar = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      setAvatarState("error");
+      setAvatarError("Use uma imagem JPG, PNG ou WebP.");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setAvatarState("error");
+      setAvatarError("A imagem precisa ter no máximo 5 MB.");
+      return;
+    }
+    setAvatarState("uploading");
+    setAvatarError("");
+    try {
+      const body = new FormData();
+      body.append("avatar", file);
+      const response = await fetch("/api/me/avatar", { method: "POST", body, credentials: "include" });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || "Não foi possível salvar sua foto.");
+      await refetch();
+      setAvatarState("idle");
+    } catch (error: any) {
+      setAvatarState("error");
+      setAvatarError(error.message || "Não foi possível salvar sua foto.");
+    }
+  };
 
   if (!user) { navigate("/entrar"); return null; }
 
@@ -32,114 +71,44 @@ export default function Profile() {
         <BoatMediaCluster variant="compact" />
       </div>
 
-      {/* User card */}
-      <div className="profile-card" style={{ marginBottom: 16 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
-          <div className="profile-avatar">
-            <span style={{ fontSize: 22, fontWeight: 800, color: "#fff" }}>{user.fullName[0]}</span>
+      <div className="profile-card profile-card-identity" style={{ marginBottom: 16 }}>
+        <div className="profile-identity-row">
+          <div className="profile-avatar profile-avatar-large">
+            {user.avatarUrl ? <img src={user.avatarUrl} alt={`Foto de ${user.fullName}`} /> : <span>{user.fullName[0]}</span>}
+            <label className="profile-avatar-edit" htmlFor="profile-avatar-input" title="Trocar foto">
+              <Camera size={13} />
+            </label>
+            <input id="profile-avatar-input" className="sr-only" type="file" accept="image/jpeg,image/png,image/webp" onChange={uploadAvatar} />
           </div>
-          <div>
-            <div style={{ fontWeight: 800, fontSize: "1.2rem", color: "var(--text1)" }}>{user.fullName}</div>
-            <div style={{ color: "var(--text2)", fontSize: 13 }}>@{user.username}</div>
-            <span style={{ display: "inline-block", marginTop: 5, padding: "2px 10px", borderRadius: 100, fontSize: 11, fontWeight: 700, background: isCaptain ? "color-mix(in srgb, var(--boat) 10%, transparent)" : "var(--surface)", color: isCaptain ? "var(--boat)" : "var(--text2)", border: `1px solid ${isCaptain ? "color-mix(in srgb, var(--boat) 22%, transparent)" : "var(--border)"}` }}>
-              {isCaptain ? "Capitão" : "Passageiro"}
-            </span>
+          <div className="profile-identity-copy">
+            <div className="profile-name-line"><strong>{user.fullName}</strong>{captainVerified && <span className="profile-verified"><BadgeCheck size={14} /> Capitã verificada</span>}</div>
+            <div className="profile-username">@{user.username}</div>
+            <div className="profile-role-pill"><Anchor size={12} /> {isCaptain ? "Capitão" : "Passageiro"}</div>
+            <label className="profile-upload-button" htmlFor="profile-avatar-input"><Upload size={13} /> {avatarState === "uploading" ? "Enviando…" : "Adicionar foto"}</label>
+            {avatarState === "error" && <p className="profile-avatar-error">{avatarError}</p>}
           </div>
         </div>
-        <div style={{ borderTop: "1px solid var(--border)", paddingTop: 16, display: "flex", flexDirection: "column", gap: 10 }}>
-          <div style={{ display: "flex", gap: 12, fontSize: 14 }}>
-            <span style={{ color: "var(--text3)", minWidth: 72 }}>Email</span>
-            <span style={{ color: "var(--text2)" }}>{user.email}</span>
-          </div>
-          {user.phone && !editing && (
-            <div style={{ display: "flex", gap: 12, fontSize: 14 }}>
-              <span style={{ color: "var(--text3)", minWidth: 72 }}>Telefone</span>
-              <span style={{ color: "var(--text2)" }}>{user.phone}</span>
-            </div>
-          )}
+        <div className="profile-details">
+          <div><span>Email</span><strong>{user.email}</strong></div>
+          {user.phone && !editing && <div><span>Telefone</span><strong>{user.phone}</strong></div>}
         </div>
         {editing ? (
-          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 10 }}>
+          <div className="profile-edit-fields">
             <input value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Nome completo" className="form-input" />
             <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="Telefone / WhatsApp" className="form-input" />
-            <div style={{ display: "flex", gap: 8 }}>
-              <button onClick={() => updateMutation.mutate()} className="btn-boat-solid" style={{ padding: "8px 18px", fontSize: 13 }} disabled={updateMutation.isPending}>
-                {updateMutation.isPending ? "Salvando..." : "Salvar"}
-              </button>
-              <button onClick={() => setEditing(false)} className="btn-secondary" style={{ padding: "8px 18px", fontSize: 13 }}>Cancelar</button>
-            </div>
+            <div className="profile-edit-actions"><button onClick={() => updateMutation.mutate()} className="btn-boat-solid" disabled={updateMutation.isPending}>{updateMutation.isPending ? "Salvando..." : "Salvar"}</button><button onClick={() => setEditing(false)} className="btn-secondary">Cancelar</button></div>
           </div>
         ) : (
-          <button onClick={() => { setFullName(user.fullName); setPhone(user.phone || ""); setEditing(true); }} style={{ background: "none", border: "1px solid var(--border)", borderRadius: 8, padding: "6px 14px", fontSize: 13, color: "var(--text2)", cursor: "pointer", marginTop: 8 }}>
-            Editar perfil
-          </button>
+          <button onClick={() => { setFullName(user.fullName); setPhone(user.phone || ""); setEditing(true); }} className="profile-edit-trigger">Editar perfil</button>
         )}
       </div>
 
-      {/* Actions */}
       <div className="profile-list">
-        {!isCaptain && (
-          <Link href="/perfil-capitao">
-            <button className="profile-action">
-              <div style={{ width: 38, height: 38, borderRadius: 10, background: "color-mix(in srgb, var(--boat) 10%, transparent)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <Anchor size={18} color="var(--boat)" />
-              </div>
-              <div style={{ flex: 1 }}>
-                <div className="profile-action-title">Quero ser capitão</div>
-                <div className="profile-action-sub">Complete seu perfil e publique viagens</div>
-              </div>
-              <ChevronRight size={16} color="var(--text3)" />
-            </button>
-          </Link>
-        )}
-        {isCaptain && (
-          <Link href="/minha-lancha">
-            <button className="profile-action">
-              <div style={{ width: 38, height: 38, borderRadius: 10, background: "color-mix(in srgb, var(--boat) 10%, transparent)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <Anchor size={18} color="var(--boat)" />
-              </div>
-              <div style={{ flex: 1 }}>
-                <div className="profile-action-title">Minha Lancha</div>
-                <div className="profile-action-sub">Gerenciar viagens e passageiros</div>
-              </div>
-              <ChevronRight size={16} color="var(--text3)" />
-            </button>
-          </Link>
-        )}
-        <Link href="/minhas-reservas">
-          <button className="profile-action">
-            <div style={{ width: 38, height: 38, borderRadius: 10, background: "color-mix(in srgb, var(--boat) 10%, transparent)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Calendar size={18} color="var(--boat)" />
-            </div>
-            <div style={{ flex: 1 }}>
-              <div className="profile-action-title">Minhas Reservas</div>
-              <div className="profile-action-sub">Ver travessias agendadas</div>
-            </div>
-            <ChevronRight size={16} color="var(--text3)" />
-          </button>
-        </Link>
-        <Link href="/notificacoes">
-          <button className="profile-action">
-            <div style={{ width: 38, height: 38, borderRadius: 10, background: "color-mix(in srgb, var(--boat) 10%, transparent)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Bell size={18} color="var(--boat)" />
-            </div>
-            <div style={{ flex: 1 }}>
-              <div className="profile-action-title">Notificações</div>
-              <div className="profile-action-sub">Atualizações de reservas e pedidos de rota</div>
-            </div>
-            <ChevronRight size={16} color="var(--text3)" />
-          </button>
-        </Link>
-        <button className="profile-action profile-action-danger" onClick={async () => { await logout(); navigate("/"); }}>
-          <div style={{ width: 38, height: 38, borderRadius: 10, background: "color-mix(in srgb, var(--red) 10%, transparent)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <LogOut size={18} color="var(--red)" />
-          </div>
-          <div style={{ flex: 1 }}>
-            <div className="profile-action-title" style={{ color: "var(--red)" }}>Sair da conta</div>
-          </div>
-        </button>
+        <Link href={isCaptain ? "/minha-lancha" : "/perfil-capitao"}><button className="profile-action"><div className="profile-action-icon"><Anchor size={18} /></div><div><div className="profile-action-title">{isCaptain ? "Minha Lancha" : "Quero ser capitão"}</div><div className="profile-action-sub">{isCaptain ? "Gerenciar viagens e passageiros" : "Complete seu perfil e publique viagens"}</div></div><ChevronRight size={16} color="var(--text3)" /></button></Link>
+        <Link href="/minhas-reservas"><button className="profile-action"><div className="profile-action-icon"><Calendar size={18} /></div><div><div className="profile-action-title">Minhas Reservas</div><div className="profile-action-sub">Ver travessias agendadas</div></div><ChevronRight size={16} color="var(--text3)" /></button></Link>
+        <Link href="/notificacoes"><button className="profile-action"><div className="profile-action-icon"><Bell size={18} /></div><div><div className="profile-action-title">Notificações</div><div className="profile-action-sub">Atualizações de reservas e pedidos de rota</div></div><ChevronRight size={16} color="var(--text3)" /></button></Link>
+        <button className="profile-action profile-action-danger" onClick={async () => { await logout(); navigate("/"); }}><div className="profile-action-icon"><LogOut size={18} /></div><div><div className="profile-action-title">Sair da conta</div></div></button>
       </div>
     </div>
   );
 }
-

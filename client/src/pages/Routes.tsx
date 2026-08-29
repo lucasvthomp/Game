@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
-import { ArrowRight, Anchor, MapPin, Search, ShieldCheck, Waves } from "lucide-react";
-import { useMemo, useState } from "react";
+import { ArrowRight, Anchor, MapPin, Search, ShieldCheck } from "lucide-react";
+import { lazy, Suspense, useMemo, useState } from "react";
 import { SiteAutocomplete } from "@/components/SiteSelect";
 import { apiRequest } from "@/lib/queryClient";
-import { BOAT_MEDIA } from "@/lib/boat-media";
 import { PILOT_ROUTES, type PilotRoute } from "@shared/pilot-routes";
 import { COASTAL_POINT_NAMES, ILHABELA_BEACHES } from "@shared/coastal-locations";
+
+const RidesMap = lazy(() => import("@/components/map/RidesMap"));
 
 function routeKey(route: PilotRoute) {
   return route.origin + " → " + route.destination;
@@ -39,22 +40,34 @@ export default function Routes() {
 
   return (
     <div className="routes-page-v2">
-      <section className="routes-hero-v2">
-        <div className="routes-hero-v2-copy">
-          <div className="home-v2-eyebrow routes-eyebrow"><Waves size={15} /> Rotas do litoral paulista</div>
-          <h1>Chegue pelo<br /><em>mar.</em></h1>
-          <p>Rotas entre ilhas, praias e comunidades — com ponto de embarque e informações antes da viagem.</p>
-          <div className="routes-search-v2">
-            <div className="routes-search-field"><MapPin size={16} /><SiteAutocomplete value={from} onChange={setFrom} options={locationNames} placeholder="Saída" ariaLabel="Ponto de saída" /></div>
-            <div className="routes-search-field"><MapPin size={16} /><SiteAutocomplete value={to} onChange={setTo} options={locationNames} placeholder="Chegada" ariaLabel="Ponto de chegada" /></div>
-            <button type="button" onClick={search}>Encontrar rota <ArrowRight size={16} /></button>
-          </div>
+      <section className="routes-command">
+        <div className="routes-command-copy">
+          <p className="section-label">ROTAS DO LITORAL PAULISTA</p>
+          <h1>Encontre seu próximo embarque.</h1>
+          <p>Veja as conexões publicadas no mapa, compare pontos de saída e escolha uma travessia de lancha.</p>
         </div>
-        <figure className="routes-hero-v2-media"><img src={BOAT_MEDIA.smallLancha} alt="Lancha pequena com passageiros próxima ao cais" /><figcaption><Anchor size={14} /> Pequenas lanchas. Caminhos locais.</figcaption></figure>
+        <div className="routes-command-search">
+          <div className="routes-search-field"><MapPin size={16} /><SiteAutocomplete value={from} onChange={setFrom} options={locationNames} placeholder="Saída" ariaLabel="Ponto de saída" /></div>
+          <div className="routes-search-field"><MapPin size={16} /><SiteAutocomplete value={to} onChange={setTo} options={locationNames} placeholder="Chegada" ariaLabel="Ponto de chegada" /></div>
+          <button type="button" onClick={search}>Encontrar rota <ArrowRight size={16} /></button>
+        </div>
+      </section>
+
+      <section className="routes-map-first">
+        <div className="routes-map-first-heading">
+          <div><p className="home-v2-kicker">MAPA VIVO</p><h2>As travessias, de verdade.</h2></div>
+          <p>Toque em uma lancha para abrir os detalhes da saída.</p>
+        </div>
+        <Suspense fallback={<div className="routes-map-loading">Carregando mapa costeiro…</div>}>
+          <RidesMap height="560px" rides={rides.filter((ride) => ride.rideType === "boat")} />
+        </Suspense>
       </section>
 
       <section className="routes-directory-v2">
-        <div className="routes-directory-heading"><div><p className="home-v2-kicker">ROTAS DO LITORAL</p><h2>Encontre seu ponto de embarque.</h2></div><label className="routes-filter-v2"><Search size={16} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Filtrar por cidade ou região" aria-label="Filtrar rotas" /></label></div>
+        <div className="routes-directory-heading">
+          <div><p className="home-v2-kicker">ROTAS PUBLICADAS</p><h2>Escolha de onde sair.</h2></div>
+          <label className="routes-filter-v2"><Search size={16} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Filtrar por cidade ou região" aria-label="Filtrar rotas" /></label>
+        </div>
         <div className="routes-list-v2">
           {filteredRoutes.map((route) => {
             const matchingRide = rides.filter((ride) => ride.originCity === route.origin && ride.destinationCity === route.destination).sort((a, b) => new Date(a.departureTime).getTime() - new Date(b.departureTime).getTime())[0];
@@ -65,7 +78,7 @@ export default function Routes() {
       </section>
 
       <section className="routes-points-v2">
-        <div className="routes-points-v2-heading"><div><p className="home-v2-kicker">PONTOS CONHECIDOS</p><h2>Onde você pode embarcar.</h2></div><p>Os pontos aparecem conforme operadores e rotas entram no piloto.</p></div>
+        <div className="routes-points-v2-heading"><div><p className="home-v2-kicker">PONTOS CONHECIDOS</p><h2>Onde você pode embarcar.</h2></div><p>Praias e píeres entram no mapa conforme operadores e rotas são publicados.</p></div>
         <div className="routes-point-grid-v2">{ILHABELA_BEACHES.slice(0, 16).map((point) => <span key={point.name} className="routes-point-item-v2"><MapPin size={15} /><strong>{point.name}</strong><small>Ilhabela · ponto de referência</small></span>)}</div>
       </section>
 

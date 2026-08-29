@@ -110,7 +110,7 @@ export default function RideDetail() {
   const hasExactOrigin = ride.originLat != null && ride.originLng != null;
   const hasExactDestination = ride.destLat != null && ride.destLng != null;
   const isDemoRide = ride.description?.startsWith("[DEMO]") ?? false;
-  const displayDescription = ride.description?.replace(/^\\[DEMO\\]\\s*/, "");
+  const displayDescription = ride.description?.replace(/^\[DEMO\]\s*/, "");
 
   const departurePassed = new Date(ride.departureTime) < new Date();
   const alreadyReviewed = user ? reviews.some((r: any) => r.reviewerId === user.id) : false;

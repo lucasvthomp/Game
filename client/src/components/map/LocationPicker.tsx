@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from "react-leaflet";
 import { MAP_THEME_CLASS, PIN, pinIcon, SP_REGION_CENTER, SP_REGION_ZOOM, TILE_URL, TILE_ATTRIBUTION } from "./leafletSetup";
+import { ILHABELA_BEACHES } from "@shared/coastal-locations";
 
 export interface LatLng { lat: number; lng: number }
 
@@ -13,10 +14,29 @@ interface LocationPickerProps {
   height?: string;
 }
 
-function ClickToPlace({ onChange }: { onChange: (latlng: LatLng) => void }) {
+function nearestCoastalPoint(point: LatLng): LatLng | null {
+  let nearest: LatLng | null = null;
+  let nearestDistance = Number.POSITIVE_INFINITY;
+  for (const beach of ILHABELA_BEACHES) {
+    const latitudeScale = Math.cos((beach.latitude * Math.PI) / 180);
+    const distance = Math.hypot(
+      (point.lat - beach.latitude) * 1.1,
+      (point.lng - beach.longitude) * latitudeScale,
+    );
+    if (distance < nearestDistance) {
+      nearestDistance = distance;
+      nearest = { lat: beach.latitude, lng: beach.longitude };
+    }
+  }
+  return nearestDistance <= 0.085 ? nearest : null;
+}
+
+function ClickToPlace({ onChange, onReject }: { onChange: (latlng: LatLng) => void; onReject: () => void }) {
   useMapEvents({
     click(e) {
-      onChange({ lat: e.latlng.lat, lng: e.latlng.lng });
+      const point = nearestCoastalPoint({ lat: e.latlng.lat, lng: e.latlng.lng });
+      if (point) onChange(point);
+      else onReject();
     },
   });
   return null;
@@ -39,6 +59,7 @@ function RecenterOnValue({ value }: { value: LatLng | null }) {
  * start over without touching the text fields.
  */
 export default function LocationPicker({ value, onChange, label, variant = "origin", height = "260px" }: LocationPickerProps) {
+  const [notice, setNotice] = useState("");
   const isDestination = variant === "dest";
   const color = isDestination ? PIN.dest : PIN.origin;
   const icon = pinIcon(color, isDestination ? "⚓" : "📍", true);
@@ -59,7 +80,7 @@ export default function LocationPicker({ value, onChange, label, variant = "orig
         <MapContainer className={MAP_THEME_CLASS} center={center} zoom={zoom} style={{ height: "100%", width: "100%" }} scrollWheelZoom attributionControl aria-label="Escolha um ponto no mapa costeiro">
           <TileLayer url={TILE_URL} attribution={TILE_ATTRIBUTION} />
           <RecenterOnValue value={value} />
-          <ClickToPlace onChange={(point) => onChange(point)} />
+          <ClickToPlace onChange={(point) => { setNotice(""); onChange(point); }} onReject={() => setNotice("Escolha um ponto na costa. Áreas em terra ficam bloqueadas.")} />
           {value && (
             <Marker
               position={[value.lat, value.lng]}
@@ -68,7 +89,14 @@ export default function LocationPicker({ value, onChange, label, variant = "orig
               eventHandlers={{
                 dragend: (event: any) => {
                   const point = event.target.getLatLng();
-                  onChange({ lat: point.lat, lng: point.lng });
+                  const snapped = nearestCoastalPoint({ lat: point.lat, lng: point.lng });
+                  if (snapped) {
+                    setNotice("");
+                    onChange(snapped);
+                  } else {
+                    setNotice("O ponto precisa ficar na costa. Ajustamos para o último local válido.");
+                    onChange(value);
+                  }
                 },
               }}
             />
@@ -90,7 +118,7 @@ export default function LocationPicker({ value, onChange, label, variant = "orig
       <div className="lc-picker-coords" aria-live="polite">
         {value
           ? <>Ponto selecionado · {value.lat.toFixed(5)}, {value.lng.toFixed(5)}</>
-          : <>Escolha o ponto exato de embarque no mapa</>}
+          : <>Escolha um ponto costeiro no mapa — locais em terra não são aceitos</>}
       </div>
     </div>
   );

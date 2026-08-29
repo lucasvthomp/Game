@@ -5091,7 +5091,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   to { opacity: 1; transform: translateY(0) rotate(1deg) scale(1); }
 }
 
-@media (prefers-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference) {
   .app-body { animation: mvPageIn .45s cubic-bezier(.16,1,.3,1) both; }
   .home-v2-hero-inner,
   .routes-hero-v2-copy,

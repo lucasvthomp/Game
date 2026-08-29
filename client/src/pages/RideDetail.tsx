@@ -3,7 +3,7 @@ import { SiteSelect } from "@/components/SiteSelect";
 import { apiRequest } from "@/lib/queryClient";
 import { useParams, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
-import { Anchor, Car, Clock, Users, Star, ChevronLeft, CheckCircle, Shield, AlertCircle } from "lucide-react";
+import { Anchor, Car, Clock, Users, Star, ChevronLeft, CheckCircle, Shield, AlertCircle, MapPin } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
@@ -107,6 +107,8 @@ export default function RideDetail() {
   const reviews = reviewsData?.reviews || [];
   const avgRating: number = reviewsData?.avgRating ?? data.avgRating ?? 0;
   const totalPrice = (parseFloat(ride.pricePerSeat) * seats).toFixed(2).replace(".", ",");
+  const hasExactOrigin = ride.originLat != null && ride.originLng != null;
+  const hasExactDestination = ride.destLat != null && ride.destLng != null;
 
   const departurePassed = new Date(ride.departureTime) < new Date();
   const alreadyReviewed = user ? reviews.some((r: any) => r.reviewerId === user.id) : false;
@@ -167,6 +169,17 @@ export default function RideDetail() {
               type={ride.rideType as "boat" | "car"}
               height="260px"
             />
+          </div>
+
+          <div className="detail-pickup-note">
+            <div className="detail-pickup-point">
+              <span className="detail-pickup-icon"><MapPin size={16} /></span>
+              <span><strong>Ponto de embarque</strong><small>{ride.originCity}</small><em>{hasExactOrigin ? "Pino exato publicado pelo operador" : "Local de referência — confirme o ponto com o capitão"}</em></span>
+            </div>
+            <div className="detail-pickup-point">
+              <span className="detail-pickup-icon detail-pickup-icon-dest"><MapPin size={16} /></span>
+              <span><strong>Desembarque</strong><small>{ride.destinationCity}</small><em>{hasExactDestination ? "Ponto de chegada marcado no mapa" : "Ponto de referência da rota"}</em></span>
+            </div>
           </div>
 
           <div className="detail-meta-row">

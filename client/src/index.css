@@ -5271,3 +5271,330 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .commercial-submit { width: 100%; }
   .lc-picker-map-hint { right: 8px; bottom: 8px; font-size: 10px; }
 }
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MARCAMAR · COASTAL UI SYSTEM
+   Final visual layer: one calm palette, consistent surfaces, and clearer rhythm.
+   ───────────────────────────────────────────────────────────────────────────── */
+:root {
+  --bg: #eef6f3;
+  --bg2: #e3eeeb;
+  --card: #ffffff;
+  --surface: #f6faf9;
+  --border: #d4e4e0;
+  --border2: #b8d1cb;
+  --text1: #0b3039;
+  --text2: #4b6970;
+  --text3: #789094;
+  --boat: #087f8b;
+  --boat-light: #def3ef;
+  --boat-dark: #055d68;
+  --sunset: #ed755d;
+  --shadow-sm: 0 4px 14px rgba(8, 58, 65, .06);
+  --shadow-md: 0 12px 30px rgba(8, 58, 65, .10);
+  --shadow-lg: 0 24px 60px rgba(8, 58, 65, .16);
+  --mv-ink: #0b3039;
+  --mv-ink-soft: #4b6970;
+  --mv-teal: #087f8b;
+  --mv-teal-dark: #055d68;
+  --mv-coral: #ed755d;
+  --mv-sand: #eef6f3;
+  --mv-sand-deep: #e3eeeb;
+  --mv-line: rgba(11, 48, 57, .12);
+  --mv-white: #ffffff;
+  --mv-shadow: 0 24px 60px rgba(8, 58, 65, .14);
+  --page-max: 1180px;
+  --page-gutter: clamp(18px, 4vw, 56px);
+}
+[data-theme="dark"] {
+  --bg: #071d23;
+  --bg2: #0b2830;
+  --card: #102f36;
+  --surface: #123942;
+  --border: #28535b;
+  --border2: #3a6b72;
+  --text1: #ecf8f5;
+  --text2: #a8c2bf;
+  --text3: #759694;
+  --boat: #75d2c9;
+  --boat-light: #153f45;
+  --boat-dark: #a0e7df;
+  --sunset: #ff9a7f;
+  --shadow-sm: 0 5px 18px rgba(0, 0, 0, .24);
+  --shadow-md: 0 14px 36px rgba(0, 0, 0, .32);
+  --shadow-lg: 0 26px 70px rgba(0, 0, 0, .42);
+  --mv-ink: #ecf8f5;
+  --mv-ink-soft: #a8c2bf;
+  --mv-teal: #75d2c9;
+  --mv-teal-dark: #a0e7df;
+  --mv-coral: #ff9a7f;
+  --mv-sand: #071d23;
+  --mv-sand-deep: #0b2830;
+  --mv-line: rgba(236, 248, 245, .14);
+  --mv-white: #102f36;
+  --mv-shadow: 0 26px 70px rgba(0, 0, 0, .42);
+}
+html { background: var(--bg); }
+body {
+  min-width: 320px;
+  color: var(--text1);
+  background:
+    radial-gradient(circle at 6% -10%, color-mix(in srgb, var(--boat) 12%, transparent), transparent 28rem),
+    radial-gradient(circle at 96% 18%, color-mix(in srgb, var(--sunset) 7%, transparent), transparent 24rem),
+    var(--bg);
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .22;
+  background-image: radial-gradient(color-mix(in srgb, var(--boat) 14%, transparent) .7px, transparent .7px);
+  background-size: 24px 24px;
+  mask-image: linear-gradient(to bottom, black, transparent 60%);
+  z-index: -1;
+}
+::selection { background: color-mix(in srgb, var(--boat) 22%, transparent); color: var(--text1); }
+:focus-visible { outline: 0; box-shadow: 0 0 0 4px color-mix(in srgb, var(--boat) 20%, transparent) !important; }
+
+/* Header: compact, legible, and unmistakably Marcamar. */
+.nav-root {
+  min-height: 72px;
+  border-bottom: 1px solid color-mix(in srgb, var(--boat) 16%, var(--border));
+  background: color-mix(in srgb, var(--card) 86%, transparent);
+  box-shadow: 0 8px 26px rgba(8, 58, 65, .06);
+}
+.nav-root::after {
+  content: "";
+  display: block;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--boat), var(--sunset), transparent);
+  opacity: .5;
+}
+.nav-inner { max-width: var(--page-max); height: 72px; padding-inline: var(--page-gutter); }
+.nav-logo { gap: 11px; }
+.nav-logo-icon {
+  width: 40px; height: 40px; border-radius: 13px;
+  background: linear-gradient(145deg, var(--boat), color-mix(in srgb, var(--boat) 55%, #113e46));
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--boat) 28%, transparent);
+}
+.nav-logo-meta { display: grid; gap: 1px; }
+.nav-logo-text { font-size: 17px; letter-spacing: -.04em; }
+.nav-logo-meta small { color: var(--text3); font-size: 9px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+.nav-links { gap: 3px; }
+.nav-link {
+  position: relative;
+  padding: 10px 13px;
+  border-radius: 12px;
+  color: var(--text2);
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: .01em;
+}
+.nav-link:hover { color: var(--boat); background: color-mix(in srgb, var(--boat) 8%, transparent); }
+.nav-link.active {
+  color: var(--boat);
+  background: color-mix(in srgb, var(--boat) 11%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--boat) 18%, transparent);
+}
+.nav-auth { gap: 8px; }
+.nav-theme-btn {
+  width: 38px; height: 38px; border-radius: 12px !important;
+  color: var(--text2) !important;
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+}
+.nav-theme-btn:hover { color: var(--boat) !important; border-color: var(--boat) !important; }
+.nav-login, .nav-signup { min-height: 40px; padding-inline: 15px; border-radius: 12px; font-size: 12px; font-weight: 750; }
+.nav-signup { background: var(--boat); box-shadow: 0 7px 18px color-mix(in srgb, var(--boat) 24%, transparent); }
+.nav-signup:hover { background: var(--boat-dark); }
+.nav-avatar { gap: 8px; padding: 5px 8px 5px 5px; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); font-size: 12px; font-weight: 700; }
+.nav-avatar-dot { width: 28px; height: 28px; background: var(--boat); color: #fff; }
+.nav-mobile { border-top: 1px solid var(--border); background: var(--card); box-shadow: var(--shadow-md); padding: 12px var(--page-gutter) 18px; }
+.nav-mobile-link { border-radius: 11px; padding: 12px 10px; color: var(--text2); font-size: 14px; font-weight: 700; }
+.nav-mobile-link.active, .nav-mobile-link:hover { background: var(--boat-light); color: var(--boat); }
+
+/* Shared page rhythm and type scale. */
+.home-v2, .routes-page-v2, .commercial-page, .rides-page { color: var(--text1); background: transparent; }
+.page-title { color: var(--text1); letter-spacing: -.055em; }
+.section-label, .home-v2-kicker { letter-spacing: .16em; font-size: 10px; font-weight: 850; }
+.home-v2-hero {
+  min-height: min(760px, calc(100svh - 72px));
+  border-radius: 0 0 42px 42px;
+  box-shadow: 0 18px 44px rgba(7, 47, 55, .14);
+  background: #0e4e59;
+}
+.home-v2-hero-image { filter: saturate(1.12) contrast(1.03); object-position: center 62%; }
+.home-v2-hero-scrim { background: linear-gradient(110deg, rgba(4, 31, 38, .88) 0%, rgba(4, 44, 52, .56) 48%, rgba(4, 31, 38, .2) 100%); }
+.home-v2-hero-inner { width: min(var(--page-max), calc(100% - 2 * var(--page-gutter))); padding-block: clamp(72px, 11vw, 136px) clamp(88px, 10vw, 128px); }
+.home-v2-eyebrow { color: #c9efea; margin-bottom: 22px; }
+.home-v2-hero h1 { max-width: 760px; font-size: clamp(3.2rem, 8vw, 7.4rem); line-height: .92; letter-spacing: -.075em; }
+.home-v2-hero h1 em { color: #ffd0ae; }
+.home-v2-hero-copy { max-width: 560px; margin-block: 26px 30px; font-size: clamp(1rem, 1.8vw, 1.2rem); color: rgba(255,255,255,.84); }
+.home-v2-search {
+  width: min(100%, 1100px); padding: 8px; gap: 5px; border-radius: 19px;
+  border-color: rgba(255,255,255,.28);
+  box-shadow: 0 18px 46px rgba(0, 22, 28, .28);
+}
+.home-v2-search-field { min-height: 56px; padding-inline: 14px; border-right-color: #dbe9e6; }
+.home-v2-search-field input { font-size: 13px; }
+.home-v2-search-button { min-height: 56px; border-radius: 13px; padding-inline: 24px; background: var(--sunset); }
+.home-v2-search-button:hover { background: color-mix(in srgb, var(--sunset) 86%, #000); box-shadow: 0 8px 18px rgba(237, 117, 93, .3); }
+.home-v2-proof { gap: 10px; margin-top: 16px; }
+.home-v2-proof span { padding: 8px 11px; border: 1px solid rgba(255,255,255,.18); border-radius: 999px; background: rgba(255,255,255,.08); font-size: 11px; }
+.home-v2-departures, .home-v2-how { width: min(var(--page-max), calc(100% - 2 * var(--page-gutter))); padding-block: clamp(64px, 8vw, 100px); }
+.home-v2-departures { padding-top: clamp(70px, 8vw, 110px); }
+.home-v2-section-heading { margin-bottom: 26px; }
+.home-v2-section-heading h2, .routes-directory-heading h2, .routes-points-v2 h2, .home-v2-trust h2, .home-v2-request h2, .routes-cta-v2 h2 { font-size: clamp(2rem, 4vw, 3.4rem); }
+.home-v2-route-list { display: grid; gap: 10px; border: 0; }
+.home-v2-route-row {
+  grid-template-columns: minmax(0, 1fr) auto 24px;
+  padding: 19px 20px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--card) 90%, transparent);
+  box-shadow: var(--shadow-sm);
+  transition: transform .22s cubic-bezier(.16,1,.3,1), box-shadow .22s ease, border-color .22s ease;
+}
+.home-v2-route-row:hover { padding-inline: 20px; transform: translateY(-3px); border-color: color-mix(in srgb, var(--boat) 38%, var(--border)); box-shadow: var(--shadow-md); background: var(--card); }
+.home-v2-route-cities { font-size: 16px; }
+.home-v2-route-side strong { font-size: 14px; }
+.home-v2-how { padding-top: 24px; }
+.home-v2-steps { gap: 12px; border: 0; }
+.home-v2-step, .home-v2-step + .home-v2-step { min-height: 238px; padding: 24px; border: 1px solid var(--border); border-radius: 18px; background: var(--card); box-shadow: var(--shadow-sm); }
+.home-v2-step + .home-v2-step { padding-left: 24px; }
+.home-v2-step:hover { transform: translateY(-5px); border-color: color-mix(in srgb, var(--boat) 40%, var(--border)); box-shadow: var(--shadow-md); }
+.home-v2-step-number { margin-bottom: 28px; }
+.home-v2-step-icon { width: 48px; height: 48px; border-radius: 15px; background: var(--boat-light); }
+.home-v2-step h3 { font-size: 18px; }
+.home-v2-trust, .home-v2-request, .routes-cta-v2 {
+  width: min(var(--page-max), calc(100% - 2 * var(--page-gutter)));
+  border-radius: 22px;
+  padding: clamp(24px, 4vw, 38px);
+  box-shadow: var(--shadow-md);
+}
+.home-v2-trust { background: linear-gradient(135deg, color-mix(in srgb, var(--boat-light) 82%, var(--card)), var(--card)); border-color: color-mix(in srgb, var(--boat) 20%, var(--border)); }
+.home-v2-request { margin-bottom: 84px; background: linear-gradient(120deg, #0b3039, #0d4d57); }
+.home-v2-coral-button { min-height: 48px; padding-inline: 20px; background: var(--sunset); box-shadow: 0 8px 18px rgba(237,117,93,.2); }
+.home-v2-coral-button:hover { background: color-mix(in srgb, var(--sunset) 86%, #000); box-shadow: 0 10px 24px rgba(237,117,93,.28); }
+
+/* Rides: calm command center instead of a loose list. */
+.rides-header { padding-block: 0 28px; background: linear-gradient(180deg, var(--card), color-mix(in srgb, var(--bg) 74%, var(--card))); border-bottom: 1px solid var(--border); }
+.rides-header-inner, .rides-body { width: min(var(--page-max), calc(100% - 2 * var(--page-gutter))); padding-inline: 0; }
+.lancha-header-intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, .72fr); align-items: center; gap: 52px; padding-top: clamp(38px, 6vw, 72px); }
+.lancha-header-copy h1 { font-size: clamp(2.4rem, 5vw, 4.6rem) !important; }
+.lancha-header-dek { max-width: 590px; color: var(--text2); font-size: 1rem; line-height: 1.7; }
+.lancha-media-cluster { opacity: .95; transform: rotate(2deg); }
+.rides-search { max-width: 650px; margin-top: 30px; min-height: 54px; border: 1px solid var(--border); border-radius: 15px; background: var(--card); box-shadow: var(--shadow-sm); }
+.rides-search:focus-within { border-color: var(--boat); box-shadow: var(--shadow-md), 0 0 0 4px color-mix(in srgb, var(--boat) 10%, transparent); }
+.rides-body { padding-top: 28px; padding-bottom: 90px; }
+.ride-grid-v2 { grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 16px; }
+.rcv2 { border-radius: 20px; box-shadow: var(--shadow-sm); }
+.rcv2:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: color-mix(in srgb, var(--boat) 34%, var(--border)); }
+.rcv2-body { padding: 21px 20px 18px; gap: 15px; }
+.rcv2-city { font-size: 1.08rem; }
+.rcv2-footer { padding-top: 15px; }
+.rcv2-cta { border-radius: 11px; min-height: 38px; padding-inline: 17px; background: var(--boat) !important; }
+.rcv2-cta:hover:not(:disabled) { filter: none; background: var(--boat-dark) !important; }
+.rides-count { margin: 0 0 16px; color: var(--text2); font-size: 12px; font-weight: 750; }
+
+/* Routes and commercial share the same editorial grid. */
+.routes-page-v2 { background: transparent; }
+.routes-hero-v2 { width: min(var(--page-max), calc(100% - 2 * var(--page-gutter))); padding-block: clamp(64px, 9vw, 112px) 74px; }
+.routes-hero-v2 h1 { font-size: clamp(3.4rem, 7vw, 6.6rem); }
+.routes-hero-v2-media img { border-radius: 30px 30px 30px 8px; box-shadow: var(--shadow-lg); }
+.routes-directory-v2, .routes-points-v2 { width: min(var(--page-max), calc(100% - 2 * var(--page-gutter))); padding-block: 76px; }
+.routes-directory-v2 { border-top: 1px solid var(--border); }
+.routes-list-v2 { display: grid; gap: 9px; }
+.routes-route-row-v2 {
+  min-height: 86px; padding: 17px 20px; border: 1px solid var(--border); border-radius: 16px;
+  background: var(--card); box-shadow: var(--shadow-sm);
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+.routes-route-row-v2:hover { transform: translateX(5px); border-color: color-mix(in srgb, var(--boat) 36%, var(--border)); box-shadow: var(--shadow-md); }
+.routes-route-mark { background: var(--boat-light); color: var(--boat); }
+.routes-point-grid-v2 { gap: 9px; }
+.routes-point-item-v2 { padding: 15px 16px; border: 1px solid var(--border); border-radius: 14px; background: color-mix(in srgb, var(--card) 80%, transparent); }
+.routes-point-item-v2:hover { transform: translateY(-3px); border-color: var(--boat); background: var(--card); box-shadow: var(--shadow-sm); }
+.routes-cta-v2 { margin-bottom: 82px; background: linear-gradient(120deg, color-mix(in srgb, var(--boat-light) 86%, var(--card)), var(--card)); }
+
+/* Commercial waitlist: an intentional, high-conversion form surface. */
+.commercial-page { padding-bottom: 96px; }
+.commercial-hero { width: min(var(--page-max), calc(100% - 2 * var(--page-gutter))); margin: 0 auto; padding-block: clamp(64px, 9vw, 112px) 74px; }
+.commercial-hero-copy h1 { font-size: clamp(2.8rem, 6vw, 5.8rem); letter-spacing: -.07em; }
+.commercial-hero-panel { min-height: 330px; border-radius: 30px; background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--boat) 22%, transparent), transparent 62%), var(--card); box-shadow: var(--shadow-lg); }
+.commercial-body { width: min(var(--page-max), calc(100% - 2 * var(--page-gutter))); gap: 28px; }
+.commercial-form-card, .commercial-side-note { border-radius: 22px; box-shadow: var(--shadow-md); }
+.commercial-form-card { padding: clamp(24px, 4vw, 44px); }
+.commercial-form { gap: 18px; }
+.commercial-form input, .commercial-form textarea { min-height: 50px; border-radius: 12px; background: var(--surface); }
+.commercial-form .site-select-trigger { min-height: 50px; border-radius: 12px; }
+.commercial-side-note { position: sticky; top: 96px; align-self: start; }
+.commercial-side-step { padding-block: 20px; }
+
+/* Shared cards, maps, and footer. */
+.detail-card, .profile-card, .res-card, .route-request-card, .recurring-card-full, .admin-section, .messages-bubble {
+  border-color: var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-sm);
+}
+.detail-card:hover, .profile-card:hover, .res-card:hover { border-color: color-mix(in srgb, var(--boat) 30%, var(--border)); box-shadow: var(--shadow-md); }
+.site-select-trigger, .site-autocomplete input { border-color: var(--border); }
+.site-select-trigger:hover { border-color: var(--boat); }
+.site-select-menu, .site-autocomplete-menu { border: 1px solid var(--border); border-radius: 14px; background: var(--card); box-shadow: var(--shadow-lg); }
+.site-select-option:hover, .site-autocomplete-option:hover { background: var(--boat-light); color: var(--boat); }
+.lc-map-frame, .leaflet-map-wrap, .lancha-live-map { border-radius: 20px; border-color: var(--border); box-shadow: var(--shadow-md); }
+.footer { margin-top: 28px; border-top-color: var(--border); background: color-mix(in srgb, var(--card) 94%, var(--bg)); }
+.footer-inner { max-width: var(--page-max); padding-block: 58px 44px; }
+.footer-logo-icon { background: var(--boat); }
+.footer-group-title { color: var(--boat); }
+.footer-link:hover, .footer-bottom-link:hover { color: var(--boat); }
+.footer-bottom { background: var(--bg2); border-top-color: var(--border); }
+
+/* Small screens: preserve hierarchy without horizontal overflow. */
+@media (max-width: 900px) {
+  .nav-inner { height: 64px; }
+  .nav-root { min-height: 64px; }
+  .lancha-header-intro { grid-template-columns: 1fr; gap: 20px; }
+  .lancha-media-cluster { width: min(360px, 80vw); justify-self: end; }
+  .commercial-side-note { position: static; }
+}
+@media (max-width: 720px) {
+  .home-v2-hero { min-height: 680px; border-radius: 0 0 28px 28px; }
+  .home-v2-hero-inner { padding-block: 68px 82px; }
+  .home-v2-search { grid-template-columns: 1fr 1fr; }
+  .home-v2-search-field { border-right: 0; border-bottom: 1px solid var(--border); }
+  .home-v2-date-field, .home-v2-passenger-field { border-bottom: 0; }
+  .home-v2-search-button { grid-column: 1 / -1; }
+  .home-v2-proof { display: grid; grid-template-columns: 1fr; }
+  .home-v2-proof span { width: fit-content; }
+  .home-v2-steps { grid-template-columns: 1fr; }
+  .home-v2-step, .home-v2-step + .home-v2-step { min-height: 0; padding: 22px; }
+  .home-v2-step + .home-v2-step { border-left: 1px solid var(--border); }
+  .home-v2-trust, .home-v2-request, .routes-cta-v2 { grid-template-columns: 1fr; gap: 16px; }
+  .home-v2-coral-button { justify-self: start; }
+  .routes-hero-v2 { grid-template-columns: 1fr; gap: 28px; }
+  .routes-hero-v2-media { max-width: 520px; }
+  .routes-directory-heading, .routes-points-v2-heading { display: grid; gap: 16px; align-items: start; }
+  .routes-route-detail { display: none; }
+  .routes-route-row-v2 { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .commercial-hero, .commercial-body { width: min(100% - 32px, var(--page-max)); }
+  .commercial-hero { padding-top: 54px; }
+}
+@media (max-width: 560px) {
+  .nav-logo-meta small { display: none; }
+  .nav-logo-text { font-size: 16px; }
+  .rides-header-inner, .rides-body { width: min(100% - 28px, var(--page-max)); }
+  .home-v2-departures, .home-v2-how, .routes-directory-v2, .routes-points-v2 { width: min(100% - 28px, var(--page-max)); }
+  .home-v2-search { grid-template-columns: 1fr; }
+  .home-v2-search-field, .home-v2-date-field, .home-v2-passenger-field { border-bottom: 1px solid var(--border); }
+  .home-v2-search-button { grid-column: auto; }
+  .home-v2-section-heading { align-items: flex-start; flex-direction: column; gap: 10px; }
+  .home-v2-route-row { grid-template-columns: minmax(0, 1fr) 18px; gap: 10px; padding: 16px; }
+  .home-v2-route-side { display: none; }
+  .ride-grid-v2 { grid-template-columns: 1fr; }
+  .rcv2-body { padding-inline: 16px; }
+  .rcv2-city { font-size: 1rem; }
+  .commercial-form-card, .commercial-side-note { padding: 22px 18px; }
+}

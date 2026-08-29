@@ -22,6 +22,7 @@ export default function HowItWorks() {
           </div>
         </div>
         <div className="content-page-v2-hero-note">
+          <span className="content-hero-note-icon"><MaritimeIcon variant="wave" size={22} /></span>
           <span className="content-note-number">03</span>
           <strong>passos até o embarque</strong>
           <span>Rota, detalhe, conversa.</span>

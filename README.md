@@ -8,7 +8,7 @@ Marcamar is a responsive Brazilian marketplace prototype for scheduled water tra
 - Express + TypeScript
 - PostgreSQL + Drizzle ORM
 - Passport local sessions, with optional Google OAuth
-- React Leaflet / OpenStreetMap for maps
+- Google Maps JavaScript API for configured deployments, with React Leaflet / OpenStreetMap fallback
 - TanStack Query and Wouter on the client
 
 ## Local setup
@@ -56,3 +56,8 @@ See [.env.example](.env.example). Production deployments must provide `DATABASE_
 ## Deployment
 
 Railway uses `npm run build` during the build phase and `npm start` at runtime. Set `SESSION_SECRET` and `DATABASE_URL` before deploying.
+
+
+## Maps
+
+Set `VITE_GOOGLE_MAPS_API_KEY` in the client build environment to use Google Maps for live ride maps, route detail maps, and coastal drop-pin selection. The public browser key should be restricted in Google Cloud Console by HTTP referrer and limited to Maps JavaScript API (and Places/Geometry if enabled). When the variable is absent, the app keeps its keyless OpenStreetMap fallback so local development still works.

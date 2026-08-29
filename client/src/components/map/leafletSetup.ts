@@ -18,7 +18,6 @@ L.Icon.Default.mergeOptions({
 export const PIN = {
   origin: "#3C7A89", // teal
   dest: "#E2725B",   // terracotta
-  car: "#E2725B",    // terracotta
   boat: "#3C7A89",   // teal
 } as const;
 

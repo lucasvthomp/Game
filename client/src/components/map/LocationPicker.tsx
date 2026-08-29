@@ -71,7 +71,7 @@ export default function LocationPicker({ value, onChange, label, variant = "orig
       <div className="lc-picker-head">
         {label && <div className="lc-picker-label">{label}</div>}
         {value && (
-          <button type="button" className="lc-picker-clear" onClick={() => onChange(null)}>
+          <button type="button" className="lc-picker-clear" onClick={() => { setNotice(""); onChange(null); }}>
             Limpar ponto
           </button>
         )}
@@ -110,6 +110,7 @@ export default function LocationPicker({ value, onChange, label, variant = "orig
           <span className={`marcamar-map-legend-dot ${isDestination ? "dest" : "origin"}`} />
           {isDestination ? "Destino" : "Embarque"}
         </div>
+        {notice && <div className="lc-picker-map-notice" role="status">{notice}</div>}
         <div className="lc-picker-map-hint" aria-hidden="true">
           <span className="lc-picker-map-dot" />
           Clique para posicionar · arraste para ajustar

@@ -6302,3 +6302,9 @@ body::before {
 [data-theme="dark"] .home-v2-hero-scrim {
   background: rgba(18, 25, 24, .62);
 }
+
+
+/* Keep night maps neutral too: reduce the purple cast from inverted basemap tiles. */
+[data-theme="dark"] .marcamar-map-theme .leaflet-tile-pane {
+  filter: invert(.82) grayscale(.72) sepia(.12) hue-rotate(16deg) saturate(.28) brightness(.68) contrast(1.02);
+}

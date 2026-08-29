@@ -6165,3 +6165,140 @@ body::before {
 [data-theme="dark"] .marcamar-map-theme .leaflet-tile-pane {
   filter: invert(.82) hue-rotate(18deg) saturate(.34) brightness(.66) contrast(1.02);
 }
+
+
+/* Basic lancha visual: an open hull and bench, never a luxury-yacht cue */
+.home-v2-lancha-showcase {
+  width: min(var(--page-max), calc(100% - (2 * var(--page-gutter))));
+  margin: clamp(28px, 4vw, 56px) auto 0;
+  display: grid;
+  grid-template-columns: minmax(240px, .8fr) minmax(0, 1.2fr);
+  align-items: stretch;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  border-radius: 28px;
+  background: #1a201f;
+  color: #f0eee7;
+  box-shadow: 0 20px 46px rgba(12, 23, 22, .14);
+}
+
+.home-v2-lancha-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  padding: clamp(26px, 4vw, 52px);
+}
+
+.home-v2-lancha-copy .home-v2-kicker {
+  margin: 0;
+  color: #9ec8bd;
+}
+
+.home-v2-lancha-copy h2 {
+  max-width: 390px;
+  margin: 0;
+  color: #f8f6ef;
+  font-size: clamp(1.65rem, 3.4vw, 2.65rem);
+  line-height: 1.02;
+  letter-spacing: -.045em;
+}
+
+.home-v2-lancha-copy > p:not(.home-v2-kicker) {
+  max-width: 420px;
+  margin: 0;
+  color: rgba(240, 238, 231, .73);
+  line-height: 1.55;
+}
+
+.home-v2-lancha-specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.home-v2-lancha-specs span {
+  padding: 7px 10px;
+  border: 1px solid rgba(240, 238, 231, .18);
+  border-radius: 999px;
+  color: rgba(240, 238, 231, .82);
+  font-size: .73rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+}
+
+.home-v2-lancha-art {
+  position: relative;
+  min-height: 320px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 42% 50%, rgba(126, 164, 149, .2), transparent 52%),
+    #111414;
+}
+
+.home-v2-lancha-art::after {
+  position: absolute;
+  inset: auto 10% 14%;
+  height: 22%;
+  border-radius: 50%;
+  background: rgba(126, 190, 177, .2);
+  filter: blur(24px);
+  content: "";
+  pointer-events: none;
+}
+
+.home-v2-lancha-art img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: min(100%, 680px);
+  max-height: 420px;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 24px rgba(0, 0, 0, .34));
+  transform: translate3d(0, 2%, 0) rotate(-1deg);
+  animation: marcamar-lancha-drift 7s ease-in-out infinite;
+}
+
+@keyframes marcamar-lancha-drift {
+  0%, 100% { transform: translate3d(0, 2%, 0) rotate(-1deg); }
+  50% { transform: translate3d(0, -1.5%, 0) rotate(.6deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-v2-lancha-art img {
+    animation: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .home-v2-lancha-showcase {
+    width: calc(100% - (2 * var(--page-gutter)));
+    grid-template-columns: 1fr;
+    border-radius: 22px;
+  }
+
+  .home-v2-lancha-copy {
+    padding: 26px 22px 18px;
+  }
+
+  .home-v2-lancha-art {
+    min-height: 205px;
+  }
+
+  .home-v2-lancha-art img {
+    width: 112%;
+    max-height: 280px;
+    transform: translate3d(0, 4%, 0) rotate(-1deg);
+  }
+}
+
+[data-theme="dark"] .home-v2-hero {
+  background: #1b2422;
+}
+
+[data-theme="dark"] .home-v2-hero-scrim {
+  background: rgba(18, 25, 24, .62);
+}

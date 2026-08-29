@@ -231,7 +231,7 @@ export default function Rides() {
                           </span>
                           <span className="rcv2-captain-badges">
                             {ride.captainVerified && <span className="rcv2-verified-badge"><BadgeCheck size={13} /> Verificada</span>}
-                            {ride.captainVerified && Number(ride.avgRating || 0) >= 4.8 && <span className="rcv2-top-badge"><Trophy size={12} /> Top capitã</span>}
+                            {(ride.captainTop || (ride.captainVerified && Number(ride.avgRating || 0) >= 4.8)) && <span className="rcv2-top-badge"><Trophy size={12} /> Top capitã</span>}
                           </span>
                         </div>
 

@@ -50,9 +50,9 @@ export async function seedDemoData() {
     if (!captainId) throw new Error("Demo captain could not be created.");
 
     await pool.query(`INSERT INTO captain_profiles
-  (user_id, license_number, license_image_url, boat_name, boat_model, boat_capacity, boat_image_url, bio, verified)
+  (user_id, license_number, license_image_url, boat_name, boat_model, boat_capacity, boat_image_url, bio, verified, top_captain)
 SELECT $1, 'DEMO-CAP-001', '/images/marcamar-map-route.svg', 'Vento Sul', 'Lancha cabinada 24', 8,
-       '/images/marcamar-map-route.svg', 'Capitã local com saídas entre as praias de Ilhabela.', true
+       '/images/marcamar-map-route.svg', 'Capitã local com saídas entre as praias de Ilhabela.', true, true
 WHERE NOT EXISTS (SELECT 1 FROM captain_profiles WHERE user_id = $1)`, [captainId]);
 
     const demoRides = [

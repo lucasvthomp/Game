@@ -87,6 +87,8 @@ export function num(v: unknown): number | null {
 export const SP_REGION_CENTER: [number, number] = [-23.7, -45.4];
 export const SP_REGION_ZOOM = 8;
 
-// CARTO Voyager tiles — light, clean, good Brazil coverage
-export const TILE_URL = "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
-export const TILE_ATTRIBUTION = '&copy; <a href="https://carto.com">CARTO</a> &copy; <a href="https://openstreetmap.org">OpenStreetMap</a>';
+// OpenStreetMap standard tiles — public, keyless and reliable for the MVP.
+// The Marcamar theme is layered in CSS, so the underlay stays familiar while
+// the interface gets its own coastal palette and markers.
+export const TILE_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+export const TILE_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';

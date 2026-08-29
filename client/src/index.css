@@ -7635,3 +7635,389 @@ body,
   font-size: 12px;
   font-weight: 800;
 }
+
+
+/* ─── VISUAL FINISH PASS ─── */
+.nav-account {
+  min-width: 126px;
+  gap: 9px;
+  padding: 5px 9px 5px 5px;
+  border-color: color-mix(in srgb, var(--boat) 22%, var(--border));
+  background: color-mix(in srgb, var(--card) 78%, var(--boat-light) 22%);
+  transition: transform .22s cubic-bezier(.16,1,.3,1), border-color .2s ease, box-shadow .2s ease;
+}
+
+.nav-account:hover {
+  border-color: color-mix(in srgb, var(--boat) 58%, var(--border));
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--text1) 10%, transparent);
+  transform: translateY(-2px);
+}
+
+.nav-account > svg {
+  flex: 0 0 auto;
+  color: var(--text3);
+}
+
+.nav-avatar-dot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.nav-avatar-dot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nav-avatar-copy {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 2px;
+}
+
+.nav-avatar-copy strong {
+  overflow: hidden;
+  color: var(--text1);
+  font-size: 12px;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-avatar-copy small {
+  color: var(--text3);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.nav-mobile-profile {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 2px 0 10px;
+  padding: 12px;
+  border: 1px solid color-mix(in srgb, var(--boat) 24%, var(--border));
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--boat-light) 65%, var(--card));
+}
+
+.nav-mobile-profile > span {
+  display: grid;
+  gap: 3px;
+}
+
+.nav-mobile-profile strong {
+  color: var(--text1);
+  font-size: 13px;
+}
+
+.nav-mobile-profile small {
+  color: var(--text3);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+/* A richer waitlist canvas without changing the commercial page's intentionally
+   simple, single-action message. */
+.commercial-page-simple {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  min-height: calc(100svh - 72px);
+  place-items: center;
+  overflow: hidden;
+  padding: clamp(34px, 8vw, 92px) var(--page-gutter);
+  background:
+    radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--boat) 13%, transparent), transparent 28%),
+    radial-gradient(circle at 84% 74%, color-mix(in srgb, var(--car) 11%, transparent), transparent 30%),
+    var(--bg);
+}
+
+.commercial-page-simple::before,
+.commercial-page-simple::after {
+  position: absolute;
+  width: min(46vw, 520px);
+  height: min(46vw, 520px);
+  border: 1px solid color-mix(in srgb, var(--boat) 15%, transparent);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.commercial-page-simple::before {
+  top: -25%;
+  left: -12%;
+}
+
+.commercial-page-simple::after {
+  right: -15%;
+  bottom: -28%;
+  border-color: color-mix(in srgb, var(--car) 18%, transparent);
+}
+
+.commercial-waitlist-shell {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 570px);
+  min-height: 390px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: clamp(52px, 8vw, 84px) clamp(22px, 6vw, 62px);
+  border: 1px solid color-mix(in srgb, var(--boat) 28%, var(--border));
+  border-radius: 30px;
+  background: color-mix(in srgb, var(--card) 92%, var(--boat-light) 8%);
+  box-shadow: 0 28px 70px color-mix(in srgb, var(--text1) 13%, transparent);
+}
+
+.commercial-waitlist-shell > *:not(.commercial-waitlist-art) {
+  position: relative;
+  z-index: 2;
+}
+
+.commercial-waitlist-art {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.commercial-waitlist-art-ring {
+  position: absolute;
+  border: 1px solid color-mix(in srgb, var(--boat) 16%, transparent);
+  border-radius: 50%;
+  animation: commercialOrbit 13s linear infinite;
+}
+
+.commercial-waitlist-art-ring-a {
+  top: 9%;
+  right: -11%;
+  width: 210px;
+  height: 210px;
+}
+
+.commercial-waitlist-art-ring-b {
+  bottom: -19%;
+  left: -10%;
+  width: 240px;
+  height: 240px;
+  border-color: color-mix(in srgb, var(--car) 18%, transparent);
+  animation-direction: reverse;
+  animation-duration: 17s;
+}
+
+.commercial-waitlist-art-buoy {
+  position: absolute;
+  top: 14%;
+  right: 14%;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid color-mix(in srgb, var(--boat) 24%, transparent);
+  border-radius: 14px;
+  color: var(--boat);
+  background: color-mix(in srgb, var(--boat) 11%, transparent);
+  animation: commercialFloat 4.5s ease-in-out infinite;
+}
+
+.commercial-waitlist-art-wave {
+  position: absolute;
+  right: 8%;
+  bottom: 8%;
+  color: color-mix(in srgb, var(--boat) 15%, transparent);
+  transform: rotate(-7deg);
+}
+
+.commercial-waitlist-shell h1 {
+  margin-top: 10px;
+  font-size: clamp(2rem, 5vw, 3.1rem);
+  letter-spacing: -.06em;
+}
+
+.commercial-waitlist-shell > p:not(.home-v2-kicker) {
+  max-width: 400px;
+  margin-top: 11px;
+  color: var(--text2);
+  font-size: .95rem;
+  line-height: 1.55;
+}
+
+.commercial-waitlist-icon {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  margin-bottom: 17px;
+  border: 1px solid color-mix(in srgb, var(--boat) 28%, transparent);
+  border-radius: 19px;
+  color: var(--boat);
+  background: color-mix(in srgb, var(--boat) 11%, transparent);
+  box-shadow: 0 10px 20px color-mix(in srgb, var(--boat) 13%, transparent);
+}
+
+.commercial-waitlist-form {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 430px);
+  margin-top: 24px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  padding: 7px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--surface);
+}
+
+.commercial-waitlist-form input {
+  min-width: 0;
+  height: 46px;
+  padding: 0 12px;
+  border: 0;
+  outline: 0;
+  color: var(--text1);
+  background: transparent;
+}
+
+.commercial-waitlist-form button {
+  min-height: 46px;
+  border: 0;
+  border-radius: 11px;
+  white-space: nowrap;
+}
+
+@keyframes commercialOrbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes commercialFloat {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-8px) rotate(3deg); }
+}
+
+/* Footer spotlight adds a clear close to every journey before the link columns. */
+.footer {
+  overflow: hidden;
+}
+
+.footer-spotlight {
+  width: min(1180px, calc(100% - (2 * var(--page-gutter, 24px))));
+  margin: clamp(22px, 4vw, 44px) auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  padding: clamp(20px, 3vw, 27px) clamp(20px, 3vw, 30px);
+  border: 1px solid color-mix(in srgb, var(--boat) 28%, var(--border));
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 88% 20%, color-mix(in srgb, var(--boat) 13%, transparent), transparent 32%),
+    color-mix(in srgb, var(--card) 92%, var(--boat-light) 8%);
+  box-shadow: 0 14px 30px color-mix(in srgb, var(--text1) 8%, transparent);
+}
+
+.footer-spotlight-copy {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+}
+
+.footer-spotlight-mark {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  border: 1px solid color-mix(in srgb, var(--boat) 25%, transparent);
+  border-radius: 14px;
+  color: var(--boat);
+  background: color-mix(in srgb, var(--boat) 11%, transparent);
+}
+
+.footer-spotlight-kicker {
+  color: var(--boat-dark);
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: .14em;
+}
+
+.footer-spotlight h2 {
+  margin-top: 5px;
+  color: var(--text1);
+  font-size: clamp(1rem, 2.3vw, 1.35rem);
+  letter-spacing: -.035em;
+}
+
+.footer-spotlight-link {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 9px 13px;
+  border: 1px solid color-mix(in srgb, var(--boat) 30%, var(--border));
+  border-radius: 11px;
+  color: var(--text1);
+  background: color-mix(in srgb, var(--boat) 9%, transparent);
+  font-size: .76rem;
+  font-weight: 850;
+  transition: transform .22s cubic-bezier(.16,1,.3,1), background .2s ease, border-color .2s ease;
+}
+
+.footer-spotlight-link:hover {
+  border-color: var(--boat);
+  background: color-mix(in srgb, var(--boat) 16%, transparent);
+  transform: translateY(-2px);
+}
+
+.footer-inner {
+  width: min(1180px, 100%);
+  padding-top: clamp(42px, 5vw, 62px);
+}
+
+@media (max-width: 700px) {
+  .footer-spotlight {
+    width: calc(100% - (2 * var(--page-gutter, 16px)));
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 18px;
+    border-radius: 18px;
+  }
+
+  .footer-spotlight-link {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .commercial-waitlist-shell {
+    min-height: 350px;
+    border-radius: 24px;
+  }
+
+  .commercial-waitlist-art-buoy {
+    top: 9%;
+    right: 9%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .commercial-waitlist-art-ring,
+  .commercial-waitlist-art-buoy {
+    animation: none;
+  }
+}

@@ -4,11 +4,13 @@ import { ArrowRight, Anchor, MapPin, Search, ShieldCheck } from "lucide-react";
 import { lazy, Suspense, useMemo, useState } from "react";
 import { SiteAutocomplete } from "@/components/SiteSelect";
 import { MaritimeIcon } from "@/components/MaritimeIcon";
+import type { LatLng } from "@/components/map/LocationPicker";
 import { apiRequest } from "@/lib/queryClient";
 import { PILOT_ROUTES, type PilotRoute } from "@shared/pilot-routes";
 import { COASTAL_POINT_NAMES, ILHABELA_BEACHES } from "@shared/coastal-locations";
 
 const RidesMap = lazy(() => import("@/components/map/RidesMap"));
+const LocationPicker = lazy(() => import("@/components/map/LocationPicker"));
 
 function routeKey(route: PilotRoute) {
   return route.origin + " → " + route.destination;
@@ -18,6 +20,8 @@ export default function Routes() {
   const [query, setQuery] = useState("");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const [routePin, setRoutePin] = useState<LatLng | null>(null);
+  const [showPinDrop, setShowPinDrop] = useState(false);
   const routesQuery = useQuery({ queryKey: ["/api/routes/popular"], queryFn: () => apiRequest("GET", "/api/routes/popular") });
   const locationsQuery = useQuery({ queryKey: ["/api/locations"], queryFn: () => apiRequest("GET", "/api/locations") });
   const ridesQuery = useQuery({ queryKey: ["/api/rides", "routes-boat"], queryFn: () => apiRequest("GET", "/api/rides?type=boat") });
@@ -41,16 +45,6 @@ export default function Routes() {
 
   return (
     <div className="routes-page-v2">
-      <section className="routes-map-first routes-map-first-top">
-        <div className="routes-map-first-heading">
-          <div className="routes-map-first-title"><span className="routes-map-first-title-icon"><MaritimeIcon variant="lancha" size={22} /></span><div><p className="home-v2-kicker">MAPA VIVO</p><h1>Veja as rotas disponíveis.</h1></div></div>
-          <p>Toque em uma lancha para abrir os detalhes da saída.</p>
-        </div>
-        <Suspense fallback={<div className="routes-map-loading">Carregando mapa costeiro…</div>}>
-          <RidesMap height="min(640px, calc(100svh - 178px))" rides={rides.filter((ride) => ride.rideType === "boat")} />
-        </Suspense>
-      </section>
-
       <section className="routes-command">
         <div className="routes-command-copy">
           <p className="section-label">ROTAS DO LITORAL PAULISTA</p>
@@ -61,6 +55,59 @@ export default function Routes() {
           <div className="routes-search-field"><MapPin size={16} /><SiteAutocomplete value={from} onChange={setFrom} options={locationNames} placeholder="Saída" ariaLabel="Ponto de saída" /></div>
           <div className="routes-search-field"><MapPin size={16} /><SiteAutocomplete value={to} onChange={setTo} options={locationNames} placeholder="Chegada" ariaLabel="Ponto de chegada" /></div>
           <button type="button" onClick={search}>Encontrar rota <ArrowRight size={16} /></button>
+        </div>
+      </section>
+
+      <section className="routes-map-workspace">
+        <div className="routes-map-workspace-head">
+          <div>
+            <p className="home-v2-kicker">MAPA DO LITORAL</p>
+            <h2>Veja as saídas e marque um ponto.</h2>
+            <p>O mapa mostra viagens publicadas. Para sugerir um embarque, escolha uma praia costeira.</p>
+          </div>
+          <span className="routes-map-workspace-badge"><MaritimeIcon variant="wave" size={17} /> pontos costeiros</span>
+        </div>
+        <div className="routes-map-workspace-grid">
+          <div className="routes-map-live">
+            <Suspense fallback={<div className="routes-map-loading">Carregando mapa costeiro…</div>}>
+              <RidesMap height="min(480px, 58svh)" rides={rides.filter((ride) => ride.rideType === "boat")} />
+            </Suspense>
+          </div>
+          <aside className={"routes-pin-card" + (showPinDrop ? " is-open" : "")}>
+            <div className="routes-pin-card-icon"><MaritimeIcon variant="buoy" size={22} /></div>
+            <p className="home-v2-kicker">PINPOINT DE EMBARQUE</p>
+            <h3>Marque um ponto na costa.</h3>
+            <p>Toque perto de uma praia para soltar o pin. Pontos em terra são bloqueados.</p>
+            <button type="button" className="routes-pin-toggle" onClick={() => setShowPinDrop((current) => !current)}>
+              {showPinDrop ? "Fechar mapa de ponto" : routePin ? "Ajustar ponto" : "Soltar pin"}
+              <MaritimeIcon variant="route" size={16} />
+            </button>
+            {showPinDrop && (
+              <div className="routes-pin-picker">
+                <Suspense fallback={<div className="routes-map-loading">Carregando seletor…</div>}>
+                  <LocationPicker
+                    label="Ponto de embarque"
+                    variant="origin"
+                    value={routePin}
+                    onChange={setRoutePin}
+                    height="310px"
+                  />
+                </Suspense>
+                {routePin && (
+                  <button type="button" className="routes-pin-use" onClick={() => setShowPinDrop(false)}>
+                    Usar este ponto
+                    <ArrowRight size={16} />
+                  </button>
+                )}
+              </div>
+            )}
+            {routePin && !showPinDrop && (
+              <div className="routes-pin-selected" role="status">
+                <span><MaritimeIcon variant="buoy" size={16} /> Ponto costeiro salvo</span>
+                <small>{routePin.lat.toFixed(4)}, {routePin.lng.toFixed(4)}</small>
+              </div>
+            )}
+          </aside>
         </div>
       </section>
 

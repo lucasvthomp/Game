@@ -90,8 +90,8 @@ export default function Rides() {
           </div>
 
           {/* Filter bar */}
-          <div style={{ display: "flex", gap: 10, marginTop: 14, flexWrap: "wrap", alignItems: "center" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 10, padding: "7px 12px" }}>
+          <div className="rides-filter-bar">
+            <div className="rides-filter-chip">
               <Calendar size={13} style={{ color: "var(--text3)" }} />
               <input
                 type="date"
@@ -119,7 +119,7 @@ export default function Rides() {
                 Limpar filtros
               </button>
             )}
-            <div style={{ marginLeft: "auto", display: "flex", gap: 4 }}>
+            <div className="rides-view-toggle">
               <button
                 onClick={() => setViewMode("list")}
                 style={{ padding: "7px 12px", borderRadius: 10, border: "1px solid var(--border)", background: viewMode === "list" ? "var(--boat-light)" : "var(--surface)", color: viewMode === "list" ? "var(--boat)" : "var(--text2)", cursor: "pointer", display: "flex", alignItems: "center", gap: 5, fontSize: 12, fontWeight: 600 }}

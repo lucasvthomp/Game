@@ -5196,3 +5196,19 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .captain-page,
 .dashboard-page,
 .admin-page { padding-bottom: 72px; }
+
+
+.rcv2-demo-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 4px 9px;
+  border: 1px solid color-mix(in srgb, var(--mv-coral) 38%, var(--mv-line));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--mv-coral) 10%, var(--mv-white));
+  color: var(--mv-coral);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}

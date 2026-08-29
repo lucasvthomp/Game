@@ -359,9 +359,10 @@ router.get("/rides", async (req: Request, res: Response) => {
     });
     const enriched = await Promise.all(activeRides.map(async (ride) => {
       const captain = await storage.getUser(ride.captainId);
-      const [captainProfile, avgRating] = await Promise.all([
+      const [captainProfile, avgRating, captainReviews] = await Promise.all([
         storage.getCaptainProfile(ride.captainId),
         storage.getCaptainAverageRating(ride.captainId),
+        storage.getReviewsByCaptain(ride.captainId),
       ]);
       return {
         ...ride,
@@ -371,6 +372,9 @@ router.get("/rides", async (req: Request, res: Response) => {
         captainVerified: Boolean(captainProfile?.verified),
         captainTop: Boolean(captainProfile?.topCaptain),
         boatName: captainProfile?.boatName,
+        captainBoatModel: captainProfile?.boatModel || null,
+        captainBoatCapacity: captainProfile?.boatCapacity || ride.totalSeats,
+        captainReviewCount: captainReviews.length,
         avgRating,
       };
     }));

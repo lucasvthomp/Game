@@ -6496,3 +6496,30 @@ body::before {
     animation: none;
   }
 }
+
+
+/* Keep the fleet strip lightweight on narrow screens: icons become a compact three-up rail. */
+@media (max-width: 700px) {
+  .home-v2-fleet-points {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+  }
+
+  .home-v2-fleet-points span {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 13px 10px 14px;
+  }
+
+  .home-v2-fleet-points b {
+    font-size: .68rem;
+    line-height: 1.1;
+  }
+
+  .home-v2-fleet-points small {
+    display: none;
+  }
+}

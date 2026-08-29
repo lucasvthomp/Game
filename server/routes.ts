@@ -138,6 +138,40 @@ router.get("/maritime-routes", async (_req: Request, res: Response) => {
   res.json({ routes: (await storage.listMaritimeRoutes()).filter((route) => route.active) });
 });
 
+router.post("/commercial-waitlist", async (req: Request, res: Response) => {
+  try {
+    const fullName = typeof req.body.fullName === "string" ? req.body.fullName.trim() : "";
+    const email = typeof req.body.email === "string" ? req.body.email.trim().toLowerCase() : "";
+    const company = typeof req.body.company === "string" ? req.body.company.trim() : "";
+    const phone = typeof req.body.phone === "string" ? req.body.phone.trim() : "";
+    const interest = typeof req.body.interest === "string" ? req.body.interest : "";
+    const notes = typeof req.body.notes === "string" ? req.body.notes.trim() : "";
+    const allowedInterests = ["people", "cargo", "both"];
+
+    if (!fullName || !email || !allowedInterests.includes(interest)) {
+      return res.status(400).json({ error: "Informe nome, email e o tipo de transporte comercial." });
+    }
+    if (fullName.length > 120 || email.length > 160 || company.length > 160 || phone.length > 40 || notes.length > 1000) {
+      return res.status(400).json({ error: "Revise os limites dos campos enviados." });
+    }
+
+    const existing = await storage.getCommercialWaitlistByEmail(email);
+    if (existing) return res.json({ entry: existing, alreadyRegistered: true });
+
+    const entry = await storage.createCommercialWaitlist({
+      fullName,
+      email,
+      company: company || null,
+      phone: phone || null,
+      interest,
+      notes: notes || null,
+    });
+    res.status(201).json({ entry });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Não foi possível registrar seu interesse comercial." });
+  }
+});
+
 router.post("/route-requests", requireAuth, async (req: Request, res: Response) => {
   try {
     const origin = typeof req.body.origin === "string" ? req.body.origin.trim() : "";

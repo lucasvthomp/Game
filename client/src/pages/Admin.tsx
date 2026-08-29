@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ShieldCheck, Check, X } from "lucide-react";
+import { ShieldCheck, Check, Trophy, X } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 
-type Verification = { id: number; userId: number; verified: boolean; createdAt: string; boatName?: string; boatModel?: string };
+type Verification = { id: number; userId: number; verified: boolean; topCaptain?: boolean; createdAt: string; boatName?: string; boatModel?: string };
 
 export default function Admin() {
   const qc = useQueryClient();
@@ -18,8 +18,8 @@ export default function Admin() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["/api/admin/route-requests"] }),
   });
   const mutation = useMutation({
-    mutationFn: ({ id, verified }: { id: number; verified: boolean }) =>
-      apiRequest("PATCH", `/api/admin/verifications/captain/${id}`, { verified }),
+    mutationFn: ({ id, verified, topCaptain }: { id: number; verified: boolean; topCaptain?: boolean }) =>
+      apiRequest("PATCH", `/api/admin/verifications/captain/${id}`, { verified, topCaptain }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["/api/admin/verifications"] }),
   });
 
@@ -85,7 +85,7 @@ export default function Admin() {
                 <div><strong>{item.boatName || "Lancha sem nome"}</strong><span>Perfil #{item.id} · Usuário #{item.userId}</span></div>
                 <div className="admin-verification-actions">
                   <span className={item.verified ? "admin-status verified" : "admin-status"}>{item.verified ? "Verificado" : "Pendente"}</span>
-                  <button className="admin-verify-button" onClick={() => mutation.mutate({ id: item.id, verified: !item.verified })}>{item.verified ? <X size={14} /> : <Check size={14} />}{item.verified ? "Revogar" : "Aprovar"}</button>
+                  <button className="admin-verify-button" onClick={() => mutation.mutate({ id: item.id, verified: !item.verified, topCaptain: item.topCaptain })}>{item.verified ? <X size={14} /> : <Check size={14} />}{item.verified ? "Revogar" : "Aprovar"}</button><button className="admin-verify-button admin-top-toggle" onClick={() => mutation.mutate({ id: item.id, verified: item.verified, topCaptain: !item.topCaptain })}><Trophy size={14} />{item.topCaptain ? "Remover top" : "Marcar top"}</button>
                 </div>
               </div>
             ))}

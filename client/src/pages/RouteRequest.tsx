@@ -5,26 +5,7 @@ import { useState } from "react";
 import { SiteAutocomplete } from "@/components/SiteSelect";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
-
-const COASTAL_SP_CITIES = [
-  "Ubatuba",
-  "Caraguatatuba",
-  "São Sebastião",
-  "Ilhabela",
-  "Bertioga",
-  "Guarujá",
-  "Santos",
-  "São Vicente",
-  "Praia Grande",
-  "Mongaguá",
-  "Itanhaém",
-  "Peruíbe",
-  "Iguape",
-  "Ilha Comprida",
-  "Cananéia",
-  "Bonete",
-  "Castelhanos",
-];
+import { COASTAL_POINT_NAMES } from "@shared/coastal-locations";
 
 type FormState = {
   origin: string;
@@ -137,7 +118,7 @@ export default function RouteRequest() {
               <div className="route-request-form-row">
                 <label>
                   Origem
-                  <SiteAutocomplete value={form.origin} onChange={(value) => update("origin", value)} options={COASTAL_SP_CITIES} placeholder="Ex.: Ilhabela" ariaLabel="Origem da rota" />
+                  <SiteAutocomplete value={form.origin} onChange={(value) => update("origin", value)} options={COASTAL_POINT_NAMES} placeholder="Ex.: Ilhabela" ariaLabel="Origem da rota" />
                 </label>
                 <label>
                   Destino

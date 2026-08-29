@@ -55,6 +55,9 @@ SELECT $1, 'DEMO-CAP-001', '/images/marcamar-map-route.svg', 'Vento Sul', 'Lanch
        '/images/marcamar-map-route.svg', 'Capitã local com saídas entre as praias de Ilhabela.', true, true
 WHERE NOT EXISTS (SELECT 1 FROM captain_profiles WHERE user_id = $1)`, [captainId]);
 
+    // Keep existing demo rows aligned when new trust fields are introduced.
+    await pool.query("UPDATE captain_profiles SET verified = true, top_captain = true WHERE user_id = $1 AND license_number = 'DEMO-CAP-001'", [captainId]);
+
     const demoRides = [
       { originCity: "Ilhabela · Praia do Perequê", destinationCity: "Ilhabela · Praia do Bonete", originLat: -23.8059, originLng: -45.3565, destLat: -23.919, destLng: -45.223, departureDays: 2, price: 125, totalSeats: 8, availableSeats: 5, description: "[DEMO] Manhã tranquila até o Bonete · confirme o cais na conversa." },
       { originCity: "Ilhabela · Praia do Perequê", destinationCity: "Ilhabela · Praia de Castelhanos", originLat: -23.8059, originLng: -45.3565, destLat: -23.7509, destLng: -45.1466, departureDays: 3, price: 160, totalSeats: 8, availableSeats: 6, description: "[DEMO] Travessia panorâmica para Castelhanos em lancha pequena." },

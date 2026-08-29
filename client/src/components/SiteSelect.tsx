@@ -109,8 +109,9 @@ export function SiteAutocomplete({ value, onChange, options, placeholder, ariaLa
         onChange={(event) => {
           onChange(event.target.value);
           setOpen(true);
+          setActiveIndex(-1);
         }}
-        onFocus={() => setOpen(true)}
+        onFocus={() => { setOpen(true); setActiveIndex(-1); }}
         placeholder={placeholder}
         aria-label={ariaLabel}
         aria-autocomplete="list"

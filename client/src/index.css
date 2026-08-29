@@ -8425,3 +8425,36 @@ a,
     transform: none;
   }
 }
+
+
+/* Autocomplete stays useful on touch keyboards: visible focus and a bounded
+   list keep coastal point choices inside the viewport. */
+.site-autocomplete-menu {
+  max-height: min(300px, 45svh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.site-autocomplete-option {
+  min-height: 42px;
+  align-items: center;
+  display: flex;
+}
+
+.site-autocomplete-option.active,
+.site-autocomplete-option:focus-visible {
+  background: color-mix(in srgb, var(--boat) 14%, var(--card));
+  color: var(--boat-dark);
+  outline: none;
+}
+
+@media (max-width: 700px) {
+  .site-autocomplete-menu {
+    max-height: min(280px, 42svh);
+  }
+
+  .site-autocomplete-option {
+    min-height: 46px;
+    padding-block: 11px;
+  }
+}

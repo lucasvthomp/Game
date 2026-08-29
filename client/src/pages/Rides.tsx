@@ -90,8 +90,8 @@ export default function Rides() {
           </div>
 
           {/* Filter bar */}
-          <div style={{ display: "flex", gap: 10, marginTop: 14, flexWrap: "wrap", alignItems: "center" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 10, padding: "7px 12px" }}>
+          <div className="rides-filter-bar">
+            <div className="rides-filter-chip">
               <Calendar size={13} style={{ color: "var(--text3)" }} />
               <input
                 type="date"
@@ -100,8 +100,8 @@ export default function Rides() {
                 style={{ border: "none", background: "none", outline: "none", fontSize: 13, color: "var(--text1)", cursor: "pointer" }}
               />
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 10, padding: "7px 12px" }}>
-              <span style={{ fontSize: 12, color: "var(--text3)", whiteSpace: "nowrap" }}>Até R$</span>
+            <div className="rides-filter-chip">
+              <span className="rides-filter-label">Até R$</span>
               <input
                 type="number"
                 placeholder="Sem limite"
@@ -119,14 +119,14 @@ export default function Rides() {
                 Limpar filtros
               </button>
             )}
-            <div style={{ marginLeft: "auto", display: "flex", gap: 4 }}>
-              <button
+            <div className="rides-view-toggle">
+              <button className="rides-view-button"
                 onClick={() => setViewMode("list")}
                 style={{ padding: "7px 12px", borderRadius: 10, border: "1px solid var(--border)", background: viewMode === "list" ? "var(--boat-light)" : "var(--surface)", color: viewMode === "list" ? "var(--boat)" : "var(--text2)", cursor: "pointer", display: "flex", alignItems: "center", gap: 5, fontSize: 12, fontWeight: 600 }}
               >
                 <List size={13} /> Lista
               </button>
-              <button
+              <button className="rides-view-button"
                 onClick={() => setViewMode("map")}
                 style={{ padding: "7px 12px", borderRadius: 10, border: "1px solid var(--border)", background: viewMode === "map" ? "var(--boat-light)" : "var(--surface)", color: viewMode === "map" ? "var(--boat)" : "var(--text2)", cursor: "pointer", display: "flex", alignItems: "center", gap: 5, fontSize: 12, fontWeight: 600 }}
               >

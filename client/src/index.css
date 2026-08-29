@@ -7016,3 +7016,182 @@ body,
     animation: none;
   }
 }
+
+
+/* Make the ride directory feel like a live control surface, not a poster. */
+.rides-header {
+  padding: 28px 0 20px;
+}
+
+.lancha-header-intro {
+  min-height: 236px;
+  gap: clamp(24px, 4vw, 60px);
+}
+
+.lancha-media-cluster {
+  min-height: 236px;
+  transform: scale(.9);
+  transform-origin: center right;
+}
+
+.rides-search {
+  margin-top: 16px;
+}
+
+.rides-filter-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 12px;
+}
+
+.rides-filter-chip {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text2);
+  transition: border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+
+.rides-filter-chip:focus-within {
+  border-color: var(--boat);
+  background: var(--card);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--boat) 12%, transparent);
+}
+
+.rides-filter-chip input {
+  min-width: 0;
+  color: var(--text1) !important;
+}
+
+.rides-filter-label {
+  color: var(--text3);
+  font-size: .75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.rides-filter-bar > button {
+  min-height: 42px;
+  padding: 7px 12px !important;
+  border-color: var(--border) !important;
+  color: var(--text2) !important;
+  transition: transform .2s ease, border-color .2s ease, color .2s ease;
+}
+
+.rides-filter-bar > button:hover {
+  border-color: var(--boat) !important;
+  color: var(--boat) !important;
+  transform: translateY(-2px);
+}
+
+.rides-view-toggle {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: auto;
+  padding: 3px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--surface);
+}
+
+.rides-view-button {
+  min-height: 36px !important;
+  border-color: transparent !important;
+  border-radius: 10px !important;
+  transition: transform .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
+}
+
+.rides-view-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px color-mix(in srgb, var(--text1) 10%, transparent);
+}
+
+.rides-count {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 14px;
+  color: var(--text2);
+  font-size: .76rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.rides-count::before {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--boat);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--boat) 13%, transparent);
+  content: "";
+  animation: dashboardPulse 2.2s ease-in-out infinite;
+}
+
+.ride-grid-v2 {
+  gap: 16px;
+}
+
+.rcv2 {
+  border-color: color-mix(in srgb, var(--boat) 20%, var(--border));
+  box-shadow: 0 12px 24px color-mix(in srgb, var(--text1) 8%, transparent);
+  transition: transform .3s cubic-bezier(.16, 1, .3, 1), box-shadow .3s ease, border-color .3s ease;
+}
+
+.rcv2:hover {
+  border-color: color-mix(in srgb, var(--boat) 56%, var(--border));
+  box-shadow: 0 20px 36px color-mix(in srgb, var(--text1) 14%, transparent);
+  transform: translateY(-6px);
+}
+
+@media (max-width: 700px) {
+  .rides-header {
+    padding: 18px 0 14px;
+  }
+
+  .lancha-header-intro {
+    min-height: 0;
+    gap: 2px;
+  }
+
+  .lancha-media-cluster {
+    min-height: 200px;
+    transform: none;
+  }
+
+  .rides-filter-bar {
+    gap: 8px;
+  }
+
+  .rides-filter-chip {
+    flex: 1 1 145px;
+    min-height: 46px;
+  }
+
+  .rides-view-toggle {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .rides-view-button {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .ride-grid-v2 {
+    gap: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rides-count::before {
+    animation: none;
+  }
+}

@@ -7464,3 +7464,128 @@ body,
     animation: none;
   }
 }
+
+
+/* ─── RIDE CARD DECISION DETAILS ─── */
+/* Keep the captain visible as a trusted person, then make the practical
+   comparison fields scannable in one pass: date, time, boarding point, seats
+   and a transparent per-person starting price. */
+.rcv2-captain {
+  align-items: flex-start;
+  min-height: 58px;
+}
+
+.rcv2-captain-copy {
+  flex: 1 1 auto;
+  align-content: center;
+}
+
+.rcv2-captain-copy .rcv2-boat-name {
+  color: var(--text2);
+  font-size: 10px;
+}
+
+.rcv2-captain-proof {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
+  margin-left: auto;
+  min-width: 0;
+}
+
+.rcv2-captain-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text1);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.rcv2-captain-rating strong {
+  font-size: 11px;
+}
+
+.rcv2-captain-rating small {
+  color: var(--text3);
+  font-size: 10px;
+}
+
+.rcv2-captain-badges {
+  max-width: 176px;
+}
+
+.rcv2-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 14px;
+  padding: 12px 0 2px;
+  border-top: 1px solid var(--border);
+}
+
+.rcv2-detail-item {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.rcv2-detail-item > span {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.rcv2-detail-item strong {
+  overflow: hidden;
+  color: var(--text1);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rcv2-detail-item small {
+  color: var(--text3);
+  font-size: 9px;
+  line-height: 1.2;
+}
+
+.rcv2-price-stack {
+  display: grid;
+  gap: 2px;
+}
+
+.rcv2-price-label {
+  color: var(--text3);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 470px) {
+  .rcv2-captain-proof {
+    max-width: 130px;
+  }
+
+  .rcv2-captain-badges {
+    max-width: 130px;
+  }
+
+  .rcv2-verified-badge,
+  .rcv2-top-badge {
+    padding-inline: 5px;
+    font-size: 8px;
+  }
+
+  .rcv2-detail-grid {
+    gap: 7px 5px;
+  }
+
+  .rcv2-detail-item {
+    gap: 6px;
+  }
+}

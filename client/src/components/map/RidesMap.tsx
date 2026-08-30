@@ -56,7 +56,7 @@ export default function RidesMap({ rides, height = "480px" }: RidesMapProps) {
   );
 
   const coords = markers.map((m) => m.coord);
-  const boatIcon = pinIcon(PIN.boat, "⚓");
+  const boatIcon = pinIcon(PIN.boat);
 
   if (markers.length === 0) {
     return (

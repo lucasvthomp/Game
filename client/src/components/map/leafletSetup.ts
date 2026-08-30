@@ -87,8 +87,8 @@ export function num(v: unknown): number | null {
 export const SP_REGION_CENTER: [number, number] = [-23.7, -45.4];
 export const SP_REGION_ZOOM = 8;
 
-// OpenStreetMap standard tiles — public, keyless and reliable for the MVP.
-// The Marcamar theme is layered in CSS, so the underlay stays familiar while
-// the interface gets its own coastal palette and markers.
-export const TILE_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-export const TILE_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+// Carto Positron tiles — light, neutral and intentionally free of terrain
+// pictograms. Place names remain readable while our coastal pins carry the
+// product's visual language.
+export const TILE_URL = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png";
+export const TILE_ATTRIBUTION = '&copy; OpenStreetMap contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';

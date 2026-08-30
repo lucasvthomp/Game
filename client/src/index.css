@@ -9381,9 +9381,10 @@ a,
 }
 
 
-/* ─── DISCREET WATER MOTION ───
-   Adds a quiet sense of place without turning the booking surface into a
-   cinematic hero. The texture is decorative and never intercepts input. */
+/* ─── REAL WATER SURFACE ───
+   A quiet, photographic surface gives the brand a sense of place. It stays
+   static and soft so the interface remains easy to read and never feels like
+   a decorative animation. */
 .home-clean-intro {
   position: relative;
   isolation: isolate;
@@ -9392,37 +9393,25 @@ a,
 
 .home-clean-water-texture {
   position: absolute;
-  inset: -24% -10%;
+  inset: -16% -8%;
   z-index: 0;
   pointer-events: none;
-  opacity: .48;
-  background:
-    radial-gradient(ellipse at 15% 112%, color-mix(in srgb, var(--boat) 11%, transparent), transparent 58%),
-    repeating-radial-gradient(ellipse at 48% 112%, transparent 0 13px, color-mix(in srgb, var(--boat) 8%, transparent) 14px 15px, transparent 16px 32px),
-    repeating-linear-gradient(154deg, transparent 0 48px, color-mix(in srgb, var(--boat) 5%, transparent) 49px 50px, transparent 51px 94px);
-  background-size: 100% 100%, 320px 120px, 250px 180px;
-  background-position: 0 0, 0 0, 0 0;
-  filter: saturate(.72);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 19%, #000 78%, transparent 100%);
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 19%, #000 78%, transparent 100%);
-  transform: rotate(-2deg);
-  animation: marcamarWaterDrift 24s ease-in-out infinite;
+  opacity: .22;
+  background-image:
+    linear-gradient(180deg, color-mix(in srgb, var(--card) 92%, transparent), color-mix(in srgb, var(--bg2) 76%, transparent)),
+    url("/images/marcamar-water-texture.jpg");
+  background-size: cover;
+  background-position: center 42%;
+  background-repeat: no-repeat;
+  background-blend-mode: normal, soft-light;
+  filter: saturate(.64) contrast(.94);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 84%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 84%, transparent 100%);
 }
 
 .home-clean-shell {
   position: relative;
   z-index: 1;
-}
-
-@keyframes marcamarWaterDrift {
-  0%, 100% {
-    background-position: 0 0, 0 0, 0 0;
-    transform: rotate(-2deg) translate3d(0, 0, 0) scale(1.02);
-  }
-  50% {
-    background-position: 0 0, 42px -15px, -34px 18px;
-    transform: rotate(-2deg) translate3d(1.5%, -1%, 0) scale(1.05);
-  }
 }
 
 .home-clean-search {
@@ -9464,25 +9453,49 @@ a,
   transform: translateX(3px);
 }
 
+/* Let the map workspace carry the same real-water cue without turning it into
+   a hero. The map and controls stay above this low-contrast surface. */
+.routes-map-workspace {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.routes-map-workspace::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--bg2) 91%, transparent), color-mix(in srgb, var(--card) 84%, transparent)),
+    url("/images/marcamar-water-texture.jpg") center / cover no-repeat;
+  background-blend-mode: normal, soft-light;
+  opacity: .18;
+  filter: saturate(.52) contrast(.92);
+}
+
 @media (max-width: 620px) {
   .home-clean-water-texture {
-    inset: -18% -20%;
-    opacity: .34;
-    animation-duration: 29s;
+    inset: -12% -24%;
+    opacity: .16;
+    background-position: 58% 42%;
   }
 
   .home-clean-service-card > svg {
     opacity: .9;
   }
+
+  .routes-map-workspace::before {
+    opacity: .11;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-clean-water-texture,
   .home-clean-service-card > svg {
     animation: none;
   }
 }
-
 
 /* ─── PROFESSIONAL FOOTER ───
    A useful information architecture with one clear action, without another

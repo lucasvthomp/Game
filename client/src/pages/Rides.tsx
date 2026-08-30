@@ -169,25 +169,12 @@ export default function Rides() {
                       <div className="rcv2-bar" style={{ background: accent }} />
 
                       <div className="rcv2-body">
-                        {/* Top row: seats + rating */}
-                        <div className="rcv2-top">
-                          {ride.description?.startsWith("[DEMO]") && <span className="rcv2-demo-badge">Exemplo de teste</span>}
-                          <div className="rcv2-top-right">
-                            {ride.avgRating > 0 && (
-                              <span className="rcv2-rating">
-                                <Star size={11} fill="var(--amber)" color="var(--amber)" />
-                                {Number(ride.avgRating).toFixed(1)}
-                              </span>
-                            )}
-                            <span style={{
-                              display: "inline-flex", alignItems: "center", gap: 5,
-                              color: soldOut ? "var(--red)" : "var(--text2)", fontSize: 12,
-                            }}>
-                              <Users size={10} />
-                              {soldOut ? "Esgotado" : `${ride.availableSeats} vagas`}
-                            </span>
+                        {/* Keep only the small context label here; practical details live below. */}
+                        {ride.description?.startsWith("[DEMO]") && (
+                          <div className="rcv2-top">
+                            <span className="rcv2-demo-badge">Exemplo de teste</span>
                           </div>
-                        </div>
+                        )}
 
                         {/* Route — hero section */}
                         <div className="rcv2-route">
@@ -212,8 +199,7 @@ export default function Rides() {
                           </span>
                           <span className="rcv2-captain-copy">
                             <strong>{ride.captainName || "Capitão local"}</strong>
-                            <small>{ride.captainUsername ? "@" + ride.captainUsername : (ride.boatName || "Operador de lancha")}</small>
-                            {ride.boatName && <small className="rcv2-boat-name">{ride.boatName}{ride.captainBoatModel ? " · " + ride.captainBoatModel : ""}</small>}
+                            <small>{ride.captainUsername ? "@" + ride.captainUsername : "Operador local"}{ride.boatName ? " · " + ride.boatName : ""}{ride.captainBoatModel ? " · " + ride.captainBoatModel : ""}</small>
                           </span>
                           <span className="rcv2-captain-proof">
                             {Number(ride.avgRating || 0) > 0 && (
@@ -261,13 +247,9 @@ export default function Rides() {
                               <span className="rcv2-per"> / pessoa</span>
                             </span>
                           </div>
-                          <button
-                            className="rcv2-cta"
-                            style={{ background: accent, opacity: soldOut ? 0.4 : 1 }}
-                            disabled={soldOut}
-                          >
+                          <span className="rcv2-cta" style={{ background: accent, opacity: soldOut ? 0.4 : 1 }}>
                             {soldOut ? "Esgotado" : "Ver detalhes"}
-                          </button>
+                          </span>
                         </div>
                       </div>
                     </div>

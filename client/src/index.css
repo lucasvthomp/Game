@@ -9393,20 +9393,29 @@ a,
 
 .home-clean-water-texture {
   position: absolute;
-  inset: -16% -8%;
+  inset: -8% -4%;
   z-index: 0;
   pointer-events: none;
-  opacity: .22;
+  opacity: .56;
   background-image:
-    linear-gradient(180deg, color-mix(in srgb, var(--card) 92%, transparent), color-mix(in srgb, var(--bg2) 76%, transparent)),
+    linear-gradient(110deg,
+      color-mix(in srgb, var(--card) 84%, transparent) 0%,
+      color-mix(in srgb, var(--card) 36%, transparent) 52%,
+      color-mix(in srgb, var(--card) 18%, transparent) 100%),
     url("/images/marcamar-water-texture.jpg");
   background-size: cover;
   background-position: center 42%;
   background-repeat: no-repeat;
-  background-blend-mode: normal, soft-light;
-  filter: saturate(.64) contrast(.94);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 84%, transparent 100%);
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 84%, transparent 100%);
+  background-blend-mode: normal;
+  filter: saturate(.85) contrast(1.05);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 88%, transparent 100%);
+}
+
+
+[data-theme="dark"] .home-clean-water-texture {
+  opacity: .42;
+  filter: saturate(.58) brightness(.72) contrast(1.04);
 }
 
 .home-clean-shell {
@@ -9477,8 +9486,8 @@ a,
 
 @media (max-width: 620px) {
   .home-clean-water-texture {
-    inset: -12% -24%;
-    opacity: .16;
+    inset: -10% -30%;
+    opacity: .4;
     background-position: 58% 42%;
   }
 

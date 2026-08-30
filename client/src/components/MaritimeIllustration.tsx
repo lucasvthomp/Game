@@ -75,11 +75,12 @@ export function MaritimeIllustration({ variant, size = 96, className, ...props }
   return (
     <svg
       {...props}
-      className={className}
+      className={"maritime-illustration-2d" + (className ? " " + className : "")}
       width={size}
       height={size}
       viewBox="0 0 96 96"
       fill="none"
+      shapeRendering="geometricPrecision"
       role={props["aria-label"] ? "img" : undefined}
       aria-hidden={props["aria-label"] ? undefined : true}
     >

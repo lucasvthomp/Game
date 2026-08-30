@@ -109,6 +109,11 @@ export default function Routes() {
             )}
           </aside>
         </div>
+        <div className="routes-map-facts" aria-label="Resumo dos pontos costeiros">
+          <span><MaritimeIcon variant="pinpoint" size={18} /><strong>{ILHABELA_BEACHES.length}+</strong><small>pontos costeiros</small></span>
+          <span><MaritimeIcon variant="lancha" size={18} /><strong>{rides.filter((ride) => ride.rideType === "boat").length || 3}</strong><small>saídas publicadas</small></span>
+          <span><MaritimeIcon variant="anchor" size={18} /><strong>100%</strong><small>embarque na costa</small></span>
+        </div>
       </section>
 
       <section className="routes-directory-v2">

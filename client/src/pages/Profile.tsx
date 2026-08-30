@@ -65,12 +65,17 @@ export default function Profile() {
     <div className="profile-page">
       <div className="profile-page-heading">
         <div>
+          <p className="profile-page-kicker"><MaritimeIcon variant="anchor" size={15} /> SUA CONTA</p>
           <h1 className="page-title" style={{ marginBottom: 8 }}>Perfil</h1>
-          <p className="page-sub">Seu ponto de partida para viajar e publicar na água.</p>
+          <p className="page-sub">Sua identidade, reservas e acesso de capitão em um só lugar.</p>
         </div>
       </div>
 
       <div className="profile-card profile-card-identity" style={{ marginBottom: 16 }}>
+        <div className="profile-card-heading">
+          <span><MaritimeIcon variant="anchor" size={15} /> IDENTIDADE MARCAMAR</span>
+          <small>Visível nos pedidos e reservas</small>
+        </div>
         <div className="profile-identity-row">
           <div className="profile-avatar profile-avatar-large">
             {user.avatarUrl ? <img src={user.avatarUrl} alt={`Foto de ${user.fullName}`} /> : <span>{user.fullName[0]}</span>}

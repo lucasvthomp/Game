@@ -2,12 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import { SiteSelect, SiteAutocomplete } from "@/components/SiteSelect";
 import { apiRequest } from "@/lib/queryClient";
 import { Link } from "wouter";
-import { Anchor, BadgeCheck, Calendar, Clock, MapPin, Star, Search, Trophy, Users, ArrowRight, Map, List } from "lucide-react";
+import { BadgeCheck, Calendar, Star, Search, Trophy, Users, ArrowRight, Map, List } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState, lazy, Suspense } from "react";
-import { BOAT_MEDIA } from "@/lib/boat-media";
 import { COASTAL_POINT_NAMES } from "@shared/coastal-locations";
+import { MaritimeIcon } from "@/components/MaritimeIcon";
 
 const RidesMap = lazy(() => import("@/components/map/RidesMap"));
 
@@ -67,21 +67,6 @@ export default function Rides() {
               </p>
             </div>
 
-            <div className="lancha-media-cluster" aria-hidden="true">
-              <figure className="lancha-cluster-map lancha-cluster-map-coast">
-                <img src="/images/marcamar-map-coast.svg" alt="" />
-              </figure>
-              <figure className="lancha-cluster-photo lancha-cluster-photo-dock">
-                <img src={BOAT_MEDIA.dock} alt="" />
-              </figure>
-              <figure className="lancha-cluster-map lancha-cluster-map-route">
-                <img src="/images/marcamar-map-route.svg" alt="" />
-              </figure>
-              <figure className="lancha-cluster-photo lancha-cluster-photo-passenger">
-                <img src={BOAT_MEDIA.passenger} alt="" />
-              </figure>
-              <span className="lancha-cluster-note">rotas reais · litoral paulista</span>
-            </div>
           </div>
 
           <div className="rides-search">
@@ -163,7 +148,7 @@ export default function Rides() {
           </div>
         ) : viewMode === "map" ? null : rides.length === 0 ? (
           <div className="rides-empty">
-            <Anchor size={44} className="empty-state-icon" />
+            <MaritimeIcon variant="lancha" size={44} className="empty-state-icon" />
             <p style={{ fontWeight: 600, fontSize: "1.05rem", marginBottom: 6 }}>Nenhuma travessia encontrada</p>
             <p style={{ fontSize: 13 }}>Tente outra cidade ou volte mais tarde</p>
             <Link href={`/solicitar-rota?${initialParams.toString()}`}>
@@ -252,11 +237,11 @@ export default function Rides() {
                             <span><strong>{format(new Date(ride.departureTime), "EEE, dd MMM", { locale: ptBR })}</strong><small>data</small></span>
                           </span>
                           <span className="rcv2-detail-item">
-                            <Clock size={14} style={{ color: accent }} />
+                            <MaritimeIcon variant="clock" size={14} style={{ color: accent }} />
                             <span><strong>{format(new Date(ride.departureTime), "HH:mm", { locale: ptBR })}</strong><small>saída</small></span>
                           </span>
                           <span className="rcv2-detail-item">
-                            <MapPin size={14} style={{ color: accent }} />
+                            <MaritimeIcon variant="pinpoint" size={14} style={{ color: accent }} />
                             <span><strong>{ride.originCity}</strong><small>embarque</small></span>
                           </span>
                           <span className="rcv2-detail-item">

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
-import { ArrowRight, Anchor, MapPin, Search, ShieldCheck } from "lucide-react";
+import { ArrowRight, Search } from "lucide-react";
 import { lazy, Suspense, useMemo, useState } from "react";
 import { SiteAutocomplete } from "@/components/SiteSelect";
 import { MaritimeIcon } from "@/components/MaritimeIcon";
@@ -52,7 +52,7 @@ export default function Routes() {
           <p>Compare pontos de saída e escolha uma travessia de lancha pela costa.</p>
         </div>
         <div className="routes-command-search">
-          <div className="routes-search-field"><MapPin size={16} /><SiteAutocomplete value={from} onChange={setFrom} options={locationNames} placeholder="Saída" ariaLabel="Ponto de saída" /></div>
+          <div className="routes-search-field"><MaritimeIcon variant="pinpoint" size={17} /><SiteAutocomplete value={from} onChange={setFrom} options={locationNames} placeholder="Saída" ariaLabel="Ponto de saída" /></div>
           <div className="routes-search-field"><MapPin size={16} /><SiteAutocomplete value={to} onChange={setTo} options={locationNames} placeholder="Chegada" ariaLabel="Ponto de chegada" /></div>
           <button type="button" onClick={search}>Encontrar rota <ArrowRight size={16} /></button>
         </div>

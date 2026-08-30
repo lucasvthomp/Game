@@ -1,26 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
-import { ArrowRight, Anchor, CalendarDays, Check, Clock3, MapPin, ShieldCheck, UsersRound, Waves } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { SiteAutocomplete } from "@/components/SiteSelect";
 import { MaritimeIcon } from "@/components/MaritimeIcon";
+import { MaritimeIllustration } from "@/components/MaritimeIllustration";
 import { apiRequest } from "@/lib/queryClient";
-import { BOAT_MEDIA } from "@/lib/boat-media";
 import { PILOT_ROUTES } from "@shared/pilot-routes";
 import { COASTAL_POINT_NAMES } from "@shared/coastal-locations";
-
 
 function timeLabel(value: string | Date) {
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? "Horário a confirmar" : date.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
 }
+
 function dateLabel(value: string | Date) {
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? "Próxima saída" : date.toLocaleDateString("pt-BR", { weekday: "short", day: "2-digit", month: "short" });
 }
+
 function priceLabel(value: unknown) {
   const amount = Number(value);
-  return Number.isFinite(amount) ? "R$ " + amount.toFixed(0).replace(".", ",") : "Preço informado na viagem";
+  return Number.isFinite(amount) ? "R$ " + amount.toFixed(0).replace(".", ",") : "Consulte";
 }
 
 export default function Home() {
@@ -29,7 +30,10 @@ export default function Home() {
   const [searchDate, setSearchDate] = useState("");
   const [searchPassengers, setSearchPassengers] = useState("1");
   const { data } = useQuery({ queryKey: ["/api/rides", "home-boat"], queryFn: () => apiRequest("GET", "/api/rides?type=boat") });
-  const boatRides = ((data?.rides ?? []) as any[]).filter((ride) => ride.rideType === "boat").sort((a, b) => new Date(a.departureTime).getTime() - new Date(b.departureTime).getTime()).slice(0, 4);
+  const boatRides = ((data?.rides ?? []) as any[])
+    .filter((ride) => ride.rideType === "boat")
+    .sort((a, b) => new Date(a.departureTime).getTime() - new Date(b.departureTime).getTime())
+    .slice(0, 4);
 
   const handleSearch = (event: FormEvent) => {
     event.preventDefault();
@@ -42,79 +46,122 @@ export default function Home() {
   };
 
   return (
-    <div className="home-v2">
-      <section className="home-v2-hero">
-        <img className="home-v2-hero-image" src={BOAT_MEDIA.smallLancha} alt="Lancha de passageiros chegando ao píer" />
-        <div className="home-v2-hero-scrim" aria-hidden="true" />
-        <div className="home-v2-hero-inner">
-          <div className="home-v2-eyebrow"><Waves size={15} /> Lanchas locais no litoral paulista</div>
-          <h1>Seu caminho pela costa,<br /><em>de lancha.</em></h1>
-          <p className="home-v2-hero-copy">Transporte rápido entre ilhas, praias e comunidades — com ponto de embarque, horário e capacidade claros.</p>
-          <form className="home-v2-search" onSubmit={handleSearch}>
-            <div className="home-v2-search-field"><MapPin size={17} aria-hidden="true" /><SiteAutocomplete value={searchFrom} onChange={setSearchFrom} options={COASTAL_POINT_NAMES} placeholder="De onde?" ariaLabel="Ponto de saída" /></div>
-            <div className="home-v2-search-field"><MapPin size={17} aria-hidden="true" /><SiteAutocomplete value={searchTo} onChange={setSearchTo} options={COASTAL_POINT_NAMES} placeholder="Para onde?" ariaLabel="Ponto de chegada" /></div>
-            <label className="home-v2-search-field home-v2-date-field"><CalendarDays size={17} aria-hidden="true" /><input type="date" value={searchDate} onChange={(event) => setSearchDate(event.target.value)} aria-label="Data da viagem" /></label>
-            <label className="home-v2-search-field home-v2-passenger-field"><UsersRound size={17} aria-hidden="true" /><input type="number" min="1" max="12" value={searchPassengers} onChange={(event) => setSearchPassengers(event.target.value)} aria-label="Quantidade de passageiros" /></label>
-            <button type="submit" className="home-v2-search-button">Buscar lanchas <ArrowRight size={17} /></button>
+    <div className="home-clean">
+      <section className="home-clean-intro">
+        <div className="home-clean-shell">
+          <div className="home-clean-brandline">
+            <span className="home-clean-brandmark"><MaritimeIcon variant="lancha" size={20} /></span>
+            <strong>Marcamar</strong>
+            <span>litoral paulista</span>
+          </div>
+
+          <div className="home-clean-heading">
+            <div className="home-clean-heading-copy">
+              <p className="home-clean-kicker">TRANSPORTE LOCAL PELA ÁGUA</p>
+              <h1>Viaje pela costa.<br /><em>Sem complicar.</em></h1>
+              <p>Encontre uma lancha, veja o ponto de embarque e reserve sua travessia com clareza.</p>
+            </div>
+            <div className="home-clean-intro-note">
+              <span className="home-clean-note-icon"><MaritimeIcon variant="pinpoint" size={22} /></span>
+              <div><strong>Pontos que você reconhece</strong><span>Praias, píeres e comunidades do litoral.</span></div>
+            </div>
+          </div>
+
+          <form className="home-clean-search" onSubmit={handleSearch}>
+            <label className="home-clean-search-field">
+              <MaritimeIcon variant="pinpoint" size={18} />
+              <span><small>SAÍDA</small><SiteAutocomplete value={searchFrom} onChange={setSearchFrom} options={COASTAL_POINT_NAMES} placeholder="De onde?" ariaLabel="Ponto de saída" /></span>
+            </label>
+            <label className="home-clean-search-field">
+              <MaritimeIcon variant="beach" size={18} />
+              <span><small>CHEGADA</small><SiteAutocomplete value={searchTo} onChange={setSearchTo} options={COASTAL_POINT_NAMES} placeholder="Para onde?" ariaLabel="Ponto de chegada" /></span>
+            </label>
+            <label className="home-clean-search-field home-clean-search-date">
+              <MaritimeIcon variant="clock" size={18} />
+              <span><small>DATA</small><input type="date" value={searchDate} onChange={(event) => setSearchDate(event.target.value)} aria-label="Data da viagem" /></span>
+            </label>
+            <label className="home-clean-search-field home-clean-search-passengers">
+              <MaritimeIcon variant="lancha" size={18} />
+              <span><small>PASSAGEIROS</small><input type="number" min="1" max="12" value={searchPassengers} onChange={(event) => setSearchPassengers(event.target.value)} aria-label="Quantidade de passageiros" /></span>
+            </label>
+            <button type="submit" className="home-clean-search-button">Buscar lanchas <ArrowRight size={17} /></button>
           </form>
-          <div className="home-v2-proof"><span><ShieldCheck size={16} /> Informações antes do embarque</span><span><Anchor size={16} /> Operadores independentes</span><span><UsersRound size={16} /> Até 12 passageiros por lancha</span></div>
-          <div className="home-v2-hero-signal"><span className="home-v2-hero-signal-live"><i /> Agora no litoral</span><span>{boatRides.length || 3} saídas publicadas</span><span>Ilhabela · São Sebastião</span></div>
-        </div>
-      </section>
 
-      <section className="home-v2-departures">
-        <div className="home-v2-section-heading"><div><p className="home-v2-kicker">SAÍDAS PUBLICADAS</p><h2>Próximas travessias</h2></div><Link href="/lanchas"><span className="home-v2-text-link">Ver todas <ArrowRight size={16} /></span></Link></div>
-        {boatRides.length > 0 ? (
-          <div className="home-v2-route-list">{boatRides.map((ride) => (
-            <Link key={ride.id} href={"/viagens/" + ride.id}><span className="home-v2-route-row"><span className="home-v2-route-main"><span className="home-v2-route-cities">{ride.originCity} <ArrowRight size={15} /> {ride.destinationCity}</span><span className="home-v2-route-meta"><CalendarDays size={14} /> {dateLabel(ride.departureTime)} · <Clock3 size={14} /> {timeLabel(ride.departureTime)}</span></span><span className="home-v2-route-side"><strong>{priceLabel(ride.pricePerSeat)}</strong><span>{ride.availableSeats ?? ride.totalSeats} lugares</span></span><ArrowRight className="home-v2-row-arrow" size={18} /></span></Link>
-          ))}</div>
-        ) : (
-          <div className="home-v2-route-list">{PILOT_ROUTES.slice(0, 4).map((route) => (
-            <Link key={route.id} href={"/lanchas?from=" + encodeURIComponent(route.origin) + "&to=" + encodeURIComponent(route.destination)}><span className="home-v2-route-row"><span className="home-v2-route-main"><span className="home-v2-route-cities">{route.origin} <ArrowRight size={15} /> {route.destination}</span><span className="home-v2-route-meta"><MapPin size={14} /> {route.region}</span></span><span className="home-v2-route-side"><strong>Consulte saídas</strong><span>Rota do piloto</span></span><ArrowRight className="home-v2-row-arrow" size={18} /></span></Link>
-          ))}</div>
-        )}
-      </section>
-
-      <section id="como-funciona" className="home-v2-how">
-        <div className="home-v2-section-heading"><div><p className="home-v2-kicker">COMO FUNCIONA</p><h2>Um jeito simples de cruzar a água.</h2></div></div>
-        <div className="home-v2-steps">
-          {[
-            { number: "01", icon: <MapPin size={20} />, title: "Escolha o trecho", copy: "Busque por saída, chegada e data. Os pontos são nomes que você reconhece no litoral." },
-            { number: "02", icon: <Clock3 size={20} />, title: "Confira os detalhes", copy: "Veja horário, capacidade, valor e as informações do operador antes de pedir sua vaga." },
-            { number: "03", icon: <Anchor size={20} />, title: "Combine o embarque", copy: "Depois da reserva, alinhe o ponto de encontro e siga para o cais com tranquilidade." },
-          ].map((step) => <article key={step.number} className="home-v2-step"><span className="home-v2-step-number">{step.number}</span><span className="home-v2-step-icon">{step.icon}</span><h3>{step.title}</h3><p>{step.copy}</p></article>)}
-        </div>
-      </section>
-
-      <section id="seguranca" className="home-v2-trust">
-        <div className="home-v2-trust-mark"><ShieldCheck size={22} /></div>
-        <div><p className="home-v2-kicker">FEITO PARA O LITORAL</p><h2>Clareza antes de entrar na lancha.</h2><p>O Marcamar organiza o que importa para uma travessia local: quem oferece, onde embarca, quando sai e quantas vagas existem.</p></div>
-        <div className="home-v2-trust-list"><span><Check size={16} /> Rota e ponto visíveis</span><span><Check size={16} /> Capacidade publicada</span><span><Check size={16} /> Conversa registrada</span></div>
-      </section>
-
-      <section className="home-v2-fleet-strip" aria-label="A lancha do Marcamar">
-        <div className="home-v2-fleet-intro">
-          <span className="home-v2-fleet-mark"><MaritimeIcon variant="lancha" size={30} /></span>
-          <div>
-            <p className="home-v2-kicker">A LANCHA POR DENTRO</p>
-            <h2>O básico que faz a costa funcionar.</h2>
-            <p>Casco aberto, banco corrido e motor de popa — transporte local, sem complicação.</p>
+          <div className="home-clean-trust">
+            <span><Check size={15} /> Ponto e horário visíveis</span>
+            <span><Check size={15} /> Capacidade publicada</span>
+            <span><Check size={15} /> Operadores locais</span>
           </div>
         </div>
-        <div className="home-v2-fleet-art">
-          <img src="/images/marcamar-basic-lancha-3d.png" alt="Lancha de pesca com banco corrido e motor de popa" />
-        </div>
-        <div className="home-v2-fleet-points">
-          <span><MaritimeIcon variant="dock" size={22} /><b>Embarque local</b><small>Pontos reconhecíveis</small></span>
-          <span><MaritimeIcon variant="route" size={22} /><b>Rotas reais</b><small>Praias e comunidades</small></span>
-          <span><MaritimeIcon variant="buoy" size={22} /><b>Informação clara</b><small>Vagas e horários</small></span>
-        </div>
       </section>
 
-      <section id="ajuda" className="home-v2-request">
-        <div><p className="home-v2-kicker">NÃO ENCONTROU?</p><h2>Peça uma rota para o seu caminho.</h2><p>Conte de onde você sai, para onde precisa chegar e quando. A equipe Marcamar acompanha os pedidos do piloto.</p></div>
-        <Link href="/solicitar-rota"><span className="home-v2-coral-button">Solicitar uma rota <ArrowRight size={17} /></span></Link>
-      </section>
+      <main className="home-clean-main">
+        <section className="home-clean-services" aria-label="Atalhos Marcamar">
+          <Link href="/lanchas"><article className="home-clean-service-card">
+            <div><h2>Encontrar uma lancha</h2><p>Compare saídas, horários e valores para o seu trecho.</p><span>Buscar saídas <ArrowRight size={15} /></span></div>
+            <MaritimeIllustration variant="lancha" size={88} />
+          </article></Link>
+          <Link href="/rotas"><article className="home-clean-service-card">
+            <div><h2>Explorar pontos</h2><p>Veja praias e píeres costeiros no mapa.</p><span>Ver rotas <ArrowRight size={15} /></span></div>
+            <MaritimeIllustration variant="beach" size={88} />
+          </article></Link>
+          <Link href="/solicitar-rota"><article className="home-clean-service-card">
+            <div><h2>Pedir uma rota</h2><p>Não encontrou? Conte qual caminho você precisa.</p><span>Solicitar <ArrowRight size={15} /></span></div>
+            <MaritimeIllustration variant="palm" size={88} />
+          </article></Link>
+        </section>
+
+        <section className="home-clean-departures">
+          <div className="home-clean-section-head">
+            <div><p className="home-clean-kicker">SAÍDAS PUBLICADAS</p><h2>Próximas travessias</h2></div>
+            <Link href="/lanchas"><span className="home-clean-link">Ver todas <ArrowRight size={15} /></span></Link>
+          </div>
+
+          <div className="home-clean-route-list">
+            {boatRides.length > 0 ? boatRides.map((ride) => (
+              <Link key={ride.id} href={"/viagens/" + ride.id}>
+                <span className="home-clean-route-row">
+                  <span className="home-clean-route-main">
+                    <span className="home-clean-route-cities"><strong>{ride.originCity}</strong><ArrowRight size={15} /><strong>{ride.destinationCity}</strong></span>
+                    <span className="home-clean-route-meta"><MaritimeIcon variant="clock" size={14} /> {dateLabel(ride.departureTime)} · {timeLabel(ride.departureTime)}</span>
+                  </span>
+                  <span className="home-clean-route-side"><strong>{priceLabel(ride.pricePerSeat)}</strong><small>{ride.availableSeats ?? ride.totalSeats} lugares</small></span>
+                  <ArrowRight className="home-clean-route-arrow" size={18} />
+                </span>
+              </Link>
+            )) : PILOT_ROUTES.slice(0, 4).map((route) => (
+              <Link key={route.id} href={"/lanchas?from=" + encodeURIComponent(route.origin) + "&to=" + encodeURIComponent(route.destination)}>
+                <span className="home-clean-route-row">
+                  <span className="home-clean-route-main">
+                    <span className="home-clean-route-cities"><strong>{route.origin}</strong><ArrowRight size={15} /><strong>{route.destination}</strong></span>
+                    <span className="home-clean-route-meta"><MaritimeIcon variant="beach" size={14} /> {route.region}</span>
+                  </span>
+                  <span className="home-clean-route-side"><strong>Consulte</strong><small>rota disponível</small></span>
+                  <ArrowRight className="home-clean-route-arrow" size={18} />
+                </span>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className="home-clean-how">
+          <div className="home-clean-section-head">
+            <div><p className="home-clean-kicker">COMO FUNCIONA</p><h2>Três passos, só isso.</h2></div>
+            <Link href="/como-funciona"><span className="home-clean-link">Entenda melhor <ArrowRight size={15} /></span></Link>
+          </div>
+          <div className="home-clean-steps">
+            <article><span className="home-clean-step-icon"><MaritimeIllustration variant="pinpoint" size={56} /></span><div><strong>Escolha o trecho</strong><p>Informe de onde sai, para onde vai e a data.</p></div></article>
+            <article><span className="home-clean-step-icon"><MaritimeIllustration variant="clock" size={56} /></span><div><strong>Confira antes</strong><p>Veja horário, valor, vagas e quem conduz.</p></div></article>
+            <article><span className="home-clean-step-icon"><MaritimeIllustration variant="lancha" size={56} /></span><div><strong>Vá para o cais</strong><p>Combine o embarque e siga pela água.</p></div></article>
+          </div>
+        </section>
+
+        <section className="home-clean-callout">
+          <span className="home-clean-callout-icon"><MaritimeIcon variant="palm" size={24} /></span>
+          <div><p className="home-clean-kicker">NÃO ENCONTROU?</p><h2>Peça uma rota para o seu caminho.</h2><p>Conte de onde você sai e quando precisa viajar. A gente procura uma travessia.</p></div>
+          <Link href="/solicitar-rota"><span className="home-clean-button">Solicitar rota <ArrowRight size={16} /></span></Link>
+        </section>
+      </main>
     </div>
   );
 }

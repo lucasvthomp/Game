@@ -1,10 +1,10 @@
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation, Link } from "wouter";
-import { Anchor, BadgeCheck, Bell, Camera, Calendar, ChevronRight, LogOut, Upload, User } from "lucide-react";
+import { BadgeCheck, Bell, Camera, Calendar, ChevronRight, LogOut, Upload } from "lucide-react";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import { BoatMediaCluster } from "@/components/layout/BoatMediaCluster";
+import { MaritimeIcon } from "@/components/MaritimeIcon";
 
 export default function Profile() {
   const { user, logout, refetch } = useAuth();
@@ -68,14 +68,13 @@ export default function Profile() {
           <h1 className="page-title" style={{ marginBottom: 8 }}>Perfil</h1>
           <p className="page-sub">Seu ponto de partida para viajar e publicar na água.</p>
         </div>
-        <BoatMediaCluster variant="compact" />
       </div>
 
       <div className="profile-card profile-card-identity" style={{ marginBottom: 16 }}>
         <div className="profile-identity-row">
           <div className="profile-avatar profile-avatar-large">
             {user.avatarUrl ? <img src={user.avatarUrl} alt={`Foto de ${user.fullName}`} /> : <span>{user.fullName[0]}</span>}
-            <label className="profile-avatar-edit" htmlFor="profile-avatar-input" title="Trocar foto">
+            <label className="profile-avatar-edit" htmlFor="profile-avatar-input" title="Trocar foto" aria-label="Trocar foto de perfil">
               <Camera size={13} />
             </label>
             <input id="profile-avatar-input" className="sr-only" type="file" accept="image/jpeg,image/png,image/webp" onChange={uploadAvatar} />
@@ -83,7 +82,7 @@ export default function Profile() {
           <div className="profile-identity-copy">
             <div className="profile-name-line"><strong>{user.fullName}</strong>{captainVerified && <span className="profile-verified"><BadgeCheck size={14} /> Capitã verificada</span>}</div>
             <div className="profile-username">@{user.username}</div>
-            <div className="profile-role-pill"><Anchor size={12} /> {isCaptain ? "Capitão" : "Passageiro"}</div>
+            <div className="profile-role-pill"><MaritimeIcon variant="anchor" size={12} /> {isCaptain ? "Capitão" : "Passageiro"}</div>
             <label className="profile-upload-button" htmlFor="profile-avatar-input"><Upload size={13} /> {avatarState === "uploading" ? "Enviando…" : "Adicionar foto"}</label>
             {avatarState === "error" && <p className="profile-avatar-error">{avatarError}</p>}
           </div>
@@ -104,7 +103,7 @@ export default function Profile() {
       </div>
 
       <div className="profile-list">
-        <Link href={isCaptain ? "/minha-lancha" : "/perfil-capitao"}><button className="profile-action"><div className="profile-action-icon"><Anchor size={18} /></div><div><div className="profile-action-title">{isCaptain ? "Minha Lancha" : "Quero ser capitão"}</div><div className="profile-action-sub">{isCaptain ? "Gerenciar viagens e passageiros" : "Complete seu perfil e publique viagens"}</div></div><ChevronRight size={16} color="var(--text3)" /></button></Link>
+        <Link href={isCaptain ? "/minha-lancha" : "/perfil-capitao"}><button className="profile-action"><div className="profile-action-icon"><MaritimeIcon variant="lancha" size={18} /></div><div><div className="profile-action-title">{isCaptain ? "Minha Lancha" : "Quero ser capitão"}</div><div className="profile-action-sub">{isCaptain ? "Gerenciar viagens e passageiros" : "Complete seu perfil e publique viagens"}</div></div><ChevronRight size={16} color="var(--text3)" /></button></Link>
         <Link href="/minhas-reservas"><button className="profile-action"><div className="profile-action-icon"><Calendar size={18} /></div><div><div className="profile-action-title">Minhas Reservas</div><div className="profile-action-sub">Ver travessias agendadas</div></div><ChevronRight size={16} color="var(--text3)" /></button></Link>
         <Link href="/notificacoes"><button className="profile-action"><div className="profile-action-icon"><Bell size={18} /></div><div><div className="profile-action-title">Notificações</div><div className="profile-action-sub">Atualizações de reservas e pedidos de rota</div></div><ChevronRight size={16} color="var(--text3)" /></button></Link>
         <button className="profile-action profile-action-danger" onClick={async () => { await logout(); navigate("/"); }}><div className="profile-action-icon"><LogOut size={18} /></div><div><div className="profile-action-title">Sair da conta</div></div></button>

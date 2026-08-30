@@ -1,6 +1,6 @@
 import type { SVGProps } from "react";
 
-export type MaritimeIconVariant = "lancha" | "dock" | "buoy" | "route" | "wave";
+export type MaritimeIconVariant = "lancha" | "dock" | "buoy" | "route" | "wave" | "palm" | "beach" | "anchor" | "clock" | "pinpoint";
 
 type MaritimeIconProps = SVGProps<SVGSVGElement> & {
   variant?: MaritimeIconVariant;
@@ -44,6 +44,43 @@ const paths: Record<MaritimeIconVariant, JSX.Element> = {
       <path d="M3 9.5c2.1 0 2.1-1.5 4.2-1.5s2.1 1.5 4.2 1.5 2.1-1.5 4.2-1.5 2.1 1.5 4.2 1.5" />
       <path d="M3 15c2.1 0 2.1-1.5 4.2-1.5s2.1 1.5 4.2 1.5 2.1-1.5 4.2-1.5 2.1 1.5 4.2 1.5" opacity=".52" />
       <path d="M6 20.5h12" opacity=".35" />
+    </>
+  ),
+  palm: (
+    <>
+      <path d="M12 21V9" />
+      <path d="M12 9C9.2 6.3 5.9 6.5 3.5 8.3c2.8.3 4.9 1.2 6.4 2.9" />
+      <path d="M12 9c2.7-2.8 5.9-2.9 8.5-1.4-2.4.2-4.5 1.2-6.1 3" />
+      <path d="M12 9c-.7-3.5.9-5.5 3-6.5.4 2.2-.3 4.3-2.1 5.8" />
+      <path d="M8.5 21h7" opacity=".45" />
+    </>
+  ),
+  beach: (
+    <>
+      <circle cx="17.5" cy="6.5" r="2.5" />
+      <path d="M3 17c2.2-1.8 4.5-1.8 6.8 0s4.6 1.8 6.8 0 4.6-1.8 6.8 0" />
+      <path d="M3 21c2.2-1.8 4.5-1.8 6.8 0s4.6 1.8 6.8 0 4.6-1.8 6.8 0" opacity=".45" />
+      <path d="M5 13.5h6" />
+    </>
+  ),
+  anchor: (
+    <>
+      <path d="M12 4v11M8.5 7h7" />
+      <circle cx="12" cy="3.5" r="1.5" />
+      <path d="M6 12.5a6 6 0 0 0 12 0M3.5 16.5c1.8.8 3.7.8 5.5 0M15 16.5c1.8.8 3.7.8 5.5 0" />
+    </>
+  ),
+  clock: (
+    <>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 7.5v5l3.5 2" />
+      <path d="M12 2v1M22 12h-1M12 22v-1M2 12h1" opacity=".45" />
+    </>
+  ),
+  pinpoint: (
+    <>
+      <path d="M12 21s6.5-6.1 6.5-11.25a6.5 6.5 0 1 0-13 0C5.5 14.9 12 21 12 21Z" />
+      <circle cx="12" cy="9.75" r="2.25" />
     </>
   ),
 };

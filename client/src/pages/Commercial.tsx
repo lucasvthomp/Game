@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { ArrowRight, CheckCircle2, Mail, Anchor, Waves } from "lucide-react";
+import { ArrowRight, CheckCircle2, Mail } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
+import { MaritimeIllustration } from "@/components/MaritimeIllustration";
 
 export default function Commercial() {
   const [email, setEmail] = useState("");
@@ -28,7 +29,7 @@ export default function Commercial() {
   return (
     <div className="commercial-page commercial-page-simple">
       <main className="commercial-waitlist-shell">
-        <div className="commercial-waitlist-art" aria-hidden="true"><span className="commercial-waitlist-art-ring commercial-waitlist-art-ring-a" /><span className="commercial-waitlist-art-ring commercial-waitlist-art-ring-b" /><span className="commercial-waitlist-art-buoy"><Anchor size={20} /></span><Waves className="commercial-waitlist-art-wave" size={86} /></div>
+        <MaritimeIllustration className="commercial-waitlist-illustration" variant="lancha" size={88} aria-hidden="true" />
         {status === "success" ? (
           <div className="commercial-waitlist-success">
             <span className="commercial-waitlist-icon"><CheckCircle2 size={28} /></span>

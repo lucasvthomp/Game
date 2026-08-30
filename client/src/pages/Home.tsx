@@ -48,6 +48,7 @@ export default function Home() {
   return (
     <div className="home-clean">
       <section className="home-clean-intro">
+        <div className="home-clean-water-texture" aria-hidden="true" />
         <div className="home-clean-shell">
           <div className="home-clean-brandline">
             <span className="home-clean-brandmark"><MaritimeIcon variant="lancha" size={20} /></span>

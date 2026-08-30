@@ -9352,3 +9352,30 @@ a,
     border-radius: 20px;
   }
 }
+
+
+/* Keep the commercial waitlist intentionally quiet: one message, one action,
+   and one small branded illustration. */
+.commercial-waitlist-illustration {
+  display: block;
+  margin: -8px auto 2px;
+  filter: drop-shadow(0 9px 10px color-mix(in srgb, var(--text1) 9%, transparent));
+}
+
+.commercial-waitlist-shell > .commercial-waitlist-illustration + .commercial-waitlist-success,
+.commercial-waitlist-shell > .commercial-waitlist-illustration + .commercial-waitlist-icon {
+  margin-top: 2px;
+}
+
+@media (max-width: 620px) {
+  .commercial-waitlist-illustration {
+    width: 72px;
+    height: 72px;
+    margin-top: -2px;
+  }
+
+  .home-clean-service-card:hover,
+  .rcv2:hover {
+    transform: none;
+  }
+}

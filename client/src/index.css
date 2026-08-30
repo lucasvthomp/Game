@@ -9479,9 +9479,9 @@ a,
   background:
     linear-gradient(135deg, color-mix(in srgb, var(--bg2) 91%, transparent), color-mix(in srgb, var(--card) 84%, transparent)),
     url("/images/marcamar-water-texture.jpg") center / cover no-repeat;
-  background-blend-mode: normal, soft-light;
-  opacity: .18;
-  filter: saturate(.52) contrast(.92);
+  background-blend-mode: normal;
+  opacity: .29;
+  filter: saturate(.72) contrast(1.02);
 }
 
 @media (max-width: 620px) {
@@ -9496,7 +9496,7 @@ a,
   }
 
   .routes-map-workspace::before {
-    opacity: .11;
+    opacity: .2;
   }
 }
 

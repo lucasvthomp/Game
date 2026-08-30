@@ -6,13 +6,6 @@ export default function Footer() {
   const year = new Date().getFullYear();
   return (
     <footer className="footer">
-      <div className="footer-spotlight">
-        <div className="footer-spotlight-copy">
-          <span className="footer-spotlight-mark"><Waves size={18} /></span>
-          <div><p className="footer-spotlight-kicker">MARCAMAR · LITORAL EM MOVIMENTO</p><h2>O litoral fica mais perto pela água.</h2></div>
-        </div>
-        <Link href="/lanchas"><span className="footer-spotlight-link">Encontrar uma lancha <ArrowUpRight size={15} /></span></Link>
-      </div>
       <div className="footer-inner">
         <div className="footer-brand">
           <div className="footer-logo"><div className="footer-logo-icon"><MaritimeIcon variant="anchor" size={15} aria-hidden="true" /></div><span className="footer-logo-text">Marcamar</span></div>

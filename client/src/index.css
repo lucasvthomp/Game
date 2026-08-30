@@ -9482,3 +9482,510 @@ a,
     animation: none;
   }
 }
+
+
+/* ─── PROFESSIONAL FOOTER ───
+   A useful information architecture with one clear action, without another
+   oversized marketing panel. */
+.footer {
+  background: var(--card);
+}
+
+.footer-wrap {
+  width: min(1180px, calc(100% - 48px));
+  margin-inline: auto;
+}
+
+.footer-utility {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px 0 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.footer-utility-copy {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-utility-mark {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 12px;
+  color: var(--boat);
+  background: var(--boat-light);
+}
+
+.footer-utility-copy > div {
+  display: grid;
+  gap: 4px;
+}
+
+.footer-kicker {
+  color: var(--boat-dark);
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: .14em;
+  line-height: 1.2;
+}
+
+.footer-utility-copy strong {
+  color: var(--text1);
+  font-size: clamp(.95rem, 2vw, 1.15rem);
+  letter-spacing: -.025em;
+}
+
+.footer-primary-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 42px;
+  padding: 9px 14px;
+  border: 1px solid color-mix(in srgb, var(--boat) 35%, var(--border));
+  border-radius: 11px;
+  color: var(--boat-dark);
+  background: color-mix(in srgb, var(--boat-light) 64%, var(--card));
+  font-size: .76rem;
+  font-weight: 850;
+  white-space: nowrap;
+  transition: transform .2s ease, border-color .2s ease, background .2s ease;
+}
+
+.footer-primary-link:hover {
+  border-color: var(--boat);
+  background: var(--boat-light);
+  transform: translateY(-2px);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.45fr) repeat(3, minmax(135px, 1fr));
+  gap: clamp(24px, 5vw, 68px);
+  padding: 42px 0 34px;
+}
+
+.footer-brand {
+  min-width: 0;
+  max-width: 280px;
+}
+
+.footer-tagline {
+  max-width: 260px;
+  margin-top: 13px;
+  line-height: 1.55;
+}
+
+.footer-region {
+  margin-top: 19px;
+}
+
+.footer-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+  padding: 7px 9px;
+  border: 1px solid color-mix(in srgb, var(--boat) 22%, var(--border));
+  border-radius: 9px;
+  color: var(--text3);
+  background: color-mix(in srgb, var(--boat-light) 38%, var(--card));
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.footer-status svg {
+  color: var(--boat);
+}
+
+.footer-links-group {
+  min-width: 0;
+}
+
+.footer-group-title {
+  margin-bottom: 11px;
+  color: var(--text3);
+  font-size: 10px;
+  letter-spacing: .13em;
+}
+
+.footer-link {
+  min-height: 29px;
+  padding: 5px 0;
+  font-size: 12px;
+}
+
+.footer-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 17px 0 20px;
+  border-top: 1px solid var(--border);
+  color: var(--text3);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.footer-note svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  color: var(--boat);
+}
+
+.footer-note strong {
+  color: var(--text2);
+}
+
+.footer-bottom-inner {
+  width: min(1180px, calc(100% - 48px));
+}
+
+@media (max-width: 760px) {
+  .footer-wrap {
+    width: calc(100% - 32px);
+  }
+
+  .footer-utility {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 15px;
+    padding-block: 24px 20px;
+  }
+
+  .footer-primary-link {
+    width: 100%;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 30px 18px;
+    padding-block: 32px 26px;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+    max-width: 380px;
+  }
+
+  .footer-note {
+    padding-bottom: 18px;
+  }
+
+  .footer-bottom-inner {
+    width: calc(100% - 32px);
+  }
+}
+
+@media (max-width: 440px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .footer-brand {
+    grid-column: auto;
+  }
+
+  .footer-note {
+    font-size: 10px;
+  }
+}
+
+
+/* ─── PROFILE + ROUTES SURFACE ─── */
+.profile-page {
+  width: min(780px, calc(100% - 48px));
+  min-height: calc(100svh - 68px);
+  margin-inline: auto;
+  padding: clamp(38px, 6vw, 72px) 0 88px;
+}
+
+.profile-page-heading {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 24px;
+}
+
+.profile-page-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--boat-dark);
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: .14em;
+}
+
+.profile-page-kicker svg {
+  color: var(--boat);
+}
+
+.profile-page-heading .page-title {
+  margin: 0 !important;
+  color: var(--text1);
+  font-size: clamp(2.45rem, 6vw, 4.5rem);
+  line-height: .95;
+  letter-spacing: -.075em;
+}
+
+.profile-page-heading .page-sub {
+  max-width: 510px;
+  color: var(--text2);
+  font-size: .92rem;
+  line-height: 1.55;
+}
+
+.profile-card-identity {
+  padding: 22px !important;
+}
+
+.profile-card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 22px;
+  padding-bottom: 13px;
+  border-bottom: 1px solid var(--border);
+}
+
+.profile-card-heading > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--boat-dark);
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: .12em;
+}
+
+.profile-card-heading > span svg {
+  color: var(--boat);
+}
+
+.profile-card-heading small {
+  color: var(--text3);
+  font-size: 10px;
+}
+
+.profile-identity-row {
+  gap: 18px;
+}
+
+.profile-avatar-large {
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--text1) 11%, transparent);
+}
+
+.profile-details {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+
+.profile-action {
+  min-height: 66px;
+  padding: 12px 15px;
+}
+
+.profile-action-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+}
+
+.profile-action-title {
+  font-size: .82rem;
+}
+
+.profile-action-sub {
+  margin-top: 3px;
+  color: var(--text3);
+  font-size: .7rem;
+}
+
+@media (max-width: 620px) {
+  .profile-page {
+    width: calc(100% - 32px);
+    padding-top: 30px;
+    padding-bottom: 82px;
+  }
+
+  .profile-card-identity {
+    padding: 18px !important;
+  }
+
+  .profile-card-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 18px;
+  }
+
+  .profile-identity-row {
+    gap: 13px;
+  }
+
+  .profile-page-heading .page-title {
+    font-size: clamp(2.55rem, 14vw, 3.7rem);
+  }
+
+  .profile-details {
+    margin-top: 18px;
+    padding-top: 15px;
+  }
+
+  .profile-action {
+    min-height: 64px;
+  }
+}
+
+/* Routes keeps the map central while making the page feel intentional on
+   desktop and compact on mobile. */
+.routes-page-v2 {
+  min-height: calc(100svh - 68px);
+  background:
+    linear-gradient(to bottom, color-mix(in srgb, var(--card) 52%, var(--bg)), var(--bg) 24rem);
+}
+
+.routes-command {
+  position: relative;
+  z-index: 1;
+  width: min(1120px, calc(100% - 48px));
+  padding-block: clamp(40px, 6vw, 68px) 28px;
+  border-bottom: 0;
+}
+
+.routes-command-copy h2 {
+  max-width: 700px;
+  margin-top: 9px;
+  color: var(--text1);
+  font-size: clamp(2.5rem, 5.6vw, 5rem);
+  line-height: .95;
+  letter-spacing: -.075em;
+}
+
+.routes-command-copy > p:last-child {
+  max-width: 510px;
+  margin-top: 15px;
+  font-size: .95rem;
+}
+
+.routes-command-search {
+  border-radius: 15px;
+  box-shadow: 0 9px 22px color-mix(in srgb, var(--text1) 7%, transparent);
+}
+
+.routes-map-workspace {
+  padding-top: 24px;
+}
+
+.routes-map-workspace-head {
+  margin-bottom: 15px;
+}
+
+.routes-map-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 13px;
+}
+
+.routes-map-facts > span {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 14px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--card);
+  box-shadow: 0 5px 15px color-mix(in srgb, var(--text1) 5%, transparent);
+}
+
+.routes-map-facts svg {
+  flex: 0 0 auto;
+  color: var(--boat);
+}
+
+.routes-map-facts strong {
+  color: var(--text1);
+  font-size: .83rem;
+}
+
+.routes-map-facts small {
+  overflow: hidden;
+  color: var(--text3);
+  font-size: .67rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.routes-directory-v2,
+.routes-points-v2 {
+  padding-block: 52px;
+}
+
+.routes-directory-v2 {
+  border-top: 1px solid var(--border);
+}
+
+.routes-route-row-v2 {
+  box-shadow: 0 5px 16px color-mix(in srgb, var(--text1) 5%, transparent);
+}
+
+.routes-points-v2 {
+  background: color-mix(in srgb, var(--card) 43%, transparent);
+}
+
+.routes-cta-v2 {
+  box-shadow: 0 7px 20px color-mix(in srgb, var(--text1) 6%, transparent);
+}
+
+@media (max-width: 760px) {
+  .routes-command {
+    width: calc(100% - 32px);
+    padding-top: 36px;
+  }
+
+  .routes-command-copy h2 {
+    font-size: clamp(2.55rem, 13vw, 4rem);
+  }
+
+  .routes-map-facts {
+    gap: 7px;
+  }
+
+  .routes-map-facts > span {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+    padding: 11px;
+  }
+
+  .routes-map-facts strong {
+    font-size: .78rem;
+  }
+}
+
+@media (max-width: 440px) {
+  .routes-command,
+  .routes-map-workspace {
+    width: calc(100% - 28px);
+  }
+
+  .routes-map-facts > span {
+    padding: 10px 9px;
+  }
+
+  .routes-map-facts small {
+    display: block;
+    font-size: .62rem;
+  }
+}

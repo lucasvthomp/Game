@@ -64,7 +64,7 @@ function LeafletLocationPicker({ value, onChange, label, variant = "origin", hei
   const [notice, setNotice] = useState("");
   const isDestination = variant === "dest";
   const color = isDestination ? PIN.dest : PIN.origin;
-  const icon = pinIcon(color, isDestination ? "⚓" : "📍", true);
+  const icon = pinIcon(color, "", true);
   const center: [number, number] = value ? [value.lat, value.lng] : SP_REGION_CENTER;
   const zoom = value ? 13 : SP_REGION_ZOOM;
 

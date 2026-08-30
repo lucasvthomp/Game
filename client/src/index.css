@@ -2381,6 +2381,12 @@ input, select, textarea, button { font-family: inherit; }
   .everyday-water-lead { max-width: 670px; }
   .everyday-water-visual { min-height: 560px; width: min(720px, 100%); margin: 0 auto; }
 }
+
+@keyframes marcamarWaterSurfaceMap {
+  0%, 100% { background-position: 0 0, center 48%; transform: scale(1.04); }
+  50% { background-position: 0 0, 54% 52%; transform: scale(1.08); }
+}
+
 @media (max-width: 620px) {
   .everyday-water-section { padding-right: 18px; padding-left: 18px; }
   .everyday-water-copy h2 { font-size: clamp(2.55rem, 13vw, 4rem); letter-spacing: -2.5px; }
@@ -9410,9 +9416,23 @@ a,
   filter: saturate(.85) contrast(1.05);
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 88%, transparent 100%);
   mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 88%, transparent 100%);
+  transform: scale(1.06);
+  transform-origin: center;
+  animation: marcamarWaterSurface 30s ease-in-out infinite;
 }
 
-
+@keyframes marcamarWaterSurface {
+  0%, 100% {
+    background-position: center 42%;
+    transform: scale(1.06) translate3d(-.7%, 0, 0);
+    filter: saturate(.82) contrast(1.05) brightness(.99);
+  }
+  50% {
+    background-position: 54% 48%;
+    transform: scale(1.1) translate3d(.9%, -.5%, 0);
+    filter: saturate(.9) contrast(1.03) brightness(1.03);
+  }
+}
 [data-theme="dark"] .home-clean-water-texture {
   opacity: .42;
   filter: saturate(.58) brightness(.72) contrast(1.04);
@@ -9482,6 +9502,10 @@ a,
   background-blend-mode: normal;
   opacity: .29;
   filter: saturate(.72) contrast(1.02);
+  background-position: 0 0, center 48%;
+  transform: scale(1.04);
+  transform-origin: center;
+  animation: marcamarWaterSurfaceMap 36s ease-in-out infinite;
 }
 
 @media (max-width: 620px) {
@@ -9489,6 +9513,7 @@ a,
     inset: -10% -30%;
     opacity: .4;
     background-position: 58% 42%;
+    animation-duration: 36s;
   }
 
   .home-clean-service-card > svg {
@@ -9497,10 +9522,13 @@ a,
 
   .routes-map-workspace::before {
     opacity: .2;
+    animation-duration: 42s;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .home-clean-water-texture,
+  .routes-map-workspace::before,
   .home-clean-service-card > svg {
     animation: none;
   }
@@ -10011,3 +10039,37 @@ a,
     font-size: .62rem;
   }
 }
+
+
+/* ─── NEUTRAL COASTAL MAP ───
+   Carto's light tiles remove terrain pictograms; this final override keeps
+   every map surface restrained and consistent across themes. */
+.marcamar-map-theme .leaflet-tile-pane {
+  filter: saturate(.44) brightness(1.02) contrast(.98) !important;
+}
+
+[data-theme="dark"] .marcamar-map-theme .leaflet-tile-pane {
+  filter: invert(.84) grayscale(.46) sepia(.08) saturate(.38) brightness(.72) contrast(1.06) !important;
+}
+
+.lc-map-frame-coastal .leaflet-container {
+  background: #e5e1d8;
+}
+
+[data-theme="dark"] .lc-map-frame-coastal .leaflet-container {
+  background: #262b2a;
+}
+
+.lc-pin-body::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border: 2px solid rgba(255,255,255,.92);
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0,0,0,.16);
+}
+
+.lc-pin-emoji {
+  display: none;
+}
+

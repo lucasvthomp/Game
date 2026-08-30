@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
-import { ArrowRight, Search } from "lucide-react";
+import { ArrowRight, MapPin, Search } from "lucide-react";
 import { lazy, Suspense, useMemo, useState } from "react";
 import { SiteAutocomplete } from "@/components/SiteSelect";
 import { MaritimeIcon } from "@/components/MaritimeIcon";

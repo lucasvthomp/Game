@@ -1,5 +1,6 @@
 import { Link } from "wouter";
-import { Anchor, ArrowUpRight, Waves } from "lucide-react";
+import { ArrowUpRight, Waves } from "lucide-react";
+import { MaritimeIcon } from "@/components/MaritimeIcon";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -14,7 +15,7 @@ export default function Footer() {
       </div>
       <div className="footer-inner">
         <div className="footer-brand">
-          <div className="footer-logo"><div className="footer-logo-icon"><Anchor size={13} color="#fff" /></div><span className="footer-logo-text">Marcamar</span></div>
+          <div className="footer-logo"><div className="footer-logo-icon"><MaritimeIcon variant="anchor" size={15} aria-hidden="true" /></div><span className="footer-logo-text">Marcamar</span></div>
           <p className="footer-tagline">Travessias locais de lancha, com clareza do ponto de embarque ao desembarque.</p>
           <div className="footer-region"><Waves size={14} /> Litoral paulista · São Paulo, Brasil</div>
         </div>

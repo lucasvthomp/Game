@@ -10039,3 +10039,37 @@ a,
     font-size: .62rem;
   }
 }
+
+
+/* ─── NEUTRAL COASTAL MAP ───
+   Carto's light tiles remove terrain pictograms; this final override keeps
+   every map surface restrained and consistent across themes. */
+.marcamar-map-theme .leaflet-tile-pane {
+  filter: saturate(.44) brightness(1.02) contrast(.98) !important;
+}
+
+[data-theme="dark"] .marcamar-map-theme .leaflet-tile-pane {
+  filter: invert(.84) grayscale(.46) sepia(.08) saturate(.38) brightness(.72) contrast(1.06) !important;
+}
+
+.lc-map-frame-coastal .leaflet-container {
+  background: #e5e1d8;
+}
+
+[data-theme="dark"] .lc-map-frame-coastal .leaflet-container {
+  background: #262b2a;
+}
+
+.lc-pin-body::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border: 2px solid rgba(255,255,255,.92);
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0,0,0,.16);
+}
+
+.lc-pin-emoji {
+  display: none;
+}
+

@@ -4,6 +4,7 @@ import { ArrowRight, Check } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { SiteAutocomplete } from "@/components/SiteSelect";
 import { MaritimeIcon } from "@/components/MaritimeIcon";
+import { MaritimeIllustration } from "@/components/MaritimeIllustration";
 import { apiRequest } from "@/lib/queryClient";
 import { PILOT_ROUTES } from "@shared/pilot-routes";
 import { COASTAL_POINT_NAMES } from "@shared/coastal-locations";
@@ -95,6 +96,21 @@ export default function Home() {
       </section>
 
       <main className="home-clean-main">
+        <section className="home-clean-services" aria-label="Atalhos Marcamar">
+          <Link href="/lanchas"><article className="home-clean-service-card">
+            <div><h2>Encontrar uma lancha</h2><p>Compare saídas, horários e valores para o seu trecho.</p><span>Buscar saídas <ArrowRight size={15} /></span></div>
+            <MaritimeIllustration variant="lancha" size={88} />
+          </article></Link>
+          <Link href="/rotas"><article className="home-clean-service-card">
+            <div><h2>Explorar pontos</h2><p>Veja praias e píeres costeiros no mapa.</p><span>Ver rotas <ArrowRight size={15} /></span></div>
+            <MaritimeIllustration variant="beach" size={88} />
+          </article></Link>
+          <Link href="/solicitar-rota"><article className="home-clean-service-card">
+            <div><h2>Pedir uma rota</h2><p>Não encontrou? Conte qual caminho você precisa.</p><span>Solicitar <ArrowRight size={15} /></span></div>
+            <MaritimeIllustration variant="palm" size={88} />
+          </article></Link>
+        </section>
+
         <section className="home-clean-departures">
           <div className="home-clean-section-head">
             <div><p className="home-clean-kicker">SAÍDAS PUBLICADAS</p><h2>Próximas travessias</h2></div>
@@ -134,9 +150,9 @@ export default function Home() {
             <Link href="/como-funciona"><span className="home-clean-link">Entenda melhor <ArrowRight size={15} /></span></Link>
           </div>
           <div className="home-clean-steps">
-            <article><span className="home-clean-step-icon"><MaritimeIcon variant="pinpoint" size={21} /></span><div><strong>Escolha o trecho</strong><p>Informe de onde sai, para onde vai e a data.</p></div></article>
-            <article><span className="home-clean-step-icon"><MaritimeIcon variant="clock" size={21} /></span><div><strong>Confira antes</strong><p>Veja horário, valor, vagas e quem conduz.</p></div></article>
-            <article><span className="home-clean-step-icon"><MaritimeIcon variant="lancha" size={21} /></span><div><strong>Vá para o cais</strong><p>Combine o embarque e siga pela água.</p></div></article>
+            <article><span className="home-clean-step-icon"><MaritimeIllustration variant="pinpoint" size={56} /></span><div><strong>Escolha o trecho</strong><p>Informe de onde sai, para onde vai e a data.</p></div></article>
+            <article><span className="home-clean-step-icon"><MaritimeIllustration variant="clock" size={56} /></span><div><strong>Confira antes</strong><p>Veja horário, valor, vagas e quem conduz.</p></div></article>
+            <article><span className="home-clean-step-icon"><MaritimeIllustration variant="lancha" size={56} /></span><div><strong>Vá para o cais</strong><p>Combine o embarque e siga pela água.</p></div></article>
           </div>
         </section>
 

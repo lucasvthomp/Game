@@ -10,27 +10,18 @@ const passengerSteps = [
 
 export default function HowItWorks() {
   return (
-    <div className="content-page-v2 content-page-how-v2">
-      <section className="content-page-v2-hero">
-        <div className="content-page-v2-hero-copy">
-          <div className="home-v2-eyebrow content-eyebrow"><Waves size={15} /> Um jeito mais simples de cruzar</div>
-          <h1>A água pode ser<br /><em>o caminho.</em></h1>
-          <p>O Marcamar aproxima passageiros e operadores locais para que cada travessia comece com informação clara.</p>
-          <div className="content-page-v2-actions">
-            <Link href="/lanchas"><span className="home-v2-coral-button">Encontrar uma lancha <ArrowRight size={17} /></span></Link>
-            <Link href="/rotas"><span className="content-page-v2-secondary-link">Ver rotas e pontos <ArrowRight size={16} /></span></Link>
-          </div>
+    <div className="content-page-v2 content-page-how-v2 content-page-compact">
+      <header className="content-page-compact-header">
+        <span className="content-page-compact-icon"><Waves size={23} /></span>
+        <div>
+          <p className="home-v2-kicker">COMO FUNCIONA</p>
+          <h1>Do ponto ao embarque.</h1>
+          <p>Escolha uma saída, confira os detalhes e combine o cais com tranquilidade.</p>
         </div>
-        <div className="content-page-v2-hero-note">
-          <span className="content-hero-note-icon"><MaritimeIcon variant="wave" size={22} /></span>
-          <span className="content-note-number">03</span>
-          <strong>passos até o embarque</strong>
-          <span>Rota, detalhe, conversa.</span>
-        </div>
-      </section>
+      </header>
 
       <section className="content-page-v2-section">
-        <div className="content-page-v2-section-heading"><p className="home-v2-kicker">PARA PASSAGEIROS</p><h2>Do ponto de saída ao cais.</h2><p>Você sabe o que procurar e o que esperar em cada etapa.</p></div>
+        <div className="content-page-v2-section-heading"><p className="home-v2-kicker">PARA PASSAGEIROS</p><h2>Três passos simples.</h2><p>Você sabe o que procurar e o que esperar em cada etapa.</p></div>
         <div className="content-step-grid-v2">
           {passengerSteps.map((step) => <article key={step.number} className="content-step-v2"><span className="content-step-number">{step.number}</span><span className="content-step-icon">{step.icon}</span><h3>{step.title}</h3><p>{step.copy}</p></article>)}
         </div>

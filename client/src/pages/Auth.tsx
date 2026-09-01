@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { apiRequest } from "@/lib/queryClient";
-import { Anchor } from "lucide-react";
-import { BoatMediaCluster } from "@/components/layout/BoatMediaCluster";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { MaritimeIcon } from "@/components/MaritimeIcon";
 
 function GoogleMark() {
   return (
@@ -28,97 +28,97 @@ export default function Auth({ mode }: { mode: "login" | "register" }) {
   const [loading, setLoading] = useState(false);
   const [googleAvailable, setGoogleAvailable] = useState(false);
   const [form, setForm] = useState({ email: "", password: "", username: "", fullName: "", homeCity: "", phone: "" });
-  const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement>) => setForm(f => ({ ...f, [k]: e.target.value }));
+
+  const setField = (key: keyof typeof form) => (event: ChangeEvent<HTMLInputElement>) => {
+    setForm((current) => ({ ...current, [key]: event.target.value }));
+  };
 
   useEffect(() => {
     apiRequest("GET", "/api/auth/providers")
-      .then(data => setGoogleAvailable(Boolean(data.google)))
+      .then((data) => setGoogleAvailable(Boolean(data.google)))
       .catch(() => setGoogleAvailable(false));
   }, []);
 
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(""); setLoading(true);
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setError("");
+    setLoading(true);
     try {
       if (mode === "login") await login(form.email, form.password);
       else await register(form);
       navigate("/viagens");
-    } catch (err: any) {
-      setError(err.message);
-    } finally { setLoading(false); }
+    } catch (requestError: any) {
+      setError(requestError?.message || "Não foi possível continuar.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="auth-wrap">
-      <div className="auth-story" aria-hidden="true">
-        <BoatMediaCluster variant="compact" />
-        <p>Entre para encontrar uma travessia que cabe no seu dia.</p>
-      </div>
-      <div className="auth-box">
-        <div className="auth-logo">
-          <div style={{ width: 44, height: 44, borderRadius: 14, background: "var(--boat)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px" }}>
-            <Anchor size={22} color="#fff" />
-          </div>
-          <div className="auth-title">{mode === "login" ? "Bem-vindo de volta" : "Criar conta"}</div>
-          <div className="auth-sub">{mode === "login" ? "Entre na sua conta Marcamar" : "Junte-se ao piloto de transporte compartilhado na água"}</div>
+    <main className="auth-page-clean">
+      <section className="auth-box auth-box-clean">
+        <div className="auth-logo auth-logo-clean">
+          <span className="auth-brand-icon"><MaritimeIcon variant="lancha" size={25} /></span>
+          <p className="auth-kicker">{mode === "login" ? "BEM-VINDO DE VOLTA" : "COMECE PELO SEU PERFIL"}</p>
+          <h1 className="auth-title">{mode === "login" ? "Entrar na conta" : "Criar sua conta"}</h1>
+          <p className="auth-sub">{mode === "login" ? "Acesse suas reservas e próximos embarques." : "Um perfil simples para reservar travessias pela costa."}</p>
         </div>
 
-        <div className="auth-card">
-          <button
-            className="auth-google-button"
-            type="button"
-            disabled={!googleAvailable}
-            onClick={() => { window.location.href = "/api/auth/google"; }}
-          >
+        <div className="auth-card auth-card-clean">
+          <button className="auth-google-button" type="button" disabled={!googleAvailable} onClick={() => { window.location.href = "/api/auth/google"; }}>
             <GoogleMark />
-            <span>{googleAvailable ? "Continuar com Google" : "Google — configuração pendente"}</span>
+            <span>{googleAvailable ? "Continuar com Google" : "Google indisponível"}</span>
           </button>
           <div className="auth-divider"><span>ou use email e senha</span></div>
+
           <form onSubmit={submit}>
             {mode === "register" && (
-              <>
-                <div className="form-field">
-                  <label className="form-label">NOME COMPLETO *</label>
-                  <input className="form-input" value={form.fullName} onChange={set("fullName")} required placeholder="João da Silva" />
+              <div className="auth-form-grid">
+                <div className="form-field auth-form-full">
+                  <label className="form-label" htmlFor="full-name">NOME COMPLETO *</label>
+                  <input id="full-name" className="form-input" value={form.fullName} onChange={setField("fullName")} required placeholder="João da Silva" autoComplete="name" />
                 </div>
                 <div className="form-field">
-                  <label className="form-label">USUÁRIO *</label>
-                  <input className="form-input" value={form.username} onChange={set("username")} required placeholder="joaosilva" />
+                  <label className="form-label" htmlFor="username">USUÁRIO *</label>
+                  <input id="username" className="form-input" value={form.username} onChange={setField("username")} required placeholder="joaosilva" autoComplete="username" />
                 </div>
                 <div className="form-field">
-                  <label className="form-label">CIDADE ONDE MORA (SÃO PAULO) *</label>
-                  <input className="form-input" value={form.homeCity} onChange={set("homeCity")} required placeholder="São Sebastião" autoComplete="address-level2" />
-                  <div className="form-hint">Informe a cidade ou município onde você mora no estado de São Paulo.</div>
+                  <label className="form-label" htmlFor="home-city">CIDADE *</label>
+                  <input id="home-city" className="form-input" value={form.homeCity} onChange={setField("homeCity")} required placeholder="São Sebastião" autoComplete="address-level2" />
                 </div>
-              </>
-            )}
-            <div className="form-field">
-              <label className="form-label">EMAIL *</label>
-              <input className="form-input" type="email" value={form.email} onChange={set("email")} required placeholder="seu@email.com" />
-            </div>
-            <div className="form-field">
-              <label className="form-label">SENHA *</label>
-              <input className="form-input" type="password" value={form.password} onChange={set("password")} required placeholder="Mínimo 6 caracteres" />
-            </div>
-            {mode === "register" && (
-              <div className="form-field">
-                <label className="form-label">TELEFONE (WhatsApp)</label>
-                <input className="form-input" value={form.phone} onChange={set("phone")} placeholder="+55 11 99999-9999" />
               </div>
             )}
+
+            <div className={mode === "register" ? "auth-form-grid" : ""}>
+              <div className="form-field">
+                <label className="form-label" htmlFor="auth-email">EMAIL *</label>
+                <input id="auth-email" className="form-input" type="email" value={form.email} onChange={setField("email")} required placeholder="seu@email.com" autoComplete="email" />
+              </div>
+              <div className="form-field">
+                <label className="form-label" htmlFor="auth-password">SENHA *</label>
+                <input id="auth-password" className="form-input" type="password" value={form.password} onChange={setField("password")} required placeholder="Mínimo 6 caracteres" autoComplete={mode === "login" ? "current-password" : "new-password"} />
+              </div>
+              {mode === "register" && (
+                <div className="form-field auth-form-full">
+                  <label className="form-label" htmlFor="auth-phone">TELEFONE <span>(opcional)</span></label>
+                  <input id="auth-phone" className="form-input" value={form.phone} onChange={setField("phone")} placeholder="+55 11 99999-9999" autoComplete="tel" />
+                </div>
+              )}
+            </div>
+
             {error && <div className="form-error">{error}</div>}
-            <button className="form-submit" type="submit" disabled={loading}>
-              {loading ? "Aguarde..." : mode === "login" ? "Entrar" : "Criar conta"}
+            <button className="form-submit auth-submit-clean" type="submit" disabled={loading}>
+              {loading ? "Aguarde..." : mode === "login" ? "Entrar" : "Criar conta"} <ArrowRight size={16} />
             </button>
           </form>
+
           <div className="auth-switch">
-            {mode === "login"
-              ? <>Não tem conta? <a href="/cadastro">Cadastre-se</a></>
-              : <>Já tem conta? <a href="/entrar">Entrar</a></>}
+            {mode === "login" ? <>Não tem conta? <a href="/cadastro">Cadastre-se</a></> : <>Já tem conta? <a href="/entrar">Entrar</a></>}
           </div>
         </div>
-      </div>
-    </div>
+
+        <p className="auth-footnote"><CheckCircle2 size={14} /> Seus dados ficam protegidos e você controla suas informações.</p>
+      </section>
+    </main>
   );
 }
-

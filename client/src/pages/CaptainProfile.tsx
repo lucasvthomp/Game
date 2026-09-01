@@ -1,9 +1,11 @@
-import { useState } from "react";
-import { BoatMediaCluster } from "@/components/layout/BoatMediaCluster";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
-import { Anchor, Upload, CheckCircle } from "lucide-react";
+import { CheckCircle2, Upload } from "lucide-react";
+import { MaritimeIcon } from "@/components/MaritimeIcon";
+
+const INITIAL_FORM = { licenseNumber: "", boatName: "", boatModel: "", boatCapacity: "", bio: "" };
 
 export default function CaptainProfile() {
   const { user, refetch } = useAuth();
@@ -11,121 +13,145 @@ export default function CaptainProfile() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({ licenseNumber: "", boatName: "", boatModel: "", boatCapacity: "", bio: "" });
+  const [form, setForm] = useState(INITIAL_FORM);
   const [licenseImage, setLicenseImage] = useState<File | null>(null);
   const [boatImage, setBoatImage] = useState<File | null>(null);
-  const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setForm(f => ({ ...f, [k]: e.target.value }));
+
+  const setField = (key: keyof typeof INITIAL_FORM) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setForm((current) => ({ ...current, [key]: event.target.value }));
+  };
 
   const { data: existing } = useQuery({
     queryKey: ["/api/captain/profile"],
-    queryFn: async () => { const r = await fetch("/api/captain/profile", { credentials: "include" }); if (!r.ok) return null; return r.json(); },
+    queryFn: async () => {
+      const response = await fetch("/api/captain/profile", { credentials: "include" });
+      if (!response.ok) return null;
+      return response.json();
+    },
   });
 
-  if (!user) { navigate("/entrar"); return null; }
-  if (existing?.profile) { navigate("/minha-lancha"); return null; }
+  if (!user) {
+    navigate("/entrar");
+    return null;
+  }
+  if (existing?.profile) {
+    navigate("/minha-lancha");
+    return null;
+  }
 
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault(); setError("");
-    if (!licenseImage) { setError("Foto da habilitação é obrigatória."); return; }
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setError("");
+    if (!licenseImage) {
+      setError("Foto da habilitação é obrigatória.");
+      return;
+    }
     setLoading(true);
     try {
-      const fd = new FormData();
-      Object.entries(form).forEach(([k, v]) => fd.append(k, v));
-      fd.append("licenseImage", licenseImage);
-      if (boatImage) fd.append("boatImage", boatImage);
-      const res = await fetch("/api/captain/profile", { method: "POST", body: fd, credentials: "include" });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
+      const body = new FormData();
+      Object.entries(form).forEach(([key, value]) => body.append(key, value));
+      body.append("licenseImage", licenseImage);
+      if (boatImage) body.append("boatImage", boatImage);
+      const response = await fetch("/api/captain/profile", { method: "POST", body, credentials: "include" });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || "Não foi possível criar o perfil.");
       setSuccess(true);
       await refetch();
-      setTimeout(() => navigate("/minha-lancha"), 1500);
-    } catch (err: any) { setError(err.message); }
-    finally { setLoading(false); }
+      window.setTimeout(() => navigate("/minha-lancha"), 1200);
+    } catch (requestError: any) {
+      setError(requestError?.message || "Não foi possível criar o perfil.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (success) return (
-    <div style={{ minHeight: "70vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12, background: "var(--bg)" }}>
-      <CheckCircle size={52} color="var(--green)" />
-      <h2 style={{ color: "var(--text1)", fontWeight: 800 }}>Perfil criado!</h2>
-      <p style={{ color: "var(--text2)" }}>Redirecionando...</p>
-    </div>
-  );
+  if (success) {
+    return (
+      <main className="captain-profile-page captain-profile-success-page">
+        <div className="captain-profile-success">
+          <span className="captain-profile-success-icon"><CheckCircle2 size={30} /></span>
+          <p className="profile-page-kicker"><MaritimeIcon variant="anchor" size={15} /> PERFIL DA LANCHA</p>
+          <h1>Perfil criado.</h1>
+          <p>Estamos abrindo seu painel de capitão.</p>
+        </div>
+      </main>
+    );
+  }
 
   return (
-    <div className="captain-page">
-      <div style={{ textAlign: "center", marginBottom: 36 }}>
-        <div style={{ width: 48, height: 48, borderRadius: 14, background: "var(--boat)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
-          <Anchor size={24} color="#fff" />
+    <main className="captain-profile-page">
+      <header className="captain-profile-header">
+        <span className="captain-profile-header-icon"><MaritimeIcon variant="anchor" size={26} /></span>
+        <div>
+          <p className="profile-page-kicker"><MaritimeIcon variant="anchor" size={15} /> PERFIL DA LANCHA</p>
+          <h1>Comece a publicar.</h1>
+          <p>Informe só o essencial para apresentar sua lancha com clareza.</p>
         </div>
-        <h1 className="page-title">Perfil de Capitão</h1>
-        <p className="page-sub">Preencha seus dados para começar a publicar viagens</p>
-      </div>
+      </header>
 
-      <div className="captain-form-media">
-        <BoatMediaCluster variant="compact" />
-      </div>
-
-      <div className="card">
+      <section className="card captain-profile-card">
         <form onSubmit={submit}>
-          <div className="card-section">
-            <p className="section-label" style={{ marginBottom: 16 }}>HABILITAÇÃO</p>
-            <div style={{ marginBottom: 14 }}>
-              <label className="field-label">NÚMERO DA HABILITAÇÃO NÁUTICA *</label>
-              <input className="field-input" value={form.licenseNumber} onChange={set("licenseNumber")} required placeholder="ex: HN-123456" />
+          <div className="captain-profile-section">
+            <div className="captain-profile-section-heading">
+              <span className="captain-profile-step">1</span>
+              <div><h2>Habilitação</h2><p>Usada apenas para validar seu cadastro.</p></div>
             </div>
-            <div>
-              <label className="field-label">FOTO DA HABILITAÇÃO *</label>
-              <label className="file-label">
-                <Upload size={16} color={licenseImage ? "var(--green)" : "var(--text3)"} />
-                <span className={licenseImage ? "file-chosen" : "file-placeholder"}>
-                  {licenseImage ? licenseImage.name : "Clique para enviar foto (JPG, PNG)"}
-                </span>
-                <input type="file" accept="image/*" style={{ display: "none" }} onChange={e => setLicenseImage(e.target.files?.[0] || null)} />
-              </label>
-            </div>
-          </div>
-
-          <div className="card-section">
-            <p className="section-label" style={{ marginBottom: 16 }}>SUA LANCHA</p>
-            <div className="form-grid">
+            <div className="captain-profile-fields">
               <div>
-                <label className="field-label">NOME DA LANCHA *</label>
-                <input className="field-input" value={form.boatName} onChange={set("boatName")} required placeholder="ex: Veneza III" />
+                <label className="field-label" htmlFor="license-number">NÚMERO DA HABILITAÇÃO NÁUTICA *</label>
+                <input id="license-number" className="field-input" value={form.licenseNumber} onChange={setField("licenseNumber")} required placeholder="HN-123456" />
               </div>
               <div>
-                <label className="field-label">MODELO</label>
-                <input className="field-input" value={form.boatModel} onChange={set("boatModel")} placeholder="ex: Focker 275" />
-              </div>
-              <div>
-                <label className="field-label">CAPACIDADE (passageiros) *</label>
-                <input className="field-input" type="number" min="1" max="30" value={form.boatCapacity} onChange={set("boatCapacity")} required placeholder="ex: 8" />
-              </div>
-              <div>
-                <label className="field-label">FOTO DA LANCHA</label>
-                <label className="file-label" style={{ height: "100%", minHeight: 42 }}>
-                  <Upload size={14} color={boatImage ? "var(--green)" : "var(--text3)"} />
-                  <span className={boatImage ? "file-chosen" : "file-placeholder"} style={{ fontSize: 12 }}>
-                    {boatImage ? boatImage.name : "Opcional"}
-                  </span>
-                  <input type="file" accept="image/*" style={{ display: "none" }} onChange={e => setBoatImage(e.target.files?.[0] || null)} />
+                <label className="field-label" htmlFor="license-image">FOTO DA HABILITAÇÃO *</label>
+                <label className={"file-label captain-upload-field " + (licenseImage ? "is-selected" : "")} htmlFor="license-image">
+                  <Upload size={16} />
+                  <span>{licenseImage ? licenseImage.name : "Selecionar foto"}</span>
+                  <input id="license-image" type="file" accept="image/*" onChange={(event) => setLicenseImage(event.target.files?.[0] || null)} />
                 </label>
               </div>
-              <div className="form-full">
-                <label className="field-label">BIO / APRESENTAÇÃO</label>
-                <textarea className="field-input" value={form.bio} onChange={set("bio")} placeholder="Sua experiência, tipo de passeios, etc..." style={{ minHeight: 80, resize: "vertical" }} />
+            </div>
+          </div>
+
+          <div className="captain-profile-section">
+            <div className="captain-profile-section-heading">
+              <span className="captain-profile-step">2</span>
+              <div><h2>Sua lancha</h2><p>Essas informações aparecem antes da reserva.</p></div>
+            </div>
+            <div className="captain-profile-fields">
+              <div>
+                <label className="field-label" htmlFor="boat-name">NOME DA LANCHA *</label>
+                <input id="boat-name" className="field-input" value={form.boatName} onChange={setField("boatName")} required placeholder="Vento Sul" />
+              </div>
+              <div>
+                <label className="field-label" htmlFor="boat-model">MODELO</label>
+                <input id="boat-model" className="field-input" value={form.boatModel} onChange={setField("boatModel")} placeholder="Lancha de pesca" />
+              </div>
+              <div>
+                <label className="field-label" htmlFor="boat-capacity">CAPACIDADE *</label>
+                <input id="boat-capacity" className="field-input" type="number" min="1" max="30" value={form.boatCapacity} onChange={setField("boatCapacity")} required placeholder="8" />
+              </div>
+              <div>
+                <label className="field-label" htmlFor="boat-image">FOTO DA LANCHA <span>(opcional)</span></label>
+                <label className={"file-label captain-upload-field " + (boatImage ? "is-selected" : "")} htmlFor="boat-image">
+                  <Upload size={16} />
+                  <span>{boatImage ? boatImage.name : "Selecionar foto"}</span>
+                  <input id="boat-image" type="file" accept="image/*" onChange={(event) => setBoatImage(event.target.files?.[0] || null)} />
+                </label>
+              </div>
+              <div className="captain-profile-fields-full">
+                <label className="field-label" htmlFor="captain-bio">APRESENTAÇÃO <span>(opcional)</span></label>
+                <textarea id="captain-bio" className="field-input captain-profile-textarea" value={form.bio} onChange={setField("bio")} placeholder="Conte brevemente sobre sua experiência e a lancha." />
               </div>
             </div>
           </div>
 
-          <div className="card-section">
-            {error && <div className="alert-error">{error}</div>}
-            <button type="submit" disabled={loading} className="form-submit">
-              {loading ? "Enviando..." : "Criar perfil de capitão"}
-            </button>
+          {error && <div className="alert-error captain-profile-alert">{error}</div>}
+          <div className="captain-profile-actions">
+            <button type="submit" disabled={loading} className="form-submit">{loading ? "Enviando..." : "Criar perfil de capitão"}</button>
+            <p>Você poderá atualizar esses dados depois.</p>
           </div>
         </form>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
-

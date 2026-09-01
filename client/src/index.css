@@ -12103,3 +12103,310 @@ a,
 .home-clean-heading-simple .home-clean-heading-copy > p:last-child {
   max-width: 500px;
 }
+
+
+/* ─── COMPACT PRODUCT PAGES ─── */
+.content-page-compact {
+  min-height: calc(100svh - 72px);
+  background: var(--bg);
+}
+.content-page-compact-header {
+  width: min(1100px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: clamp(34px, 6vw, 64px) 0 30px;
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  border-bottom: 1px solid var(--border);
+}
+.content-page-compact-icon {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  color: var(--boat);
+  background: color-mix(in srgb, var(--boat-light) 72%, transparent);
+}
+.content-page-compact-header h1 {
+  margin-top: 4px;
+  max-width: 760px;
+  font-size: clamp(2.1rem, 5vw, 3.7rem);
+  line-height: 1.04;
+  letter-spacing: -0.055em;
+}
+.content-page-compact-header > div > p:last-child {
+  margin-top: 12px;
+  max-width: 600px;
+  color: var(--text2);
+  font-size: clamp(.98rem, 1.5vw, 1.08rem);
+  line-height: 1.65;
+}
+.content-page-compact .content-page-v2-section,
+.content-page-compact .content-page-v2-split,
+.content-page-compact .content-page-v2-callout {
+  width: min(1100px, calc(100% - 48px));
+  margin-left: auto;
+  margin-right: auto;
+}
+.content-page-compact .content-page-v2-section {
+  padding-top: clamp(38px, 6vw, 62px);
+  padding-bottom: clamp(20px, 4vw, 42px);
+}
+.content-page-compact .content-page-v2-split {
+  margin-top: 16px;
+  padding: clamp(24px, 4vw, 38px);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--card);
+}
+.content-page-compact .content-page-v2-callout {
+  margin-top: 16px;
+  margin-bottom: 60px;
+}
+
+/* ─── ROUTE DIRECTORY CARDS ─── */
+.routes-rides-directory {
+  width: min(1100px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: clamp(38px, 6vw, 64px) 0 62px;
+  border-top: 1px solid var(--border);
+}
+.routes-rides-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 22px;
+}
+.routes-rides-heading h2 {
+  margin-top: 5px;
+  font-size: clamp(1.55rem, 3vw, 2.35rem);
+  letter-spacing: -0.045em;
+}
+.routes-rides-heading p:last-child {
+  margin-top: 8px;
+  max-width: 620px;
+  color: var(--text2);
+  line-height: 1.55;
+}
+.routes-filter-v2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 220px;
+  height: 42px;
+  padding: 0 13px;
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--text3);
+}
+.routes-filter-v2:focus-within { border-color: var(--boat); box-shadow: 0 0 0 3px var(--glow-boat); }
+.routes-filter-v2 input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text1);
+  font-size: .88rem;
+}
+.routes-rides-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+.routes-rides-grid > a { display: block; min-width: 0; }
+.routes-ride-card {
+  display: grid;
+  gap: 20px;
+  min-height: 100%;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--card);
+  box-shadow: var(--shadow-sm);
+  transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+}
+.routes-ride-card:hover,
+.routes-rides-grid > a:focus-visible .routes-ride-card {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--boat) 52%, var(--border));
+  box-shadow: var(--shadow-md);
+}
+.routes-ride-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.routes-ride-avatar {
+  width: 50px;
+  height: 50px;
+  flex: 0 0 50px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  border: 2px solid color-mix(in srgb, var(--boat) 42%, var(--border));
+  border-radius: 50%;
+  background: var(--boat-light);
+  color: var(--boat-dark);
+  font-weight: 800;
+  font-size: 1.15rem;
+}
+.routes-ride-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.routes-ride-profile-copy { min-width: 0; }
+.routes-ride-name { display: flex; align-items: center; gap: 6px; color: var(--text1); font-size: 1rem; }
+.routes-ride-name svg { color: var(--boat); flex: 0 0 auto; }
+.routes-ride-profile-copy > span {
+  display: block;
+  overflow: hidden;
+  margin-top: 3px;
+  color: var(--text2);
+  font-size: .8rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.routes-ride-proof {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 7px;
+  color: var(--text2);
+  font-size: .76rem;
+}
+.routes-ride-proof > span { display: inline-flex; align-items: center; gap: 3px; }
+.routes-ride-proof > span:first-child svg { color: var(--amber); }
+.routes-ride-top {
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--amber) 17%, transparent);
+  color: color-mix(in srgb, var(--amber) 72%, var(--text1));
+  font-weight: 700;
+}
+.routes-ride-route {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 82px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+.routes-ride-route small,
+.routes-ride-footer small {
+  display: block;
+  color: var(--text3);
+  font-size: .65rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+.routes-ride-route strong {
+  display: block;
+  overflow: hidden;
+  margin-top: 5px;
+  color: var(--text1);
+  font-size: .97rem;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.routes-ride-destination { text-align: right; }
+.routes-ride-route-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--boat);
+}
+.routes-ride-route-line i {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: color-mix(in srgb, var(--boat) 35%, var(--border));
+}
+.routes-ride-route-line svg { flex: 0 0 auto; }
+.routes-ride-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px 15px;
+  padding: 13px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  color: var(--text2);
+  font-size: .78rem;
+}
+.routes-ride-meta > span { display: inline-flex; align-items: center; gap: 6px; }
+.routes-ride-meta svg { color: var(--boat); flex: 0 0 auto; }
+.routes-ride-meta strong { color: var(--text1); }
+.routes-ride-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 12px;
+}
+.routes-ride-footer > div { min-width: 0; }
+.routes-ride-footer strong {
+  display: inline-block;
+  margin-top: 3px;
+  color: var(--boat);
+  font-family: 'Sora', 'Inter', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: -0.045em;
+}
+.routes-ride-footer > div > span { margin-left: 4px; color: var(--text3); font-size: .8rem; }
+.routes-ride-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  padding: 10px 13px;
+  border-radius: 11px;
+  background: var(--boat);
+  color: white;
+  font-size: .82rem;
+  font-weight: 800;
+}
+.routes-rides-empty {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 42px 20px;
+  border: 1px dashed var(--border2);
+  border-radius: 20px;
+  color: var(--text2);
+  text-align: center;
+}
+.routes-rides-empty > svg { color: var(--boat); }
+.routes-rides-empty strong { color: var(--text1); }
+.routes-rides-empty a { margin-top: 5px; color: var(--boat); font-weight: 800; }
+.routes-rides-empty a span { display: inline-flex; align-items: center; gap: 5px; }
+
+/* tighter mobile rhythm */
+@media (max-width: 900px) {
+  .routes-rides-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 700px) {
+  .content-page-compact-header,
+  .content-page-compact .content-page-v2-section,
+  .content-page-compact .content-page-v2-split,
+  .content-page-compact .content-page-v2-callout,
+  .routes-rides-directory { width: min(100% - 32px, 620px); }
+  .content-page-compact-header { padding-top: 30px; padding-bottom: 24px; }
+  .content-page-compact-header h1 { font-size: clamp(2rem, 10vw, 2.8rem); }
+  .content-page-compact .content-page-v2-section { padding-top: 34px; }
+  .routes-rides-heading { display: block; }
+  .routes-filter-v2 { width: 100%; margin-top: 16px; }
+  .routes-ride-card { padding: 18px; border-radius: 18px; gap: 17px; }
+  .routes-ride-route { grid-template-columns: minmax(0, 1fr) 56px minmax(0, 1fr); }
+  .routes-ride-route strong { font-size: .88rem; }
+  .routes-ride-meta { gap: 8px 12px; }
+  .routes-ride-footer strong { font-size: 1.3rem; }
+  .routes-ride-cta { padding: 9px 10px; font-size: .78rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .routes-ride-card { transition: none; }
+  .routes-ride-card:hover { transform: none; }
+}

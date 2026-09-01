@@ -3,38 +3,81 @@ import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
 import { SiteAutocomplete } from "@/components/SiteSelect";
 import { useLocation } from "wouter";
-import { Anchor, Plus, Clock, Users, Trash2, CheckCircle, TrendingUp, Map } from "lucide-react";
+import { Anchor, ArrowRight, Calendar, CheckCircle2, ChevronDown, ChevronUp, Clock, Map, Plus, Trash2, TrendingUp, Users } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { useState, lazy, Suspense } from "react";
+import { useState, lazy, Suspense, type ChangeEvent, type FormEvent } from "react";
 import { BoatMediaCluster } from "@/components/layout/BoatMediaCluster";
+import { MaritimeIcon } from "@/components/MaritimeIcon";
 import type { LatLng } from "@/components/map/LocationPicker";
 import { getCityCoords } from "@/components/map/leafletSetup";
 import { COASTAL_POINT_NAMES } from "@shared/coastal-locations";
 
 const LocationPicker = lazy(() => import("@/components/map/LocationPicker"));
 
-const BLANK = { originCity: "", destinationCity: "", departureTime: "", returnTime: "", pricePerSeat: "", totalSeats: "", description: "" };
+const BLANK = {
+  originCity: "",
+  destinationCity: "",
+  departureTime: "",
+  returnTime: "",
+  pricePerSeat: "",
+  totalSeats: "",
+  description: "",
+};
+
+const formatCurrency = (value: number) =>
+  value.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  });
+
+const formatDeparture = (value: string) => {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Data a confirmar";
+  return format(date, "EEE, dd MMM · HH:mm", { locale: ptBR });
+};
+
+const statusLabel = (status: string) => {
+  if (status === "confirmed") return "Confirmado";
+  if (status === "pending") return "Pendente";
+  if (status === "cancelled") return "Cancelado";
+  return status;
+};
 
 function RidePassengers({ rideId }: { rideId: number }) {
   const { data, isLoading } = useQuery({
-    queryKey: [`/api/rides/${rideId}/reservations`],
-    queryFn: () => apiRequest("GET", `/api/rides/${rideId}/reservations`),
+    queryKey: ["/api/rides/" + rideId + "/reservations"],
+    queryFn: () => apiRequest("GET", "/api/rides/" + rideId + "/reservations"),
   });
-  if (isLoading) return <div style={{ padding: "12px 0", color: "var(--text3)", fontSize: 13 }}>Carregando...</div>;
+
+  if (isLoading) {
+    return <div className="captain-passengers-message">Carregando reservas...</div>;
+  }
+
   const reservations = data?.reservations || [];
-  if (!reservations.length) return <div style={{ padding: "12px 0", color: "var(--text3)", fontSize: 13 }}>Nenhuma reserva ainda.</div>;
+  if (!reservations.length) {
+    return <div className="captain-passengers-message">Nenhuma reserva ainda para esta saída.</div>;
+  }
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingTop: 12 }}>
-      {reservations.map((r: any) => (
-        <div key={r.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "var(--surface)", borderRadius: 10, padding: "10px 14px", flexWrap: "wrap", gap: 8 }}>
-          <div>
-            <div style={{ fontWeight: 700, fontSize: 14, color: "var(--text1)" }}>{r.passengerName || r.userName || "Passageiro"}</div>
-            <div style={{ fontSize: 12, color: "var(--text3)", marginTop: 2 }}>{r.seats} assento{r.seats > 1 ? "s" : ""} · R$ {(parseFloat(r.totalPrice || "0")).toFixed(2).replace(".", ",")}</div>
+    <div className="captain-passengers" aria-label="Passageiros da viagem">
+      {reservations.map((reservation: any) => (
+        <div key={reservation.id} className="captain-passenger-row">
+          <div className="captain-passenger-avatar" aria-hidden="true">
+            {(reservation.passengerName || reservation.userName || "P").charAt(0).toUpperCase()}
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 9px", borderRadius: 100, background: r.status === "confirmed" ? "rgba(61,138,92,0.12)" : "var(--surface)", color: r.status === "confirmed" ? "var(--green)" : "var(--text3)" }}>{r.status === "confirmed" ? "Confirmado" : r.status}</span>
+          <div className="captain-passenger-info">
+            <strong>{reservation.passengerName || reservation.userName || "Passageiro"}</strong>
+            <span>
+              {reservation.seats} lugar{reservation.seats > 1 ? "es" : ""} ·{" "}
+              {formatCurrency(parseFloat(reservation.totalPrice || "0"))}
+            </span>
           </div>
+          <span className={"captain-reservation-status captain-reservation-status-" + reservation.status}>
+            {statusLabel(reservation.status)}
+          </span>
         </div>
       ))}
     </div>
@@ -44,16 +87,20 @@ function RidePassengers({ rideId }: { rideId: number }) {
 export default function CaptainDashboard() {
   const { user } = useAuth();
   const [, navigate] = useLocation();
-  const qc = useQueryClient();
+  const queryClient = useQueryClient();
   const [showForm, setShowForm] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [form, setForm] = useState(BLANK);
   const [originPin, setOriginPin] = useState<LatLng | null>(null);
   const [destPin, setDestPin] = useState<LatLng | null>(null);
-  const [showMap, setShowMap] = useState(true);
+  const [showMap, setShowMap] = useState(false);
   const [expandedRide, setExpandedRide] = useState<number | null>(null);
-  const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setForm(f => ({ ...f, [k]: e.target.value }));
+
+  const setField = (key: keyof typeof BLANK) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setForm((current) => ({ ...current, [key]: event.target.value }));
+  };
+
   const setLocation = (field: "originCity" | "destinationCity", setPin: (value: LatLng | null) => void) => (value: string) => {
     setForm((current) => ({ ...current, [field]: value }));
     const coords = getCityCoords(value);
@@ -65,6 +112,7 @@ export default function CaptainDashboard() {
     queryFn: () => apiRequest("GET", "/api/captain/profile"),
     retry: false,
   });
+
   const { data: ridesData } = useQuery({
     queryKey: ["/api/my/rides"],
     queryFn: () => apiRequest("GET", "/api/my/rides"),
@@ -72,192 +120,283 @@ export default function CaptainDashboard() {
   });
 
   const createMutation = useMutation({
-    mutationFn: () => apiRequest("POST", "/api/rides", {
-      ...form,
-      pricePerSeat: parseFloat(form.pricePerSeat),
-      totalSeats: parseInt(form.totalSeats),
-      returnTime: form.returnTime || undefined,
-      originLat: originPin?.lat ?? null,
-      originLng: originPin?.lng ?? null,
-      destLat: destPin?.lat ?? null,
-      destLng: destPin?.lng ?? null,
-    }),
+    mutationFn: () =>
+      apiRequest("POST", "/api/rides", {
+        ...form,
+        pricePerSeat: parseFloat(form.pricePerSeat),
+        totalSeats: parseInt(form.totalSeats, 10),
+        returnTime: form.returnTime || undefined,
+        originLat: originPin?.lat ?? null,
+        originLng: originPin?.lng ?? null,
+        destLat: destPin?.lat ?? null,
+        destLng: destPin?.lng ?? null,
+      }),
     onSuccess: () => {
-      setSuccess("Viagem criada!");
+      setSuccess("Saída publicada com sucesso.");
+      setError("");
       setShowForm(false);
       setForm(BLANK);
       setOriginPin(null);
       setDestPin(null);
       setShowMap(false);
-      qc.invalidateQueries({ queryKey: ["/api/my/rides"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/my/rides"] });
     },
-    onError: (err: any) => setError(err.message),
-  });
-  const cancelMutation = useMutation({
-    mutationFn: (id: number) => apiRequest("DELETE", `/api/rides/${id}`),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["/api/my/rides"] }),
+    onError: (mutationError: any) => {
+      setError(mutationError?.message || "Não foi possível publicar a saída.");
+    },
   });
 
-  if (!user) { navigate("/entrar"); return null; }
-  if (!["captain", "both"].includes(user.role)) { navigate("/perfil-capitao"); return null; }
+  const cancelMutation = useMutation({
+    mutationFn: (id: number) => apiRequest("DELETE", "/api/rides/" + id),
+    onSuccess: () => {
+      setSuccess("Saída cancelada. Os passageiros serão avisados.");
+      setError("");
+      queryClient.invalidateQueries({ queryKey: ["/api/my/rides"] });
+    },
+    onError: (mutationError: any) => setError(mutationError?.message || "Não foi possível cancelar a saída."),
+  });
+
+  if (!user) {
+    navigate("/entrar");
+    return null;
+  }
+
+  if (!["captain", "both"].includes(user.role)) {
+    navigate("/perfil-capitao");
+    return null;
+  }
 
   const rides = ridesData?.rides || [];
-  const totalEarnings = rides.filter((r: any) => r.status === "active").reduce((s: number, r: any) => s + parseFloat(r.pricePerSeat) * r.confirmedSeats, 0);
-  const totalPassengers = rides.reduce((s: number, r: any) => s + (r.confirmedSeats || 0), 0);
+  const activeRides = rides.filter((ride: any) => ride.status === "active");
+  const totalEarnings = activeRides.reduce(
+    (sum: number, ride: any) => sum + parseFloat(ride.pricePerSeat || "0") * (ride.confirmedSeats || 0),
+    0,
+  );
+  const totalPassengers = rides.reduce((sum: number, ride: any) => sum + (ride.confirmedSeats || 0), 0);
+  const nextRide = activeRides
+    .filter((ride: any) => new Date(ride.departureTime).getTime() >= Date.now())
+    .sort((a: any, b: any) => new Date(a.departureTime).getTime() - new Date(b.departureTime).getTime())[0];
+
+  const openForm = () => {
+    setShowForm((visible) => !visible);
+    setError("");
+    setSuccess("");
+  };
+
+  const closeForm = () => {
+    setShowForm(false);
+    setOriginPin(null);
+    setDestPin(null);
+    setShowMap(false);
+    setError("");
+  };
+
+  const submitForm = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setError("");
+    setSuccess("");
+    createMutation.mutate();
+  };
+
+  const cancelRide = (id: number) => {
+    if (confirm("Cancelar esta saída? Os passageiros serão notificados.")) {
+      cancelMutation.mutate(id);
+    }
+  };
 
   return (
-    <div className="dashboard-page">
-      <div className="page-header dashboard-page-header">
-        <div>
-          <h1 className="page-title">Minha Lancha</h1>
-          <p className="page-sub">Gerencie suas viagens e passageiros</p><span className="dashboard-live-pill"><i /> Painel operacional</span>
+    <main className="dashboard-page captain-dashboard-page">
+      <section className="captain-dashboard-intro">
+        <div className="captain-dashboard-heading">
+          <p className="captain-dashboard-kicker">
+            <MaritimeIcon variant="anchor" size={16} /> PAINEL DA LANCHA
+          </p>
+          <h1>Olá, {(user.fullName || "capitão").split(" ")[0]}.</h1>
+          <p>Publique saídas, acompanhe reservas e mantenha sua operação no rumo certo.</p>
+          <span className="dashboard-live-pill"><i /> Painel operacional</span>
         </div>
         <BoatMediaCluster variant="compact" />
-        <button className="btn-add" onClick={() => { setShowForm(!showForm); setError(""); setSuccess(""); }}>
-          <Plus size={16} /> Nova viagem
+        <button className="btn-add captain-dashboard-primary" onClick={openForm}>
+          <Plus size={17} /> {showForm ? "Fechar publicação" : "Publicar saída"}
         </button>
-      </div>
+      </section>
 
-      {/* Stats */}
-      <div className="dashboard-stats">
-        {[
-          { label: "Viagens ativas", value: rides.filter((r: any) => r.status === "active").length, icon: <Anchor size={18} color="var(--boat)" /> },
-          { label: "Passageiros", value: totalPassengers, icon: <Users size={18} color="var(--boat)" /> },
-          { label: "Receita estimada", value: `R$ ${totalEarnings.toFixed(0)}`, icon: <TrendingUp size={18} color="var(--boat)" /> },
-        ].map((stat, i) => (
-          <div key={i} className="card dashboard-stat-card">
-            <div className="dashboard-stat-icon">
-              {stat.icon}
-            </div>
-            <div>
-              <div style={{ fontWeight: 800, fontSize: "1.3rem", color: "var(--text1)", letterSpacing: "-0.5px" }}>{stat.value}</div>
-              <div style={{ color: "var(--text2)", fontSize: 12 }}>{stat.label}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {success && <div className="alert-success"><CheckCircle size={15} /> {success}</div>}
-
-      {/* New ride form */}
-      {showForm && (
-        <div className="card dashboard-ride-form" style={{ marginBottom: 24 }}>
-          <div className="card-section">
-            <p className="section-label" style={{ marginBottom: 16 }}>NOVA VIAGEM</p>
-            <form onSubmit={e => { e.preventDefault(); setError(""); createMutation.mutate(); }}>
-              <div className="form-grid">
-                <div>
-                  <label className="field-label">ORIGEM *</label>
-                  <SiteAutocomplete value={form.originCity} onChange={setLocation("originCity", setOriginPin)} options={COASTAL_POINT_NAMES} placeholder="Ex.: Praia do Perequê" ariaLabel="Ponto de embarque" />
-                </div>
-                <div>
-                  <label className="field-label">DESTINO *</label>
-                  <SiteAutocomplete value={form.destinationCity} onChange={setLocation("destinationCity", setDestPin)} options={COASTAL_POINT_NAMES} placeholder="Ex.: Praia do Bonete" ariaLabel="Ponto de desembarque" />
-                </div>
-                <div>
-                  <label className="field-label">DATA / HORA DE SAÍDA *</label>
-                  <input className="field-input" type="datetime-local" value={form.departureTime} onChange={set("departureTime")} required />
-                </div>
-                <div>
-                  <label className="field-label">RETORNO (opcional)</label>
-                  <input className="field-input" type="datetime-local" value={form.returnTime} onChange={set("returnTime")} />
-                </div>
-                <div>
-                  <label className="field-label">PREÇO / PESSOA (R$) *</label>
-                  <input className="field-input" type="number" min="1" step="0.01" value={form.pricePerSeat} onChange={set("pricePerSeat")} required placeholder="85.00" />
-                </div>
-                <div>
-                  <label className="field-label">ASSENTOS DISPONÍVEIS *</label>
-                  <input className="field-input" type="number" min="1" max="20" value={form.totalSeats} onChange={set("totalSeats")} required placeholder="6" />
-                </div>
-                <div className="form-full">
-                  <label className="field-label">DESCRIÇÃO (opcional)</label>
-                  <textarea className="field-input" value={form.description} onChange={set("description")} placeholder="Ponto de encontro, o que levar, informações extras..." style={{ minHeight: 72, resize: "vertical" }} />
-                </div>
-                <div className="form-full">
-                  <p style={{ display: "flex", alignItems: "center", gap: 6, color: "var(--text2)", fontSize: 12, margin: "2px 0 10px" }}><Map size={13} color="var(--boat)" /> Selecione uma praia ou ajuste o ponto exato no mapa.</p>
-                  <button type="button" style={{ background: "none", border: "1px solid var(--border)", color: "var(--text2)", borderRadius: 8, padding: "6px 14px", cursor: "pointer", fontSize: 12, fontWeight: 600, display: "flex", alignItems: "center", gap: 6 }} onClick={() => setShowMap(v => !v)}>
-                    <Map size={13} /> {showMap ? "Esconder mapa" : "Marcar no mapa (opcional)"}
-                  </button>
-                  {showMap && (
-                    <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 14 }}>
-                      <Suspense fallback={<div style={{ height: 280, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text3)" }}>Carregando mapa...</div>}>
-                        <LocationPicker
-                          label="Origem (clique para marcar)"
-                          variant="origin"
-                          value={originPin}
-                          onChange={setOriginPin}
-                        />
-                        <LocationPicker
-                          label="Destino (clique para marcar)"
-                          variant="dest"
-                          value={destPin}
-                          onChange={setDestPin}
-                        />
-                      </Suspense>
-                    </div>
-                  )}
-                </div>
-              </div>
-              {error && <div className="alert-error" style={{ marginTop: 12 }}>{error}</div>}
-              <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
-                <button type="submit" disabled={createMutation.isPending} className="btn-add" style={{ flex: 1, justifyContent: "center" }}>
-                  {createMutation.isPending ? "Criando..." : "Criar viagem"}
-                </button>
-                <button type="button" onClick={() => { setShowForm(false); setOriginPin(null); setDestPin(null); setShowMap(false); }} style={{ background: "none", border: "1px solid var(--border)", color: "var(--text2)", borderRadius: 10, padding: "10px 20px", cursor: "pointer", fontSize: 14 }}>
-                  Cancelar
-                </button>
-              </div>
-            </form>
-          </div>
+      <section className="dashboard-stats captain-dashboard-stats" aria-label="Resumo da operação">
+        <div className="card dashboard-stat-card captain-stat-card">
+          <span className="captain-stat-icon"><MaritimeIcon variant="route" size={22} /></span>
+          <div><strong>{activeRides.length}</strong><span>Saídas ativas</span></div>
         </div>
+        <div className="card dashboard-stat-card captain-stat-card">
+          <span className="captain-stat-icon"><Users size={21} /></span>
+          <div><strong>{totalPassengers}</strong><span>Passageiros confirmados</span></div>
+        </div>
+        <div className="card dashboard-stat-card captain-stat-card">
+          <span className="captain-stat-icon"><TrendingUp size={21} /></span>
+          <div><strong>{formatCurrency(totalEarnings)}</strong><span>Receita estimada</span></div>
+        </div>
+      </section>
+
+      {nextRide && (
+        <section className="captain-next-card" aria-labelledby="next-ride-title">
+          <div className="captain-next-card-heading">
+            <span className="captain-next-badge"><MaritimeIcon variant="clock" size={15} /> Próxima saída</span>
+            <span className="captain-next-date">{formatDeparture(nextRide.departureTime)}</span>
+          </div>
+          <div className="captain-next-card-body">
+            <div>
+              <p className="captain-next-label">ROTA</p>
+              <h2 id="next-ride-title">{nextRide.originCity} <ArrowRight size={18} /> {nextRide.destinationCity}</h2>
+            </div>
+            <div className="captain-next-metrics">
+              <span><Users size={16} /> {nextRide.confirmedSeats || 0}/{nextRide.totalSeats} lugares</span>
+              <span><strong>{formatCurrency(parseFloat(nextRide.pricePerSeat || "0"))}</strong> por pessoa</span>
+            </div>
+            <button className="captain-next-action" onClick={() => setExpandedRide(expandedRide === nextRide.id ? null : nextRide.id)}>
+              {expandedRide === nextRide.id ? "Ocultar reservas" : "Ver reservas"}
+              {expandedRide === nextRide.id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            </button>
+          </div>
+          {expandedRide === nextRide.id && <RidePassengers rideId={nextRide.id} />}
+        </section>
       )}
 
-      <div className="dashboard-section-heading"><div><p className="section-label">OPERAÇÃO</p><h2>Suas viagens</h2><p>Veja saídas, reservas e o que precisa de atenção.</p></div><span className="dashboard-count-pill">{rides.length} publicada{rides.length === 1 ? "" : "s"}</span></div>
+      {success && <div className="alert-success captain-alert"><CheckCircle2 size={16} /> {success}</div>}
 
-      {/* Ride list */}
-      {rides.length === 0 ? (
-        <div className="card empty-state">
-          <Anchor size={40} className="empty-state-icon" />
-          <p style={{ fontWeight: 600, color: "var(--text3)" }}>Nenhuma viagem criada ainda.</p>
-          <p style={{ fontSize: 13, color: "var(--boat)", marginTop: 4 }}>Clique em "Nova viagem" para começar.</p>
-        </div>
-      ) : (
-        <div className="dashboard-ride-list">
-          {rides.map((ride: any) => (
-            <div key={ride.id} className="ride-row fade-up">
-              <div style={{ flex: 1 }}>
-                <div className="ride-row-title">{ride.originCity} → {ride.destinationCity}</div>
-                <div className="ride-row-meta">
-                  <span><Clock size={12} /> {format(new Date(ride.departureTime), "dd/MM/yyyy 'às' HH:mm")}</span>
-                  <span><Users size={12} /> {ride.confirmedSeats}/{ride.totalSeats} reservados</span>
-                  <span style={{ color: "var(--boat)", fontWeight: 700 }}>R$ {parseFloat(ride.pricePerSeat).toFixed(2).replace(".", ",")}/pessoa</span>
-                </div>
+      {showForm && (
+        <section className="card dashboard-ride-form captain-form-card" aria-labelledby="publish-ride-title">
+          <div className="captain-form-header">
+            <div>
+              <p className="section-label">NOVA SAÍDA</p>
+              <h2 id="publish-ride-title">Publique uma rota simples</h2>
+              <p>Escolha os pontos de embarque e informe os detalhes essenciais.</p>
+            </div>
+            <span className="captain-form-step">1 · detalhes</span>
+          </div>
+          <form onSubmit={submitForm}>
+            <div className="captain-form-grid">
+              <div>
+                <label className="field-label">ORIGEM *</label>
+                <SiteAutocomplete value={form.originCity} onChange={setLocation("originCity", setOriginPin)} options={COASTAL_POINT_NAMES} placeholder="Ex.: Praia do Perequê" ariaLabel="Ponto de embarque" />
               </div>
-              <div className="ride-row-actions">
-                <span className={`status-pill ${ride.status === "active" ? "status-active" : ride.status === "cancelled" ? "status-cancelled" : "status-completed"}`}>
-                  {ride.status === "active" ? "Ativa" : ride.status === "cancelled" ? "Cancelada" : "Concluída"}
-                </span>
-                {ride.status === "active" && (
-                  <button className="btn-danger" onClick={() => { if (confirm("Cancelar esta viagem? Os passageiros serão notificados.")) cancelMutation.mutate(ride.id); }}>
-                    <Trash2 size={14} />
-                  </button>
+              <div>
+                <label className="field-label">DESTINO *</label>
+                <SiteAutocomplete value={form.destinationCity} onChange={setLocation("destinationCity", setDestPin)} options={COASTAL_POINT_NAMES} placeholder="Ex.: Praia do Bonete" ariaLabel="Ponto de desembarque" />
+              </div>
+              <div>
+                <label className="field-label">DATA / HORA DE SAÍDA *</label>
+                <input className="field-input" type="datetime-local" value={form.departureTime} onChange={setField("departureTime")} required />
+              </div>
+              <div>
+                <label className="field-label">RETORNO <span>(opcional)</span></label>
+                <input className="field-input" type="datetime-local" value={form.returnTime} onChange={setField("returnTime")} />
+              </div>
+              <div>
+                <label className="field-label">PREÇO / PESSOA (R$) *</label>
+                <input className="field-input" type="number" min="1" step="0.01" value={form.pricePerSeat} onChange={setField("pricePerSeat")} placeholder="85" required />
+              </div>
+              <div>
+                <label className="field-label">LUGARES DISPONÍVEIS *</label>
+                <input className="field-input" type="number" min="1" max="20" value={form.totalSeats} onChange={setField("totalSeats")} placeholder="6" required />
+              </div>
+              <div className="captain-form-full">
+                <label className="field-label">NOTA PARA PASSAGEIROS <span>(opcional)</span></label>
+                <textarea className="field-input captain-form-textarea" value={form.description} onChange={setField("description")} placeholder="Ponto de encontro, o que levar, informações extras..." />
+              </div>
+              <div className="captain-form-full captain-map-control">
+                <div className="captain-map-copy">
+                  <span className="captain-map-icon"><Map size={16} /></span>
+                  <div><strong>Quer marcar o ponto exato?</strong><span>Você pode indicar a praia acima ou ajustar a localização no mapa.</span></div>
+                </div>
+                <button type="button" className="captain-map-toggle" onClick={() => setShowMap((visible) => !visible)}>
+                  <Map size={14} /> {showMap ? "Esconder mapa" : "Marcar no mapa"}
+                </button>
+                {showMap && (
+                  <div className="captain-map-grid">
+                    <Suspense fallback={<div className="captain-map-loading">Carregando mapa...</div>}>
+                      <LocationPicker label="Origem (clique para marcar)" variant="origin" value={originPin} onChange={setOriginPin} />
+                      <LocationPicker label="Destino (clique para marcar)" variant="dest" value={destPin} onChange={setDestPin} />
+                    </Suspense>
+                  </div>
                 )}
               </div>
-              <div style={{ borderTop: "1px solid var(--border)", marginTop: 12, paddingTop: 12 }}>
-                <button
-                  onClick={() => setExpandedRide(expandedRide === ride.id ? null : ride.id)}
-                  style={{ background: "none", border: "none", color: "var(--boat)", fontSize: 13, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 5 }}
-                >
-                  <Users size={13} /> {expandedRide === ride.id ? "Ocultar passageiros" : "Ver passageiros"}
-                </button>
-                {expandedRide === ride.id && <RidePassengers rideId={ride.id} />}
-              </div>
             </div>
-          ))}
-        </div>
+            {error && <div className="alert-error captain-alert">{error}</div>}
+            <div className="captain-form-actions">
+              <button type="submit" disabled={createMutation.isPending} className="btn-add">
+                {createMutation.isPending ? "Publicando..." : "Publicar saída"} <ArrowRight size={16} />
+              </button>
+              <button type="button" className="captain-secondary-button" onClick={closeForm}>Cancelar</button>
+            </div>
+          </form>
+        </section>
       )}
-    </div>
+
+      <section className="captain-rides-section" aria-labelledby="captain-rides-title">
+        <div className="dashboard-section-heading captain-rides-heading">
+          <div>
+            <p className="section-label">OPERAÇÃO</p>
+            <h2 id="captain-rides-title">Suas saídas</h2>
+            <p>Tenha uma visão rápida de horários, lugares e reservas.</p>
+          </div>
+          <span className="dashboard-count-pill">{rides.length} publicada{rides.length === 1 ? "" : "s"}</span>
+        </div>
+
+        {rides.length === 0 ? (
+          <div className="card captain-empty-state">
+            <span className="captain-empty-icon"><MaritimeIcon variant="lancha" size={34} /></span>
+            <div>
+              <h3>Seu painel começa com uma saída.</h3>
+              <p>Publique uma rota em poucos passos e deixe os passageiros encontrarem você.</p>
+            </div>
+            <button className="captain-secondary-button captain-empty-action" onClick={() => setShowForm(true)}>
+              <Plus size={15} /> Publicar saída
+            </button>
+          </div>
+        ) : (
+          <div className="captain-ride-list">
+            {rides.map((ride: any) => {
+              const isExpanded = expandedRide === ride.id;
+              const isActive = ride.status === "active";
+              return (
+                <article key={ride.id} className="captain-ride-card fade-up">
+                  <div className="captain-ride-card-top">
+                    <span className="captain-ride-route-icon"><MaritimeIcon variant="route" size={22} /></span>
+                    <div className="captain-ride-route">
+                      <span className="captain-ride-eyebrow">ROTA</span>
+                      <h3>{ride.originCity} <ArrowRight size={16} /> {ride.destinationCity}</h3>
+                      <div className="captain-ride-meta">
+                        <span><Calendar size={15} /> {formatDeparture(ride.departureTime)}</span>
+                        <span><Users size={15} /> {ride.confirmedSeats || 0}/{ride.totalSeats} lugares</span>
+                      </div>
+                    </div>
+                    <div className="captain-ride-price">
+                      <strong>{formatCurrency(parseFloat(ride.pricePerSeat || "0"))}</strong>
+                      <span>por pessoa</span>
+                    </div>
+                  </div>
+                  <div className="captain-ride-card-bottom">
+                    <span className={"status-pill " + (isActive ? "status-active" : ride.status === "cancelled" ? "status-cancelled" : "status-completed")}>
+                      {isActive ? "Ativa" : ride.status === "cancelled" ? "Cancelada" : "Concluída"}
+                    </span>
+                    <div className="captain-ride-actions">
+                      <button className="captain-passenger-toggle" onClick={() => setExpandedRide(isExpanded ? null : ride.id)}>
+                        <Users size={15} /> {isExpanded ? "Ocultar reservas" : "Ver reservas"}
+                        {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                      </button>
+                      {isActive && (
+                        <button className="captain-cancel-button" onClick={() => cancelRide(ride.id)} disabled={cancelMutation.isPending}>
+                          <Trash2 size={14} /> Cancelar saída
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  {isExpanded && <RidePassengers rideId={ride.id} />}
+                </article>
+              );
+            })}
+          </div>
+        )}
+      </section>
+    </main>
   );
 }
-

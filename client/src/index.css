@@ -12008,3 +12008,88 @@ a,
     width: 100%;
   }
 }
+
+
+/* The route page leads with the map and controls, not an oversized hero. */
+.routes-page-v2 {
+  min-height: calc(100svh - 58px);
+  color: var(--text1);
+  background: var(--bg);
+}
+.routes-command-clean {
+  width: min(1100px, calc(100% - 48px));
+  grid-template-columns: minmax(0, 1fr) minmax(360px, .85fr);
+  align-items: center;
+  gap: clamp(24px, 5vw, 65px);
+  padding: clamp(28px, 5vw, 52px) 0 24px;
+  border-bottom: 1px solid var(--border);
+}
+.routes-command-clean .routes-command-copy h1 {
+  max-width: 570px;
+  margin: 7px 0 8px;
+  color: var(--text1);
+  font-size: clamp(2.05rem, 4.4vw, 3.45rem);
+  line-height: 1;
+  letter-spacing: -.07em;
+}
+.routes-command-clean .routes-command-copy > p:last-child {
+  max-width: 440px;
+  margin: 0;
+  color: var(--text2);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.routes-command-clean .routes-command-search {
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--text1) 6%, transparent);
+}
+.routes-map-workspace {
+  width: min(1100px, calc(100% - 48px));
+  padding: 28px 0 52px;
+}
+.routes-map-workspace-head {
+  margin-bottom: 14px;
+}
+.routes-map-workspace-head h2 {
+  font-size: clamp(1.25rem, 2.7vw, 1.8rem);
+}
+.routes-map-workspace-head > div > p:last-child {
+  font-size: 13px;
+}
+.routes-directory-v2,
+.routes-points-v2 {
+  width: min(1100px, calc(100% - 48px));
+  padding: 48px 0;
+}
+.routes-directory-v2 {
+  border-top: 1px solid var(--border);
+}
+.routes-points-v2 {
+  border-top: 1px solid var(--border);
+}
+@media (max-width: 720px) {
+  .routes-command-clean,
+  .routes-map-workspace,
+  .routes-directory-v2,
+  .routes-points-v2 {
+    width: calc(100% - 28px);
+  }
+  .routes-command-clean {
+    display: block;
+    padding-top: 28px;
+  }
+  .routes-command-clean .routes-command-search {
+    margin-top: 20px;
+  }
+  .routes-map-workspace {
+    padding-top: 22px;
+  }
+  .routes-map-workspace-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .routes-directory-v2,
+  .routes-points-v2 {
+    padding: 38px 0;
+  }
+}

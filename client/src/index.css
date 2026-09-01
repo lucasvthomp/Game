@@ -11631,3 +11631,56 @@ a,
     transform: none;
   }
 }
+
+
+/* Legal pages inherit the same quiet canvas as the product pages. */
+.legal-page-v2 {
+  width: min(920px, calc(100% - 48px));
+  padding: clamp(38px, 7vw, 74px) 0 86px;
+  color: var(--text1);
+  background: var(--bg);
+}
+.legal-page-v2-top {
+  align-items: flex-start;
+  margin-bottom: 36px;
+}
+.legal-page-v2-mark {
+  color: var(--text3);
+}
+.legal-page-v2 h1 {
+  max-width: 700px;
+  font-size: clamp(2.35rem, 5vw, 4.25rem);
+  letter-spacing: -.07em;
+}
+.legal-page-v2-lead {
+  max-width: 680px;
+  margin: 17px 0 38px;
+  color: var(--text2);
+  font-size: 16px;
+  line-height: 1.6;
+}
+.legal-section-list-v2 {
+  border-top-color: var(--border);
+}
+.legal-section-list-v2 section {
+  padding: 20px 0;
+  border-bottom-color: var(--border);
+}
+.legal-section-list-v2 h2 {
+  color: var(--text1);
+  font-size: 16px;
+}
+.legal-section-list-v2 p,
+.legal-page-v2-note {
+  color: var(--text2);
+}
+
+/* Make the new filled icon stickers feel intentional at any size. */
+.ride-result-card svg,
+.home-clean-service-card > svg,
+.home-clean-step-icon > svg,
+.captain-stat-icon svg,
+.footer-clean svg {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

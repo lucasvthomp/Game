@@ -1,4 +1,4 @@
-import { useState, type CSSProperties, type FormEvent } from "react";
+import { useState, type CSSProperties, type FormEvent, type PointerEvent } from "react";
 import { ArrowRight, CheckCircle2, Mail } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { MaritimeIcon } from "@/components/MaritimeIcon";
@@ -27,7 +27,7 @@ export default function Commercial() {
     }
   };
 
-  const handlePointerMove = (event: React.PointerEvent<HTMLElement>) => {
+  const handlePointerMove = (event: PointerEvent<HTMLElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
     setSpotlight({
       x: Math.round(((event.clientX - rect.left) / rect.width) * 100),

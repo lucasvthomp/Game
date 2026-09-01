@@ -118,7 +118,19 @@ export default function Routes() {
         </div>
       </header>
 
-      <section className="routes-map-workspace">
+      <section className="routes-rides-directory">
+        <div className="routes-rides-heading">
+          <div><p className="home-v2-kicker">SAÍDAS PUBLICADAS</p><h2>Escolha uma lancha.</h2><p>Veja primeiro quem conduz. Depois confira rota, horário, valor e vagas.</p></div>
+          <label className="routes-filter-v2"><Search size={16} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Filtrar saídas" aria-label="Filtrar saídas" /></label>
+        </div>
+        {filteredRides.length > 0 ? (
+          <div className="routes-rides-grid">{filteredRides.map((ride) => <RouteRideCard key={ride.id} ride={ride} />)}</div>
+        ) : (
+          <div className="routes-rides-empty"><MaritimeIcon variant="lancha" size={32} /><strong>Nenhuma saída publicada ainda.</strong><span>Peça uma rota ou tente outro termo de busca.</span><Link href="/solicitar-rota"><span>Solicitar uma rota <ArrowRight size={14} /></span></Link></div>
+        )}
+      </section>
+
+\n      <section className="routes-map-workspace">
         <div className="routes-map-workspace-head">
           <div><p className="home-v2-kicker">MAPA DO LITORAL</p><h2>Saídas perto de você.</h2><p>Veja viagens publicadas e marque um ponto somente na costa.</p></div>
           <span className="routes-map-workspace-badge"><MaritimeIcon variant="wave" size={17} /> pontos costeiros</span>
@@ -139,18 +151,6 @@ export default function Routes() {
             {routePin && !showPinDrop && <div className="routes-pin-selected" role="status"><span><MaritimeIcon variant="buoy" size={16} /> Ponto costeiro salvo</span><small>{routePin.lat.toFixed(4)}, {routePin.lng.toFixed(4)}</small></div>}
           </aside>
         </div>
-      </section>
-
-      <section className="routes-rides-directory">
-        <div className="routes-rides-heading">
-          <div><p className="home-v2-kicker">SAÍDAS PUBLICADAS</p><h2>Escolha uma lancha.</h2><p>Veja primeiro quem conduz. Depois confira rota, horário, valor e vagas.</p></div>
-          <label className="routes-filter-v2"><Search size={16} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Filtrar saídas" aria-label="Filtrar saídas" /></label>
-        </div>
-        {filteredRides.length > 0 ? (
-          <div className="routes-rides-grid">{filteredRides.map((ride) => <RouteRideCard key={ride.id} ride={ride} />)}</div>
-        ) : (
-          <div className="routes-rides-empty"><MaritimeIcon variant="lancha" size={32} /><strong>Nenhuma saída publicada ainda.</strong><span>Peça uma rota ou tente outro termo de busca.</span><Link href="/solicitar-rota"><span>Solicitar uma rota <ArrowRight size={14} /></span></Link></div>
-        )}
       </section>
 
       <section className="routes-points-v2">

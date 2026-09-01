@@ -50,15 +50,10 @@ export default function Home() {
       <section className="home-clean-intro">
         <div className="home-clean-water-texture" aria-hidden="true" />
         <div className="home-clean-shell">
-          <div className="home-clean-heading">
+          <div className="home-clean-heading home-clean-heading-simple">
             <div className="home-clean-heading-copy">
-              <p className="home-clean-kicker">TRANSPORTE LOCAL PELA ÁGUA</p>
               <h1>Viaje pela costa.<br /><em>Sem complicar.</em></h1>
               <p>Encontre uma lancha, veja o ponto de embarque e reserve sua travessia com clareza.</p>
-            </div>
-            <div className="home-clean-intro-note">
-              <span className="home-clean-note-icon"><MaritimeIcon variant="pinpoint" size={22} /></span>
-              <div><strong>Pontos que você reconhece</strong><span>Praias, píeres e comunidades do litoral.</span></div>
             </div>
           </div>
 

@@ -12093,3 +12093,13 @@ a,
     padding: 38px 0;
   }
 }
+
+
+.home-clean-heading-simple {
+  display: block;
+  max-width: 700px;
+  margin-top: clamp(34px, 5vw, 54px);
+}
+.home-clean-heading-simple .home-clean-heading-copy > p:last-child {
+  max-width: 500px;
+}

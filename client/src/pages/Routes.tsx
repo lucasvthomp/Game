@@ -45,18 +45,18 @@ export default function Routes() {
 
   return (
     <div className="routes-page-v2">
-      <section className="routes-command">
+      <header className="routes-command routes-command-clean">
         <div className="routes-command-copy">
-          <p className="section-label">ROTAS DO LITORAL PAULISTA</p>
-          <h2>Encontre seu próximo embarque.</h2>
-          <p>Compare pontos de saída e escolha uma travessia de lancha pela costa.</p>
+          <p className="section-label">ROTAS</p>
+          <h1>Veja onde embarcar.</h1>
+          <p>Escolha uma saída ou marque um ponto costeiro no mapa.</p>
         </div>
         <div className="routes-command-search">
           <div className="routes-search-field"><MaritimeIcon variant="pinpoint" size={17} /><SiteAutocomplete value={from} onChange={setFrom} options={locationNames} placeholder="Saída" ariaLabel="Ponto de saída" /></div>
-          <div className="routes-search-field"><MapPin size={16} /><SiteAutocomplete value={to} onChange={setTo} options={locationNames} placeholder="Chegada" ariaLabel="Ponto de chegada" /></div>
-          <button type="button" onClick={search}>Encontrar rota <ArrowRight size={16} /></button>
+          <div className="routes-search-field"><MaritimeIcon variant="beach" size={17} /><SiteAutocomplete value={to} onChange={setTo} options={locationNames} placeholder="Chegada" ariaLabel="Ponto de chegada" /></div>
+          <button type="button" onClick={search}>Buscar saída <ArrowRight size={16} /></button>
         </div>
-      </section>
+      </header>
 
       <section className="routes-map-workspace">
         <div className="routes-map-workspace-head">

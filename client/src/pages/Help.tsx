@@ -1,4 +1,4 @@
-import { ArrowRight, ChevronDown, LifeBuoy, Mail, Search } from "lucide-react";
+import { ArrowRight, ChevronDown, LifeBuoy, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
 import { MaritimeIcon } from "@/components/MaritimeIcon";
@@ -14,20 +14,44 @@ const faqs = [
 export default function Help() {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(0);
-  const visibleFaqs = useMemo(() => faqs.filter((faq) => !query || (faq.q + " " + faq.a).toLocaleLowerCase("pt-BR").includes(query.toLocaleLowerCase("pt-BR"))), [query]);
+  const visibleFaqs = useMemo(
+    () => faqs.filter((faq) => !query || (faq.q + " " + faq.a).toLocaleLowerCase("pt-BR").includes(query.toLocaleLowerCase("pt-BR"))),
+    [query],
+  );
 
   return (
-    <div className="content-page-v2 help-page-v2">
-      <section className="content-page-v2-hero help-hero-v2">
-        <div className="content-page-v2-hero-copy"><div className="home-v2-eyebrow content-eyebrow"><LifeBuoy size={15} /> Ajuda do Marcamar</div><h1>Vamos deixar<br /><em>claro.</em></h1><p>Respostas rápidas sobre rotas, reservas, embarque e como participar do piloto.</p></div>
-        <div className="help-hero-panel"><MaritimeIcon variant="wave" size={25} /><strong>Procure uma resposta</strong><span>Ou fale com a equipe pelo seu pedido de rota.</span></div>
-      </section>
+    <div className="content-page-v2 help-page-v2 content-page-compact">
+      <header className="content-page-compact-header">
+        <span className="content-page-compact-icon"><LifeBuoy size={23} /></span>
+        <div>
+          <p className="home-v2-kicker">AJUDA</p>
+          <h1>Encontre sua resposta.</h1>
+          <p>Rotas, reservas, embarque e participação no piloto em um só lugar.</p>
+        </div>
+      </header>
+
       <section className="content-page-v2-section help-faq-section">
         <label className="help-search-v2"><Search size={17} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar em ajuda" aria-label="Buscar em ajuda" /></label>
-        <div className="help-faq-list-v2">{visibleFaqs.map((faq, index) => { const actualIndex = faqs.indexOf(faq); const isOpen = open === actualIndex; return <article key={faq.q} className={"help-faq-item-v2" + (isOpen ? " is-open" : "")}><button type="button" onClick={() => setOpen(isOpen ? -1 : actualIndex)} aria-expanded={isOpen}><span>{faq.q}</span><ChevronDown size={18} /></button>{isOpen && <p>{faq.a}</p>}</article>; })}</div>
+        <div className="help-faq-list-v2">
+          {visibleFaqs.map((faq) => {
+            const actualIndex = faqs.indexOf(faq);
+            const isOpen = open === actualIndex;
+            return (
+              <article key={faq.q} className={"help-faq-item-v2" + (isOpen ? " is-open" : "")}>
+                <button type="button" onClick={() => setOpen(isOpen ? -1 : actualIndex)} aria-expanded={isOpen}><span>{faq.q}</span><ChevronDown size={18} /></button>
+                {isOpen && <p>{faq.a}</p>}
+              </article>
+            );
+          })}
+        </div>
         {visibleFaqs.length === 0 && <p className="help-empty-v2">Não encontramos uma resposta com esse termo.</p>}
       </section>
-      <section className="content-page-v2-callout"><div className="content-callout-icon"><MaritimeIcon variant="dock" size={22} /></div><div><p className="home-v2-kicker">AINDA PRECISA DE AJUDA?</p><h2>Conte qual rota está faltando.</h2><p>O pedido de rota é o melhor ponto de partida para a equipe entender o que você precisa.</p></div><Link href="/solicitar-rota"><span className="home-v2-coral-button">Solicitar uma rota <ArrowRight size={17} /></span></Link></section>
+
+      <section className="content-page-v2-callout">
+        <div className="content-callout-icon"><MaritimeIcon variant="dock" size={22} /></div>
+        <div><p className="home-v2-kicker">AINDA PRECISA DE AJUDA?</p><h2>Conte qual rota está faltando.</h2><p>O pedido de rota é o melhor ponto de partida para a equipe entender o que você precisa.</p></div>
+        <Link href="/solicitar-rota"><span className="home-v2-coral-button">Solicitar uma rota <ArrowRight size={17} /></span></Link>
+      </section>
     </div>
   );
 }

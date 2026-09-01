@@ -27,7 +27,7 @@ export default function Navbar() {
   const role = user?.role;
   const isCaptain = role === "captain" || role === "both";
   const links = [
-    { href: "/como-funciona", label: "Explorar" },
+    { href: "/como-funciona", label: "Como funciona" },
     { href: "/rotas", label: "Rotas" },
     { href: "/comercial", label: "Comercial" },
     { href: "/seguranca", label: "Segurança" },
@@ -41,7 +41,7 @@ export default function Navbar() {
     <nav className="nav-root">
       <div className="brazil-stripe" style={{ opacity: 0.5 }} />
       <div className="nav-inner">
-        <Link href="/"><div className="nav-logo"><div className="nav-logo-icon"><MaritimeIcon variant="anchor" size={17} aria-hidden="true" /></div><span className="nav-logo-meta"><span className="nav-logo-text">Marcamar</span><small>costa em movimento</small></span></div></Link>
+        <Link href="/"><div className="nav-logo"><div className="nav-logo-icon"><MaritimeIcon variant="anchor" size={17} aria-hidden="true" /></div><span className="nav-logo-meta"><span className="nav-logo-text">Marcamar</span></span></div></Link>
         <div className="nav-links hidden md-flex">{links.map((link) => <Link key={link.href} href={link.href}><span className={"nav-link " + (isActive(link.href) ? "active" : "")} aria-current={isActive(link.href) ? "page" : undefined}>{link.label}</span></Link>)}</div>
         <div className="nav-auth hidden md-flex">
           <button className="nav-theme-btn" onClick={() => setDark((value) => !value)} title={dark ? "Modo claro" : "Modo escuro"} aria-label={dark ? "Ativar modo claro" : "Ativar modo escuro"}>{dark ? <Sun size={16} /> : <Moon size={16} />}</button>{user && <Link href="/notificacoes"><span className="nav-notification-link" title="Notificações" aria-label="Notificações"><Bell size={17} />{unreadNotifications > 0 && <span className="nav-notification-count">{unreadNotifications > 9 ? "9+" : unreadNotifications}</span>}</span></Link>}

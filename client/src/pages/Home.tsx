@@ -50,12 +50,6 @@ export default function Home() {
       <section className="home-clean-intro">
         <div className="home-clean-water-texture" aria-hidden="true" />
         <div className="home-clean-shell">
-          <div className="home-clean-brandline">
-            <span className="home-clean-brandmark"><MaritimeIcon variant="lancha" size={20} /></span>
-            <strong>Marcamar</strong>
-            <span>litoral paulista</span>
-          </div>
-
           <div className="home-clean-heading">
             <div className="home-clean-heading-copy">
               <p className="home-clean-kicker">TRANSPORTE LOCAL PELA ÁGUA</p>

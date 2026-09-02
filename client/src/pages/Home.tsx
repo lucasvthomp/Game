@@ -48,7 +48,19 @@ export default function Home() {
   return (
     <div className="home-clean">
       <section className="home-clean-intro">
+        <svg className="home-clean-water-svg" aria-hidden="true" focusable="false">
+          <defs>
+            <filter id="marcamar-water-physics" x="-12%" y="-12%" width="124%" height="124%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.008 0.02" numOctaves="2" seed="8" result="waterNoise">
+                <animate attributeName="baseFrequency" values="0.008 0.02;0.012 0.028;0.008 0.02" dur="11s" repeatCount="indefinite" />
+                <animate attributeName="seed" values="8;16;8" dur="17s" repeatCount="indefinite" />
+              </feTurbulence>
+              <feDisplacementMap in="SourceGraphic" in2="waterNoise" scale="24" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+          </defs>
+        </svg>
         <div className="home-clean-water-texture" aria-hidden="true" />
+        <div className="home-clean-water-ripple" aria-hidden="true" />
         <div className="home-clean-shell">
           <div className="home-clean-heading home-clean-heading-simple">
             <div className="home-clean-heading-copy">

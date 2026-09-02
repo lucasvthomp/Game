@@ -5,6 +5,7 @@ import { lazy, Suspense, useMemo, useState } from "react";
 import { SiteAutocomplete } from "@/components/SiteSelect";
 import { MaritimeIcon } from "@/components/MaritimeIcon";
 import type { LatLng } from "@/components/map/LocationPicker";
+import { getCityCoords } from "@/components/map/leafletSetup";
 import { apiRequest } from "@/lib/queryClient";
 import { PILOT_ROUTES, type PilotRoute } from "@shared/pilot-routes";
 import { COASTAL_POINT_NAMES, ILHABELA_BEACHES } from "@shared/coastal-locations";
@@ -26,7 +27,9 @@ function coastalPointFor(value: string): LatLng | null {
   if (!value) return null;
   const normalized = value.toLocaleLowerCase("pt-BR");
   const match = ILHABELA_BEACHES.find((point) => point.name.toLocaleLowerCase("pt-BR") === normalized || point.name.toLocaleLowerCase("pt-BR").includes(normalized) || point.municipality.toLocaleLowerCase("pt-BR") === normalized);
-  return match ? { lat: match.latitude, lng: match.longitude } : null;
+  if (match) return { lat: match.latitude, lng: match.longitude };
+  const city = getCityCoords(value);
+  return city ? { lat: city[0], lng: city[1] } : null;
 }
 
 function RouteRideCard({ ride }: { ride: any }) {

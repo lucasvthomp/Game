@@ -27,12 +27,10 @@ export default function Navbar() {
   const role = user?.role;
   const isCaptain = role === "captain" || role === "both";
   const links = [
-    { href: "/como-funciona", label: "Como funciona" },
     { href: "/rotas", label: "Rotas" },
     { href: "/comercial", label: "Comercial" },
-    { href: "/seguranca", label: "Segurança" },
     { href: "/ajuda", label: "Ajuda" },
-    ...(isCaptain ? [{ href: "/minha-lancha", label: "Minha Lancha" }] : []),
+    ...(isCaptain ? [{ href: "/minha-lancha", label: "Minha lancha" }] : []),
     ...(user ? [{ href: "/minhas-reservas", label: "Reservas" }] : []),
   ];
   const isActive = (href: string) => href === "/" ? location === "/" : location === href || location.startsWith(href + "/");

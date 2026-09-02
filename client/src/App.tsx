@@ -19,12 +19,12 @@ import Admin from "@/pages/Admin";
 import RouteRequest from "@/pages/RouteRequest";
 import Routes from "@/pages/Routes";
 import Commercial from "@/pages/Commercial";
-import HowItWorks from "@/pages/HowItWorks";
 import Safety from "@/pages/Safety";
 import Help from "@/pages/Help";
 import Terms from "@/pages/Terms";
 import Privacy from "@/pages/Privacy";
 import Notifications from "@/pages/Notifications";
+import Accessibility from "@/pages/Accessibility";
 
 export default function App() {
   return (
@@ -40,11 +40,11 @@ export default function App() {
             <Route path="/lanchas">{() => <Rides />}</Route>
             <Route path="/rotas" component={Routes} />
             <Route path="/comercial" component={Commercial} />
-            <Route path="/como-funciona" component={HowItWorks} />
             <Route path="/seguranca" component={Safety} />
             <Route path="/ajuda" component={Help} />
             <Route path="/termos" component={Terms} />
             <Route path="/privacidade" component={Privacy} />
+            <Route path="/acessibilidade" component={Accessibility} />
             <Route path="/notificacoes" component={Notifications} />
             <Route path="/viagens/:id" component={RideDetail} />
             <Route path="/perfil-capitao" component={CaptainProfile} />

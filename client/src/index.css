@@ -12964,3 +12964,12 @@ a,
 @media (max-width: 520px) {
   .footer-clean-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 25px 18px; }
 }
+
+.footer-clean { color: var(--text1); }
+.footer-clean .footer-logo-text,
+.footer-clean .footer-group-title,
+.footer-clean .footer-bottom,
+.footer-clean .footer-bottom-link { color: var(--text1); }
+.footer-clean .footer-status,
+.footer-clean .footer-region,
+.footer-clean .footer-bottom-note { color: var(--text3); }

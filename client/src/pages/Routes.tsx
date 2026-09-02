@@ -55,19 +55,16 @@ function RouteRideCard({ ride }: { ride: any }) {
             </div>
           </div>
         </div>
-
         <div className="routes-ride-route">
           <div><small>SAÍDA</small><strong>{ride.originCity}</strong></div>
           <span className="routes-ride-route-line"><i /><MaritimeIcon variant="lancha" size={19} /><i /></span>
           <div className="routes-ride-destination"><small>CHEGADA</small><strong>{ride.destinationCity}</strong></div>
         </div>
-
         <div className="routes-ride-meta">
           <span><Calendar size={15} /> <strong>{cardDate(ride.departureTime)}</strong></span>
           <span><MaritimeIcon variant="clock" size={16} /> <strong>{cardTime(ride.departureTime)}</strong></span>
           <span><Users size={15} /> <strong>{available}/{total}</strong> vagas</span>
         </div>
-
         <div className="routes-ride-footer">
           <div><small>A PARTIR DE</small><strong>{Number.isFinite(price) ? price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) : "Consulte"}</strong><span>/ pessoa</span></div>
           <span className="routes-ride-cta">Ver detalhes <ArrowRight size={15} /></span>
@@ -129,67 +126,72 @@ export default function Routes() {
   };
 
   return (
-    <div className="routes-page-v2">
-      <section className="routes-map-hero" aria-labelledby="routes-title">
-        <div className="routes-map-hero-map">
-          <Suspense fallback={<div className="routes-map-loading">Carregando mapa costeiro…</div>}>
-            <RidesMap height="min(560px, 66svh)" rides={publishedRides} />
-          </Suspense>
-          <div className="routes-map-hero-map-label"><MaritimeIcon variant="wave" size={16} /> mapa costeiro</div>
+    <div className="routes-page-v2 routes-page-rework">
+      <section className="routes-planner" aria-labelledby="routes-title">
+        <div className="routes-planner-intro">
+          <div>
+            <p className="home-v2-kicker">ROTAS</p>
+            <h1 id="routes-title">Planeje pelo mapa.</h1>
+            <p>Escolha o trecho e veja as saídas de lancha que fazem sentido para você.</p>
+          </div>
+          <div className="routes-planner-context"><MaritimeIcon variant="wave" size={18} /><span>São Paulo · pontos costeiros</span></div>
         </div>
-        <div className="routes-map-hero-panel">
-          <p className="home-v2-kicker">ROTAS</p>
-          <h1 id="routes-title">Escolha seu caminho pela água.</h1>
-          <p className="routes-map-hero-lead">Encontre uma saída publicada ou marque exatamente onde quer embarcar.</p>
-          <div className="routes-map-search-card">
-            <div className="routes-map-search-step"><span className="routes-map-step-number">1</span><div><strong>Defina o trecho</strong><small>Saída e chegada</small></div></div>
-            <div className="routes-search-field"><MaritimeIcon variant="pinpoint" size={17} /><SiteAutocomplete value={from} onChange={updateFrom} options={locationNames} placeholder="Saída" ariaLabel="Ponto de saída" /></div>
-            <div className="routes-search-field"><MaritimeIcon variant="beach" size={17} /><SiteAutocomplete value={to} onChange={updateTo} options={locationNames} placeholder="Chegada" ariaLabel="Ponto de chegada" /></div>
-            <div className="routes-map-search-inline">
-              <label><MaritimeIcon variant="clock" size={16} /><span><small>DATA</small><input type="date" value={travelDate} onChange={(event) => setTravelDate(event.target.value)} aria-label="Data da viagem" /></span></label>
-              <label><MaritimeIcon variant="clock" size={16} /><span><small>HORÁRIO</small><input type="time" value={travelTime} onChange={(event) => setTravelTime(event.target.value)} aria-label="Horário da viagem" /></span></label>
-              <label><MaritimeIcon variant="lancha" size={16} /><span><small>PASSAGEIROS</small><input type="number" min="1" max="12" value={passengers} onChange={(event) => setPassengers(event.target.value)} aria-label="Quantidade de passageiros" /></span></label>
+
+        <div className="routes-planner-board">
+          <div className="routes-planner-map">
+            <Suspense fallback={<div className="routes-map-loading">Carregando mapa costeiro…</div>}>
+              <RidesMap height="min(610px, 68svh)" rides={publishedRides} />
+            </Suspense>
+            <div className="routes-planner-map-caption"><span><MaritimeIcon variant="lancha" size={16} /> saídas publicadas</span><span><MaritimeIcon variant="pinpoint" size={16} /> pontos ajustáveis</span></div>
+          </div>
+
+          <aside className="routes-planner-card">
+            <div className="routes-planner-card-head">
+              <span className="routes-planner-step-number">{mapStep === "search" ? "01" : "02"}</span>
+              <div><p className="home-v2-kicker">{mapStep === "search" ? "SEU TRECHO" : "SEUS PONTOS"}</p><h2>{mapStep === "search" ? "Onde você vai?" : "Ajuste no mapa."}</h2></div>
+              <span className="routes-planner-step-count">{mapStep === "search" ? "1 de 2" : "2 de 2"}</span>
             </div>
+
             {mapStep === "search" ? (
-              <button type="button" className="routes-map-search-button" onClick={continueToPins}>Continuar no mapa <ArrowRight size={16} /></button>
+              <div className="routes-planner-form">
+                <label className="routes-planner-field"><MaritimeIcon variant="pinpoint" size={18} /><span><small>SAÍDA</small><SiteAutocomplete value={from} onChange={updateFrom} options={locationNames} placeholder="De onde?" ariaLabel="Ponto de saída" /></span></label>
+                <label className="routes-planner-field"><MaritimeIcon variant="beach" size={18} /><span><small>CHEGADA</small><SiteAutocomplete value={to} onChange={updateTo} options={locationNames} placeholder="Para onde?" ariaLabel="Ponto de chegada" /></span></label>
+                <div className="routes-planner-inline">
+                  <label><MaritimeIcon variant="clock" size={16} /><span><small>DATA</small><input type="date" value={travelDate} onChange={(event) => setTravelDate(event.target.value)} aria-label="Data da viagem" /></span></label>
+                  <label><MaritimeIcon variant="clock" size={16} /><span><small>HORA</small><input type="time" value={travelTime} onChange={(event) => setTravelTime(event.target.value)} aria-label="Horário da viagem" /></span></label>
+                  <label><MaritimeIcon variant="lancha" size={16} /><span><small>PESSOAS</small><input type="number" min="1" max="12" value={passengers} onChange={(event) => setPassengers(event.target.value)} aria-label="Quantidade de passageiros" /></span></label>
+                </div>
+                <button type="button" className="routes-planner-button" onClick={continueToPins}>Continuar <ArrowRight size={16} /></button>
+                <p className="routes-planner-hint">Você poderá mover os pins para o ponto exato na costa.</p>
+              </div>
             ) : (
-              <div className="routes-map-pin-step">
-                <div className="routes-map-search-step"><span className="routes-map-step-number">2</span><div><strong>Ajuste os pontos</strong><small>Arraste os pins pela costa</small></div></div>
-                <div className="routes-map-pickers">
-                  <Suspense fallback={<div className="routes-map-loading">Carregando seletor…</div>}>
-                    <LocationPicker label="Embarque" variant="origin" value={originPin} onChange={setOriginPin} height="170px" />
-                    <LocationPicker label="Chegada" variant="dest" value={destinationPin} onChange={setDestinationPin} height="170px" />
+              <div className="routes-planner-pin-flow">
+                <p className="routes-planner-pin-intro">Os pontos começam na melhor referência encontrada. Arraste para ajustar.</p>
+                <div className="routes-planner-pickers">
+                  <Suspense fallback={<div className="routes-map-loading">Carregando pontos…</div>}>
+                    <LocationPicker label="Embarque" variant="origin" value={originPin} onChange={setOriginPin} height="160px" />
+                    <LocationPicker label="Chegada" variant="dest" value={destinationPin} onChange={setDestinationPin} height="160px" />
                   </Suspense>
                 </div>
-                <button type="button" className="routes-map-search-button" onClick={search}>Buscar saídas <ArrowRight size={16} /></button>
-                <button type="button" className="routes-map-back" onClick={() => setMapStep("search")}>Voltar e editar trecho</button>
+                <button type="button" className="routes-planner-button" onClick={search}>Buscar saídas <ArrowRight size={16} /></button>
+                <button type="button" className="routes-planner-back" onClick={() => setMapStep("search")}>Editar trecho</button>
               </div>
             )}
-          </div>
+          </aside>
         </div>
       </section>
 
-      <section className="routes-rides-directory">
-        <div className="routes-rides-heading">
-          <div><p className="home-v2-kicker">SAÍDAS PUBLICADAS</p><h2>Escolha uma lancha.</h2><p>Veja primeiro quem conduz. Depois confira rota, horário, valor e vagas.</p></div>
-          <label className="routes-filter-v2"><Search size={16} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Filtrar saídas" aria-label="Filtrar saídas" /></label>
+      <section className="routes-results">
+        <div className="routes-results-head">
+          <div><p className="home-v2-kicker">SAÍDAS PUBLICADAS</p><h2>Escolha uma lancha.</h2><p>Perfil, rota, horário, valor e vagas em um só cartão.</p></div>
+          <label className="routes-filter-v2"><Search size={16} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Filtrar" aria-label="Filtrar saídas" /></label>
         </div>
-        {filteredRides.length > 0 ? (
-          <div className="routes-rides-grid">{filteredRides.map((ride) => <RouteRideCard key={ride.id} ride={ride} />)}</div>
-        ) : (
-          <div className="routes-rides-empty"><MaritimeIcon variant="lancha" size={32} /><strong>Nenhuma saída publicada ainda.</strong><span>Peça uma rota ou tente outro termo de busca.</span><Link href="/solicitar-rota"><span>Solicitar uma rota <ArrowRight size={14} /></span></Link></div>
-        )}
+        {filteredRides.length > 0 ? <div className="routes-rides-grid">{filteredRides.map((ride) => <RouteRideCard key={ride.id} ride={ride} />)}</div> : <div className="routes-rides-empty"><MaritimeIcon variant="lancha" size={32} /><strong>Nenhuma saída publicada ainda.</strong><span>Peça uma rota ou tente outro termo.</span><Link href="/solicitar-rota"><span>Solicitar rota <ArrowRight size={14} /></span></Link></div>}
       </section>
 
       <section className="routes-points-v2">
-        <div className="routes-points-v2-heading"><div><p className="home-v2-kicker">PONTOS CONHECIDOS</p><h2>Onde você pode embarcar.</h2></div><p>{ILHABELA_BEACHES.length}+ praias e pontos costeiros entram no mapa.</p></div>
-        <div className="routes-point-grid-v2">{ILHABELA_BEACHES.slice(0, 16).map((point) => <span key={point.name} className="routes-point-item-v2"><MaritimeIcon variant="buoy" size={16} /><strong>{point.name}</strong><small>Ilhabela · ponto costeiro</small></span>)}</div>
-      </section>
-
-      <section className="routes-cta-v2">
-        <div className="routes-cta-v2-icon"><MaritimeIcon variant="wave" size={24} /></div>
-        <div><p className="home-v2-kicker">FALTA UMA SAÍDA?</p><h2>Peça a rota que você precisa.</h2><p>Conte origem, destino e data para ajudar a criar a próxima conexão.</p></div>
-        <Link href="/solicitar-rota"><span className="home-v2-coral-button">Solicitar uma rota <ArrowRight size={17} /></span></Link>
+        <div className="routes-points-v2-heading"><div><p className="home-v2-kicker">PONTOS COSTEIROS</p><h2>Escolha pelo lugar.</h2></div><p>{ILHABELA_BEACHES.length}+ praias e pontos no mapa.</p></div>
+        <div className="routes-point-grid-v2">{ILHABELA_BEACHES.slice(0, 16).map((point) => <span key={point.name} className="routes-point-item-v2"><MaritimeIcon variant="buoy" size={16} /><strong>{point.name}</strong><small>Ilhabela</small></span>)}</div>
       </section>
     </div>
   );

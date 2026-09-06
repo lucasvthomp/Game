@@ -111,14 +111,16 @@ export default function WaterSurface({ className = "" }: WaterSurfaceProps) {
 
     resize();
     const resizeObserver = new ResizeObserver(resize);
+    const onPointerMove = (event: PointerEvent) => kick(event.clientX, event.clientY);
     resizeObserver.observe(canvas);
     window.addEventListener("resize", resize);
-    window.addEventListener("pointermove", (event) => kick(event.clientX, event.clientY), { passive: true });
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
     frame = requestAnimationFrame(draw);
 
     return () => {
       resizeObserver.disconnect();
       window.removeEventListener("resize", resize);
+      window.removeEventListener("pointermove", onPointerMove);
       cancelAnimationFrame(frame);
     };
   }, []);

@@ -10,7 +10,7 @@ const sections = [
   ["6. Conduta e segurança", "Não use o serviço para transportar itens proibidos, não ultrapasse a capacidade publicada e respeite passageiros, comunidades costeiras e o meio ambiente. Em emergência, priorize os canais oficiais e as instruções da tripulação."],
   ["7. Conteúdo e suspensão", "Você é responsável pelo que publica. Podemos remover conteúdo, suspender contas ou retirar uma rota quando houver fraude, risco, assédio, dados falsos ou descumprimento destes termos."],
   ["8. Privacidade e verificações", "O tratamento de dados pessoais segue a Política de Privacidade e a Lei Geral de Proteção de Dados (LGPD). Validações de identidade, certidões criminais e documentos náuticos só serão feitas para uma finalidade definida, com base legal adequada e acesso restrito."],
-  ["9. Lei aplicável", "Estes termos são regidos pelas leis brasileiras. Para a operação inicial em São Paulo, fica eleito o foro da Comarca de São Paulo/SP, respeitados os direitos do consumidor e qualquer foro obrigatório previsto em lei."],
+  ["9. Lei aplicável", "Estes termos são regidos pelas leis brasileiras, incluindo o Código de Defesa do Consumidor (Lei Federal nº 8.078/1990) e, quando aplicável à operação em São Paulo, a Lei Estadual nº 17.832/2023 e suas atualizações. Fica eleito o foro da Comarca de São Paulo/SP, respeitados os direitos do consumidor e qualquer foro obrigatório previsto em lei."],
 ];
 
 export default function Terms() {

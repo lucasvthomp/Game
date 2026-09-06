@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@400;500;600;700&display=swap');
 /* Leaflet base CSS is loaded via the <link> in index.html and the bundled
    `import "leaflet/dist/leaflet.css"` inside components/map/leafletSetup.ts. */
 
@@ -13635,4 +13635,132 @@ h1, h2, h3, h4, h5, h6,
 @media (prefers-reduced-motion: reduce) {
   .home-clean-water-texture,
   .home-clean-water-ripple { animation-duration: 1ms !important; }
+}
+
+
+/* ─── THEME RESET: warm editorial coast ─── */
+:root {
+  --bg: #F4F0E8;
+  --bg2: #EAE3D7;
+  --card: #FFFCF6;
+  --surface: #EEE8DD;
+  --border: #D8D0C3;
+  --border2: #B9AE9F;
+  --text1: #202723;
+  --text2: #69716B;
+  --text3: #92988F;
+  --boat: #C9674F;
+  --boat-light: #F2DDD4;
+  --boat-dark: #9E4938;
+  --car: #4F8B83;
+  --car-light: #DDEBE6;
+  --car-dark: #376E68;
+  --amber: #C98B3A;
+  --dark: #191C19;
+  --dark2: #252A25;
+  --red: #C84B4B;
+  --green: #39836E;
+  --brazil1: #39836E;
+  --brazil2: #C98B3A;
+  --brazil3: #4F8B83;
+  --sunset: #C9674F;
+  --ocean: #4F8B83;
+  --shadow-sm: 0 1px 7px rgba(53,44,34,.06);
+  --shadow-md: 0 8px 24px rgba(53,44,34,.10);
+  --shadow-lg: 0 20px 52px rgba(53,44,34,.13);
+  --glow-car: rgba(79,139,131,.16);
+  --glow-boat: rgba(201,103,79,.18);
+}
+[data-theme="dark"] {
+  --bg: #181A18;
+  --bg2: #21231F;
+  --card: #272824;
+  --surface: #30312B;
+  --border: #48483E;
+  --border2: #5E5C50;
+  --text1: #F6F0E5;
+  --text2: #B9B8AD;
+  --text3: #8C9085;
+  --boat: #F08B70;
+  --boat-light: #4A2C25;
+  --boat-dark: #D66D55;
+  --car: #82C1B4;
+  --car-light: #29403B;
+  --car-dark: #5CA295;
+  --amber: #E0A553;
+  --dark: #101210;
+  --dark2: #181A18;
+  --red: #F07979;
+  --green: #73B79D;
+  --brazil1: #73B79D;
+  --brazil2: #E0A553;
+  --brazil3: #82C1B4;
+  --sunset: #F08B70;
+  --ocean: #82C1B4;
+  --shadow-sm: 0 2px 10px rgba(0,0,0,.28);
+  --shadow-md: 0 8px 28px rgba(0,0,0,.42);
+  --shadow-lg: 0 20px 56px rgba(0,0,0,.62);
+  --glow-car: rgba(130,193,180,.18);
+  --glow-boat: rgba(240,139,112,.20);
+}
+body,
+button,
+input,
+select,
+textarea { font-family: "Instrument Sans", -apple-system, BlinkMacSystemFont, sans-serif !important; }
+h1, h2, h3, h4, h5, h6,
+.hero-pro-title, .section-title-pro, .split-panel-title, .map-text-title,
+.recurring-pro-title, .cta-band-title, .cta-pro-card h3, .auth-title,
+.page-title, .dash-name { font-family: "DM Serif Display", Georgia, serif !important; font-weight: 400; letter-spacing: -.018em; }
+.home-clean-heading-copy h1 {
+  font-family: "DM Serif Display", Georgia, serif !important;
+  font-weight: 400;
+  letter-spacing: -.045em;
+}
+.home-clean-heading-copy h1 em {
+  color: var(--boat);
+  font-family: "DM Serif Display", Georgia, serif !important;
+  font-style: italic;
+  font-weight: 400;
+}
+.home-clean-section-head h2,
+.home-clean-boarding-head h2 { font-weight: 400; letter-spacing: -.02em; }
+
+/* A warmer, quieter surface system across the landing page. */
+.home-clean,
+.home-clean-intro,
+.home-clean-service-card,
+.home-clean-route-list,
+.home-clean-step-v2,
+.home-clean-boarding-grid article { border-color: var(--border); }
+.home-clean-intro { background: var(--card); }
+.home-clean-search {
+  border-color: var(--border2);
+  background: color-mix(in srgb, var(--card) 78%, var(--surface));
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--text1) 9%, transparent);
+}
+.home-clean-search-button { border-radius: 10px; }
+.home-clean-service-card { border-radius: 14px; box-shadow: var(--shadow-sm); }
+.home-clean-service-card:hover { box-shadow: var(--shadow-md); }
+.home-clean-route-list { border-radius: 14px; box-shadow: var(--shadow-sm); }
+.home-clean-step-v2 { border-radius: 14px; box-shadow: var(--shadow-sm); }
+.home-clean-step-v2:hover { box-shadow: var(--shadow-md); }
+.home-clean-boarding-grid article { border-radius: 14px; background: color-mix(in srgb, var(--surface) 78%, var(--card)); }
+
+/* Keep the water motion organic, but shift its tint with the new warm accent. */
+.home-clean-water-ripple {
+  opacity: .16;
+  mix-blend-mode: soft-light;
+}
+[data-theme="dark"] .home-clean-water-ripple { opacity: .2; }
+
+/* Small type details that make the new display face feel deliberate. */
+.home-clean-kicker { letter-spacing: .18em; font-size: .61rem; }
+.home-clean-route-cities,
+.home-clean-route-side strong { letter-spacing: -.015em; }
+.home-clean-section-lede { max-width: 560px; font-size: .87rem; }
+
+@media (max-width: 700px) {
+  .home-clean-heading-copy h1 { font-size: clamp(3rem, 14vw, 4.6rem); }
+  .home-clean-service-card { border-radius: 13px; }
 }

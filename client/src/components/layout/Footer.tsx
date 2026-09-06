@@ -32,11 +32,11 @@ export default function Footer() {
             <div className="footer-logo"><span className="footer-logo-icon"><MaritimeIcon variant="anchor" size={17} /></span><span className="footer-logo-text">Marcamar</span></div>
             <p className="footer-tagline">Lancha local no litoral paulista.</p>
             <span className="footer-region"><MaritimeIcon variant="palm" size={15} /> São Paulo · Brasil</span>
-            <span className="footer-status"><CheckCircle2 size={14} /> Serviço em construção contínua</span>
+            <span className="footer-status"><CheckCircle2 size={14} /> Atendimento local</span>
           </div>
           <div className="footer-clean-note">
             <span className="footer-clean-note-icon"><MaritimeIcon variant="wave" size={18} /></span>
-            <div><strong>Escolha o ponto. Veja os detalhes.</strong><span>Escolha o ponto, veja os detalhes e combine o cais.</span></div>
+            <div><strong>Escolha o ponto. Veja os detalhes.</strong><span>Combine o cais com clareza.</span></div>
           </div>
         </div>
         <div className="footer-grid footer-clean-grid">

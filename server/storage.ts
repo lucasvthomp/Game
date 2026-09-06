@@ -1,6 +1,6 @@
 import { db } from "./db.js";
 import {
-  users, captainProfiles, driverProfiles, rides, recurringSchedules, reservations, reviews, messages, locations, maritimeRoutes, incidents, notifications, routeRequests, commercialWaitlist
+  users, captainProfiles, driverProfiles, rides, recurringSchedules, reservations, reviews, messages, locations, maritimeRoutes, incidents, notifications, routeRequests, commercialWaitlist, verificationSubmissions, adminAuditEvents
 } from "@shared/schema";
 import type {
   User, InsertUser,
@@ -12,7 +12,7 @@ import type {
   Review, InsertReview,
   Message, InsertMessage,
   Location, InsertLocation, MaritimeRoute, InsertMaritimeRoute, Incident, InsertIncident, Notification, InsertNotification,
-  RouteRequest, InsertRouteRequest, CommercialWaitlist, InsertCommercialWaitlist,
+  RouteRequest, InsertRouteRequest, CommercialWaitlist, InsertCommercialWaitlist, VerificationSubmission, InsertVerificationSubmission, AdminAuditEvent, InsertAdminAuditEvent,
 } from "@shared/schema";
 import { eq, desc, and, gte, sql, or, ilike, asc } from "drizzle-orm";
 import { hashPassword } from "./auth.js";
@@ -134,6 +134,29 @@ export const storage = {
   async setDriverVerified(id: number, verified: boolean): Promise<DriverProfile | undefined> {
     const [profile] = await db.update(driverProfiles).set({ verified }).where(eq(driverProfiles.id, id)).returning();
     return profile;
+  },
+
+  // ── Verification and admin audit ──
+  async createVerificationSubmission(data: InsertVerificationSubmission): Promise<VerificationSubmission> {
+    const [submission] = await db.insert(verificationSubmissions).values(data).returning();
+    return submission;
+  },
+  async getVerificationSubmission(id: number): Promise<VerificationSubmission | undefined> {
+    return (await db.select().from(verificationSubmissions).where(eq(verificationSubmissions.id, id)))[0];
+  },
+  async getVerificationSubmissionsByUser(userId: number): Promise<VerificationSubmission[]> {
+    return db.select().from(verificationSubmissions).where(eq(verificationSubmissions.userId, userId)).orderBy(desc(verificationSubmissions.createdAt));
+  },
+  async listVerificationSubmissions(): Promise<VerificationSubmission[]> {
+    return db.select().from(verificationSubmissions).orderBy(desc(verificationSubmissions.createdAt));
+  },
+  async updateVerificationSubmission(id: number, data: Partial<VerificationSubmission>): Promise<VerificationSubmission | undefined> {
+    const [submission] = await db.update(verificationSubmissions).set({ ...data, updatedAt: new Date() }).where(eq(verificationSubmissions.id, id)).returning();
+    return submission;
+  },
+  async createAdminAuditEvent(data: InsertAdminAuditEvent): Promise<AdminAuditEvent> {
+    const [event] = await db.insert(adminAuditEvents).values(data).returning();
+    return event;
   },
 
   // ── Rides ──

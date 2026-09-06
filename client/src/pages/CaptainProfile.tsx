@@ -2,7 +2,7 @@ import { useState, type ChangeEvent, type FormEvent } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
-import { CheckCircle2, Upload } from "lucide-react";
+import { CheckCircle2, Upload, Camera } from "lucide-react";
 import { MaritimeIcon } from "@/components/MaritimeIcon";
 
 const INITIAL_FORM = { licenseNumber: "", boatName: "", boatModel: "", boatCapacity: "", bio: "" };
@@ -16,6 +16,7 @@ export default function CaptainProfile() {
   const [form, setForm] = useState(INITIAL_FORM);
   const [licenseImage, setLicenseImage] = useState<File | null>(null);
   const [boatImage, setBoatImage] = useState<File | null>(null);
+  const [registrationImage, setRegistrationImage] = useState<File | null>(null);
 
   const setField = (key: keyof typeof INITIAL_FORM) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm((current) => ({ ...current, [key]: event.target.value }));
@@ -42,6 +43,10 @@ export default function CaptainProfile() {
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
+    if (!user.avatarUrl) {
+      setError("Adicione uma foto de perfil em Perfil antes de solicitar aprovação.");
+      return;
+    }
     if (!licenseImage) {
       setError("Foto da habilitação é obrigatória.");
       return;
@@ -52,6 +57,7 @@ export default function CaptainProfile() {
       Object.entries(form).forEach(([key, value]) => body.append(key, value));
       body.append("licenseImage", licenseImage);
       if (boatImage) body.append("boatImage", boatImage);
+      if (registrationImage) body.append("boatRegistrationImage", registrationImage);
       const response = await fetch("/api/captain/profile", { method: "POST", body, credentials: "include" });
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error || "Não foi possível criar o perfil.");
@@ -85,7 +91,8 @@ export default function CaptainProfile() {
         <div>
           <p className="profile-page-kicker"><MaritimeIcon variant="anchor" size={15} /> PERFIL DA LANCHA</p>
           <h1>Comece a publicar.</h1>
-          <p>Informe só o essencial para apresentar sua lancha com clareza.</p>
+          <p>Informe o essencial para apresentar sua lancha. A aprovação é manual nesta fase.</p>
+          {!user.avatarUrl && <p className="captain-profile-requirement"><Camera size={15} /> Adicione sua foto no Perfil antes de enviar.</p>}
         </div>
       </header>
 
@@ -138,6 +145,14 @@ export default function CaptainProfile() {
                   <input id="boat-image" type="file" accept="image/*" onChange={(event) => setBoatImage(event.target.files?.[0] || null)} />
                 </label>
               </div>
+              <div>
+                <label className="field-label" htmlFor="boat-registration">REGISTRO DA EMBARCAÇÃO (TIE)</label>
+                <label className={"file-label captain-upload-field " + (registrationImage ? "is-selected" : "")} htmlFor="boat-registration">
+                  <Upload size={16} />
+                  <span>{registrationImage ? registrationImage.name : "Selecionar foto ou PDF"}</span>
+                  <input id="boat-registration" type="file" accept="image/*,.pdf,application/pdf" onChange={(event) => setRegistrationImage(event.target.files?.[0] || null)} />
+                </label>
+              </div>
               <div className="captain-profile-fields-full">
                 <label className="field-label" htmlFor="captain-bio">APRESENTAÇÃO <span>(opcional)</span></label>
                 <textarea id="captain-bio" className="field-input captain-profile-textarea" value={form.bio} onChange={setField("bio")} placeholder="Conte brevemente sobre sua experiência e a lancha." />
@@ -148,7 +163,7 @@ export default function CaptainProfile() {
           {error && <div className="alert-error captain-profile-alert">{error}</div>}
           <div className="captain-profile-actions">
             <button type="submit" disabled={loading} className="form-submit">{loading ? "Enviando..." : "Criar perfil de capitão"}</button>
-            <p>Você poderá atualizar esses dados depois.</p>
+            <p>Os documentos ficam restritos à revisão da equipe e podem ser atualizados depois.</p>
           </div>
         </form>
       </section>

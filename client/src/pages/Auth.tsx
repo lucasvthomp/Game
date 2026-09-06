@@ -69,7 +69,7 @@ export default function Auth({ mode }: { mode: "login" | "register" }) {
             <GoogleMark />
             <span>{googleAvailable ? "Continuar com Google" : "Google indisponível"}</span>
           </button>
-          <div className="auth-divider"><span>ou use email e senha</span></div>
+          <div className="auth-divider"><span>ou use email/usuário e senha</span></div>
 
           <form onSubmit={submit}>
             {mode === "register" && (
@@ -91,8 +91,8 @@ export default function Auth({ mode }: { mode: "login" | "register" }) {
 
             <div className={mode === "register" ? "auth-form-grid" : ""}>
               <div className="form-field">
-                <label className="form-label" htmlFor="auth-email">EMAIL *</label>
-                <input id="auth-email" className="form-input" type="email" value={form.email} onChange={setField("email")} required placeholder="seu@email.com" autoComplete="email" />
+                <label className="form-label" htmlFor="auth-email">{mode === "login" ? "EMAIL OU USUÁRIO *" : "EMAIL *"}</label>
+                <input id="auth-email" className="form-input" type={mode === "login" ? "text" : "email"} value={form.email} onChange={setField("email")} required placeholder={mode === "login" ? "seu@email.com ou marcamar-admin" : "seu@email.com"} autoComplete={mode === "login" ? "username" : "email"} />
               </div>
               <div className="form-field">
                 <label className="form-label" htmlFor="auth-password">SENHA *</label>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap');
 /* Leaflet base CSS is loaded via the <link> in index.html and the bundled
    `import "leaflet/dist/leaflet.css"` inside components/map/leafletSetup.ts. */
 
@@ -13834,3 +13834,36 @@ h1, h2, h3, h4, h5, h6,
 }
 .home-clean-water-ripple { opacity: .2; }
 [data-theme="dark"] .home-clean-water-ripple { opacity: .2; }
+
+
+/* ─── TYPOGRAPHY RESET: neutral, modern, and easy to scan ─── */
+body,
+button,
+input,
+select,
+textarea { font-family: "Inter Tight", Inter, -apple-system, BlinkMacSystemFont, sans-serif !important; }
+h1, h2, h3, h4, h5, h6,
+.hero-pro-title, .section-title-pro, .split-panel-title, .map-text-title,
+.recurring-pro-title, .cta-band-title, .cta-pro-card h3, .auth-title,
+.page-title, .dash-name,
+.home-clean-heading-copy h1,
+.home-clean-section-head h2,
+.home-clean-boarding-head h2 {
+  font-family: "Inter Tight", Inter, -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: -.045em;
+}
+h1 em, h2 em, h3 em,
+.hero-pro-title em, .section-title-pro em, .content-page-v2-hero h1 em,
+.home-clean-heading-copy h1 em {
+  font-family: "Inter Tight", Inter, -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-style: normal;
+  font-weight: 700;
+}
+.home-clean-heading-copy h1 {
+  letter-spacing: -.055em;
+}
+.home-clean-heading-copy h1 em {
+  color: var(--boat);
+}

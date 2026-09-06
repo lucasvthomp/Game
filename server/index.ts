@@ -328,8 +328,37 @@ if (process.env.NODE_ENV === "production") {
   app.use(vite.middlewares);
 }
 
+async function seedAdminFromEnv() {
+  const email = process.env.ADMIN_EMAIL?.toLowerCase().trim();
+  const password = process.env.ADMIN_PASSWORD;
+  if (!email || !password) return;
+  if (password.length < 12) {
+    console.warn("ADMIN_PASSWORD precisa ter pelo menos 12 caracteres; conta administrativa não criada.");
+    return;
+  }
+  const existing = await pool.query<{ id: number }>("SELECT id FROM users WHERE email = $1 LIMIT 1", [email]);
+  if (existing.rows[0]) {
+    await pool.query("UPDATE users SET role = 'admin' WHERE id = $1", [existing.rows[0].id]);
+    return;
+  }
+  const baseUsername = (process.env.ADMIN_USERNAME || "marcamar-admin").toLowerCase().replace(/[^a-z0-9_]/g, "").slice(0, 24) || "marcamar-admin";
+  let username = baseUsername;
+  let suffix = 2;
+  while ((await pool.query("SELECT 1 FROM users WHERE username = $1 LIMIT 1", [username])).rows[0]) {
+    username = baseUsername.slice(0, 24 - String(suffix).length) + suffix;
+    suffix += 1;
+  }
+  const hashed = await hashPassword(password);
+  await pool.query(
+    "INSERT INTO users (email, username, password, full_name, home_city, role) VALUES ($1, $2, $3, $4, $5, 'admin')",
+    [email, username, hashed, process.env.ADMIN_NAME || "Equipe Marcamar", "São Paulo"],
+  );
+  console.log("Conta administrativa criada para " + email);
+}
+
 app.listen(PORT, async () => {
   await runMigrations();
+  await seedAdminFromEnv();
   await seedDemoData();
   console.log(`Marcamar rodando na porta ${PORT}`);
 });

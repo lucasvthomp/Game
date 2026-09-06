@@ -331,7 +331,7 @@ router.post("/verification/identity", requireAuth, async (req: Request, res: Res
 router.post("/verification/document", requireAuth, upload.single("document"), async (req: Request, res: Response) => {
   const user = req.user as any;
   const kind = typeof req.body.kind === "string" ? req.body.kind : "";
-  if (!verificationKinds.includes(kind as any) || kind === "identity" && req.body.consent !== "true") {
+  if (!verificationKinds.includes(kind as any) || req.body.consent !== "true") {
     return res.status(400).json({ error: "Tipo de verificação ou consentimento inválido." });
   }
   if (!req.file) return res.status(400).json({ error: "Envie uma imagem ou PDF legível." });
@@ -342,7 +342,7 @@ router.post("/verification/document", requireAuth, upload.single("document"), as
     subjectName: user.fullName,
     documentUrl: `/uploads/${req.file.filename}`,
     provider: "manual",
-    consentAt: req.body.consent === "true" ? new Date() : null,
+    consentAt: new Date(),
   });
   res.status(201).json({
     submission,

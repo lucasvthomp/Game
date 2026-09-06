@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap');
 /* Leaflet base CSS is loaded via the <link> in index.html and the bundled
    `import "leaflet/dist/leaflet.css"` inside components/map/leafletSetup.ts. */
 
@@ -13386,4 +13386,253 @@ a,
     min-height: 32px;
     font-size: .73rem;
   }
+}
+
+
+/* ─── HOME POLISH: neutral palette, readable type, and a calmer lower page ─── */
+:root {
+  --bg: #F6F6F2;
+  --bg2: #EDEDE8;
+  --card: #FFFFFF;
+  --surface: #F1F2EE;
+  --border: #D9DDD8;
+  --border2: #BEC7C1;
+  --text1: #1B2723;
+  --text2: #5D6A64;
+  --text3: #89948D;
+  --boat: #2F817B;
+  --boat-light: #DBECE7;
+  --boat-dark: #23645F;
+  --car: #D77955;
+  --car-light: #F6E5DC;
+  --car-dark: #B65C3E;
+  --dark: #101512;
+  --dark2: #171E1A;
+  --shadow-sm: 0 1px 8px rgba(27,39,35,.06);
+  --shadow-md: 0 8px 26px rgba(27,39,35,.09);
+  --shadow-lg: 0 20px 54px rgba(27,39,35,.13);
+  --glow-car: rgba(215,121,85,.16);
+  --glow-boat: rgba(47,129,123,.16);
+}
+[data-theme="dark"] {
+  --bg: #151917;
+  --bg2: #1D211E;
+  --card: #232824;
+  --surface: #2B312D;
+  --border: #3D4841;
+  --border2: #526158;
+  --text1: #F3F3EC;
+  --text2: #B8C0B8;
+  --text3: #87928A;
+  --boat: #78C5BA;
+  --boat-light: #1E3934;
+  --boat-dark: #56A79B;
+  --car: #E18B69;
+  --car-light: #4B2D25;
+  --car-dark: #EEA184;
+  --dark: #0F1210;
+  --dark2: #151917;
+  --shadow-sm: 0 2px 10px rgba(0,0,0,.28);
+  --shadow-md: 0 8px 30px rgba(0,0,0,.42);
+  --shadow-lg: 0 20px 56px rgba(0,0,0,.62);
+  --glow-car: rgba(225,139,105,.20);
+  --glow-boat: rgba(120,197,186,.18);
+}
+body,
+button,
+input,
+select,
+textarea { font-family: "Manrope", -apple-system, BlinkMacSystemFont, sans-serif !important; }
+h1, h2, h3, h4, h5, h6,
+.hero-pro-title, .section-title-pro, .split-panel-title, .map-text-title,
+.recurring-pro-title, .cta-band-title, .cta-pro-card h3, .auth-title,
+.page-title, .dash-name { font-family: "Manrope", -apple-system, BlinkMacSystemFont, sans-serif !important; }
+.home-clean-heading-copy h1 em { font-family: "Newsreader", Georgia, serif !important; }
+
+/* Long, phase-shifted loops avoid the snap at the end of a short visual cycle. */
+.home-clean-water-texture {
+  animation-duration: 52s;
+  animation-timing-function: linear;
+}
+.home-clean-water-ripple {
+  animation-duration: 41s;
+  animation-timing-function: linear;
+}
+
+/* A denser, more useful rhythm for the content below the route list. */
+.home-clean-bottom-section {
+  margin-top: 70px;
+  padding-top: 52px;
+  border-top: 1px solid var(--border);
+}
+.home-clean-bottom-head {
+  align-items: flex-start;
+  margin-bottom: 23px;
+}
+.home-clean-section-lede {
+  max-width: 520px;
+  margin-top: 10px;
+  color: var(--text2);
+  font-size: .84rem;
+  line-height: 1.55;
+}
+.home-clean-section-count {
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text3);
+  font-size: .68rem;
+  font-weight: 800;
+}
+.home-clean-steps-v2 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 11px;
+}
+.home-clean-step-v2 {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+  min-height: 157px;
+  padding: 17px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--card);
+  box-shadow: var(--shadow-sm);
+  transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+}
+.home-clean-step-v2:hover {
+  border-color: color-mix(in srgb, var(--boat) 42%, var(--border));
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+.home-clean-step-number {
+  align-self: start;
+  color: var(--text3);
+  font-size: .68rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+}
+.home-clean-step-v2 .home-clean-step-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  background: var(--surface);
+}
+.home-clean-step-v2 > div { min-width: 0; }
+.home-clean-step-v2 strong {
+  display: block;
+  color: var(--text1);
+  font-size: .84rem;
+  letter-spacing: -.02em;
+}
+.home-clean-step-v2 p {
+  margin-top: 6px;
+  color: var(--text2);
+  font-size: .73rem;
+  line-height: 1.48;
+}
+.home-clean-step-arrow {
+  align-self: end;
+  color: var(--text3);
+}
+.home-clean-boarding {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 52px 0 76px;
+  border-top: 0;
+}
+.home-clean-boarding-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 22px;
+  margin-bottom: 23px;
+}
+.home-clean-outline-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 42px;
+  padding: 9px 13px;
+  border: 1px solid var(--border2);
+  border-radius: 11px;
+  background: var(--card);
+  color: var(--text1);
+  font-size: .74rem;
+  font-weight: 800;
+  transition: border-color .2s ease, color .2s ease, transform .2s ease;
+}
+.home-clean-outline-button:hover {
+  border-color: var(--boat);
+  color: var(--boat-dark);
+  transform: translateY(-2px);
+}
+.home-clean-boarding-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 11px;
+}
+.home-clean-boarding-grid article {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+  min-height: 130px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+}
+.home-clean-boarding-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--boat) 28%, var(--border));
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--boat);
+}
+.home-clean-boarding-grid strong {
+  color: var(--text1);
+  font-size: .83rem;
+}
+.home-clean-boarding-grid p {
+  margin-top: 6px;
+  color: var(--text2);
+  font-size: .73rem;
+  line-height: 1.5;
+}
+.home-clean-boarding .home-clean-info-more {
+  margin-top: 20px;
+}
+
+@media (max-width: 900px) {
+  .home-clean-steps-v2,
+  .home-clean-boarding-grid { grid-template-columns: 1fr; }
+  .home-clean-step-v2 { min-height: 116px; }
+  .home-clean-boarding-grid article { min-height: 96px; }
+}
+@media (max-width: 700px) {
+  .home-clean-main { padding-bottom: 51px; }
+  .home-clean-bottom-section { margin-top: 53px; padding-top: 39px; }
+  .home-clean-bottom-head,
+  .home-clean-boarding-head { display: block; }
+  .home-clean-section-count { display: inline-flex; margin-top: 14px; }
+  .home-clean-boarding {
+    width: calc(100% - 28px);
+    padding: 40px 0 56px;
+  }
+  .home-clean-outline-button { margin-top: 16px; }
+  .home-clean-step-v2 { grid-template-columns: auto auto minmax(0, 1fr) auto; gap: 9px; padding: 14px; border-radius: 17px; }
+  .home-clean-step-v2 .home-clean-step-icon { width: 50px; height: 50px; border-radius: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-clean-water-texture,
+  .home-clean-water-ripple { animation-duration: 1ms !important; }
 }

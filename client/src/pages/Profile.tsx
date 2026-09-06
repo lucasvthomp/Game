@@ -1,6 +1,6 @@
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation, Link } from "wouter";
-import { BadgeCheck, Bell, Camera, Calendar, ChevronRight, LogOut, Upload } from "lucide-react";
+import { BadgeCheck, Bell, Camera, Calendar, ChevronRight, FileCheck2, LogOut, ShieldCheck, Upload } from "lucide-react";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -15,6 +15,10 @@ export default function Profile() {
   const [phone, setPhone] = useState(user?.phone || "");
   const [avatarState, setAvatarState] = useState<"idle" | "uploading" | "error">("idle");
   const [avatarError, setAvatarError] = useState("");
+  const [documentKind, setDocumentKind] = useState<"identity" | "criminal_background">("identity");
+  const [documentFile, setDocumentFile] = useState<File | null>(null);
+  const [documentConsent, setDocumentConsent] = useState(false);
+  const [verificationNotice, setVerificationNotice] = useState("");
   const isCaptain = user?.role === "captain" || user?.role === "both";
   const { data: captainData } = useQuery({
     queryKey: ["/api/captain/profile"],
@@ -23,6 +27,11 @@ export default function Profile() {
     retry: false,
   });
   const captainVerified = Boolean(captainData?.profile?.verified);
+  const { data: verificationData, refetch: refetchVerification } = useQuery({
+    queryKey: ["/api/verification/me"],
+    queryFn: () => apiRequest("GET", "/api/verification/me"),
+    enabled: !!user,
+  });
 
   const updateMutation = useMutation({
     mutationFn: () => apiRequest("PATCH", "/api/me", { fullName, phone }),
@@ -57,6 +66,28 @@ export default function Profile() {
       setAvatarState("error");
       setAvatarError(error.message || "Não foi possível salvar sua foto.");
     }
+  };
+
+  const submitVerificationDocument = async () => {
+    if (!documentFile || !documentConsent) {
+      setVerificationNotice("Escolha um documento e aceite a revisão para continuar.");
+      return;
+    }
+    setVerificationNotice("Enviando documento…");
+    const body = new FormData();
+    body.append("kind", documentKind);
+    body.append("document", documentFile);
+    body.append("consent", "true");
+    const response = await fetch("/api/verification/document", { method: "POST", body, credentials: "include" });
+    const payload = await response.json();
+    if (!response.ok) {
+      setVerificationNotice(payload.error || "Não foi possível enviar o documento.");
+      return;
+    }
+    setDocumentFile(null);
+    setDocumentConsent(false);
+    setVerificationNotice("Recebido. A equipe fará a revisão manual.");
+    await refetchVerification();
   };
 
   if (!user) { navigate("/entrar"); return null; }
@@ -106,6 +137,23 @@ export default function Profile() {
           <button onClick={() => { setFullName(user.fullName); setPhone(user.phone || ""); setEditing(true); }} className="profile-edit-trigger">Editar perfil</button>
         )}
       </div>
+
+      <section className="profile-card profile-verification-card">
+        <div className="profile-card-heading"><span><ShieldCheck size={15} /> VERIFICAÇÕES</span><small>Revisão humana no piloto</small></div>
+        <p className="profile-verification-copy">Envie um documento oficial para ajudar a proteger passageiros e capitães. A equipe vê apenas o necessário para aprovar o acesso.</p>
+        <div className="profile-verification-statuses">
+          {((verificationData?.submissions || []) as any[]).map((submission) => <div className="profile-verification-status" key={submission.id}><FileCheck2 size={15} /><span>{submission.kind === "criminal_background" ? "Certidão criminal" : "Identidade"} · {submission.status === "verified" ? "aprovado" : submission.status === "rejected" ? "recusado" : "em análise"}</span></div>)}
+        </div>
+        <div className="profile-verification-choices">
+          <button type="button" className={documentKind === "identity" ? "profile-verification-choice active" : "profile-verification-choice"} onClick={() => setDocumentKind("identity")}>Documento de identidade</button>
+          <button type="button" className={documentKind === "criminal_background" ? "profile-verification-choice active" : "profile-verification-choice"} onClick={() => setDocumentKind("criminal_background")}>Certidão criminal</button>
+        </div>
+        <label className="profile-upload-button" htmlFor="verification-document-input"><Upload size={13} /> {documentFile ? documentFile.name : "Selecionar foto ou PDF"}</label>
+        <input id="verification-document-input" className="sr-only" type="file" accept="image/*,.pdf,application/pdf" onChange={(event) => setDocumentFile(event.target.files?.[0] || null)} />
+        <label className="profile-verification-consent"><input type="checkbox" checked={documentConsent} onChange={(event) => setDocumentConsent(event.target.checked)} /> Autorizo a revisão deste documento para segurança e cadastro.</label>
+        <button type="button" className="btn-boat-solid" onClick={submitVerificationDocument}>Enviar para revisão</button>
+        {verificationNotice && <p className="profile-avatar-error">{verificationNotice}</p>}
+      </section>
 
       <div className="profile-list">
         <Link href={isCaptain ? "/minha-lancha" : "/perfil-capitao"}><button className="profile-action"><div className="profile-action-icon"><MaritimeIcon variant="lancha" size={18} /></div><div><div className="profile-action-title">{isCaptain ? "Minha Lancha" : "Quero ser capitão"}</div><div className="profile-action-sub">{isCaptain ? "Gerenciar viagens e passageiros" : "Complete seu perfil e publique viagens"}</div></div><ChevronRight size={16} color="var(--text3)" /></button></Link>

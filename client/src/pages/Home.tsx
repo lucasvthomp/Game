@@ -53,8 +53,7 @@ export default function Home() {
           <defs>
             <filter id="marcamar-water-physics" x="-12%" y="-12%" width="124%" height="124%">
               <feTurbulence type="fractalNoise" baseFrequency="0.008 0.02" numOctaves="2" seed="8" result="waterNoise">
-                <animate attributeName="baseFrequency" values="0.008 0.02;0.012 0.028;0.008 0.02" dur="11s" repeatCount="indefinite" />
-                <animate attributeName="seed" values="8;16;8" dur="17s" repeatCount="indefinite" />
+                <animate attributeName="baseFrequency" values="0.008 0.02;0.010 0.024;0.012 0.028;0.010 0.024;0.008 0.02" dur="32s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.25;0.5;0.75;1" keySplines="0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1" />
               </feTurbulence>
               <feDisplacementMap in="SourceGraphic" in2="waterNoise" scale="24" xChannelSelector="R" yChannelSelector="G" />
             </filter>

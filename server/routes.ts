@@ -17,7 +17,7 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (_req, file, cb) => {
     const ext = path.extname(file.originalname).toLowerCase();
-    cb(null, [".jpg", ".jpeg", ".png", ".webp"].includes(ext));
+    cb(null, [".jpg", ".jpeg", ".png", ".webp", ".pdf"].includes(ext));
   },
 });
 
@@ -295,10 +295,97 @@ router.patch("/admin/incidents/:id", requireAdmin, async (req: Request, res: Res
   res.json({ incident });
 });
 
+// ── IDENTITY, CERTIFICATE AND BOAT DOCUMENT VERIFICATION ──
+const verificationKinds = ["identity", "criminal_background", "boat_license", "boat_registration"] as const;
+const verificationStatuses = ["pending", "verified", "rejected", "needs_review"] as const;
+
+router.get("/verification/me", requireAuth, async (req: Request, res: Response) => {
+  res.json({ submissions: await storage.getVerificationSubmissionsByUser((req.user as any).id) });
+});
+
+router.post("/verification/identity", requireAuth, async (req: Request, res: Response) => {
+  const user = req.user as any;
+  const fullName = typeof req.body.fullName === "string" ? req.body.fullName.trim() : user.fullName;
+  const last4 = typeof req.body.documentLast4 === "string" ? req.body.documentLast4.replace(/\D/g, "").slice(-4) : "";
+  if (!fullName || last4.length !== 4 || req.body.consent !== true) {
+    return res.status(400).json({ error: "Informe os 4 últimos dígitos do documento e aceite a validação." });
+  }
+  const existing = (await storage.getVerificationSubmissionsByUser(user.id)).find((item) => item.kind === "identity" && item.status === "pending");
+  if (existing) return res.json({ submission: existing, automatic: false });
+  const submission = await storage.createVerificationSubmission({
+    userId: user.id,
+    kind: "identity",
+    status: "pending",
+    subjectName: fullName,
+    documentLast4: last4,
+    provider: "manual",
+    consentAt: new Date(),
+  });
+  res.status(201).json({
+    submission,
+    automatic: false,
+    message: "A validação automática ainda não está conectada. Nossa equipe fará a conferência com o documento oficial enviado.",
+  });
+});
+
+router.post("/verification/document", requireAuth, upload.single("document"), async (req: Request, res: Response) => {
+  const user = req.user as any;
+  const kind = typeof req.body.kind === "string" ? req.body.kind : "";
+  if (!verificationKinds.includes(kind as any) || kind === "identity" && req.body.consent !== "true") {
+    return res.status(400).json({ error: "Tipo de verificação ou consentimento inválido." });
+  }
+  if (!req.file) return res.status(400).json({ error: "Envie uma imagem ou PDF legível." });
+  const submission = await storage.createVerificationSubmission({
+    userId: user.id,
+    kind,
+    status: "pending",
+    subjectName: user.fullName,
+    documentUrl: `/uploads/${req.file.filename}`,
+    provider: "manual",
+    consentAt: req.body.consent === "true" ? new Date() : null,
+  });
+  res.status(201).json({
+    submission,
+    automatic: false,
+    message: kind === "criminal_background"
+      ? "Envie a certidão oficial da Polícia Federal; ela será revisada sem consulta paralela."
+      : "Documento recebido para revisão manual da equipe Marcamar.",
+  });
+});
+
 // ── ADMIN VERIFICATION ──
 router.get("/admin/verifications", requireAdmin, async (_req: Request, res: Response) => {
-  const captains = await storage.listCaptainProfiles();
-  res.json({ captains });
+  const [captains, submissions] = await Promise.all([
+    storage.listCaptainProfiles(),
+    storage.listVerificationSubmissions(),
+  ]);
+  res.json({ captains, submissions });
+});
+
+router.patch("/admin/verifications/submissions/:id", requireAdmin, async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  const status = typeof req.body.status === "string" ? req.body.status : "";
+  const reviewerNotes = typeof req.body.reviewerNotes === "string" ? req.body.reviewerNotes.trim() : undefined;
+  const expiresAt = req.body.expiresAt ? new Date(req.body.expiresAt) : null;
+  if (!Number.isInteger(id) || !verificationStatuses.includes(status as any)) {
+    return res.status(400).json({ error: "Status de verificação inválido." });
+  }
+  if (expiresAt && Number.isNaN(expiresAt.getTime())) return res.status(400).json({ error: "Validade inválida." });
+  const submission = await storage.updateVerificationSubmission(id, {
+    status,
+    reviewerId: (req.user as any).id,
+    ...(reviewerNotes !== undefined ? { reviewerNotes: reviewerNotes || null } : {}),
+    ...(req.body.expiresAt !== undefined ? { expiresAt } : {}),
+  });
+  if (!submission) return res.status(404).json({ error: "Solicitação de verificação não encontrada." });
+  await storage.createAdminAuditEvent({
+    adminUserId: (req.user as any).id,
+    action: "verification_status_changed",
+    entityType: "verification_submission",
+    entityId: id,
+    details: { kind: submission.kind, status, reviewerNotes: reviewerNotes || null },
+  });
+  res.json({ submission });
 });
 
 router.patch("/admin/verifications/captain/:id", requireAdmin, async (req: Request, res: Response) => {
@@ -313,17 +400,21 @@ router.patch("/admin/verifications/captain/:id", requireAdmin, async (req: Reque
 });
 
 // ── CAPTAIN PROFILE ──
-router.post("/captain/profile", requireAuth, upload.fields([{ name: "licenseImage", maxCount: 1 }, { name: "boatImage", maxCount: 1 }]), async (req: Request, res: Response) => {
+router.post("/captain/profile", requireAuth, upload.fields([{ name: "licenseImage", maxCount: 1 }, { name: "boatImage", maxCount: 1 }, { name: "boatRegistrationImage", maxCount: 1 }]), async (req: Request, res: Response) => {
   try {
     const user = req.user as any;
     if (await storage.getCaptainProfile(user.id)) return res.status(400).json({ error: "Perfil de capitão já existe." });
     const files = req.files as { [f: string]: Express.Multer.File[] };
+    if (!user.avatarUrl) return res.status(400).json({ error: "Adicione uma foto de perfil antes de solicitar aprovação." });
     const licenseImageUrl = files?.licenseImage?.[0] ? `/uploads/${files.licenseImage[0].filename}` : null;
     if (!licenseImageUrl) return res.status(400).json({ error: "Foto da habilitação é obrigatória." });
     const { licenseNumber, boatName, boatModel, boatCapacity, bio } = req.body;
     if (!licenseNumber || !boatName || !boatCapacity) return res.status(400).json({ error: "Campos obrigatórios faltando." });
     const profile = await storage.createCaptainProfile({ userId: user.id, licenseNumber, licenseImageUrl, boatName, boatModel: boatModel || null, boatCapacity: parseInt(boatCapacity), boatImageUrl: files?.boatImage?.[0] ? `/uploads/${files.boatImage[0].filename}` : null, bio: bio || null });
-    res.json({ profile });
+    await storage.createVerificationSubmission({ userId: user.id, kind: "boat_license", status: "pending", subjectName: user.fullName, documentUrl: licenseImageUrl, provider: "manual" });
+    const boatRegistrationUrl = files?.boatRegistrationImage?.[0] ? `/uploads/${files.boatRegistrationImage[0].filename}` : null;
+    if (boatRegistrationUrl) await storage.createVerificationSubmission({ userId: user.id, kind: "boat_registration", status: "pending", subjectName: user.fullName, documentUrl: boatRegistrationUrl, provider: "manual" });
+    res.json({ profile, verification: "pending" });
   } catch (err: any) { res.status(500).json({ error: err.message }); }
 });
 

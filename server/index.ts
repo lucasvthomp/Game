@@ -8,6 +8,7 @@ import { setupAuth } from "./auth.js";
 import router from "./routes.js";
 import { pool } from "./db.js";
 import { seedDemoData } from "./demo-data.js";
+import { hashPassword } from "./auth.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -263,6 +264,39 @@ async function runMigrations() {
         created_at TIMESTAMP DEFAULT NOW() NOT NULL
       );
       CREATE INDEX IF NOT EXISTS messages_reservation_id_idx ON messages(reservation_id);
+      
+      CREATE TABLE IF NOT EXISTS verification_submissions (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id),
+        kind TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'not_started',
+        subject_name TEXT,
+        document_last4 TEXT,
+        document_url TEXT,
+        provider TEXT NOT NULL DEFAULT 'manual',
+        provider_reference TEXT,
+        consent_at TIMESTAMP,
+        result JSONB,
+        reviewer_id INTEGER REFERENCES users(id),
+        reviewer_notes TEXT,
+        expires_at TIMESTAMP,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+        updated_at TIMESTAMP DEFAULT NOW() NOT NULL
+      );
+      CREATE INDEX IF NOT EXISTS verification_submissions_user_idx ON verification_submissions(user_id);
+      CREATE INDEX IF NOT EXISTS verification_submissions_status_idx ON verification_submissions(status);
+      CREATE INDEX IF NOT EXISTS verification_submissions_kind_idx ON verification_submissions(kind);
+
+      CREATE TABLE IF NOT EXISTS admin_audit_events (
+        id SERIAL PRIMARY KEY,
+        admin_user_id INTEGER NOT NULL REFERENCES users(id),
+        action TEXT NOT NULL,
+        entity_type TEXT NOT NULL,
+        entity_id INTEGER,
+        details JSONB,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL
+      );
+      CREATE INDEX IF NOT EXISTS admin_audit_events_created_idx ON admin_audit_events(created_at);
     `);
     console.log("Migrações concluídas.");
   } finally {

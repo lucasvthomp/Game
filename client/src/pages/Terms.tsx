@@ -1,4 +1,4 @@
-import { ArrowLeft, FileText, MapPin, ShieldCheck, ShipWheel } from "lucide-react";
+import { ArrowLeft, FileText, MapPin, ShieldCheck, Ship } from "lucide-react";
 import { Link } from "wouter";
 
 const sections = [
@@ -17,7 +17,7 @@ export default function Terms() {
   return (
     <div className="legal-page-v2">
       <div className="legal-page-v2-top"><Link href="/"><span className="content-page-v2-secondary-link"><ArrowLeft size={16} /> Voltar ao início</span></Link><span className="legal-page-v2-mark"><FileText size={18} /> Marcamar · São Paulo</span></div>
-      <div className="legal-page-v2-icon-row"><ShipWheel size={24} /><ShieldCheck size={24} /><MapPin size={24} /></div>
+      <div className="legal-page-v2-icon-row"><Ship size={24} /><ShieldCheck size={24} /><MapPin size={24} /></div>
       <p className="home-v2-kicker">TERMOS DE USO · VERSÃO DE PILOTO</p>
       <h1>Regras claras para viajar pela costa.</h1>
       <p className="legal-page-v2-lead">Vigência: 06 de setembro de 2026 · Operação inicial limitada ao Estado de São Paulo.</p>

@@ -61,3 +61,10 @@ Railway uses `npm run build` during the build phase and `npm start` at runtime. 
 ## Maps
 
 Set `VITE_GOOGLE_MAPS_API_KEY` in the client build environment to use Google Maps for live ride maps, route detail maps, and coastal drop-pin selection. Restrict the public browser key in Google Cloud Console by HTTP referrer and limit it to the APIs the app uses. When the variable is absent, the app keeps its keyless OpenStreetMap fallback for local development.
+
+## Verification and legal launch notes
+
+- The São Paulo pilot uses manual review for identity, criminal-background certificates, the operator's CHA (when applicable), and the vessel's TIE/registration document. The admin queue records the reviewer and decision; it does not claim an automatic government lookup.
+- The Polícia Federal certificate service is an official issue/validation flow, not a general public API for searching people. Do not scrape it. A future automated identity provider (such as SERPRO Datavalid) requires a commercial contract, consent and a separate adapter.
+- Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` (12+ characters) in Railway variables to create the first staff account on startup. The account signs in at `/entrar` and can open `/admin`. Never commit these values.
+- `/termos` and `/privacidade` contain São Paulo-only pilot drafts with placeholders for the legal entity and DPO contact. They must be reviewed by Brazilian counsel before public launch.

@@ -37,6 +37,39 @@ export const captainProfiles = pgTable("captain_profiles", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 }, (t) => [index("captain_profiles_user_id_idx").on(t.userId)]);
 
+export const verificationSubmissions = pgTable("verification_submissions", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id),
+  kind: text("kind").notNull(),
+  status: text("status").notNull().default("not_started"),
+  subjectName: text("subject_name"),
+  documentLast4: text("document_last4"),
+  documentUrl: text("document_url"),
+  provider: text("provider").notNull().default("manual"),
+  providerReference: text("provider_reference"),
+  consentAt: timestamp("consent_at"),
+  result: jsonb("result"),
+  reviewerId: integer("reviewer_id").references(() => users.id),
+  reviewerNotes: text("reviewer_notes"),
+  expiresAt: timestamp("expires_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (t) => [
+  index("verification_submissions_user_idx").on(t.userId),
+  index("verification_submissions_status_idx").on(t.status),
+  index("verification_submissions_kind_idx").on(t.kind),
+]);
+
+export const adminAuditEvents = pgTable("admin_audit_events", {
+  id: serial("id").primaryKey(),
+  adminUserId: integer("admin_user_id").notNull().references(() => users.id),
+  action: text("action").notNull(),
+  entityType: text("entity_type").notNull(),
+  entityId: integer("entity_id"),
+  details: jsonb("details"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (t) => [index("admin_audit_events_created_idx").on(t.createdAt)]);
+
 export const driverProfiles = pgTable("driver_profiles", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").notNull().references(() => users.id),
@@ -212,6 +245,8 @@ export const incidents = pgTable("incidents", {
 ]);
 
 export const insertCommercialWaitlistSchema = createInsertSchema(commercialWaitlist).omit({ id: true, createdAt: true });
+export const insertVerificationSubmissionSchema = createInsertSchema(verificationSubmissions).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertAdminAuditEventSchema = createInsertSchema(adminAuditEvents).omit({ id: true, createdAt: true });
 
 export const insertIncidentSchema = createInsertSchema(incidents).omit({ id: true, createdAt: true });
 export type Incident = typeof incidents.$inferSelect;
@@ -242,6 +277,10 @@ export const insertMaritimeRouteSchema = createInsertSchema(maritimeRoutes).omit
 
 export type CommercialWaitlist = typeof commercialWaitlist.$inferSelect;
 export type InsertCommercialWaitlist = typeof commercialWaitlist.$inferInsert;
+export type VerificationSubmission = typeof verificationSubmissions.$inferSelect;
+export type InsertVerificationSubmission = typeof verificationSubmissions.$inferInsert;
+export type AdminAuditEvent = typeof adminAuditEvents.$inferSelect;
+export type InsertAdminAuditEvent = typeof adminAuditEvents.$inferInsert;
 
 export type RouteRequest = typeof routeRequests.$inferSelect;
 export type InsertRouteRequest = typeof routeRequests.$inferInsert;

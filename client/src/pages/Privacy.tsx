@@ -1,4 +1,4 @@
-import { ArrowLeft, Eye, LockKeyhole, UserRoundCheck } from "lucide-react";
+import { ArrowLeft, Eye, LockKeyhole, UserCheck } from "lucide-react";
 import { Link } from "wouter";
 
 const sections = [
@@ -18,7 +18,7 @@ export default function Privacy() {
   return (
     <div className="legal-page-v2">
       <div className="legal-page-v2-top"><Link href="/"><span className="content-page-v2-secondary-link"><ArrowLeft size={16} /> Voltar ao início</span></Link><span className="legal-page-v2-mark"><LockKeyhole size={18} /> Marcamar · Privacidade</span></div>
-      <div className="legal-page-v2-icon-row"><Eye size={24} /><UserRoundCheck size={24} /><LockKeyhole size={24} /></div>
+      <div className="legal-page-v2-icon-row"><Eye size={24} /><UserCheck size={24} /><LockKeyhole size={24} /></div>
       <p className="home-v2-kicker">POLÍTICA DE PRIVACIDADE · LGPD</p>
       <h1>Dados usados com propósito e cuidado.</h1>
       <p className="legal-page-v2-lead">Vigência: 06 de setembro de 2026 · Aplicável ao piloto do Marcamar no Estado de São Paulo.</p>

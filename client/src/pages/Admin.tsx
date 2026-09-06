@@ -95,13 +95,15 @@ function PublicAdminDemo() {
 }
 
 export default function Admin() {
+  const { user, isLoading: authLoading } = useAuth();
+  const isAdmin = user?.role === "admin";
   const qc = useQueryClient();
   const { data, isLoading } = useQuery({ queryKey: ["/api/admin/verifications"], queryFn: () => apiRequest("GET", "/api/admin/verifications"), enabled: isAdmin });
   const { data: routeData } = useQuery({ queryKey: ["/api/admin/maritime-routes"], queryFn: () => apiRequest("GET", "/api/admin/maritime-routes"), enabled: isAdmin });
   const { data: incidentData } = useQuery({ queryKey: ["/api/admin/incidents"], queryFn: () => apiRequest("GET", "/api/admin/incidents"), enabled: isAdmin });
   const { data: routeRequestData } = useQuery({ queryKey: ["/api/admin/route-requests"], queryFn: () => apiRequest("GET", "/api/admin/route-requests"), enabled: isAdmin });
 
-  if (authLoading) return <div className="page-wrapper admin-page"><div className="section-inner"><p className="admin-empty">Carregando painel...</p></div></div>;\n  if (!isAdmin) return <PublicAdminDemo />;\n\n  const invalidate = (key: string) => qc.invalidateQueries({ queryKey: [key] });
+  const invalidate = (key: string) => qc.invalidateQueries({ queryKey: [key] });
   const captainMutation = useMutation({
     mutationFn: ({ id, verified, topCaptain }: { id: number; verified: boolean; topCaptain?: boolean }) => apiRequest("PATCH", `/api/admin/verifications/captain/${id}`, { verified, topCaptain }),
     onSuccess: () => invalidate("/api/admin/verifications"),
@@ -114,6 +116,9 @@ export default function Admin() {
     mutationFn: ({ id, status }: { id: number; status: string }) => apiRequest("PATCH", `/api/admin/route-requests/${id}`, { status }),
     onSuccess: () => invalidate("/api/admin/route-requests"),
   });
+
+  if (authLoading) return <div className="page-wrapper admin-page"><div className="section-inner"><p className="admin-empty">Carregando painel...</p></div></div>;
+  if (!isAdmin) return <PublicAdminDemo />;
 
   const captains = (data?.captains || []) as Captain[];
   const submissions = (data?.submissions || []) as Submission[];

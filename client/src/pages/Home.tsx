@@ -53,8 +53,7 @@ export default function Home() {
           <defs>
             <filter id="marcamar-water-physics" x="-12%" y="-12%" width="124%" height="124%">
               <feTurbulence type="fractalNoise" baseFrequency="0.008 0.02" numOctaves="2" seed="8" result="waterNoise">
-                <animate attributeName="baseFrequency" values="0.008 0.02;0.012 0.028;0.008 0.02" dur="11s" repeatCount="indefinite" />
-                <animate attributeName="seed" values="8;16;8" dur="17s" repeatCount="indefinite" />
+                <animate attributeName="baseFrequency" values="0.008 0.02;0.010 0.024;0.012 0.028;0.010 0.024;0.008 0.02" dur="32s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.25;0.5;0.75;1" keySplines="0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1" />
               </feTurbulence>
               <feDisplacementMap in="SourceGraphic" in2="waterNoise" scale="24" xChannelSelector="R" yChannelSelector="G" />
             </filter>
@@ -148,27 +147,59 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="home-clean-how">
-          <div className="home-clean-section-head">
-            <div><p className="home-clean-kicker">COMO FUNCIONA</p><h2>Três passos, só isso.</h2></div>
-            <Link href="/rotas"><span className="home-clean-link">Ver saídas <ArrowRight size={15} /></span></Link>
+        <section className="home-clean-how home-clean-bottom-section" aria-labelledby="how-title">
+          <div className="home-clean-section-head home-clean-bottom-head">
+            <div>
+              <p className="home-clean-kicker">SIMPLES ASSIM</p>
+              <h2 id="how-title">Do ponto à lancha.</h2>
+              <p className="home-clean-section-lede">Uma jornada curta, com cada decisão no lugar certo.</p>
+            </div>
+            <span className="home-clean-section-count">3 passos</span>
           </div>
-          <div className="home-clean-steps">
-            <article><span className="home-clean-step-icon"><MaritimeIllustration variant="pinpoint" size={56} /></span><div><strong>Escolha o trecho</strong><p>Informe de onde sai, para onde vai e a data.</p></div></article>
-            <article><span className="home-clean-step-icon"><MaritimeIllustration variant="clock" size={56} /></span><div><strong>Confira antes</strong><p>Veja horário, valor, vagas e quem conduz.</p></div></article>
-            <article><span className="home-clean-step-icon"><MaritimeIllustration variant="lancha" size={56} /></span><div><strong>Vá para o cais</strong><p>Combine o embarque e siga pela água.</p></div></article>
+          <div className="home-clean-steps-v2">
+            <article className="home-clean-step-v2">
+              <span className="home-clean-step-number">01</span>
+              <span className="home-clean-step-icon"><MaritimeIllustration variant="pinpoint" size={54} /></span>
+              <div><strong>Escolha o trecho</strong><p>Informe de onde sai, para onde vai e a data.</p></div>
+              <ArrowRight className="home-clean-step-arrow" size={17} />
+            </article>
+            <article className="home-clean-step-v2">
+              <span className="home-clean-step-number">02</span>
+              <span className="home-clean-step-icon"><MaritimeIllustration variant="clock" size={54} /></span>
+              <div><strong>Confira antes</strong><p>Veja horário, valor, vagas e quem conduz.</p></div>
+              <ArrowRight className="home-clean-step-arrow" size={17} />
+            </article>
+            <article className="home-clean-step-v2">
+              <span className="home-clean-step-number">03</span>
+              <span className="home-clean-step-icon"><MaritimeIllustration variant="lancha" size={54} /></span>
+              <div><strong>Vá para o cais</strong><p>Combine o embarque e siga pela água.</p></div>
+              <ArrowRight className="home-clean-step-arrow" size={17} />
+            </article>
           </div>
         </section>
 
-        <section className="home-clean-info" aria-label="Informações importantes">
-          <div className="home-clean-section-head">
-            <div><p className="home-clean-kicker">ANTES DE EMBARCAR</p><h2>O essencial, sem ruído.</h2></div>
-            <Link href="/ajuda"><span className="home-clean-link">Abrir ajuda <ArrowRight size={15} /></span></Link>
+        <section className="home-clean-info home-clean-boarding" aria-labelledby="boarding-title">
+          <div className="home-clean-boarding-head">
+            <div>
+              <p className="home-clean-kicker">NO CAIS</p>
+              <h2 id="boarding-title">Tudo claro antes de sair.</h2>
+              <p className="home-clean-section-lede">O que você precisa saber fica visível antes de confirmar.</p>
+            </div>
+            <Link href="/ajuda"><span className="home-clean-outline-button">Abrir ajuda <ArrowRight size={15} /></span></Link>
           </div>
-          <div className="home-clean-info-grid">
-            <article><span className="home-clean-info-icon"><MaritimeIcon variant="pinpoint" size={22} /></span><div><strong>Ponto costeiro</strong><p>Escolha praias e píeres. O mapa bloqueia pontos em terra.</p></div></article>
-            <article><span className="home-clean-info-icon"><MaritimeIcon variant="lancha" size={22} /></span><div><strong>Detalhes visíveis</strong><p>Veja quem conduz, horário, valor e vagas antes de reservar.</p></div></article>
-            <article><span className="home-clean-info-icon"><MaritimeIcon variant="buoy" size={22} /></span><div><strong>Segurança primeiro</strong><p>Confirme o embarque com o capitão e consulte as condições do mar.</p></div></article>
+          <div className="home-clean-boarding-grid">
+            <article>
+              <span className="home-clean-boarding-icon"><MaritimeIcon variant="pinpoint" size={22} /></span>
+              <div><strong>Ponto costeiro</strong><p>Escolha praias e píeres. O mapa bloqueia pontos em terra.</p></div>
+            </article>
+            <article>
+              <span className="home-clean-boarding-icon"><MaritimeIcon variant="lancha" size={22} /></span>
+              <div><strong>Detalhes visíveis</strong><p>Veja quem conduz, horário, valor e vagas antes de reservar.</p></div>
+            </article>
+            <article>
+              <span className="home-clean-boarding-icon"><MaritimeIcon variant="buoy" size={22} /></span>
+              <div><strong>Segurança primeiro</strong><p>Confirme o embarque com o capitão e consulte as condições do mar.</p></div>
+            </article>
           </div>
           <Link href="/seguranca"><span className="home-clean-info-more">Conheça nossos cuidados de segurança <ArrowRight size={15} /></span></Link>
         </section>

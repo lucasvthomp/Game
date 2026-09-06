@@ -29,14 +29,29 @@ export default function WaterSurface({ className = "" }: WaterSurfaceProps) {
     const resize = () => {
       const bounds = canvas.getBoundingClientRect();
       const ratio = Math.min(window.devicePixelRatio || 1, 2);
-      width = Math.max(1, bounds.width);
-      height = Math.max(1, bounds.height);
-      canvas.width = Math.round(width * ratio);
-      canvas.height = Math.round(height * ratio);
+      const nextWidth = Math.max(1, bounds.width);
+      const nextHeight = Math.max(1, bounds.height);
+      const nextDensity = Math.max(28, Math.ceil(nextWidth / 13));
+      const pixelWidth = Math.round(nextWidth * ratio);
+      const pixelHeight = Math.round(nextHeight * ratio);
+
+      // ResizeObserver can fire while fonts and layout settle. Keep the
+      // existing wave state so the surface never snaps back to its origin.
+      if (pixelWidth === canvas.width && pixelHeight === canvas.height && nextDensity === density) return;
+
+      const previousDisplacement = displacement;
+      const previousVelocity = velocity;
+      width = nextWidth;
+      height = nextHeight;
+      canvas.width = pixelWidth;
+      canvas.height = pixelHeight;
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
-      density = Math.max(28, Math.ceil(width / 13));
+      density = nextDensity;
       displacement = new Float32Array(density);
       velocity = new Float32Array(density);
+      const copyLength = Math.min(density, previousDisplacement.length);
+      displacement.set(previousDisplacement.subarray(0, copyLength));
+      velocity.set(previousVelocity.subarray(0, copyLength));
     };
 
     const kick = (clientX: number, clientY: number) => {

@@ -5,6 +5,7 @@ import { useState, type FormEvent } from "react";
 import { SiteAutocomplete } from "@/components/SiteSelect";
 import { MaritimeIcon } from "@/components/MaritimeIcon";
 import { MaritimeIllustration } from "@/components/MaritimeIllustration";
+import WaterSurface from "@/components/WaterSurface";
 import { apiRequest } from "@/lib/queryClient";
 import { PILOT_ROUTES } from "@shared/pilot-routes";
 import { COASTAL_POINT_NAMES } from "@shared/coastal-locations";
@@ -61,6 +62,7 @@ export default function Home() {
         </svg>
         <div className="home-clean-water-texture" aria-hidden="true" />
         <div className="home-clean-water-ripple" aria-hidden="true" />
+        <WaterSurface />
         <div className="home-clean-shell">
           <div className="home-clean-heading home-clean-heading-simple">
             <div className="home-clean-heading-copy">

@@ -13867,3 +13867,8 @@ h1 em, h2 em, h3 em,
 .home-clean-heading-copy h1 em {
   color: var(--boat);
 }
+
+
+/* Ensure legacy component-level font declarations cannot reintroduce the old serif/UI faces. */
+body, html { font-family: "Inter Tight", Inter, -apple-system, BlinkMacSystemFont, sans-serif !important; }
+body * { font-family: inherit !important; }

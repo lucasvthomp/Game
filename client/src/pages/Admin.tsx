@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { BadgeCheck, Check, FileCheck2, ShieldCheck, Trophy, X } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
+import { useAuth } from "@/hooks/use-auth";
 
 type Captain = { id: number; userId: number; verified: boolean; topCaptain?: boolean; createdAt: string; boatName?: string; boatModel?: string };
 type Submission = { id: number; userId: number; kind: string; status: string; subjectName?: string; documentUrl?: string; provider?: string; reviewerNotes?: string; createdAt: string };
@@ -19,14 +20,88 @@ const statusLabel: Record<string, string> = {
   rejected: "Recusado",
 };
 
+
+function PublicAdminDemo() {
+  const demoRows = [
+    ["Identidade", "Exemplo de capitão", "Pendente"],
+    ["Habilitação náutica", "Perfil de demonstração", "Em revisão"],
+    ["Registro da embarcação", "Lancha exemplo", "Aguardando"],
+  ];
+
+  return (
+    <div className="page-wrapper admin-page">
+      <div className="section-inner">
+        <div className="admin-heading">
+          <div className="admin-heading-icon"><ShieldCheck size={24} /></div>
+          <div>
+            <p className="section-label">MODO DEMONSTRAÇÃO · PÚBLICO</p>
+            <h1 className="page-title">Painel Marcamar</h1>
+            <p className="page-sub">Uma prévia do fluxo de operação com dados fictícios.</p>
+          </div>
+        </div>
+
+        <section className="admin-section" style={{ borderColor: "var(--boat)", background: "color-mix(in srgb, var(--boat) 8%, var(--surface))" }}>
+          <div className="admin-section-heading">
+            <div>
+              <h2>Visualização aberta</h2>
+              <p className="admin-section-help">Este modo é apenas para conhecer a interface. Nenhuma informação real é exibida e nenhuma ação altera o sistema.</p>
+            </div>
+            <span>Demo</span>
+          </div>
+        </section>
+
+        <div className="admin-demo-stats" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 12, marginBottom: 18 }}>
+          {[
+            ["12", "Capitães"],
+            ["04", "Verificações"],
+            ["06", "Rotas ativas"],
+            ["01", "Incidente"],
+          ].map(([value, label]) => (
+            <div className="admin-section" key={label} style={{ margin: 0, padding: 18 }}>
+              <strong style={{ display: "block", fontSize: 28, color: "var(--text1)" }}>{value}</strong>
+              <span style={{ color: "var(--text2)" }}>{label}</span>
+            </div>
+          ))}
+        </div>
+
+        <section className="admin-section">
+          <div className="admin-section-heading"><h2>Fila de verificações</h2><span>04</span></div>
+          {demoRows.map(([kind, subject, status]) => (
+            <div className="admin-verification-card" key={kind}>
+              <div><strong><FileCheck2 size={15} /> {kind}</strong><span>{subject} · dados fictícios</span></div>
+              <div className="admin-verification-actions"><span className="admin-status">{status}</span></div>
+            </div>
+          ))}
+        </section>
+
+        <section className="admin-section">
+          <div className="admin-section-heading"><h2>Rotas e ocorrências</h2><span>Demo</span></div>
+          <div className="admin-verification-card">
+            <div><strong>Ilhabela → Praia do Curral</strong><span>Rota de exemplo · saída 09:00</span></div>
+            <div className="admin-verification-actions"><span className="admin-status verified">Publicada</span></div>
+          </div>
+          <div className="admin-verification-card">
+            <div><strong>Checklist de embarque</strong><span>Incidente fictício · acompanhamento</span></div>
+            <div className="admin-verification-actions"><span className="admin-status">Em análise</span></div>
+          </div>
+        </section>
+
+        <p style={{ textAlign: "center", color: "var(--text2)", margin: "24px auto 0", maxWidth: 560 }}>
+          Precisa revisar documentos ou publicar rotas? <a href="/entrar" style={{ color: "var(--boat)" }}>Entre com uma conta de equipe</a>.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function Admin() {
   const qc = useQueryClient();
-  const { data, isLoading } = useQuery({ queryKey: ["/api/admin/verifications"], queryFn: () => apiRequest("GET", "/api/admin/verifications") });
-  const { data: routeData } = useQuery({ queryKey: ["/api/admin/maritime-routes"], queryFn: () => apiRequest("GET", "/api/admin/maritime-routes") });
-  const { data: incidentData } = useQuery({ queryKey: ["/api/admin/incidents"], queryFn: () => apiRequest("GET", "/api/admin/incidents") });
-  const { data: routeRequestData } = useQuery({ queryKey: ["/api/admin/route-requests"], queryFn: () => apiRequest("GET", "/api/admin/route-requests") });
+  const { data, isLoading } = useQuery({ queryKey: ["/api/admin/verifications"], queryFn: () => apiRequest("GET", "/api/admin/verifications"), enabled: isAdmin });
+  const { data: routeData } = useQuery({ queryKey: ["/api/admin/maritime-routes"], queryFn: () => apiRequest("GET", "/api/admin/maritime-routes"), enabled: isAdmin });
+  const { data: incidentData } = useQuery({ queryKey: ["/api/admin/incidents"], queryFn: () => apiRequest("GET", "/api/admin/incidents"), enabled: isAdmin });
+  const { data: routeRequestData } = useQuery({ queryKey: ["/api/admin/route-requests"], queryFn: () => apiRequest("GET", "/api/admin/route-requests"), enabled: isAdmin });
 
-  const invalidate = (key: string) => qc.invalidateQueries({ queryKey: [key] });
+  if (authLoading) return <div className="page-wrapper admin-page"><div className="section-inner"><p className="admin-empty">Carregando painel...</p></div></div>;\n  if (!isAdmin) return <PublicAdminDemo />;\n\n  const invalidate = (key: string) => qc.invalidateQueries({ queryKey: [key] });
   const captainMutation = useMutation({
     mutationFn: ({ id, verified, topCaptain }: { id: number; verified: boolean; topCaptain?: boolean }) => apiRequest("PATCH", `/api/admin/verifications/captain/${id}`, { verified, topCaptain }),
     onSuccess: () => invalidate("/api/admin/verifications"),

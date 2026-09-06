@@ -13764,3 +13764,73 @@ h1, h2, h3, h4, h5, h6,
   .home-clean-heading-copy h1 { font-size: clamp(3rem, 14vw, 4.6rem); }
   .home-clean-service-card { border-radius: 13px; }
 }
+
+
+/* ─── COLOR ROLLBACK ─── */
+/* Restore the prior neutral stone + sea-glass palette while keeping the new type system. */
+:root {
+  --bg: #F6F6F2;
+  --bg2: #EDEDE8;
+  --card: #FFFFFF;
+  --surface: #F1F2EE;
+  --border: #D9DDD8;
+  --border2: #BEC7C1;
+  --text1: #1B2723;
+  --text2: #5D6A64;
+  --text3: #89948D;
+  --boat: #2F817B;
+  --boat-light: #DBECE7;
+  --boat-dark: #23645F;
+  --car: #D77955;
+  --car-light: #F6E5DC;
+  --car-dark: #B65C3E;
+  --amber: #F59E0B;
+  --dark: #101512;
+  --dark2: #171E1A;
+  --red: #EF4444;
+  --green: #10B981;
+  --brazil1: #10B981;
+  --brazil2: #F59E0B;
+  --brazil3: #2563EB;
+  --sunset: #D77955;
+  --ocean: #2F817B;
+  --shadow-sm: 0 1px 8px rgba(27,39,35,.06);
+  --shadow-md: 0 8px 26px rgba(27,39,35,.09);
+  --shadow-lg: 0 20px 54px rgba(27,39,35,.13);
+  --glow-car: rgba(215,121,85,.16);
+  --glow-boat: rgba(47,129,123,.16);
+}
+[data-theme="dark"] {
+  --bg: #151917;
+  --bg2: #1D211E;
+  --card: #232824;
+  --surface: #2B312D;
+  --border: #3D4841;
+  --border2: #526158;
+  --text1: #F3F3EC;
+  --text2: #B8C0B8;
+  --text3: #87928A;
+  --boat: #78C5BA;
+  --boat-light: #1E3934;
+  --boat-dark: #56A79B;
+  --car: #E18B69;
+  --car-light: #4B2D25;
+  --car-dark: #EEA184;
+  --amber: #FBBF24;
+  --dark: #0F1210;
+  --dark2: #151917;
+  --red: #F87171;
+  --green: #34D399;
+  --brazil1: #34D399;
+  --brazil2: #FBBF24;
+  --brazil3: #60A5FA;
+  --sunset: #E18B69;
+  --ocean: #78C5BA;
+  --shadow-sm: 0 2px 10px rgba(0,0,0,.28);
+  --shadow-md: 0 8px 30px rgba(0,0,0,.42);
+  --shadow-lg: 0 20px 56px rgba(0,0,0,.62);
+  --glow-car: rgba(225,139,105,.20);
+  --glow-boat: rgba(120,197,186,.18);
+}
+.home-clean-water-ripple { opacity: .2; }
+[data-theme="dark"] .home-clean-water-ripple { opacity: .2; }

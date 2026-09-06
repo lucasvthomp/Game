@@ -113,7 +113,7 @@ export default function Profile() {
             <label className="profile-avatar-edit" htmlFor="profile-avatar-input" title="Trocar foto" aria-label="Trocar foto de perfil">
               <Camera size={13} />
             </label>
-            <input id="profile-avatar-input" className="sr-only" type="file" accept="image/jpeg,image/png,image/webp" onChange={uploadAvatar} />
+            <input id="profile-avatar-input" className="sr-only" type="file" accept="image/jpeg,image/png,image/webp" capture="user" onChange={uploadAvatar} />
           </div>
           <div className="profile-identity-copy">
             <div className="profile-name-line"><strong>{user.fullName}</strong>{captainVerified && <span className="profile-verified"><BadgeCheck size={14} /> Capitã verificada</span>}</div>

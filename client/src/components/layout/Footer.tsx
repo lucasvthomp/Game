@@ -5,19 +5,19 @@ import { MaritimeIcon } from "@/components/MaritimeIcon";
 const columns = [
   {
     title: "Descobrir",
-    links: [["/lanchas", "Encontrar lanchas"], ["/rotas", "Rotas e pontos"], ["/viagens", "Viagens publicadas"], ["/solicitar-rota", "Pedir uma rota"], ["/comercial", "Transporte comercial"]],
+    links: [["/lanchas", "Lanchas"], ["/rotas", "Rotas"], ["/viagens", "Viagens"], ["/solicitar-rota", "Pedir rota"], ["/comercial", "Comercial"]],
   },
   {
     title: "Sua conta",
-    links: [["/entrar", "Entrar"], ["/cadastro", "Criar conta"], ["/perfil", "Meu perfil"], ["/minhas-reservas", "Minhas reservas"], ["/notificacoes", "Notificações"]],
+    links: [["/entrar", "Entrar"], ["/cadastro", "Cadastro"], ["/perfil", "Perfil"], ["/minhas-reservas", "Reservas"], ["/notificacoes", "Avisos"]],
   },
   {
     title: "Suporte",
-    links: [["/ajuda", "Central de ajuda"], ["/seguranca", "Segurança"], ["/acessibilidade", "Acessibilidade"], ["/termos", "Termos de uso"], ["/privacidade", "Privacidade"]],
+    links: [["/ajuda", "Ajuda"], ["/seguranca", "Segurança"], ["/acessibilidade", "Acessibilidade"], ["/termos", "Termos"], ["/privacidade", "Privacidade"]],
   },
   {
     title: "Para capitães",
-    links: [["/perfil-capitao", "Ser capitão"], ["/minha-lancha", "Painel da lancha"], ["/recorrentes", "Saídas recorrentes"]],
+    links: [["/perfil-capitao", "Ser capitão"], ["/minha-lancha", "Painel"], ["/recorrentes", "Recorrentes"]],
   },
 ] as const;
 
@@ -30,13 +30,13 @@ export default function Footer() {
         <div className="footer-clean-head">
           <div className="footer-brand">
             <div className="footer-logo"><span className="footer-logo-icon"><MaritimeIcon variant="anchor" size={17} /></span><span className="footer-logo-text">Marcamar</span></div>
-            <p className="footer-tagline">Travessias locais de lancha pela costa de São Paulo.</p>
+            <p className="footer-tagline">Lancha local no litoral paulista.</p>
             <span className="footer-region"><MaritimeIcon variant="palm" size={15} /> São Paulo · Brasil</span>
             <span className="footer-status"><CheckCircle2 size={14} /> Serviço em construção contínua</span>
           </div>
           <div className="footer-clean-note">
             <span className="footer-clean-note-icon"><MaritimeIcon variant="wave" size={18} /></span>
-            <div><strong>Clareza antes do embarque.</strong><span>Escolha o ponto, veja os detalhes e combine o cais.</span></div>
+            <div><strong>Escolha o ponto. Veja os detalhes.</strong><span>Escolha o ponto, veja os detalhes e combine o cais.</span></div>
           </div>
         </div>
         <div className="footer-grid footer-clean-grid">

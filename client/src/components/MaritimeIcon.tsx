@@ -132,7 +132,7 @@ export function MaritimeIcon({ variant = "lancha", size = 32, className, ...prop
   return (
     <svg
       {...props}
-      className={className}
+      className={"maritime-icon" + (className ? " " + className : "")}
       width={size}
       height={size}
       viewBox="0 0 24 24"

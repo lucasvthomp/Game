@@ -14027,3 +14027,28 @@ body * { font-family: inherit !important; }
     transition: none;
   }
 }
+
+
+/* Navigation icon alignment */
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.nav-link .maritime-icon {
+  color: var(--boat);
+  flex: 0 0 auto;
+  filter: none;
+  opacity: .82;
+}
+.nav-link.active .maritime-icon {
+  opacity: 1;
+}
+.nav-mobile-link {
+  gap: 10px;
+}
+.nav-mobile-link .maritime-icon {
+  color: var(--boat);
+  flex: 0 0 auto;
+  filter: none;
+}

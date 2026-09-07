@@ -17,7 +17,10 @@ const kindLabel: Record<string, string> = {
 const statusLabel: Record<string, string> = {
   pending: "Pendente",
   needs_review: "Revisar",
-  verified: "Aprova
+  verified: "Aprovado",
+  rejected: "Recusado",
+};
+
 
 function PublicAdminDemo() {
   const [demoRows, setDemoRows] = useState([
@@ -108,12 +111,6 @@ function PublicAdminDemo() {
         <p style={{ textAlign: "center", color: "var(--text2)", margin: "12px auto 0", maxWidth: 560 }}>
           Para revisar documentos reais ou publicar alterações, <a href="/entrar" style={{ color: "var(--boat)" }}>entre com uma conta de equipe</a>.
         </p>
-      </div>
-    </div>
-  );
-}
-
->
       </div>
     </div>
   );

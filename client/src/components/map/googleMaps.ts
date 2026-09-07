@@ -8,10 +8,11 @@ const env = (import.meta as ImportMeta & { env?: Record<string, string | undefin
 export const GOOGLE_MAPS_API_KEY = String(env?.VITE_GOOGLE_MAPS_API_KEY || "").trim();
 
 export function hasGoogleMapsKey() {
-  // Avoid initializing Google's renderer with Railway placeholders or malformed
-  // values. When a real key is absent, the app stays on the branded Leaflet map
-  // instead of showing the repeated "API KEY REQUIRED" watermark.
-  return /^AIza[0-9A-Za-z_-]{20,}$/.test(GOOGLE_MAPS_API_KEY);
+  // Keep Marcamar's neutral map as the dependable default. Google is opt-in so
+  // a key with referrer restrictions or an unenabled Maps API cannot paint the
+  // "API KEY REQUIRED" watermark over the experience.
+  const useGoogle = String(env?.VITE_USE_GOOGLE_MAPS || "").toLowerCase() === "true";
+  return useGoogle && /^AIza[0-9A-Za-z_-]{20,}$/.test(GOOGLE_MAPS_API_KEY);
 }
 
 let mapsPromise: Promise<Record<string, any>> | null = null;

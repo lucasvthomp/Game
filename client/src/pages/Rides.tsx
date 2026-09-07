@@ -51,8 +51,11 @@ export default function Rides() {
       const matchesCity = !query
         || ride.originCity?.toLocaleLowerCase("pt-BR").includes(query)
         || ride.destinationCity?.toLocaleLowerCase("pt-BR").includes(query);
+      // Compare calendar dates as ISO strings so a date-only input is not
+      // shifted by the viewer's timezone (notably in Brazil / the Americas).
       const matchesDate = !dateFilter
-        || new Date(ride.departureTime).toDateString() === new Date(dateFilter).toDateString();
+        || (typeof ride.departureTime === "string"
+          && ride.departureTime.slice(0, 10) === dateFilter);
       const matchesPrice = !maxPrice || Number(ride.pricePerSeat) <= Number(maxPrice);
       return matchesCity && matchesDate && matchesPrice;
     })

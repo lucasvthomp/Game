@@ -13872,3 +13872,46 @@ h1 em, h2 em, h3 em,
 /* Ensure legacy component-level font declarations cannot reintroduce the old serif/UI faces. */
 body, html { font-family: "Inter Tight", Inter, -apple-system, BlinkMacSystemFont, sans-serif !important; }
 body * { font-family: inherit !important; }
+
+
+/* ─── WATER MOTION FALLBACK ───
+   Keep the photographic surface smooth on mobile/Safari. The canvas physics
+   layer is desktop-enhancement only; the image texture remains animated on all
+   devices without filter URL rendering glitches. */
+.home-clean-water-texture {
+  filter: saturate(.88) contrast(1.03) brightness(.99);
+  animation: marcamarWaterPanStable 48s linear infinite;
+  transform: translateZ(0);
+  will-change: background-position;
+}
+@keyframes marcamarWaterPanStable {
+  0% { background-position: 28% 42%; }
+  50% { background-position: 72% 54%; }
+  100% { background-position: 28% 42%; }
+}
+.home-clean-water-ripple {
+  animation-duration: 34s;
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}
+@media (max-width: 700px) {
+  .home-clean-water-texture {
+    inset: 0;
+    background-size: cover;
+    animation-duration: 38s;
+    filter: saturate(.9) contrast(1.02) brightness(1);
+  }
+  .home-clean-water-surface {
+    display: none;
+  }
+  .home-clean-water-ripple {
+    opacity: .12;
+    animation-duration: 42s;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-clean-water-texture,
+  .home-clean-water-ripple {
+    animation: none !important;
+  }
+}

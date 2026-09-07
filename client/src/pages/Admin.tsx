@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { BadgeCheck, Check, FileCheck2, ShieldCheck, Trophy, X } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
@@ -22,11 +23,19 @@ const statusLabel: Record<string, string> = {
 
 
 function PublicAdminDemo() {
-  const demoRows = [
-    ["Identidade", "Exemplo de capitão", "Pendente"],
-    ["Habilitação náutica", "Perfil de demonstração", "Em revisão"],
-    ["Registro da embarcação", "Lancha exemplo", "Aguardando"],
-  ];
+  const [demoRows, setDemoRows] = useState([
+    { kind: "Identidade", subject: "Exemplo de capitão", status: "Pendente" },
+    { kind: "Habilitação náutica", subject: "Perfil de demonstração", status: "Em revisão" },
+    { kind: "Registro da embarcação", subject: "Lancha exemplo", status: "Aguardando" },
+  ]);
+  const [routePublished, setRoutePublished] = useState(true);
+  const [incidentOpen, setIncidentOpen] = useState(true);
+  const [notice, setNotice] = useState("");
+
+  const updateVerification = (index: number, status: string) => {
+    setDemoRows((rows) => rows.map((row, rowIndex) => rowIndex === index ? { ...row, status } : row));
+    setNotice("Atualizado apenas nesta demonstração.");
+  };
 
   return (
     <div className="page-wrapper admin-page">
@@ -36,15 +45,15 @@ function PublicAdminDemo() {
           <div>
             <p className="section-label">MODO DEMONSTRAÇÃO · PÚBLICO</p>
             <h1 className="page-title">Painel Marcamar</h1>
-            <p className="page-sub">Uma prévia do fluxo de operação com dados fictícios.</p>
+            <p className="page-sub">Teste o fluxo de operação com dados fictícios e ações locais.</p>
           </div>
         </div>
 
         <section className="admin-section" style={{ borderColor: "var(--boat)", background: "color-mix(in srgb, var(--boat) 8%, var(--surface))" }}>
           <div className="admin-section-heading">
             <div>
-              <h2>Visualização aberta</h2>
-              <p className="admin-section-help">Este modo é apenas para conhecer a interface. Nenhuma informação real é exibida e nenhuma ação altera o sistema.</p>
+              <h2>Modo de teste</h2>
+              <p className="admin-section-help">Aprovar, recusar e atualizar aqui só muda esta visualização no seu navegador. Nenhum dado real é exibido ou alterado.</p>
             </div>
             <span>Demo</span>
           </div>
@@ -52,10 +61,10 @@ function PublicAdminDemo() {
 
         <div className="admin-demo-stats" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 12, marginBottom: 18 }}>
           {[
+            [String(demoRows.length), "Verificações"],
             ["12", "Capitães"],
-            ["04", "Verificações"],
             ["06", "Rotas ativas"],
-            ["01", "Incidente"],
+            [incidentOpen ? "01" : "00", "Incidentes abertos"],
           ].map(([value, label]) => (
             <div className="admin-section" key={label} style={{ margin: 0, padding: 18 }}>
               <strong style={{ display: "block", fontSize: 28, color: "var(--text1)" }}>{value}</strong>
@@ -65,11 +74,15 @@ function PublicAdminDemo() {
         </div>
 
         <section className="admin-section">
-          <div className="admin-section-heading"><h2>Fila de verificações</h2><span>04</span></div>
-          {demoRows.map(([kind, subject, status]) => (
-            <div className="admin-verification-card" key={kind}>
-              <div><strong><FileCheck2 size={15} /> {kind}</strong><span>{subject} · dados fictícios</span></div>
-              <div className="admin-verification-actions"><span className="admin-status">{status}</span></div>
+          <div className="admin-section-heading"><h2>Fila de verificações</h2><span>{demoRows.filter((row) => row.status !== "Aprovado" && row.status !== "Recusado").length}</span></div>
+          {demoRows.map((row, index) => (
+            <div className="admin-verification-card" key={row.kind}>
+              <div><strong><FileCheck2 size={15} /> {row.kind}</strong><span>{row.subject} · dados fictícios</span></div>
+              <div className="admin-verification-actions">
+                <span className={row.status === "Aprovado" ? "admin-status verified" : "admin-status"}>{row.status}</span>
+                {row.status !== "Aprovado" && <button type="button" className="admin-verify-button" onClick={() => updateVerification(index, "Aprovado")}><Check size={14} /> Aprovar</button>}
+                {row.status !== "Recusado" && <button type="button" className="admin-verify-button" onClick={() => updateVerification(index, "Recusado")}><X size={14} /> Recusar</button>}
+              </div>
             </div>
           ))}
         </section>
@@ -77,17 +90,26 @@ function PublicAdminDemo() {
         <section className="admin-section">
           <div className="admin-section-heading"><h2>Rotas e ocorrências</h2><span>Demo</span></div>
           <div className="admin-verification-card">
-            <div><strong>Ilhabela → Praia do Curral</strong><span>Rota de exemplo · saída 09:00</span></div>
-            <div className="admin-verification-actions"><span className="admin-status verified">Publicada</span></div>
+            <div><strong>São Sebastião → Ubatuba</strong><span>Rota de exemplo · saída 09:00</span></div>
+            <div className="admin-verification-actions">
+              <span className={routePublished ? "admin-status verified" : "admin-status"}>{routePublished ? "Publicada" : "Rascunho"}</span>
+              <button type="button" className="admin-verify-button" onClick={() => { setRoutePublished((value) => !value); setNotice("Status da rota atualizado localmente."); }}>
+                {routePublished ? "Desativar" : "Publicar"}
+              </button>
+            </div>
           </div>
           <div className="admin-verification-card">
             <div><strong>Checklist de embarque</strong><span>Incidente fictício · acompanhamento</span></div>
-            <div className="admin-verification-actions"><span className="admin-status">Em análise</span></div>
+            <div className="admin-verification-actions">
+              <span className={incidentOpen ? "admin-status" : "admin-status verified"}>{incidentOpen ? "Em análise" : "Resolvido"}</span>
+              {incidentOpen && <button type="button" className="admin-verify-button" onClick={() => { setIncidentOpen(false); setNotice("Incidente resolvido localmente."); }}>Resolver</button>}
+            </div>
           </div>
         </section>
 
-        <p style={{ textAlign: "center", color: "var(--text2)", margin: "24px auto 0", maxWidth: 560 }}>
-          Precisa revisar documentos ou publicar rotas? <a href="/entrar" style={{ color: "var(--boat)" }}>Entre com uma conta de equipe</a>.
+        {notice && <p role="status" style={{ textAlign: "center", color: "var(--boat)", margin: "20px auto 0", fontWeight: 700 }}>{notice}</p>}
+        <p style={{ textAlign: "center", color: "var(--text2)", margin: "12px auto 0", maxWidth: 560 }}>
+          Para revisar documentos reais ou publicar alterações, <a href="/entrar" style={{ color: "var(--boat)" }}>entre com uma conta de equipe</a>.
         </p>
       </div>
     </div>

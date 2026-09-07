@@ -14052,3 +14052,12 @@ body * { font-family: inherit !important; }
   flex: 0 0 auto;
   filter: none;
 }
+
+
+/* Keep a single result card confidently framed on wide screens. */
+@media (min-width: 900px) {
+  .ride-grid-clean:has(> a:only-child) {
+    grid-template-columns: minmax(0, 760px);
+    max-width: 800px;
+  }
+}

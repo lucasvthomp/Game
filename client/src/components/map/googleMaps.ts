@@ -8,7 +8,10 @@ const env = (import.meta as ImportMeta & { env?: Record<string, string | undefin
 export const GOOGLE_MAPS_API_KEY = String(env?.VITE_GOOGLE_MAPS_API_KEY || "").trim();
 
 export function hasGoogleMapsKey() {
-  return GOOGLE_MAPS_API_KEY.length > 0;
+  // Avoid initializing Google's renderer with Railway placeholders or malformed
+  // values. When a real key is absent, the app stays on the branded Leaflet map
+  // instead of showing the repeated "API KEY REQUIRED" watermark.
+  return /^AIza[0-9A-Za-z_-]{20,}$/.test(GOOGLE_MAPS_API_KEY);
 }
 
 let mapsPromise: Promise<Record<string, any>> | null = null;

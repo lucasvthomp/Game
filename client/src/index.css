@@ -14061,3 +14061,18 @@ body * { font-family: inherit !important; }
     max-width: 800px;
   }
 }
+
+
+/* Keep demo operations scannable on small screens. */
+@media (max-width: 520px) {
+  .admin-demo-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+  .admin-demo-stats .admin-section {
+    padding: 14px !important;
+  }
+  .admin-demo-stats strong {
+    font-size: 24px !important;
+  }
+}

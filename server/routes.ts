@@ -445,7 +445,8 @@ router.get("/rides", async (req: Request, res: Response) => {
     activeRides = activeRides.filter((ride) => {
       const matchesFrom = !from || ride.originCity.toLocaleLowerCase("pt-BR").includes(from);
       const matchesTo = !to || ride.destinationCity.toLocaleLowerCase("pt-BR").includes(to);
-      const matchesDate = !date || ride.departureTime.toISOString().slice(0, 10) === date;
+      const isDemoRide = ride.description?.startsWith("[DEMO]");
+      const matchesDate = !date || isDemoRide || ride.departureTime.toISOString().slice(0, 10) === date;
       return matchesFrom && matchesTo && matchesDate && ride.availableSeats >= passengers;
     });
     const enriched = await Promise.all(activeRides.map(async (ride) => {
@@ -455,8 +456,13 @@ router.get("/rides", async (req: Request, res: Response) => {
         storage.getCaptainAverageRating(ride.captainId),
         storage.getReviewsByCaptain(ride.captainId),
       ]);
+      const isDemoRide = ride.description?.startsWith("[DEMO]");
+      const departureTime = date && isDemoRide
+        ? new Date(`${date}T${ride.departureTime.toISOString().slice(11, 19)}`)
+        : ride.departureTime;
       return {
         ...ride,
+        departureTime,
         captainName: captain?.fullName || "Capitão",
         captainUsername: captain?.username,
         captainAvatarUrl: captain?.avatarUrl || null,

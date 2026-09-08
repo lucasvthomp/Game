@@ -14521,3 +14521,205 @@ h1 em, h2 em, h3 em,
 @media (prefers-reduced-motion: reduce) {
   .home-clean-quick-route { transition: none; }
 }
+
+
+/* ─── SITEWIDE MOBILE POLISH ───
+   Shared rhythm for the search, support, account and captain journeys.
+   The layouts keep one clear column on small screens and preserve generous
+   touch targets without creating oversized hero gaps. */
+html, body, #root { max-width: 100%; overflow-x: hidden; }
+.page-wrapper,
+.content-page-v2,
+.legal-page-v2,
+.notifications-page,
+.profile-page,
+.detail-page,
+.captain-dashboard-page,
+.reservations-page,
+.recurring-page,
+.commercial-page-v2 {
+  min-height: calc(100svh - 68px);
+}
+@media (max-width: 900px) {
+  .content-page-v2-hero {
+    width: min(100% - 32px, 760px);
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 26px;
+    padding-block: 56px 52px;
+  }
+  .content-page-v2-hero-note,
+  .safety-hero-panel,
+  .help-hero-panel {
+    justify-self: start;
+    width: min(100%, 520px);
+  }
+  .routes-planner,
+  .routes-results,
+  .routes-page-rework .routes-points-v2 {
+    width: min(100% - 32px, 1100px);
+  }
+  .routes-planner-map,
+  .routes-planner-map .lc-map-frame-coastal,
+  .routes-planner-map .leaflet-container {
+    min-height: clamp(360px, 52svh, 560px);
+  }
+  .footer-clean-wrap,
+  .footer-clean-bottom {
+    width: min(100% - 32px, 1160px);
+  }
+}
+@media (max-width: 560px) {
+  .page-wrapper {
+    padding-inline: 12px;
+  }
+  .page-header-band {
+    padding: 26px 16px 22px;
+  }
+  .page-body {
+    padding: 24px 16px 56px;
+  }
+  .content-page-v2 {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  }
+  .content-page-v2-hero {
+    width: calc(100% - 32px);
+    gap: 22px;
+    padding-block: 42px 38px;
+  }
+  .content-page-v2-hero h1 {
+    font-size: clamp(2.55rem, 13vw, 4rem);
+    line-height: .98;
+  }
+  .content-page-v2-hero-copy > p {
+    margin: 18px 0 22px;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .content-page-v2-actions {
+    gap: 12px;
+  }
+  .content-page-v2-hero-note,
+  .safety-hero-panel,
+  .help-hero-panel {
+    width: 100%;
+    padding: 18px;
+  }
+  .routes-planner,
+  .routes-results,
+  .routes-page-rework .routes-points-v2 {
+    width: calc(100% - 24px);
+  }
+  .routes-planner {
+    padding-top: 18px;
+  }
+  .routes-planner-intro {
+    padding-bottom: 17px;
+  }
+  .routes-planner-intro h1 {
+    font-size: clamp(2rem, 11vw, 3rem);
+  }
+  .routes-planner-intro > div:first-child > p:last-child {
+    font-size: .88rem;
+  }
+  .routes-planner-map,
+  .routes-planner-map .lc-map-frame-coastal,
+  .routes-planner-map .leaflet-container {
+    min-height: clamp(320px, 53svh, 470px);
+  }
+  .routes-planner-card {
+    padding: 16px 14px;
+  }
+  .routes-results {
+    padding-block: 32px 44px;
+  }
+  .routes-ride-card,
+  .ride-result-card {
+    padding: 16px;
+    border-radius: 16px;
+  }
+  .rides-header-clean .rides-header-inner,
+  .rides-body-clean {
+    width: calc(100% - 24px);
+  }
+  .rides-header-clean {
+    padding-block: 26px 20px;
+  }
+  .rides-heading-clean {
+    margin-bottom: 18px;
+  }
+  .rides-heading-clean h1 {
+    font-size: clamp(2rem, 11vw, 3rem);
+  }
+  .captain-dashboard-page {
+    width: calc(100% - 24px);
+    padding-block: 28px calc(78px + env(safe-area-inset-bottom));
+  }
+  .captain-dashboard-intro {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding-bottom: 24px;
+  }
+  .captain-dashboard-primary {
+    width: 100%;
+    justify-content: center;
+  }
+  .profile-page,
+  .detail-page,
+  .reservations-page,
+  .recurring-page,
+  .notifications-page {
+    width: calc(100% - 24px);
+    margin-inline: auto;
+  }
+  .notifications-page {
+    padding-block: 28px calc(78px + env(safe-area-inset-bottom));
+  }
+  .notifications-header,
+  .notifications-heading-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .legal-page-v2 {
+    width: calc(100% - 32px);
+    padding-block: 42px 78px;
+  }
+  .legal-page-v2-top {
+    align-items: flex-start;
+    margin-bottom: 34px;
+  }
+  .legal-page-v2 h1 {
+    font-size: clamp(2.35rem, 12vw, 3.5rem);
+  }
+  .legal-page-v2-lead {
+    margin-block: 18px 34px;
+    font-size: 16px;
+  }
+  .commercial-coming-soon {
+    min-height: calc(100svh - 116px);
+    padding: 22px 12px 68px;
+  }
+  .commercial-coming-content {
+    width: 100%;
+    padding: 34px 18px;
+  }
+  .footer-clean-wrap {
+    padding-block: 34px 24px;
+  }
+  .footer-clean-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 22px 16px;
+  }
+  .footer-clean .footer-link {
+    min-height: 40px;
+    padding-block: 9px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .routes-ride-card,
+  .ride-result-card,
+  .notification-card {
+    transition: none;
+  }
+}

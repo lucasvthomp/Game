@@ -102,43 +102,19 @@ export default function Home() {
         <section className="home-clean-services" aria-label="Atalhos Marcamar">
           <Link href="/lanchas"><article className="home-clean-service-card">
             <div><h2>Encontrar uma lancha</h2><p>Compare saídas, horários e valores para o seu trecho.</p><span>Buscar saídas <ArrowRight size={15} /></span></div>
-            <MaritimeIllustration variant="lancha" size={88} />
+            <span className="home-clean-service-art-generated" aria-hidden="true"><img src="/assets/marcamar-lancha.png" alt="" /></span>
           </article></Link>
           <Link href="/rotas"><article className="home-clean-service-card">
             <div><h2>Explorar pontos</h2><p>Veja praias e píeres costeiros no mapa.</p><span>Ver rotas <ArrowRight size={15} /></span></div>
-            <MaritimeIllustration variant="beach" size={88} />
+            <span className="home-clean-service-art-generated" aria-hidden="true"><img src="/assets/marcamar-coast.png" alt="" /></span>
           </article></Link>
           <Link href="/solicitar-rota"><article className="home-clean-service-card">
             <div><h2>Pedir uma rota</h2><p>Não encontrou? Conte qual caminho você precisa.</p><span>Solicitar <ArrowRight size={15} /></span></div>
-            <MaritimeIllustration variant="palm" size={88} />
+            <span className="home-clean-service-art-generated" aria-hidden="true"><img src="/assets/marcamar-pinpoint.png" alt="" /></span>
           </article></Link>
         </section>
 
 
-        <section className="home-generated-visuals" aria-labelledby="identity-title">
-          <div className="home-generated-visuals-copy">
-            <p className="home-clean-kicker">A LINGUAGEM DA COSTA</p>
-            <h2 id="identity-title">A lancha certa. Um ponto claro.</h2>
-            <p>Uma identidade feita para reconhecer o que importa em segundos: a embarcação, o ponto e o caminho.</p>
-            <span className="home-generated-visuals-note"><MaritimeIcon variant="water" size={16} /> Ícones originais Marcamar</span>
-          </div>
-          <div className="home-generated-visuals-art" aria-label="Ilustrações originais Marcamar">
-            <div className="home-generated-art-card home-generated-art-card-main">
-              <img src="/assets/marcamar-lancha.png" alt="Ilustração 3D de uma lancha local básica" />
-              <span>Lancha local</span>
-            </div>
-            <div className="home-generated-art-stack">
-              <div className="home-generated-art-card">
-                <img src="/assets/marcamar-pinpoint.png" alt="Ilustração 3D de um ponto costeiro" />
-                <span>Ponto exato</span>
-              </div>
-              <div className="home-generated-art-card">
-                <img src="/assets/marcamar-coast.png" alt="Ilustração 3D de uma palmeira e onda na costa" />
-                <span>Costa paulista</span>
-              </div>
-            </div>
-          </div>
-        </section>
 
         <section className="home-clean-departures">
           <div className="home-clean-section-head">

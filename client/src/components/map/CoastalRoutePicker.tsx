@@ -123,7 +123,7 @@ export default function CoastalRoutePicker({ origin, destination, onOriginChange
           <strong>Confirme o cais.</strong>
           <span>Toque na costa para posicionar cada ponto.</span>
         </div>
-        <span className="route-picker-count">{origin && destination ? "2 de 2" : "1 de 2"}</span>
+        <span className="route-picker-count">{(origin ? 1 : 0) + (destination ? 1 : 0)} de 2</span>
       </div>
       <div className="route-picker-switcher" role="group" aria-label="Escolha qual ponto ajustar">
         <button type="button" className={target === "origin" ? "active" : ""} onClick={() => setTarget("origin")} aria-pressed={target === "origin"}>

@@ -42,7 +42,7 @@ export default function Footer() {
         <div className="footer-grid footer-clean-grid">
           {columns.map((column) => (
             <div className="footer-links-group" key={column.title}>
-              <p className="footer-group-title">{column.title}</p>
+              <p className="footer-group-title"><MaritimeIcon variant={column.title === "Descobrir" ? "compass" : column.title === "Suporte" ? "lifebuoy" : column.title === "Para capitães" ? "lancha" : "ticket"} size={14} />{column.title}</p>
               {column.links.map(([href, label]) => <Link key={href} href={href}><span className="footer-link">{label}</span></Link>)}
             </div>
           ))}

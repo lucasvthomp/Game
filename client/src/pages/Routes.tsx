@@ -134,7 +134,7 @@ export default function Routes() {
             <h1 id="routes-title">Planeje pelo mapa.</h1>
             <p>Escolha o trecho e veja as saídas de lancha que fazem sentido para você.</p>
           </div>
-          <div className="routes-planner-context"><MaritimeIcon variant="compass" size={18} /><span>São Paulo · pontos costeiros</span></div>
+          <div className="routes-planner-context"><span className="routes-generated-mark"><img src="/assets/marcamar-pinpoint.png" alt="" /></span><span>São Paulo · pontos costeiros</span></div>
         </div>
 
         <div className="routes-planner-board">

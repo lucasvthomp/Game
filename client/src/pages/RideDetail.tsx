@@ -162,7 +162,7 @@ export default function RideDetail() {
 
           <div className="detail-pickup-note">
             <div className="detail-pickup-point">
-              <span className="detail-pickup-icon"><MapPin size={16} /></span>
+              <span className="detail-pickup-icon"><img src="/assets/marcamar-dock.png" alt="" /></span>
               <span><strong>Ponto de embarque</strong><small>{ride.originCity}</small><em>{hasExactOrigin ? "Pin exato publicado pelo operador" : "Local de referência — confirme o ponto com o capitão"}</em></span>
             </div>
             <div className="detail-pickup-point">

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap');
 /* Leaflet base CSS is loaded via the <link> in index.html and the bundled
    `import "leaflet/dist/leaflet.css"` inside components/map/leafletSetup.ts. */
 
@@ -14150,4 +14150,158 @@ body * { font-family: inherit !important; }
   color: var(--boat);
   filter: none;
   flex: 0 0 auto;
+}
+
+
+/* ─── GENERATED MARCAMAR VISUALS ─── */
+.home-generated-visuals {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: clamp(22px, 4vw, 56px);
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto 32px;
+  padding: clamp(22px, 4vw, 38px);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 84% 16%, color-mix(in srgb, var(--boat-light) 76%, transparent), transparent 45%),
+    color-mix(in srgb, var(--surface) 72%, var(--card));
+  box-shadow: var(--shadow-sm);
+}
+.home-generated-visuals::after {
+  content: "";
+  position: absolute;
+  inset: auto -10% -58% 42%;
+  height: 170%;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--boat) 8%, transparent);
+  transform: rotate(-8deg);
+  pointer-events: none;
+}
+.home-generated-visuals-copy,
+.home-generated-visuals-art { position: relative; z-index: 1; }
+.home-generated-visuals-copy h2 {
+  max-width: 340px;
+  margin: 0;
+  color: var(--text1);
+  font-size: clamp(28px, 4vw, 46px);
+  line-height: .98;
+  letter-spacing: -.055em;
+}
+.home-generated-visuals-copy > p:not(.home-clean-kicker) {
+  max-width: 390px;
+  margin: 14px 0 18px;
+  color: var(--text2);
+  font-size: .86rem;
+  line-height: 1.55;
+}
+.home-generated-visuals-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--boat-dark);
+  font-size: .72rem;
+  font-weight: 800;
+}
+.home-generated-visuals-note .maritime-icon { color: var(--boat); filter: none; }
+.home-generated-visuals-art {
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap: 12px;
+  min-height: 250px;
+}
+.home-generated-art-card {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-width: 0;
+  min-height: 118px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--border2) 64%, transparent);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--card) 78%, var(--surface));
+  box-shadow: 0 12px 26px color-mix(in srgb, var(--text1) 10%, transparent);
+}
+.home-generated-art-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 8px;
+  filter: drop-shadow(0 12px 9px color-mix(in srgb, var(--text1) 20%, transparent));
+  transition: transform .35s cubic-bezier(.16,1,.3,1), filter .35s ease;
+}
+.home-generated-art-card span {
+  position: absolute;
+  left: 11px;
+  bottom: 10px;
+  padding: 5px 8px;
+  border: 1px solid color-mix(in srgb, var(--border2) 58%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--card) 88%, transparent);
+  color: var(--text1);
+  font-size: .65rem;
+  font-weight: 800;
+  letter-spacing: .02em;
+  backdrop-filter: blur(8px);
+}
+.home-generated-art-card-main { min-height: 250px; }
+.home-generated-art-stack {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 12px;
+  min-width: 0;
+}
+.home-generated-art-card:hover img {
+  transform: translateY(-6px) rotate(-1.5deg) scale(1.04);
+  filter: drop-shadow(0 16px 12px color-mix(in srgb, var(--text1) 22%, transparent));
+}
+[data-theme="dark"] .home-generated-visuals {
+  background:
+    radial-gradient(circle at 84% 16%, color-mix(in srgb, var(--boat-light) 70%, transparent), transparent 45%),
+    color-mix(in srgb, var(--surface) 88%, var(--card));
+}
+@media (max-width: 820px) {
+  .home-generated-visuals { grid-template-columns: 1fr; gap: 20px; }
+  .home-generated-visuals-copy h2 { max-width: 500px; }
+}
+@media (max-width: 540px) {
+  .home-generated-visuals { width: calc(100% - 28px); margin-bottom: 24px; padding: 19px; border-radius: 19px; }
+  .home-generated-visuals-art { min-height: 210px; grid-template-columns: 1.08fr .92fr; gap: 8px; }
+  .home-generated-art-card-main { min-height: 210px; }
+  .home-generated-art-stack { gap: 8px; }
+  .home-generated-art-card { border-radius: 14px; }
+  .home-generated-art-card span { left: 8px; bottom: 8px; font-size: .58rem; }
+}
+
+/* ─── NEW MARCAMAR TYPE DIRECTION ─── */
+body,
+html,
+button,
+input,
+select,
+textarea {
+  font-family: "Bricolage Grotesque", system-ui, sans-serif !important;
+}
+body * { font-family: inherit !important; }
+h1, h2, h3, h4, h5, h6,
+.hero-pro-title, .section-title-pro, .split-panel-title, .map-text-title,
+.recurring-pro-title, .cta-band-title, .cta-pro-card h3, .auth-title,
+.page-title, .dash-name,
+.home-clean-heading-copy h1,
+.home-clean-section-head h2,
+.home-clean-boarding-head h2 {
+  font-family: "Bricolage Grotesque", system-ui, sans-serif !important;
+  font-variation-settings: "opsz" 54, "wdth" 100;
+  font-weight: 650;
+  letter-spacing: -.04em;
+}
+.home-clean-heading-copy h1 em,
+h1 em, h2 em, h3 em {
+  font-family: "Bricolage Grotesque", system-ui, sans-serif !important;
+  font-style: normal;
+  font-weight: 750;
 }

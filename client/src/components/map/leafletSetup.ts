@@ -90,5 +90,5 @@ export const SP_REGION_ZOOM = 8;
 // OpenStreetMap tiles keep the MVP map key-free and dependable. The
 // surrounding .marcamar-map-theme styles soften the colors and hide excess
 // visual noise while our coastal pins carry the product's visual language.
-export const TILE_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-export const TILE_ATTRIBUTION = '&copy; OpenStreetMap contributors';
+export const TILE_URL = "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png";
+export const TILE_ATTRIBUTION = '&copy; OpenStreetMap contributors &copy; CARTO';

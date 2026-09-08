@@ -14411,3 +14411,113 @@ h1 em, h2 em, h3 em,
 @media (prefers-reduced-motion: reduce) {
   .home-clean-service-art-generated img { animation: none !important; transition: none; }
 }
+
+
+/* ─── LANDING CLARITY PASS ───
+   One useful set of shortcuts and one compact trust cue keep the home page
+   actionable without adding another marketing wall of copy. */
+.home-clean-quick-routes {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.home-clean-quick-label {
+  margin-right: 2px;
+  color: var(--text3);
+  font-size: .63rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.home-clean-quick-route {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 11px;
+  border: 1px solid color-mix(in srgb, var(--border2) 70%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--card) 75%, transparent);
+  color: var(--text1);
+  font-size: .69rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: border-color .2s ease, background .2s ease, transform .2s ease;
+}
+.home-clean-quick-route svg { color: var(--boat); }
+.home-clean-quick-route:hover {
+  border-color: color-mix(in srgb, var(--boat) 56%, var(--border2));
+  background: color-mix(in srgb, var(--boat-light) 64%, var(--card));
+  transform: translateY(-1px);
+}
+.home-clean-safety-bar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  margin-top: clamp(44px, 6vw, 72px);
+  padding: clamp(18px, 3vw, 26px);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--surface) 74%, var(--card));
+  box-shadow: var(--shadow-sm);
+}
+.home-clean-safety-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 14px;
+  color: var(--boat);
+  background: var(--boat-light);
+}
+.home-clean-safety-bar .home-clean-kicker { margin-bottom: 7px; }
+.home-clean-safety-bar h2 {
+  margin: 0;
+  color: var(--text1);
+  font-size: clamp(1.15rem, 2.2vw, 1.55rem);
+  letter-spacing: -.04em;
+}
+.home-clean-safety-bar p:last-child {
+  margin-top: 5px;
+  color: var(--text2);
+  font-size: .8rem;
+  line-height: 1.45;
+}
+.home-clean-safety-bar .home-clean-outline-button {
+  min-height: 42px;
+  white-space: nowrap;
+}
+@media (max-width: 700px) {
+  .home-clean-quick-routes {
+    flex-wrap: nowrap;
+    margin-right: -16px;
+    padding-bottom: 3px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .home-clean-quick-routes::-webkit-scrollbar { display: none; }
+  .home-clean-quick-label { flex: 0 0 auto; }
+  .home-clean-quick-route { min-height: 44px; }
+  .home-clean-safety-bar {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 12px;
+    margin-top: 42px;
+    padding: 17px;
+  }
+  .home-clean-safety-bar > a {
+    grid-column: 2;
+    justify-self: start;
+    margin-top: 2px;
+  }
+  .home-clean-safety-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-clean-quick-route { transition: none; }
+}

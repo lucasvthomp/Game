@@ -95,21 +95,29 @@ export default function Home() {
             <span><Check size={15} /> Capacidade publicada</span>
             <span><Check size={15} /> Operadores locais</span>
           </div>
+          <div className="home-clean-quick-routes" aria-label="Trechos rápidos">
+            <span className="home-clean-quick-label">Atalhos</span>
+            {PILOT_ROUTES.filter((route) => route.active).slice(0, 3).map((route) => (
+              <Link key={route.id} href={"/lanchas?from=" + encodeURIComponent(route.origin) + "&to=" + encodeURIComponent(route.destination)}>
+                <span className="home-clean-quick-route">{route.origin} <ArrowRight size={13} /> {route.destination}</span>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
       <main className="home-clean-main">
         <section className="home-clean-services" aria-label="Atalhos Marcamar">
           <Link href="/lanchas"><article className="home-clean-service-card">
-            <div><h2>Encontrar uma lancha</h2><p>Compare saídas, horários e valores para o seu trecho.</p><span>Buscar saídas <ArrowRight size={15} /></span></div>
+            <div><h2>Encontrar uma lancha</h2><p>Compare horários e valores.</p><span>Buscar saídas <ArrowRight size={15} /></span></div>
             <span className="home-clean-service-art-generated" aria-hidden="true"><img src="/assets/marcamar-lancha.png" alt="" /></span>
           </article></Link>
           <Link href="/rotas"><article className="home-clean-service-card">
-            <div><h2>Explorar pontos</h2><p>Veja praias e píeres costeiros no mapa.</p><span>Ver rotas <ArrowRight size={15} /></span></div>
+            <div><h2>Explorar pontos</h2><p>Veja praias e píeres no mapa.</p><span>Ver rotas <ArrowRight size={15} /></span></div>
             <span className="home-clean-service-art-generated" aria-hidden="true"><img src="/assets/marcamar-coast.png" alt="" /></span>
           </article></Link>
           <Link href="/solicitar-rota"><article className="home-clean-service-card">
-            <div><h2>Pedir uma rota</h2><p>Não encontrou? Conte qual caminho você precisa.</p><span>Solicitar <ArrowRight size={15} /></span></div>
+            <div><h2>Pedir uma rota</h2><p>Peça um trecho específico.</p><span>Solicitar <ArrowRight size={15} /></span></div>
             <span className="home-clean-service-art-generated" aria-hidden="true"><img src="/assets/marcamar-pinpoint.png" alt="" /></span>
           </article></Link>
         </section>
@@ -154,7 +162,7 @@ export default function Home() {
             <div>
               <p className="home-clean-kicker">SIMPLES ASSIM</p>
               <h2 id="how-title">Do ponto à lancha.</h2>
-              <p className="home-clean-section-lede">Uma jornada curta, com cada decisão no lugar certo.</p>
+              <p className="home-clean-section-lede">Escolha. Confira. Embarque.</p>
             </div>
             <span className="home-clean-section-count">3 passos</span>
           </div>
@@ -180,30 +188,14 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="home-clean-info home-clean-boarding" aria-labelledby="boarding-title">
-          <div className="home-clean-boarding-head">
-            <div>
-              <p className="home-clean-kicker">NO CAIS</p>
-              <h2 id="boarding-title">Tudo claro antes de sair.</h2>
-              <p className="home-clean-section-lede">O que você precisa saber fica visível antes de confirmar.</p>
-            </div>
-            <Link href="/ajuda"><span className="home-clean-outline-button">Abrir ajuda <ArrowRight size={15} /></span></Link>
+        <section className="home-clean-safety-bar" aria-labelledby="safety-title">
+          <span className="home-clean-safety-icon"><MaritimeIcon variant="lifebuoy" size={24} /></span>
+          <div>
+            <p className="home-clean-kicker">INFORMAÇÃO NO EMBARQUE</p>
+            <h2 id="safety-title">Tudo visível antes de sair.</h2>
+            <p>Capitão, ponto, horário, valor e vagas em uma só tela.</p>
           </div>
-          <div className="home-clean-boarding-grid">
-            <article>
-              <span className="home-clean-boarding-icon"><MaritimeIcon variant="pinpoint" size={22} /></span>
-              <div><strong>Ponto costeiro</strong><p>Escolha praias e píeres. O mapa bloqueia pontos em terra.</p></div>
-            </article>
-            <article>
-              <span className="home-clean-boarding-icon"><MaritimeIcon variant="lancha" size={22} /></span>
-              <div><strong>Detalhes visíveis</strong><p>Veja quem conduz, horário, valor e vagas antes de reservar.</p></div>
-            </article>
-            <article>
-              <span className="home-clean-boarding-icon"><MaritimeIcon variant="buoy" size={22} /></span>
-              <div><strong>Segurança primeiro</strong><p>Confirme o embarque com o capitão e consulte as condições do mar.</p></div>
-            </article>
-          </div>
-          <Link href="/seguranca"><span className="home-clean-info-more">Conheça nossos cuidados de segurança <ArrowRight size={15} /></span></Link>
+          <Link href="/seguranca"><span className="home-clean-outline-button">Ver segurança <ArrowRight size={15} /></span></Link>
         </section>
       </main>
     </div>

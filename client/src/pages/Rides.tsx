@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { SiteSelect, SiteAutocomplete } from "@/components/SiteSelect";
 import { apiRequest } from "@/lib/queryClient";
 import { Link } from "wouter";
-import { BadgeCheck, Calendar, Star, Search, Trophy, Users, ArrowRight, Map, List } from "lucide-react";
+import { BadgeCheck, Calendar, Star, Search, Trophy, ArrowRight, Map, List } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState, lazy, Suspense } from "react";
@@ -191,9 +191,9 @@ export default function Rides() {
                       </div>
 
                       <div className="ride-result-details">
-                        <span><Calendar size={15} /><strong>{formatRideDate(ride.departureTime, "EEE, dd MMM")}</strong></span>
+                        <span><MaritimeIcon variant="calendar" size={16} /><strong>{formatRideDate(ride.departureTime, "EEE, dd MMM")}</strong></span>
                         <span><MaritimeIcon variant="clock" size={16} /><strong>{formatRideDate(ride.departureTime, "HH:mm")}</strong></span>
-                        <span><Users size={15} /><strong>{availableSeats}/{totalSeats}</strong><small> vagas</small></span>
+                        <span><MaritimeIcon variant="passengers" size={16} /><strong>{availableSeats}/{totalSeats}</strong><small> vagas</small></span>
                       </div>
 
                       <div className="ride-result-card-footer">

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
-import { ArrowRight, BadgeCheck, Calendar, Search, Star, Trophy, Users } from "lucide-react";
+import { ArrowRight, BadgeCheck, Search, Star, Trophy } from "lucide-react";
 import { lazy, Suspense, useMemo, useState } from "react";
 import { SiteAutocomplete } from "@/components/SiteSelect";
 import { MaritimeIcon } from "@/components/MaritimeIcon";
@@ -61,9 +61,9 @@ function RouteRideCard({ ride }: { ride: any }) {
           <div className="routes-ride-destination"><small>CHEGADA</small><strong>{ride.destinationCity}</strong></div>
         </div>
         <div className="routes-ride-meta">
-          <span><Calendar size={15} /> <strong>{cardDate(ride.departureTime)}</strong></span>
+          <span><MaritimeIcon variant="calendar" size={16} /> <strong>{cardDate(ride.departureTime)}</strong></span>
           <span><MaritimeIcon variant="clock" size={16} /> <strong>{cardTime(ride.departureTime)}</strong></span>
-          <span><Users size={15} /> <strong>{available}/{total}</strong> vagas</span>
+          <span><MaritimeIcon variant="passengers" size={16} /> <strong>{available}/{total}</strong> vagas</span>
         </div>
         <div className="routes-ride-footer">
           <div><small>A PARTIR DE</small><strong>{Number.isFinite(price) ? price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) : "Consulte"}</strong><span>/ pessoa</span></div>
@@ -134,7 +134,7 @@ export default function Routes() {
             <h1 id="routes-title">Planeje pelo mapa.</h1>
             <p>Escolha o trecho e veja as saídas de lancha que fazem sentido para você.</p>
           </div>
-          <div className="routes-planner-context"><MaritimeIcon variant="wave" size={18} /><span>São Paulo · pontos costeiros</span></div>
+          <div className="routes-planner-context"><MaritimeIcon variant="compass" size={18} /><span>São Paulo · pontos costeiros</span></div>
         </div>
 
         <div className="routes-planner-board">

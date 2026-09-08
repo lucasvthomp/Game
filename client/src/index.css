@@ -14138,3 +14138,16 @@ body * { font-family: inherit !important; }
     transition: none;
   }
 }
+
+
+/* Branded footer index: each section gets a quiet, recognizable anchor. */
+.footer-group-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.footer-group-title .maritime-icon {
+  color: var(--boat);
+  filter: none;
+  flex: 0 0 auto;
+}

@@ -114,6 +114,32 @@ export default function Home() {
           </article></Link>
         </section>
 
+
+        <section className="home-generated-visuals" aria-labelledby="identity-title">
+          <div className="home-generated-visuals-copy">
+            <p className="home-clean-kicker">A LINGUAGEM DA COSTA</p>
+            <h2 id="identity-title">A lancha certa. Um ponto claro.</h2>
+            <p>Uma identidade feita para reconhecer o que importa em segundos: a embarcação, o ponto e o caminho.</p>
+            <span className="home-generated-visuals-note"><MaritimeIcon variant="water" size={16} /> Ícones originais Marcamar</span>
+          </div>
+          <div className="home-generated-visuals-art" aria-label="Ilustrações originais Marcamar">
+            <div className="home-generated-art-card home-generated-art-card-main">
+              <img src="/assets/marcamar-lancha.png" alt="Ilustração 3D de uma lancha local básica" />
+              <span>Lancha local</span>
+            </div>
+            <div className="home-generated-art-stack">
+              <div className="home-generated-art-card">
+                <img src="/assets/marcamar-pinpoint.png" alt="Ilustração 3D de um ponto costeiro" />
+                <span>Ponto exato</span>
+              </div>
+              <div className="home-generated-art-card">
+                <img src="/assets/marcamar-coast.png" alt="Ilustração 3D de uma palmeira e onda na costa" />
+                <span>Costa paulista</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="home-clean-departures">
           <div className="home-clean-section-head">
             <div><p className="home-clean-kicker">SAÍDAS PUBLICADAS</p><h2>Próximas travessias</h2></div>

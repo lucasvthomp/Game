@@ -14305,3 +14305,29 @@ h1 em, h2 em, h3 em {
   font-style: normal;
   font-weight: 750;
 }
+
+
+.routes-generated-mark {
+  display: inline-grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--boat-light) 82%, var(--card));
+  box-shadow: 0 3px 9px color-mix(in srgb, var(--text1) 10%, transparent);
+}
+.routes-generated-mark img {
+  display: block;
+  width: 31px;
+  height: 31px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 2px color-mix(in srgb, var(--text1) 16%, transparent));
+  transition: transform .24s cubic-bezier(.16,1,.3,1);
+}
+.routes-planner-context:hover .routes-generated-mark img {
+  transform: translateY(-1px) rotate(-3deg) scale(1.08);
+}
+@media (prefers-reduced-motion: reduce) {
+  .routes-generated-mark img { transition: none; }
+}

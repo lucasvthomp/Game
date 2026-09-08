@@ -1,6 +1,6 @@
 import type { SVGProps } from "react";
 
-export type MaritimeIconVariant = "lancha" | "dock" | "buoy" | "route" | "wave" | "palm" | "beach" | "anchor" | "clock" | "pinpoint" | "shield" | "briefcase";
+export type MaritimeIconVariant = "lancha" | "dock" | "buoy" | "route" | "wave" | "palm" | "beach" | "anchor" | "clock" | "pinpoint" | "shield" | "briefcase" | "sun" | "compass" | "lifebuoy" | "calendar" | "passengers" | "ticket" | "chat" | "water";
 
 type MaritimeIconProps = SVGProps<SVGSVGElement> & {
   variant?: MaritimeIconVariant;
@@ -126,6 +126,75 @@ const paths: Record<MaritimeIconVariant, JSX.Element> = {
       <path d="M3 21h18" opacity=".35" />
     </>
   ),
+
+  sun: (
+    <>
+      <circle cx="13" cy="13" r="5.8" fill="currentColor" stroke="none" opacity=".22" transform="translate(1 1)" />
+      <circle cx="12" cy="12" r="5.8" fill="currentColor" stroke="none" />
+      <circle cx="10.2" cy="10.1" r="1.45" fill="#fff" stroke="none" opacity=".48" />
+      <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4" stroke="currentColor" strokeWidth="1.7" />
+    </>
+  ),
+  compass: (
+    <>
+      <circle cx="12" cy="12" r="8.7" fill="currentColor" stroke="none" opacity=".22" transform="translate(1 1)" />
+      <circle cx="12" cy="12" r="8.7" fill="currentColor" stroke="none" />
+      <path d="m15.8 8.2-2.5 5.1-5.1 2.5 2.5-5.1 5.1-2.5Z" fill="#fff" stroke="none" opacity=".82" />
+      <circle cx="12" cy="12" r="1.25" fill="currentColor" stroke="none" />
+      <path d="M12 3.8v1.1M20.2 12h-1.1M12 20.2v-1.1M3.8 12h1.1" stroke="#fff" strokeWidth="1.1" opacity=".46" />
+    </>
+  ),
+  lifebuoy: (
+    <>
+      <circle cx="12" cy="12" r="8.6" fill="currentColor" stroke="none" opacity=".22" transform="translate(1 1)" />
+      <circle cx="12" cy="12" r="8.6" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="12" r="4.1" fill="#fff" stroke="none" opacity=".78" />
+      <circle cx="12" cy="12" r="2.45" fill="currentColor" stroke="none" />
+      <path d="m7.2 7.2 2.1 2.1M14.7 14.7l2.1 2.1M16.8 7.2l-2.1 2.1M9.3 14.7l-2.1 2.1" stroke="#fff" strokeWidth="1.8" opacity=".78" />
+    </>
+  ),
+  calendar: (
+    <>
+      <path d="M5 5.7h14v13.8H5z" fill="currentColor" stroke="none" opacity=".22" transform="translate(1 1)" />
+      <path d="M5 5.7h14v13.8H5z" fill="currentColor" stroke="none" />
+      <path d="M8 3.6v4M16 3.6v4M5 9.5h14" stroke="#fff" strokeWidth="1.55" opacity=".78" />
+      <path d="M8 12.4h.01M12 12.4h.01M16 12.4h.01M8 15.6h.01M12 15.6h.01M16 15.6h.01" stroke="#fff" strokeWidth="2.1" opacity=".72" />
+    </>
+  ),
+  passengers: (
+    <>
+      <circle cx="9" cy="8.1" r="3.2" fill="currentColor" stroke="none" opacity=".22" transform="translate(1 1)" />
+      <circle cx="9" cy="8.1" r="3.2" fill="currentColor" stroke="none" />
+      <circle cx="16.8" cy="9.3" r="2.5" fill="currentColor" stroke="none" opacity=".8" />
+      <path d="M3.9 19.7c0-3.5 2.3-5.8 5.1-5.8s5.1 2.3 5.1 5.8H3.9Z" fill="currentColor" stroke="none" opacity=".22" transform="translate(1 1)" />
+      <path d="M3.9 19.7c0-3.5 2.3-5.8 5.1-5.8s5.1 2.3 5.1 5.8H3.9Z" fill="currentColor" stroke="none" />
+      <path d="M14.7 19.7c.1-2.4 1.2-4 3.2-4 1.4 0 2.5.8 3 2.2" stroke="currentColor" strokeWidth="2.2" />
+      <circle cx="8.2" cy="7.3" r=".85" fill="#fff" stroke="none" opacity=".55" />
+    </>
+  ),
+  ticket: (
+    <>
+      <path d="M4 7.2h16v9.6H4z" fill="currentColor" stroke="none" opacity=".22" transform="translate(1 1)" />
+      <path d="M4 7.2h16v9.6H4z" fill="currentColor" stroke="none" />
+      <path d="M8 7.2v9.6M16 7.2v9.6" stroke="#fff" strokeWidth="1.3" strokeDasharray="1.6 1.6" opacity=".62" />
+      <path d="M10.6 10h2.8M10.6 13.5h2.8" stroke="#fff" strokeWidth="1.5" opacity=".78" />
+    </>
+  ),
+  chat: (
+    <>
+      <path d="M4 5.4h16v10.8H10l-5 3v-3H4z" fill="currentColor" stroke="none" opacity=".22" transform="translate(1 1)" />
+      <path d="M4 5.4h16v10.8H10l-5 3v-3H4z" fill="currentColor" stroke="none" />
+      <path d="M8 9.6h8M8 12.6h5" stroke="#fff" strokeWidth="1.55" opacity=".78" />
+    </>
+  ),
+  water: (
+    <>
+      <path d="M2.5 9.4c2.2 0 2.2-1.8 4.5-1.8s2.2 1.8 4.5 1.8 2.2-1.8 4.5-1.8 2.2 1.8 4.5 1.8l-1 3.1c-2.1 0-2.6-1.7-4.4-1.7-2.2 0-2.2 1.7-4.5 1.7s-2.2-1.7-4.5-1.7c-1.8 0-2.4 1.7-3.9 1.7l-1-3.1Z" fill="currentColor" stroke="none" opacity=".22" transform="translate(1 1.5)" />
+      <path d="M2.5 9.4c2.2 0 2.2-1.8 4.5-1.8s2.2 1.8 4.5 1.8 2.2-1.8 4.5-1.8 2.2 1.8 4.5 1.8l-1 3.1c-2.1 0-2.6-1.7-4.4-1.7-2.2 0-2.2 1.7-4.5 1.7s-2.2-1.7-4.5-1.7c-1.8 0-2.4 1.7-3.9 1.7l-1-3.1Z" fill="currentColor" stroke="none" />
+      <path d="M3 17c2.1 0 2.1-1.5 4.2-1.5S9.3 17 11.5 17s2.1-1.5 4.2-1.5S17.8 17 21 17" stroke="#fff" strokeWidth="1.2" opacity=".46" />
+      <circle cx="18.2" cy="5.1" r="1.25" fill="#fff" stroke="none" opacity=".42" />
+    </>
+  ),
 };
 
 export function MaritimeIcon({ variant = "lancha", size = 32, className, ...props }: MaritimeIconProps) {
@@ -136,6 +205,7 @@ export function MaritimeIcon({ variant = "lancha", size = 32, className, ...prop
       width={size}
       height={size}
       viewBox="0 0 24 24"
+      data-maritime-icon={variant}
       fill="none"
       stroke="currentColor"
       strokeLinecap="round"

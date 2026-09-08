@@ -199,7 +199,7 @@ export default function RideDetail() {
             <p className="section-label" style={{ margin: 0 }}>CAPITÃO</p>
           </div>
           <div className="captain-row">
-            <div className="captain-avatar"><Anchor size={20} color="#fff" /></div>
+            <div className="captain-avatar captain-avatar-boat">{captain.avatarUrl ? <img src={captain.avatarUrl} alt={`Foto de ${captain.fullName}`} /> : <span>{(captain.fullName || "C").charAt(0).toUpperCase()}</span>}</div>
             <div className="captain-info">
               <div className="captain-name">{captain.fullName}</div>
               <div className="captain-user">@{captain.username}</div>

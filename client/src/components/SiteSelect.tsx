@@ -139,7 +139,7 @@ export function SiteAutocomplete({ value, onChange, options, placeholder, ariaLa
         aria-controls={listId}
       />
       {open && filteredOptions.length > 0 && (
-        <div className="site-autocomplete-menu" id={listId} role="listbox" aria-label={ariaLabel}>
+        <div className="site-autocomplete-menu" id={listId} role="listbox" aria-label={`${ariaLabel} sugestões`}>
           {filteredOptions.map((option) => (
             <button
               key={option}

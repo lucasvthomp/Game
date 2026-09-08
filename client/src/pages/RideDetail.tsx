@@ -124,6 +124,7 @@ export default function RideDetail() {
       </div>
 
       <div className="detail-body">
+        <div className="detail-trip-shell fade-up">
         {/* Route card */}
         <div className="detail-card fade-up">
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -266,6 +267,8 @@ export default function RideDetail() {
             </div>
           </div>
         ) : null}
+
+        </div>
 
         {marineWeatherQuery.data?.conditions && (
           <div className="detail-card marine-conditions-card">

@@ -4,14 +4,14 @@ import { ArrowRight, BadgeCheck, Search, Star, Trophy } from "lucide-react";
 import { lazy, Suspense, useMemo, useState } from "react";
 import { SiteAutocomplete } from "@/components/SiteSelect";
 import { MaritimeIcon } from "@/components/MaritimeIcon";
-import type { LatLng } from "@/components/map/LocationPicker";
+import type { CoastalRoutePoint } from "@/components/map/CoastalRoutePicker";
+import CoastalRoutePicker from "@/components/map/CoastalRoutePicker";
 import { getCityCoords } from "@/components/map/leafletSetup";
 import { apiRequest } from "@/lib/queryClient";
 import { PILOT_ROUTES, type PilotRoute } from "@shared/pilot-routes";
 import { COASTAL_POINT_NAMES, ILHABELA_BEACHES } from "@shared/coastal-locations";
 
 const RidesMap = lazy(() => import("@/components/map/RidesMap"));
-const LocationPicker = lazy(() => import("@/components/map/LocationPicker"));
 
 function cardDate(value: string) {
   const date = new Date(value);
@@ -23,7 +23,7 @@ function cardTime(value: string) {
   return Number.isNaN(date.getTime()) ? "Horário a confirmar" : date.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
 }
 
-function coastalPointFor(value: string): LatLng | null {
+function coastalPointFor(value: string): CoastalRoutePoint | null {
   if (!value) return null;
   const normalized = value.toLocaleLowerCase("pt-BR");
   const match = ILHABELA_BEACHES.find((point) => point.name.toLocaleLowerCase("pt-BR") === normalized || point.name.toLocaleLowerCase("pt-BR").includes(normalized) || point.municipality.toLocaleLowerCase("pt-BR") === normalized);
@@ -82,8 +82,8 @@ export default function Routes() {
   const [travelTime, setTravelTime] = useState("");
   const [passengers, setPassengers] = useState("1");
   const [mapStep, setMapStep] = useState<"search" | "pins">("search");
-  const [originPin, setOriginPin] = useState<LatLng | null>(null);
-  const [destinationPin, setDestinationPin] = useState<LatLng | null>(null);
+  const [originPin, setOriginPin] = useState<CoastalRoutePoint | null>(null);
+  const [destinationPin, setDestinationPin] = useState<CoastalRoutePoint | null>(null);
 
   const locationsQuery = useQuery({ queryKey: ["/api/locations"], queryFn: () => apiRequest("GET", "/api/locations") });
   const ridesQuery = useQuery({ queryKey: ["/api/rides", "routes-boat"], queryFn: () => apiRequest("GET", "/api/rides?type=boat") });
@@ -134,15 +134,27 @@ export default function Routes() {
             <h1 id="routes-title">Planeje pelo mapa.</h1>
             <p>Escolha o trecho e veja as saídas de lancha que fazem sentido para você.</p>
           </div>
-          <div className="routes-planner-context"><span className="routes-generated-mark"><img src="/assets/marcamar-pinpoint.png" alt="" /></span><span>São Paulo · pontos costeiros</span></div>
+          <div className="routes-planner-context"><span className="routes-generated-mark"><img src="/assets/marcamar-compass.png" alt="" /></span><span>São Paulo · pontos costeiros</span></div>
         </div>
 
         <div className="routes-planner-board">
           <div className="routes-planner-map">
-            <Suspense fallback={<div className="routes-map-loading">Carregando mapa costeiro…</div>}>
-              <RidesMap height="min(610px, 68svh)" rides={publishedRides} />
-            </Suspense>
-            <div className="routes-planner-map-caption"><span><MaritimeIcon variant="lancha" size={16} /> saídas publicadas</span><span><MaritimeIcon variant="pinpoint" size={16} /> pontos ajustáveis</span></div>
+            {mapStep === "search" ? (
+              <Suspense fallback={<div className="routes-map-loading">Carregando mapa costeiro…</div>}>
+                <RidesMap height="min(610px, 68svh)" rides={publishedRides} />
+              </Suspense>
+            ) : (
+              <CoastalRoutePicker
+                origin={originPin}
+                destination={destinationPin}
+                onOriginChange={setOriginPin}
+                onDestinationChange={setDestinationPin}
+                height="min(610px, 68svh)"
+              />
+            )}
+            <div className="routes-planner-map-caption">
+              {mapStep === "search" ? <><span><MaritimeIcon variant="lancha" size={16} /> saídas publicadas</span><span><MaritimeIcon variant="compass" size={16} /> pontos costeiros</span></> : <span><MaritimeIcon variant="pinpoint" size={16} /> toque na costa · arraste para ajustar</span>}
+            </div>
           </div>
 
           <aside className="routes-planner-card">
@@ -167,11 +179,9 @@ export default function Routes() {
             ) : (
               <div className="routes-planner-pin-flow">
                 <p className="routes-planner-pin-intro">Os pontos começam na melhor referência encontrada. Arraste para ajustar.</p>
-                <div className="routes-planner-pickers">
-                  <Suspense fallback={<div className="routes-map-loading">Carregando pontos…</div>}>
-                    <LocationPicker label="Embarque" variant="origin" value={originPin} onChange={setOriginPin} height="160px" />
-                    <LocationPicker label="Chegada" variant="dest" value={destinationPin} onChange={setDestinationPin} height="160px" />
-                  </Suspense>
+                <div className="routes-planner-pin-summary">
+                  <span><MaritimeIcon variant="pinpoint" size={17} /><strong>Embarque</strong>{originPin ? " ponto definido" : " toque no mapa"}</span>
+                  <span><MaritimeIcon variant="beach" size={17} /><strong>Chegada</strong>{destinationPin ? " ponto definido" : " toque no mapa"}</span>
                 </div>
                 <button type="button" className="routes-planner-button" onClick={search}>Buscar saídas <ArrowRight size={16} /></button>
                 <button type="button" className="routes-planner-back" onClick={() => setMapStep("search")}>Editar trecho</button>

@@ -7,7 +7,6 @@ import { Anchor, Clock, Users, Star, ChevronLeft, CheckCircle, Shield, AlertCirc
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
-import { BoatMediaCluster } from "@/components/layout/BoatMediaCluster";
 import RouteMap from "@/components/map/RouteMap";
 
 function StarRating({ value, onChange }: { value: number; onChange?: (v: number) => void }) {
@@ -124,16 +123,6 @@ export default function RideDetail() {
         </button>
       </div>
 
-      {
-        <div className="detail-media-rail">
-          <div className="detail-media-copy">
-            <p className="section-label" style={{ color: "var(--boat)" }}>A TRAVESSIA POR PERTO</p>
-            <p>Confira o caminho, o ponto de encontro e quem está no comando antes de embarcar.</p>
-          </div>
-          <BoatMediaCluster variant="compact" />
-        </div>
-      }
-
       <div className="detail-body">
         {/* Route card */}
         <div className="detail-card fade-up">
@@ -204,7 +193,10 @@ export default function RideDetail() {
 
         {/* Captain card */}
         <div className="detail-card fade-up" style={{ animationDelay: "80ms" }}>
-          <p className="section-label" style={{ marginBottom: 16 }}>CAPITÃO</p>
+          <div className="detail-section-label-with-mark">
+            <span className="detail-generated-mark" aria-hidden="true"><img src="/assets/marcamar-helm.png" alt="" /></span>
+            <p className="section-label" style={{ margin: 0 }}>CAPITÃO</p>
+          </div>
           <div className="captain-row">
             <div className="captain-avatar"><Anchor size={20} color="#fff" /></div>
             <div className="captain-info">

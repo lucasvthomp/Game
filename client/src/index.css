@@ -14954,3 +14954,65 @@ html, body, #root { max-width: 100%; overflow-x: hidden; }
   .route-picker-values { grid-template-columns: 1fr; padding: 10px 14px 13px; }
   .routes-planner-pin-summary { grid-template-columns: 1fr; }
 }
+
+
+/* ─── UNIFIED TRIP SURFACE ─── */
+.detail-trip-shell {
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--border2) 70%, var(--border));
+  border-radius: 24px;
+  background: var(--card);
+  box-shadow: var(--shadow-md);
+}
+.detail-trip-shell > .detail-card,
+.detail-trip-shell > .booking-success {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.detail-trip-shell > .detail-card {
+  background: transparent;
+}
+.detail-trip-shell > .detail-card + .detail-card,
+.detail-trip-shell > .booking-success + .detail-card {
+  border-top: 1px solid var(--border);
+}
+.detail-trip-shell > .detail-card + .booking-success,
+.detail-trip-shell > .detail-card + .detail-card {
+  border-top: 1px solid var(--border);
+}
+.detail-trip-shell > .detail-card.fade-up {
+  animation-delay: 0ms !important;
+}
+.detail-trip-shell .detail-route-grid {
+  margin-top: 22px;
+}
+.detail-trip-shell .detail-card {
+  padding: clamp(20px, 3.5vw, 34px);
+}
+.detail-trip-shell .detail-card:first-child {
+  padding-bottom: clamp(22px, 3.5vw, 34px);
+}
+.detail-trip-shell .detail-card:not(:first-child) {
+  padding-top: clamp(20px, 3vw, 28px);
+}
+.detail-trip-shell .booking-success {
+  padding: 22px clamp(20px, 3.5vw, 34px);
+}
+@media (max-width: 640px) {
+  .detail-trip-shell { border-radius: 18px; }
+  .detail-trip-shell .detail-card { padding: 19px 16px; }
+  .detail-trip-shell .booking-success { padding: 18px 16px; }
+}
+
+/* ─── QUIET CARTOGRAPHY ─── */
+.marcamar-map-theme .leaflet-tile-pane {
+  filter: saturate(.72) sepia(.08) hue-rotate(6deg) brightness(1.03) contrast(.96);
+}
+[data-theme="dark"] .marcamar-map-theme .leaflet-tile-pane {
+  filter: invert(.86) hue-rotate(172deg) saturate(.48) brightness(.62) contrast(1.02);
+}
+.lc-map-frame-coastal .leaflet-container {
+  background: var(--surface);
+}

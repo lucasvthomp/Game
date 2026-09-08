@@ -12,7 +12,6 @@ import { PILOT_ROUTES, type PilotRoute } from "@shared/pilot-routes";
 import { COASTAL_POINT_NAMES, ILHABELA_BEACHES } from "@shared/coastal-locations";
 
 const RidesMap = lazy(() => import("@/components/map/RidesMap"));
-const LocationPicker = lazy(() => import("@/components/map/LocationPicker"));
 
 function cardDate(value: string) {
   const date = new Date(value);
@@ -24,7 +23,7 @@ function cardTime(value: string) {
   return Number.isNaN(date.getTime()) ? "Horário a confirmar" : date.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
 }
 
-function coastalPointFor(value: string): LatLng | null {
+function coastalPointFor(value: string): CoastalRoutePoint | null {
   if (!value) return null;
   const normalized = value.toLocaleLowerCase("pt-BR");
   const match = ILHABELA_BEACHES.find((point) => point.name.toLocaleLowerCase("pt-BR") === normalized || point.name.toLocaleLowerCase("pt-BR").includes(normalized) || point.municipality.toLocaleLowerCase("pt-BR") === normalized);

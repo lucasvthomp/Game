@@ -14076,3 +14076,65 @@ body * { font-family: inherit !important; }
     font-size: 24px !important;
   }
 }
+
+
+/* ─── MARCAMAR ICON CHARACTER ───
+   A compact, two-plane icon language: one solid face, one offset plane,
+   and a restrained highlight so every mark stays recognizable at 16px. */
+.maritime-icon {
+  shape-rendering: geometricPrecision;
+  transform-origin: center;
+}
+.maritime-icon[data-maritime-icon="sun"] { color: var(--amber, var(--boat)); }
+.maritime-icon[data-maritime-icon="compass"],
+.maritime-icon[data-maritime-icon="water"] { color: var(--ocean, var(--boat)); }
+.maritime-icon[data-maritime-icon="lifebuoy"],
+.maritime-icon[data-maritime-icon="ticket"] { color: var(--boat); }
+.maritime-icon[data-maritime-icon="calendar"],
+.maritime-icon[data-maritime-icon="passengers"],
+.maritime-icon[data-maritime-icon="chat"] { color: var(--text2); }
+
+.nav-theme-btn .maritime-icon {
+  filter: none;
+  transition: transform .24s cubic-bezier(.16,1,.3,1);
+}
+.nav-theme-btn:hover .maritime-icon {
+  transform: translateY(-1px) rotate(-7deg) scale(1.08);
+}
+.routes-planner-context .maritime-icon,
+.routes-planner-map-caption .maritime-icon,
+.routes-planner-field > .maritime-icon,
+.routes-planner-inline .maritime-icon,
+.routes-results-head .maritime-icon {
+  filter: none;
+}
+.routes-planner-field:hover > .maritime-icon,
+.routes-planner-inline label:hover .maritime-icon,
+.routes-point-item-v2:hover .maritime-icon,
+.routes-ride-card:hover .maritime-icon,
+.ride-result-card:hover .maritime-icon {
+  transform: translateY(-1px) rotate(-3deg) scale(1.06);
+}
+.routes-ride-meta .maritime-icon,
+.ride-result-details .maritime-icon {
+  flex: 0 0 auto;
+  color: var(--boat);
+  filter: none;
+}
+.ride-result-route-connector .maritime-icon,
+.routes-ride-route-line .maritime-icon {
+  filter: drop-shadow(1px 2px 0 color-mix(in srgb, var(--text1) 16%, transparent));
+}
+.footer-clean .maritime-icon {
+  filter: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-theme-btn .maritime-icon,
+  .routes-planner-field > .maritime-icon,
+  .routes-planner-inline .maritime-icon,
+  .routes-point-item-v2 .maritime-icon,
+  .routes-ride-card .maritime-icon,
+  .ride-result-card .maritime-icon {
+    transition: none;
+  }
+}

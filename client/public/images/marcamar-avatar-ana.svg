@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Avatar de Ana Ribeiro</title>
+  <desc id="desc">Ilustração minimalista de uma passageira Marcamar</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3a15b"/><stop offset="1" stop-color="#bb624f"/></linearGradient>
+    <linearGradient id="shirt" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6f0e5"/><stop offset="1" stop-color="#e6d8c8"/></linearGradient>
+  </defs>
+  <circle cx="128" cy="128" r="128" fill="url(#bg)"/>
+  <circle cx="128" cy="106" r="43" fill="#eab998"/>
+  <path d="M70 108c-7-36 9-72 55-76 37 1 61 29 58 68-11-12-17-25-21-41-19 20-49 35-92 49Z" fill="#3d2d2c"/>
+  <path d="M79 91c14-28 34-41 58-42 16 5 30 17 40 36-19-3-34-11-46-24-11 16-28 26-52 30Z" fill="#503a38"/>
+  <circle cx="112" cy="108" r="4" fill="#3d2d2c"/><circle cx="146" cy="108" r="4" fill="#3d2d2c"/>
+  <path d="M116 131c8 6 17 6 25 0" fill="none" stroke="#9f5a52" stroke-width="4" stroke-linecap="round"/>
+  <path d="M50 256c6-48 31-77 78-77s72 29 78 77Z" fill="url(#shirt)"/>
+  <path d="m87 184 41 29 41-29 19 23-23 49H91l-23-49Z" fill="#bb624f" opacity=".95"/>
+  <path d="M96 203h64" stroke="#f7efe2" stroke-width="6" stroke-linecap="round" opacity=".85"/>
+</svg>

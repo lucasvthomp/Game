@@ -153,8 +153,12 @@ export default function Rides() {
                   <Link key={ride.id} href={"/viagens/" + ride.id}>
                     <article className="ride-result-card fade-up" style={{ animationDelay: index * 50 + "ms" }}>
                       <div className="ride-result-card-top">
-                        <span className="ride-result-avatar">
-                          {ride.captainAvatarUrl ? <img src={ride.captainAvatarUrl} alt="" /> : <span>{(ride.captainName || "C").charAt(0).toUpperCase()}</span>}
+                        <span className="ride-result-avatar" aria-label={`Foto de ${ride.captainName || "capitão local"}`}>
+                          {ride.captainAvatarUrl ? (
+                            <img src={ride.captainAvatarUrl} alt={`Foto de ${ride.captainName || "capitão local"}`} />
+                          ) : (
+                            <span aria-hidden="true">{(ride.captainName || "C").charAt(0).toUpperCase()}</span>
+                          )}
                         </span>
                         <div className="ride-result-profile">
                           <div className="ride-result-profile-name">

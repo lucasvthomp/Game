@@ -11,18 +11,28 @@ import RouteMap from "@/components/map/RouteMap";
 
 function StarRating({ value, onChange }: { value: number; onChange?: (v: number) => void }) {
   const [hovered, setHovered] = useState(0);
+  const activeValue = hovered || value;
   return (
-    <div style={{ display: "flex", gap: 4 }}>
+    <div role="radiogroup" aria-label="Nota da viagem" style={{ display: "flex", gap: 4 }}>
       {Array.from({ length: 5 }).map((_, i) => {
-        const filled = (hovered || value) > i;
+        const rating = i + 1;
+        const filled = activeValue > i;
         return (
-          <Star
-            key={i} size={26} color="var(--amber)" fill={filled ? "var(--amber)" : "none"}
-            style={{ cursor: onChange ? "pointer" : "default", transition: "transform 0.1s", transform: hovered === i + 1 ? "scale(1.18)" : "scale(1)" }}
-            onMouseEnter={() => onChange && setHovered(i + 1)}
+          <button
+            key={rating}
+            type="button"
+            role="radio"
+            aria-label={`${rating} estrela${rating === 1 ? "" : "s"}`}
+            aria-checked={value === rating}
+            onMouseEnter={() => onChange && setHovered(rating)}
             onMouseLeave={() => onChange && setHovered(0)}
-            onClick={() => onChange && onChange(i + 1)}
-          />
+            onFocus={() => onChange && setHovered(rating)}
+            onBlur={() => onChange && setHovered(0)}
+            onClick={() => onChange && onChange(rating)}
+            style={{ border: 0, background: "transparent", padding: 2, display: "inline-flex", cursor: onChange ? "pointer" : "default", color: "var(--amber)", transition: "transform 0.1s", transform: hovered === rating ? "scale(1.18)" : "scale(1)" }}
+          >
+            <Star size={26} color="currentColor" fill={filled ? "currentColor" : "none"} />
+          </button>
         );
       })}
     </div>
@@ -112,7 +122,7 @@ export default function RideDetail() {
   const displayDescription = ride.description?.replace(/^\[DEMO\]\s*/, "");
 
   const departurePassed = new Date(ride.departureTime) < new Date();
-  const alreadyReviewed = user ? reviews.some((r: any) => r.reviewerId === user.id) : false;
+  const alreadyReviewed = user ? reviews.some((r: any) => r.reviewerId === user.id && Number(r.rideId) === ride.id) : false;
   const canReview = user && user.id !== ride.captainId && departurePassed && !alreadyReviewed && !reviewSuccess;
 
   return (
@@ -302,8 +312,12 @@ export default function RideDetail() {
                 <div key={rev.id} className="review-item">
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      <div style={{ width: 28, height: 28, borderRadius: "50%", background: "var(--surface)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "var(--text2)" }}>
-                        {(rev.reviewerName || "P")[0].toUpperCase()}
+                      <div style={{ width: 28, height: 28, borderRadius: "50%", background: "var(--surface)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", fontSize: 12, fontWeight: 700, color: "var(--text2)" }}>
+                        {rev.reviewerAvatarUrl ? (
+                          <img src={rev.reviewerAvatarUrl} alt={`Foto de ${rev.reviewerName || "passageiro"}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        ) : (
+                          (rev.reviewerName || "P")[0].toUpperCase()
+                        )}
                       </div>
                       <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text1)" }}>
                         {rev.reviewerName || "Passageiro"}

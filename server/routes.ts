@@ -768,13 +768,39 @@ router.post("/messages/:reservationId", requireAuth, async (req: Request, res: R
 router.post("/reviews", requireAuth, async (req: Request, res: Response) => {
   try {
     const user = req.user as any;
-    const { rideId, rating, comment } = req.body;
-    if (!rideId || !rating) return res.status(400).json({ error: "Dados inválidos." });
-    const ride = await storage.getRide(parseInt(rideId));
+    const rideId = Number(req.body?.rideId);
+    const rating = Number(req.body?.rating);
+    const comment = typeof req.body?.comment === "string" ? req.body.comment.trim() : "";
+
+    if (!Number.isInteger(rideId) || rideId <= 0 || !Number.isInteger(rating) || rating < 1 || rating > 5) {
+      return res.status(400).json({ error: "Escolha uma nota de 1 a 5 para esta viagem." });
+    }
+    if (comment.length > 600) {
+      return res.status(400).json({ error: "O comentário deve ter no máximo 600 caracteres." });
+    }
+
+    const ride = await storage.getRide(rideId);
     if (!ride) return res.status(404).json({ error: "Viagem não encontrada." });
-    const review = await storage.createReview({ rideId: parseInt(rideId), reviewerId: user.id, captainId: ride.captainId, rating: parseInt(rating), comment: comment || null });
-    res.json({ review });
-  } catch (err: any) { res.status(500).json({ error: err.message }); }
+    if (ride.rideType !== "boat") return res.status(400).json({ error: "Avaliações estão disponíveis apenas para travessias de lancha." });
+    if (ride.captainId === user.id) return res.status(403).json({ error: "Você não pode avaliar a própria travessia." });
+    if (new Date(ride.departureTime) > new Date()) {
+      return res.status(400).json({ error: "Você poderá avaliar a travessia depois do embarque." });
+    }
+    if (await storage.getReviewByRideAndReviewer(rideId, user.id)) {
+      return res.status(409).json({ error: "Você já avaliou esta travessia." });
+    }
+
+    const review = await storage.createReview({
+      rideId,
+      reviewerId: user.id,
+      captainId: ride.captainId,
+      rating,
+      comment: comment || null,
+    });
+    res.status(201).json({ review });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 router.get("/captain/:userId/reviews", async (req: Request, res: Response) => {
@@ -783,7 +809,11 @@ router.get("/captain/:userId/reviews", async (req: Request, res: Response) => {
   const [reviewList, avgRating] = await Promise.all([storage.getReviewsByCaptain(userId), storage.getCaptainAverageRating(userId)]);
   const enriched = await Promise.all(reviewList.map(async (r) => {
     const reviewer = await storage.getUser(r.reviewerId);
-    return { ...r, reviewerName: reviewer?.fullName || "Passageiro" };
+    return {
+      ...r,
+      reviewerName: reviewer?.fullName || "Passageiro",
+      reviewerAvatarUrl: reviewer?.avatarUrl || null,
+    };
   }));
   res.json({ reviews: enriched, avgRating });
 });

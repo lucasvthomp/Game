@@ -96,6 +96,7 @@ export default function RideDetail() {
       setReviewSuccess(true);
       setReviewError("");
       qc.invalidateQueries({ queryKey: [`/api/captain/${data?.ride?.captainId}/reviews`] });
+      qc.invalidateQueries({ queryKey: [`/api/rides/${id}`] });
     },
     onError: (err: any) => setReviewError(err.message || "Erro ao enviar avaliação."),
   });

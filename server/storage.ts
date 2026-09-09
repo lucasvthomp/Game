@@ -281,6 +281,9 @@ export const storage = {
   async getReviewsByCaptain(captainId: number): Promise<Review[]> {
     return db.select().from(reviews).where(eq(reviews.captainId, captainId)).orderBy(desc(reviews.createdAt));
   },
+  async getReviewByRideAndReviewer(rideId: number, reviewerId: number): Promise<Review | undefined> {
+    return (await db.select().from(reviews).where(and(eq(reviews.rideId, rideId), eq(reviews.reviewerId, reviewerId))))[0];
+  },
   async createReview(data: InsertReview): Promise<Review> {
     const [review] = await db.insert(reviews).values(data).returning();
     return review;

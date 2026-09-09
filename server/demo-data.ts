@@ -9,8 +9,8 @@ function demoDataEnabled() {
 }
 
 const demoUsers = [
-  { key: "captain", email: "demo.capitao@marcamar.test", username: "demo-capitao", fullName: "Marina Costa", homeCity: "Ilhabela", phone: "+55 12 99999-0001", role: "captain" },
-  { key: "passenger", email: "demo.passageiro@marcamar.test", username: "demo-passageiro", fullName: "Ana Ribeiro", homeCity: "Ilhabela", phone: "+55 12 99999-0003", role: "passenger" },
+  { key: "captain", email: "demo.capitao@marcamar.test", username: "demo-capitao", fullName: "Marina Costa", homeCity: "Ilhabela", phone: "+55 12 99999-0001", avatarUrl: "/images/marcamar-avatar-marina.svg", role: "captain" },
+  { key: "passenger", email: "demo.passageiro@marcamar.test", username: "demo-passageiro", fullName: "Ana Ribeiro", homeCity: "Ilhabela", phone: "+55 12 99999-0003", avatarUrl: "/images/marcamar-avatar-ana.svg", role: "passenger" },
 ] as const;
 
 /**
@@ -33,13 +33,13 @@ export async function seedDemoData() {
         [user.email],
       );
       if (existing.rows[0]) {
-        await pool.query(`UPDATE users SET username = $2, password = $3, full_name = $4, home_city = $5, phone = $6, role = $7 WHERE id = $1`, [existing.rows[0].id, user.username, password, user.fullName, user.homeCity, user.phone, user.role]);
+        await pool.query(`UPDATE users SET username = $2, password = $3, full_name = $4, home_city = $5, phone = $6, avatar_url = $7, role = $8 WHERE id = $1`, [existing.rows[0].id, user.username, password, user.fullName, user.homeCity, user.phone, user.avatarUrl, user.role]);
         userIds[user.key] = existing.rows[0].id;
         continue;
       }
       const inserted = await pool.query<{ id: number }>(
-        "INSERT INTO users (email, username, password, full_name, home_city, phone, role) VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT (email) DO NOTHING RETURNING id",
-        [user.email, user.username, password, user.fullName, user.homeCity, user.phone, user.role],
+        "INSERT INTO users (email, username, password, full_name, home_city, phone, avatar_url, role) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) ON CONFLICT (email) DO NOTHING RETURNING id",
+        [user.email, user.username, password, user.fullName, user.homeCity, user.phone, user.avatarUrl, user.role],
       );
       const id = inserted.rows[0]?.id;
       if (!id) throw new Error(`Demo user ${user.email} could not be created.`);
@@ -88,6 +88,29 @@ VALUES ($1, 'boat', $2, $3, $4, $5, $6, $7, $8, NULL, $9, $10, $11, $12, 'active
         captainId, ride.originCity, ride.destinationCity, ride.originLat, ride.originLng, ride.destLat, ride.destLng,
         new Date(Date.now() + ride.departureDays * 24 * 60 * 60 * 1000), ride.price, ride.totalSeats, ride.availableSeats, ride.description,
       ]);
+    }
+
+    // Seed clearly labeled fictional reviews so the trust UI can be exercised before launch.
+    // They are idempotent and disappear with the rest of the demo data when DEMO_DATA=false.
+    const passengerId = userIds.passenger;
+    if (passengerId) {
+      const demoReviewCopy = [
+        ["[DEMO] Travessia de teste São Sebastião → Ilhabela.", 5, "Embarque simples e comunicação clara."],
+        ["[DEMO] Travessia de teste Ilhabela → São Sebastião.", 5, "Lancha bem cuidada e horário cumprido."],
+        ["[DEMO] Rota de teste São Sebastião → Ubatuba.", 4, "Boa condução e ponto de encontro bem explicado."],
+        ["[DEMO] Rota de teste Ubatuba → São Sebastião.", 5, "Viagem tranquila pela costa."],
+        ["[DEMO] Manhã tranquila até o Bonete · confirme o cais na conversa.", 5, "Capitã atenciosa durante todo o trajeto."],
+        ["[DEMO] Retorno de teste Bonete → Ilhabela.", 5, "Tudo certo do início ao fim."],
+        ["[DEMO] Travessia panorâmica para Castelhanos em lancha pequena.", 5, "Ótima experiência na água."],
+        ["[DEMO] Retorno de teste Castelhanos → Ilhabela.", 5, "Ponto de embarque fácil de encontrar."],
+        ["[DEMO] Conexão costeira entre Curral e Engenho d'Água.", 5, "Rota prática e bem organizada."],
+      ] as const;
+      for (const [description, rating, comment] of demoReviewCopy) {
+        await pool.query(`INSERT INTO reviews (ride_id, reviewer_id, captain_id, rating, comment)
+SELECT id, $1, captain_id, $2, $3 FROM rides
+WHERE description = $4
+  AND NOT EXISTS (SELECT 1 FROM reviews WHERE ride_id = rides.id AND reviewer_id = $1)`, [passengerId, rating, comment, description]);
+      }
     }
 
     console.log("Demo lancha data ready (set DEMO_DATA=false to disable).");
